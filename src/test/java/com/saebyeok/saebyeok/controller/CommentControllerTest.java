@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,7 +39,7 @@ public class CommentControllerTest {
 
     @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록하고 댓글의 ID를 반환한다.")
     @Test
-    void createComment() throws Exception {
+    void createCommentTest() throws Exception {
         Member member = new Member();
         LocalDateTime now = LocalDateTime.now();
         Article article = new Article();
@@ -64,4 +65,13 @@ public class CommentControllerTest {
             andExpect(content().string("1")).
             andDo(print());
     }
+
+    @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다.")
+    @Test
+    void deleteCommentTest() throws Exception {
+        this.mockMvc.perform(delete("/articles/" + 1L + "/comments/" + 1L)).
+            andExpect(status().isNoContent()).
+            andDo(print());
+    }
+
 }
