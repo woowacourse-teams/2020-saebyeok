@@ -16,14 +16,14 @@ public class CommentTest {
         LocalDateTime now = LocalDateTime.now();
         Article article = new Article();
 
-        Comment comment = Comment.builder()
-            .content("새벽 좋아요")
-            .member(member)
-            .nickname("시라소니")
-            .createdDate(now)
-            .article(article)
-            .isDeleted(false)
-            .build();
+        Comment comment = Comment.builder().
+            content("새벽 좋아요").
+            member(member).
+            nickname("시라소니").
+            createdDate(now).
+            article(article).
+            isDeleted(false).
+            build();
 
         assertThat(comment.getContent()).isEqualTo("새벽 좋아요");
         assertThat(comment.getMember()).isEqualTo(member);

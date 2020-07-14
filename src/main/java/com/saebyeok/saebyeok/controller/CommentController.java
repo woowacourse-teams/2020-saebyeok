@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.InvalidCommentException;
+import com.saebyeok.saebyeok.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,11 @@ import java.net.URI;
 
 @RestController
 public class CommentController {
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @PostMapping("/articles/{id}/comments")
     public ResponseEntity<Long> createComment(@PathVariable Long id, @RequestBody CommentCreateRequest commentRequest) {
