@@ -37,7 +37,7 @@ public class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록하고 댓글의 ID를 반환한다.")
+    @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록하고 댓글의 ID를 반환한다")
     @Test
     void createCommentTest() throws Exception {
         Member member = new Member();
@@ -66,7 +66,7 @@ public class CommentControllerTest {
             andDo(print());
     }
 
-    @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다.")
+    @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다")
     @Test
     void deleteCommentTest() throws Exception {
         this.mockMvc.perform(delete("/articles/" + 1L + "/comments/" + 1L)).

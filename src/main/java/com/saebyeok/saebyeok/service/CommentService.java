@@ -42,7 +42,7 @@ public class CommentService {
             build();
     }
 
-    public void deleteComment(Long articleId, Long commentId) {
-
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
     }
 }

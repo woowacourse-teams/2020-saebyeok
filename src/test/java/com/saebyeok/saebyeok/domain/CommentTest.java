@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommentTest {
 
-    @DisplayName("Comment를 생성할 때 값들이 정상적으로 생성되야 한다.")
+    @DisplayName("Comment를 생성할 때 값들이 정상적으로 생성되야 한다")
     @Test
     void createCommentTest() {
         Member member = new Member();

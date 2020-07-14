@@ -37,7 +37,7 @@ public class CommentServiceTest {
         this.article = new Article();
     }
 
-    @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다.")
+    @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다")
     @Test
     void createCommentTest() {
         commentService.createComment(new CommentCreateRequest("새벽 좋아요", member, "시라소니", now,
@@ -46,7 +46,7 @@ public class CommentServiceTest {
         verify(commentRepository).save(any());
     }
 
-    @DisplayName("예외 테스트: 최소 길이보다 짧은 댓글 등록 메서드를 호출했을 때, 예외가 발생한다.")
+    @DisplayName("예외 테스트: 최소 길이보다 짧은 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
     @Test
     void createUnderLengthCommentTest() {
         CommentCreateRequest commentCreateRequest = new CommentCreateRequest(" ", member, "시라소니", now,
@@ -57,7 +57,7 @@ public class CommentServiceTest {
             hasMessageContaining("댓글의 최소 길이는");
     }
 
-    @DisplayName("예외 테스트: 최대 길이보다 긴 댓글 등록 메서드를 호출했을 때, 예외가 발생한다.")
+    @DisplayName("예외 테스트: 최대 길이보다 긴 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
     @Test
     void createOverLengthCommentTest() {
         String content = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
@@ -69,5 +69,13 @@ public class CommentServiceTest {
         assertThatThrownBy(() -> commentService.createComment(commentCreateRequest)).
             isInstanceOf(InvalidCommentException.class).
             hasMessageContaining("댓글의 최대 길이는");
+    }
+
+    @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
+    @Test
+    void deleteCommentTest() {
+        commentService.deleteComment(1L);
+
+        verify(commentRepository).deleteById(any());
     }
 }
