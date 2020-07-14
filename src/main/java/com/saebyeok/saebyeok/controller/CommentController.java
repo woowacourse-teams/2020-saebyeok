@@ -3,10 +3,7 @@ package com.saebyeok.saebyeok.controller;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.InvalidCommentException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -26,6 +23,12 @@ public class CommentController {
         return ResponseEntity.
             created(URI.create("/articles/" + 1L)).
             body(1L);
+    }
+
+    @DeleteMapping("/articles/{articleId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long articleId, @PathVariable Long commentId) {
+        return ResponseEntity.
+            noContent().build();
     }
 
 }

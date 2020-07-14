@@ -43,8 +43,15 @@ public class CommentAcceptanceTest {
      * <p>
      * when 정해진 댓글의 최대 길이보다 긴 댓글을 등록한다.
      * then 댓글 등록에 실패한다.
+     * <p>
+     * when 게시글에 달린 댓글을 모두 조회한다.
+     * then 댓글 목록의 조회에 성공한다.
+     * <p>
+     * when 댓글을 삭제한다.
+     * then 댓글 삭제에 성공한다.
      **/
 
+    // TODO: 2020/07/14 댓글 조회 및 댓글 삭제의 assert 확인(해당 댓글 조회해보기) 구현해야 함!!
     @DisplayName("댓글에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
     @Test
     void manageComment() {
@@ -65,6 +72,15 @@ public class CommentAcceptanceTest {
         ExceptionResponse response2 = createOverLengthComment(article, member);
         //then
         assertThat(response2.getErrorMessage()).isEqualTo("댓글의 최대 길이는 140자입니다!");
+
+        //when
+        given().
+            when().
+            delete("/articles/" + 1L + "/comments/" + 1L).
+            then().
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
+        //then
     }
 
     private Long createComment(Article article, Member member) {
