@@ -1,12 +1,15 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.ArticleRepository;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.MemberRepository;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -25,9 +28,24 @@ public class CommentAcceptanceTest {
     @LocalServerPort
     int port;
 
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    private Article article;
+    private Member member;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+
+        article = new Article();
+        member = new Member();
+
+        articleRepository.save(article);
+        memberRepository.save(member);
     }
 
     /**
@@ -56,8 +74,6 @@ public class CommentAcceptanceTest {
     @Test
     void manageComment() {
         //given
-        Article article = new Article();
-        Member member = new Member();
         //when
         Long id = createComment(article, member);
         //then
@@ -66,7 +82,7 @@ public class CommentAcceptanceTest {
         //when
         ExceptionResponse response1 = createUnderLengthComment(article, member);
         //then
-        assertThat(response1.getErrorMessage()).isEqualTo("댓글의 최소 길이는 한 글자입니다!");
+        assertThat(response1.getErrorMessage()).isEqualTo("댓글의 최소 길이는 1글자입니다!");
 
         //when
         ExceptionResponse response2 = createOverLengthComment(article, member);
