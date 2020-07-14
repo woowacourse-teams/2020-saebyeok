@@ -20,11 +20,11 @@ public class CommentService {
     public Comment createComment(CommentCreateRequest commentCreateRequest) {
         int contentLength = commentCreateRequest.getContent().trim().length();
         if (contentLength < MIN_LENGTH) {
-            throw new InvalidCommentException("댓글의 최소 길이는 한 글자입니다!");
+            throw new InvalidCommentException(String.format("댓글의 최소 길이는 %d글자입니다!", MIN_LENGTH));
         }
 
         if (contentLength > MAX_LENGTH) {
-            throw new InvalidCommentException("댓글의 최대 길이는 140자입니다!");
+            throw new InvalidCommentException(String.format("댓글의 최대 길이는 %d자입니다!", MAX_LENGTH));
         }
 
         Comment comment = toComment(commentCreateRequest);
