@@ -49,14 +49,14 @@ public class ArticleAcceptanceTest {
     void manageArticle() {
         //given: 글이 하나도 없다.
         List<ArticleResponse> articles = getArticles();
-        assertThat(articles.size()).isEqualTo(0);
+        assertThat(articles).isEmpty();
 
         //when: 글을 하나 추가한다.
         createArticle(CONTENT, "기뻐요", true);
 
         //then: 글이 하나 있다.
         articles = getArticles();
-        assertThat(articles.size()).isEqualTo(1);
+        assertThat(articles).hasSize(1);
 
         //when: 글을 조회한다.
         ArticleResponse articleResponse = readArticle(1L);
@@ -67,7 +67,7 @@ public class ArticleAcceptanceTest {
         //when: 글을 삭제한다.
         deleteArticle(1L);
         articles = getArticles();
-        assertThat(articles.size()).isEqualTo(0);
+        assertThat(articles).isEmpty();
     }
 
 
@@ -100,7 +100,7 @@ public class ArticleAcceptanceTest {
                 post("/articles").
         then().
                 log().all().
-                statusCode(HttpStatus.OK.value());
+                statusCode(HttpStatus.CREATED.value());
         //@formatter:on
     }
 

@@ -2,6 +2,8 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.Article;
 import com.saebyeok.saebyeok.domain.ArticleRepository;
+import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,10 @@ public class ArticleService {
         return articleRepository.findAll().stream()
                 .map(this::toArticleResponse)
                 .collect(Collectors.toList());
+    }
+
+    public Article createArticle(Member member, ArticleCreateRequest request) {
+        return articleRepository.save(request.toArticle(member));
     }
 
     private ArticleResponse toArticleResponse(Article article) {

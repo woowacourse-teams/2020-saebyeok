@@ -31,4 +31,7 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    public Article(String content, Member member, String emotion, Boolean isCommentAllowed) {
+    }
 }
