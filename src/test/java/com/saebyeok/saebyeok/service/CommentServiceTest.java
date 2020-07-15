@@ -25,6 +25,7 @@ public class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
+
     private Member member;
     private LocalDateTime now;
     private Article article;
