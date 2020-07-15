@@ -21,8 +21,8 @@ public class CommentController {
         commentService.createComment(commentCreateRequest);
 
         return ResponseEntity.
-            created(URI.create("/articles/" + articleId))
-            .build();
+            created(URI.create("/articles/" + articleId)).
+            build();
     }
 
     @DeleteMapping("/articles/{articleId}/comments/{commentId}")

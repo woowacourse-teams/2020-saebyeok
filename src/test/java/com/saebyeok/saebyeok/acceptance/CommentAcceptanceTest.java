@@ -23,7 +23,10 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommentAcceptanceTest {
+class CommentAcceptanceTest {
+    private static final String UNDER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최소 길이는 1글자입니다!";
+    private static final String OVER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최대 길이는 140자입니다!";
+    private static final long COMMENT_ID = 1L;
 
     @LocalServerPort
     int port;
@@ -36,6 +39,7 @@ public class CommentAcceptanceTest {
 
     private Article article;
     private Member member;
+    private Map<String, Object> params;
 
     @BeforeEach
     void setUp() {
@@ -43,6 +47,12 @@ public class CommentAcceptanceTest {
 
         article = new Article();
         member = new Member();
+        params = new HashMap<>();
+        params.put("member", member);
+        params.put("nickname", "시라소니");
+        params.put("createdDate", LocalDateTime.now());
+        params.put("article", article);
+        params.put("isDeleted", false);
 
         articleRepository.save(article);
         memberRepository.save(member);
@@ -56,10 +66,12 @@ public class CommentAcceptanceTest {
      * when 댓글을 등록한다.
      * then 댓글이 등록에 성공한다.
      * <p>
-     * when 정해진 댓글의 최소 길이보다 짧은 댓글을 등록한다.
+     * given 정해진 댓글의 최소 길이보다 짧은 댓글을 등록하려고 한다.
+     * when 댓글을 등록한다.
      * then 댓글 등록에 실패한다.
      * <p>
-     * when 정해진 댓글의 최대 길이보다 긴 댓글을 등록한다.
+     * given 정해진 댓글의 최대 길이보다 긴 댓글을 등록하려고 한다.
+     * when 댓글을 등록한다.
      * then 댓글 등록에 실패한다.
      * <p>
      * when 게시글에 달린 댓글을 모두 조회한다.
@@ -69,95 +81,59 @@ public class CommentAcceptanceTest {
      * then 댓글 삭제에 성공한다.
      **/
 
-    // TODO: 2020/07/14 댓글 조회 및 댓글 삭제의 assert 확인(해당 댓글 조회해보기) 구현해야 함!!
     @DisplayName("댓글에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
     @Test
     void manageComment() {
         //given
         //when
-        Long id = createComment(article, member);
+        createComment();
         //then
-        assertThat(id).isEqualTo(1L);
+        // TODO: 2020/07/15 댓글과 연관관계가 있는 Article을 통해 댓글 정보를 조회하고, 저장이 되었는지 확인한다.
 
+        //given
+        String underLengthContent = " ";
         //when
-        ExceptionResponse response1 = createUnderLengthComment(article, member);
+        ExceptionResponse underLengthExceptionResponse = createInvalidComment(underLengthContent);
         //then
-        assertThat(response1.getErrorMessage()).isEqualTo("댓글의 최소 길이는 1글자입니다!");
+        assertThat(underLengthExceptionResponse.getErrorMessage()).isEqualTo(UNDER_LENGTH_EXCEPTION_MESSAGE);
 
-        //when
-        ExceptionResponse response2 = createOverLengthComment(article, member);
-        //then
-        assertThat(response2.getErrorMessage()).isEqualTo("댓글의 최대 길이는 140자입니다!");
-
-        //when
-        given().
-            when().
-            delete("/articles/" + 1L + "/comments/" + 1L).
-            then().
-            log().all().
-            statusCode(HttpStatus.NO_CONTENT.value());
-        //then
-    }
-
-    private Long createComment(Article article, Member member) {
-        //@formatter:off
-        Map<String, Object> params = new HashMap<>();
-        params.put("content", "새벽 좋아요");
-        params.put("member", member);
-        params.put("nickname", "시라소니");
-        params.put("createdDate", LocalDateTime.now());
-        params.put("article", article);
-        params.put("isDeleted", false);
-
-        return
-            given().
-                    body(params).
-                    contentType(MediaType.APPLICATION_JSON_VALUE).
-                    accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-                    post("/articles/" + 1L + "/comments").
-            then().
-                    log().all().
-                    statusCode(HttpStatus.CREATED.value()).
-                    extract().as(Long.class);
-        //@formatter:on
-    }
-
-    private ExceptionResponse createUnderLengthComment(Article article, Member member) {
-        //@formatter:off
-        Map<String, Object> params = new HashMap<>();
-        params.put("content", " ");
-        params.put("member", member);
-        params.put("nickname", "시라소니");
-        params.put("createdDate", LocalDateTime.now());
-        params.put("article", article);
-        params.put("isDeleted", false);
-
-        return
-            given().
-                    body(params).
-                    contentType(MediaType.APPLICATION_JSON_VALUE).
-                    accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-                    post("/articles/" + 1L + "/comments").
-            then().
-                    log().all().
-                    statusCode(HttpStatus.BAD_REQUEST.value()).
-                    extract().as(ExceptionResponse.class);
-        //@formatter:on
-    }
-
-    private ExceptionResponse createOverLengthComment(Article article, Member member) {
-        //@formatter:off
-        Map<String, Object> params = new HashMap<>();
-        params.put("content", "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
+        //given
+        String overLengthContent = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
             "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
-            "1만4000원.\n");
-        params.put("member", member);
-        params.put("nickname", "시라소니");
-        params.put("createdDate", LocalDateTime.now());
-        params.put("article", article);
-        params.put("isDeleted", false);
+            "1만4000원.\n";
+        //when
+        ExceptionResponse overLengthExceptionResponse = createInvalidComment(overLengthContent);
+        //then
+        assertThat(overLengthExceptionResponse.getErrorMessage()).isEqualTo(OVER_LENGTH_EXCEPTION_MESSAGE);
+
+        // TODO: 2020/07/15 댓글 조회의 경우, 댓글과 연관관계에 있는 Article을 불러와 getComments를 해서 확인해야 한다.
+
+        //when
+        deleteComment();
+        //then
+        // TODO: 2020/07/15 댓글 삭제가 수행되었는지 댓글과 연관관계에 있는 Article을 통해 댓글을 조회하여 확인해야 한다.
+    }
+
+    private void createComment() {
+        //@formatter:off
+        params.put("content", "새벽 좋아요");
+
+        given().
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post("/articles/" + article.getId() + "/comments").
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                header("Location","/articles/" + article.getId());
+        //@formatter:on
+    }
+
+    private ExceptionResponse createInvalidComment(String content) {
+        //@formatter:off
+        params.put("content", content);
 
         return
             given().
@@ -165,11 +141,22 @@ public class CommentAcceptanceTest {
                     contentType(MediaType.APPLICATION_JSON_VALUE).
                     accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                    post("/articles/" + 1L + "/comments").
+                    post("/articles/" + article.getId() + "/comments").
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
                     extract().as(ExceptionResponse.class);
+        //@formatter:on
+    }
+
+    private void deleteComment() {
+        //@formatter:off
+        given().
+        when().
+                delete("/articles/" + article.getId() + "/comments/" + COMMENT_ID).
+        then().
+                log().all().
+                statusCode(HttpStatus.NO_CONTENT.value());
         //@formatter:on
     }
 }
