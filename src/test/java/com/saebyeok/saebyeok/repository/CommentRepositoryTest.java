@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.List;
 
@@ -122,6 +123,16 @@ public class CommentRepositoryTest {
         assertThat(comments.get(2).getNickname()).isEqualTo(comment3.getNickname());
     }
 
+    @DisplayName("존재하지 않는 댓글을 조회할 경우, 빈 값을 반환한다")
+    @Test
+    void findCommentExceptionTest() {
+        //given
+        Long notExistCommentId = 1L;
+        //when
+        //then
+        assertThat(commentRepository.findById(notExistCommentId)).isNotPresent();
+    }
+
     @DisplayName("댓글을 DB에서 삭제하고, 삭제한 댓글이 조회되지 않는다")
     @Test
     void deleteCommentTest() {
@@ -135,15 +146,23 @@ public class CommentRepositoryTest {
             build();
 
         commentRepository.save(comment);
-        Long id = comment.getId();
+        Long deletedCommentId = comment.getId();
 
         //when
         commentRepository.delete(comment);
 
         //then
-        assertThatThrownBy(() -> commentRepository.findById(id).
-            orElseThrow(CommentNotFoundException::new)).
-            isInstanceOf(CommentNotFoundException.class).
-            hasMessage("해당 댓글을 찾을 수 없습니다!");
+        assertThat(commentRepository.findById(deletedCommentId)).isNotPresent();
+    }
+
+    @DisplayName("예외 테스트: 존재하지 않는 댓글을 삭제할 경우, 예외가 발생한다")
+    @Test
+    void deleteCommentExceptionTest() {
+        //given
+        Long notExistCommentId = 1L;
+        //when
+        //then
+        assertThatThrownBy(() -> commentRepository.deleteById(notExistCommentId)).
+            isInstanceOf(EmptyResultDataAccessException.class);
     }
 }
