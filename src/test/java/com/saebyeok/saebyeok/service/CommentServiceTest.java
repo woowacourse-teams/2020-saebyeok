@@ -39,8 +39,7 @@ class CommentServiceTest {
     }
 
     private CommentCreateRequest createCommentCreateRequest(String content) {
-        return new CommentCreateRequest(content, member, "시라소니", now,
-                                        article, false);
+        return new CommentCreateRequest(content, member, "시라소니", article, false);
     }
 
     @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다")

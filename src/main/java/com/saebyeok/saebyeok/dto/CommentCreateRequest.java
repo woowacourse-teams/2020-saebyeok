@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +13,6 @@ public class CommentCreateRequest {
     private String content;
     private Member member;
     private String nickname;
-    private LocalDateTime createdDate;
     private Article article;
     private Boolean isDeleted;
 }
