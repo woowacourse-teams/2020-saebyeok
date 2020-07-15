@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.controller;
 
-import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.service.CommentService;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +15,14 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    // TODO: 2020/07/14 리턴할 body값에 comment.getId값을 넣어줘야 함 
-    @PostMapping("/articles/{id}/comments")
-    public ResponseEntity<Long> createComment(@PathVariable Long id,
+    @PostMapping("/articles/{articleId}/comments")
+    public ResponseEntity<Void> createComment(@PathVariable Long articleId,
                                               @RequestBody CommentCreateRequest commentCreateRequest) {
-        Comment comment = commentService.createComment(commentCreateRequest);
+        commentService.createComment(commentCreateRequest);
 
         return ResponseEntity.
-            created(URI.create("/articles/" + id)).
-            body(1L);
+            created(URI.create("/articles/" + articleId))
+            .build();
     }
 
     @DeleteMapping("/articles/{articleId}/comments/{commentId}")
