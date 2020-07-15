@@ -1,7 +1,6 @@
 package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ public class ArticleCreateRequest {
     private String emotion;
     private Boolean isCommentAllowed;
 
-    public Article toArticle(Member member) {
-        return new Article(content, member, emotion, isCommentAllowed);
+    public Article toArticle() {
+        return new Article(content, emotion, isCommentAllowed);
     }
 }

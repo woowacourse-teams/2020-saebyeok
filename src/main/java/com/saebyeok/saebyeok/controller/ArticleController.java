@@ -7,10 +7,7 @@ import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -34,5 +31,12 @@ public class ArticleController {
         return ResponseEntity
                 .created(URI.create("/articles/" + article.getId()))
                 .build();
+    }
+
+    @GetMapping("/articles/{id}")
+    public ResponseEntity<ArticleResponse> readArticle(Member member, @PathVariable Long id) {
+        ArticleResponse articleResponse = articleService.readArticle(id);
+        return ResponseEntity.ok(articleResponse);
+
     }
 }

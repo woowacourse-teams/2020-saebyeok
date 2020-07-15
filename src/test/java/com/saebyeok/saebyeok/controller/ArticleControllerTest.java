@@ -34,6 +34,7 @@ class ArticleControllerTest {
     private static final String TEST_CONTENT = "내용";
     private static final String TEST_EMOTION = "기쁨";
     private static final boolean TEST_IS_COMMENT_ALLOWED = true;
+    private static final long TEST_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,10 +46,10 @@ class ArticleControllerTest {
 
     @BeforeEach
     void setUp() {
-        articleResponse = new ArticleResponse(1L, TEST_CONTENT, LocalDateTime.now(), TEST_EMOTION, TEST_IS_COMMENT_ALLOWED, null);
+        articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), TEST_EMOTION, TEST_IS_COMMENT_ALLOWED, null);
     }
 
-    @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다.")
+    @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
     @Test
     void getArticlesTest() throws Exception {
         when(articleService.getArticles()).thenReturn(Arrays.asList(articleResponse));
@@ -59,18 +60,32 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$[0].content").value("내용"));
     }
 
-    @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다.")
+    @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createArticleTest() throws Exception {
         ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT, TEST_EMOTION, TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
 
-        when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(request.toArticle(new Member()));
+        when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(request.toArticle());
 
         this.mockMvc.perform(post("/articles").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
                 andDo(print());
+    }
+
+    @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
+    @Test
+    void readArticleTest() throws Exception {
+        when(articleService.readArticle(TEST_ID)).thenReturn(articleResponse);
+
+        this.mockMvc.perform(get("/articles/" + TEST_ID).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.id").value(TEST_ID)).
+                andExpect(jsonPath("$.content").value(TEST_CONTENT)).
+                andExpect(jsonPath("$.emotion").value(TEST_EMOTION)).
+                andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 }

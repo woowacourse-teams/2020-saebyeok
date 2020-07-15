@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,5 +28,10 @@ public class Member {
     private Boolean isDeleted;
 
     @OneToMany(mappedBy = "member")
-    private List<Article> articles;
+    private List<Article> articles = new ArrayList<>();
+
+    public void addArticle(Article article) {
+        // Todo: 편의 메소드 리팩토링(add를 중복으로 하는 경우 등)
+        this.articles.add(article);
+    }
 }

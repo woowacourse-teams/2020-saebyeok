@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ArticleAcceptanceTest {
+class ArticleAcceptanceTest {
     public static final String CONTENT = "내용입니다";
     @LocalServerPort
     int port;
@@ -47,6 +47,9 @@ public class ArticleAcceptanceTest {
 
     @Test
     void manageArticle() {
+        // Todo: 초기 개발을 위해 Article과 연관관계가 있는 Member를 data.sql에서 수동 생성함.
+        //  Member 관련 인수테스트가 생기면 삭제하고 아래에 코드 추가하기
+
         //given: 글이 하나도 없다.
         List<ArticleResponse> articles = getArticles();
         assertThat(articles).isEmpty();
@@ -108,6 +111,7 @@ public class ArticleAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                         get("/articles/" + id).
                 then().
