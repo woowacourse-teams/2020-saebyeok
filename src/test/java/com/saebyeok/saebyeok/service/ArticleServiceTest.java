@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +44,7 @@ class ArticleServiceTest {
     private Article article;
 
     @BeforeEach
+    @Transactional
     void setUp() {
         articleService = new ArticleService(articleRepository);
         member = new Member(MEMBER_ID, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, null);
@@ -81,6 +85,23 @@ class ArticleServiceTest {
         when(articleRepository.findById(INVALID_ARTICLE_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> articleService.readArticle(INVALID_ARTICLE_ID))
+                .isInstanceOf(ArticleNotFoundException.class)
+                .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
+    }
+
+    @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
+    @Test
+    void deleteArticleTest() {
+        when(articleRepository.findById(ARTICLE_ID)).thenReturn(Optional.of(article));
+
+        articleService.deleteArticle(ARTICLE_ID);
+        verify(articleRepository).deleteById(any());
+    }
+
+    @DisplayName("예외 테스트: 잘못된 ID의 글 삭제를 요청하면 오류를 발생시킨다")
+    @Test
+    void deleteArticleExceptionTest() {
+        assertThatThrownBy(() -> articleService.deleteArticle(INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
                 .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
     }

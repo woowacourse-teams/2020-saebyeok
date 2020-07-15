@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +20,8 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,8 +33,9 @@ class ArticleControllerTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String TEST_CONTENT = "내용";
     private static final String TEST_EMOTION = "기쁨";
-    private static final boolean TEST_IS_COMMENT_ALLOWED = true;
-    private static final long TEST_ID = 1L;
+    private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
+    private static final Long TEST_ID = 1L;
+    private static final Long INVALID_ARTICLE_ID = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -87,5 +88,36 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.content").value(TEST_CONTENT)).
                 andExpect(jsonPath("$.emotion").value(TEST_EMOTION)).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
+    }
+
+    @DisplayName("예외 테스트: 없는 ID의 글 조회를 요청하면 ArticleNotFoundException이 발생한다")
+    @Test
+    void readArticleExceptionTest() throws Exception {
+        when(articleService.readArticle(INVALID_ARTICLE_ID))
+                .thenThrow(ArticleNotFoundException.class);
+
+        this.mockMvc.perform(get("/articles/" + INVALID_ARTICLE_ID).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
+    @Test
+    void deleteArticleTest() throws Exception {
+        doNothing().when(articleService).deleteArticle(TEST_ID);
+
+        this.mockMvc.perform(delete("/articles/" + TEST_ID)).
+                andExpect(status().isNoContent());
+    }
+
+    @DisplayName("예외 테스트: 없는 ID의 글 삭제를 요청하면 ArticleNotFoundException이 발생한다")
+    @Test
+    void deleteArticleExceptionTest() throws Exception {
+        doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID.toString()))
+                .when(articleService).deleteArticle(INVALID_ARTICLE_ID);
+
+        this.mockMvc.perform(delete("/articles/" + INVALID_ARTICLE_ID).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest());
     }
 }

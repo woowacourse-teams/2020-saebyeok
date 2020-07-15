@@ -41,6 +41,12 @@ public class ArticleService {
         return toArticleResponse(article);
     }
 
+    public void deleteArticle(Long articleId) {
+        articleRepository.findById(articleId)
+                .orElseThrow(() -> new ArticleNotFoundException(articleId.toString()));
+        articleRepository.deleteById(articleId);
+    }
+
     private ArticleResponse toArticleResponse(Article article) {
         return new ArticleResponse(
                 article.getId(),
