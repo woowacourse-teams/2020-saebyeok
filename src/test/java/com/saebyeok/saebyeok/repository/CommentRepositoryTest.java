@@ -15,9 +15,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-// TODO: 2020/07/15 테스트 코드 나중에 수정하기(모든 pulbic 제거하기)
 @SpringBootTest
-public class CommentRepositoryTest {
+class CommentRepositoryTest {
     private static final String TEST_CONTENT = "새벽 좋아요";
     private static final String TEST_NICKNAME = "시라소니";
 
@@ -47,17 +46,21 @@ public class CommentRepositoryTest {
         commentRepository.deleteAll();
     }
 
-    @DisplayName("댓글을 DB에 저장하고, 저장된 댓글을 확인한다")
-    @Test
-    void saveCommentTest() {
-        //given
-        Comment comment = Comment.builder().
+    private Comment createTestComment() {
+        return Comment.builder().
             content(TEST_CONTENT).
             member(member).
             nickname(TEST_NICKNAME).
             article(article).
             isDeleted(false).
             build();
+    }
+
+    @DisplayName("댓글을 DB에 저장하고, 저장된 댓글을 확인한다")
+    @Test
+    void saveCommentTest() {
+        //given
+        Comment comment = createTestComment();
 
         //when
         commentRepository.save(comment);
@@ -78,27 +81,9 @@ public class CommentRepositoryTest {
     @Test
     void findCommentsTest() {
         //given
-        Comment comment1 = Comment.builder().
-            content(TEST_CONTENT).
-            member(member).
-            nickname(TEST_NICKNAME).
-            article(article).
-            isDeleted(false).
-            build();
-        Comment comment2 = Comment.builder().
-            content(TEST_CONTENT).
-            member(member).
-            nickname(TEST_NICKNAME).
-            article(article).
-            isDeleted(false).
-            build();
-        Comment comment3 = Comment.builder().
-            content(TEST_CONTENT).
-            member(member).
-            nickname(TEST_NICKNAME).
-            article(article).
-            isDeleted(false).
-            build();
+        Comment comment1 = createTestComment();
+        Comment comment2 = createTestComment();
+        Comment comment3 = createTestComment();
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
@@ -137,13 +122,7 @@ public class CommentRepositoryTest {
     @Test
     void deleteCommentTest() {
         //given
-        Comment comment = Comment.builder().
-            content(TEST_CONTENT).
-            member(member).
-            nickname(TEST_NICKNAME).
-            article(article).
-            isDeleted(false).
-            build();
+        Comment comment = createTestComment();
 
         commentRepository.save(comment);
         Long deletedCommentId = comment.getId();

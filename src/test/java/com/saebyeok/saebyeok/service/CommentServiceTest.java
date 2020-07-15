@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceTest {
+class CommentServiceTest {
 
     private CommentService commentService;
 
@@ -38,21 +38,30 @@ public class CommentServiceTest {
         this.article = new Article();
     }
 
+    private CommentCreateRequest createCommentCreateRequest(String content) {
+        return new CommentCreateRequest(content, member, "시라소니", now,
+                                        article, false);
+    }
+
     @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다")
     @Test
     void createCommentTest() {
-        commentService.createComment(new CommentCreateRequest("새벽 좋아요", member, "시라소니", now,
-                                                              article, false));
+        //given
+        CommentCreateRequest commentCreateRequest = createCommentCreateRequest("새벽 좋아요");
+        //when
+        commentService.createComment(commentCreateRequest);
 
+        //then
         verify(commentRepository).save(any());
     }
 
     @DisplayName("예외 테스트: 최소 길이보다 짧은 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
     @Test
     void createUnderLengthCommentTest() {
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest(" ", member, "시라소니", now,
-                                                                             article, false);
-
+        //given
+        CommentCreateRequest commentCreateRequest = createCommentCreateRequest(" ");
+        //when
+        //then
         assertThatThrownBy(() -> commentService.createComment(commentCreateRequest)).
             isInstanceOf(InvalidCommentException.class).
             hasMessageContaining("댓글의 최소 길이는");
@@ -61,12 +70,13 @@ public class CommentServiceTest {
     @DisplayName("예외 테스트: 최대 길이보다 긴 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
     @Test
     void createOverLengthCommentTest() {
+        //given
         String content = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
             "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
             "1만4000원.\n";
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest(content, member, "시라소니", now,
-                                                                             article, false);
-
+        CommentCreateRequest commentCreateRequest = createCommentCreateRequest(content);
+        //when
+        //then
         assertThatThrownBy(() -> commentService.createComment(commentCreateRequest)).
             isInstanceOf(InvalidCommentException.class).
             hasMessageContaining("댓글의 최대 길이는");
@@ -75,8 +85,13 @@ public class CommentServiceTest {
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() {
-        commentService.deleteComment(1L);
+        //given
+        long savedCommentId = 1L;
 
+        //when
+        commentService.deleteComment(savedCommentId);
+
+        //then
         verify(commentRepository).deleteById(any());
     }
 }
