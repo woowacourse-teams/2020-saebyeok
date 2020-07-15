@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 // TODO: 2020/07/15 테스트 코드 나중에 수정하기(모든 pulbic 제거하기)
 @SpringBootTest
@@ -98,10 +99,11 @@ public class CommentRepositoryTest {
             isDeleted(false).
             build();
 
-        //when
         commentRepository.save(comment1);
         commentRepository.save(comment2);
         commentRepository.save(comment3);
+
+        //when
         List<Comment> comments = commentRepository.findAll();
 
         //then
@@ -118,5 +120,30 @@ public class CommentRepositoryTest {
         assertThat(comments.get(2).getId()).isEqualTo(comment3.getId());
         assertThat(comments.get(2).getContent()).isEqualTo(comment3.getContent());
         assertThat(comments.get(2).getNickname()).isEqualTo(comment3.getNickname());
+    }
+
+    @DisplayName("댓글을 DB에서 삭제하고, 삭제한 댓글이 조회되지 않는다")
+    @Test
+    void deleteCommentTest() {
+        //given
+        Comment comment = Comment.builder().
+            content(TEST_CONTENT).
+            member(member).
+            nickname(TEST_NICKNAME).
+            article(article).
+            isDeleted(false).
+            build();
+
+        commentRepository.save(comment);
+        Long id = comment.getId();
+
+        //when
+        commentRepository.delete(comment);
+
+        //then
+        assertThatThrownBy(() -> commentRepository.findById(id).
+            orElseThrow(CommentNotFoundException::new)).
+            isInstanceOf(CommentNotFoundException.class).
+            hasMessage("해당 댓글을 찾을 수 없습니다!");
     }
 }
