@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Comment {
@@ -32,4 +29,13 @@ public class Comment {
     @ManyToOne
     private Article article;
     private Boolean isDeleted;
+
+    @Builder
+    public Comment(String content, Member member, String nickname, Article article, Boolean isDeleted) {
+        this.content = content;
+        this.member = member;
+        this.nickname = nickname;
+        this.article = article;
+        this.isDeleted = isDeleted;
+    }
 }
