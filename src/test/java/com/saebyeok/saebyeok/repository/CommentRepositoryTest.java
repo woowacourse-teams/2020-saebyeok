@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 2020/07/15 테스트 코드 나중에 수정하기(모든 pulbic 제거하기)
 @SpringBootTest
 public class CommentRepositoryTest {
     private static final String TEST_CONTENT = "새벽 좋아요";
@@ -44,9 +45,10 @@ public class CommentRepositoryTest {
         commentRepository.deleteAll();
     }
 
-    @DisplayName("댓글을 DB에 저장하고, 저장된 댓글을 확인한다.")
+    @DisplayName("댓글을 DB에 저장하고, 저장된 댓글을 확인한다")
     @Test
     void saveCommentTest() {
+        //given
         Comment comment = Comment.builder().
             content(TEST_CONTENT).
             member(member).
@@ -55,16 +57,66 @@ public class CommentRepositoryTest {
             isDeleted(false).
             build();
 
+        //when
         commentRepository.save(comment);
         List<Comment> comments = commentRepository.findAll();
-        assertThat(comments.size()).isEqualTo(1);
-
         Long id = comments.get(0).getId();
         Comment savedComment = commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+
+        //then
+        assertThat(comments.size()).isEqualTo(1);
         assertThat(savedComment.getContent()).isEqualTo(TEST_CONTENT);
         assertThat(savedComment.getMember().getId()).isEqualTo(member.getId());
         assertThat(savedComment.getNickname()).isEqualTo(TEST_NICKNAME);
         assertThat(savedComment.getArticle().getId()).isEqualTo(article.getId());
         assertThat(savedComment.getIsDeleted()).isFalse();
+    }
+
+    @DisplayName("댓글 여러개를 DB에 저장하고, 저장된 댓글들을 조회한다")
+    @Test
+    void findCommentsTest() {
+        //given
+        Comment comment1 = Comment.builder().
+            content(TEST_CONTENT).
+            member(member).
+            nickname(TEST_NICKNAME).
+            article(article).
+            isDeleted(false).
+            build();
+        Comment comment2 = Comment.builder().
+            content(TEST_CONTENT).
+            member(member).
+            nickname(TEST_NICKNAME).
+            article(article).
+            isDeleted(false).
+            build();
+        Comment comment3 = Comment.builder().
+            content(TEST_CONTENT).
+            member(member).
+            nickname(TEST_NICKNAME).
+            article(article).
+            isDeleted(false).
+            build();
+
+        //when
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        commentRepository.save(comment3);
+        List<Comment> comments = commentRepository.findAll();
+
+        //then
+        assertThat(comments.size()).isEqualTo(3);
+
+        assertThat(comments.get(0).getId()).isEqualTo(comment1.getId());
+        assertThat(comments.get(0).getContent()).isEqualTo(comment1.getContent());
+        assertThat(comments.get(0).getNickname()).isEqualTo(comment1.getNickname());
+
+        assertThat(comments.get(1).getId()).isEqualTo(comment2.getId());
+        assertThat(comments.get(1).getContent()).isEqualTo(comment2.getContent());
+        assertThat(comments.get(1).getNickname()).isEqualTo(comment2.getNickname());
+
+        assertThat(comments.get(2).getId()).isEqualTo(comment3.getId());
+        assertThat(comments.get(2).getContent()).isEqualTo(comment3.getContent());
+        assertThat(comments.get(2).getNickname()).isEqualTo(comment3.getNickname());
     }
 }
