@@ -12,8 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -27,14 +25,12 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
 
     private Member member;
-    private LocalDateTime now;
     private Article article;
 
     @BeforeEach
     void setUp() {
         this.commentService = new CommentService(commentRepository);
         this.member = new Member();
-        this.now = LocalDateTime.now();
         this.article = new Article();
     }
 

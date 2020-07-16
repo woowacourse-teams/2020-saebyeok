@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommentAcceptanceTest {
     private static final String UNDER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최소 길이는 1글자입니다!";
     private static final String OVER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최대 길이는 140자입니다!";
+    private static final String COMMENT_NOT_FOUND_EXCEPTION_MESSAGE = "해당 댓글을 찾을 수 없습니다!";
     private static final long COMMENT_ID = 1L;
     private static final long NOT_EXIST_COMMENT_ID = 10L;
-    private static final String COMMENT_NOT_FOUND_EXCEPTION_MESSAGE = "해당 댓글을 찾을 수 없습니다!";
 
     @LocalServerPort
     int port;
