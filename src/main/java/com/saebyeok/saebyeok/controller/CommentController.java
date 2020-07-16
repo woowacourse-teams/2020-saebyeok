@@ -2,18 +2,16 @@ package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@RequiredArgsConstructor
 @RestController
 public class CommentController {
     private final CommentService commentService;
-
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
 
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Void> createComment(@PathVariable Long articleId,
