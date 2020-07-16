@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.service;
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.CommentRepository;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.InvalidCommentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +48,10 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+        try {
+            commentRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new CommentNotFoundException();
+        }
     }
 }

@@ -27,6 +27,8 @@ class CommentAcceptanceTest {
     private static final String UNDER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최소 길이는 1글자입니다!";
     private static final String OVER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최대 길이는 140자입니다!";
     private static final long COMMENT_ID = 1L;
+    private static final long NOT_EXIST_COMMENT_ID = 10L;
+    private static final String COMMENT_NOT_FOUND_EXCEPTION_MESSAGE = "해당 댓글을 찾을 수 없습니다!";
 
     @LocalServerPort
     int port;
@@ -79,6 +81,9 @@ class CommentAcceptanceTest {
      * <p>
      * when 댓글을 삭제한다.
      * then 댓글 삭제에 성공한다.
+     * <p>
+     * when 존재하지 않는 댓글을 삭제한다.
+     * then 댓글 삭제에 실패한다.
      **/
 
     @DisplayName("댓글에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
@@ -112,6 +117,11 @@ class CommentAcceptanceTest {
         deleteComment();
         //then
         // TODO: 2020/07/15 댓글 삭제가 수행되었는지 댓글과 연관관계에 있는 Article을 통해 댓글을 조회하여 확인해야 한다.
+
+        //when
+        ExceptionResponse commentNotFoundExceptionResponse = deleteNotFoundComment();
+        //then
+        assertThat(commentNotFoundExceptionResponse.getErrorMessage()).isEqualTo(COMMENT_NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     private void createComment() {
@@ -157,6 +167,19 @@ class CommentAcceptanceTest {
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
+        //@formatter:on
+    }
+
+    private ExceptionResponse deleteNotFoundComment() {
+        //@formatter:off
+        return
+            given().
+            when().
+                    delete("/articles/" + article.getId() + "/comments/" + NOT_EXIST_COMMENT_ID).
+            then().
+                    log().all().
+                    statusCode(HttpStatus.BAD_REQUEST.value()).
+                    extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 }
