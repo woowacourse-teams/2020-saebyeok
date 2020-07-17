@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,6 @@ class ArticleServiceTest {
     private Article article;
 
     @BeforeEach
-    @Transactional
     void setUp() {
         articleService = new ArticleService(articleRepository);
         member = new Member(MEMBER_ID, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, null);

@@ -58,7 +58,7 @@ class ArticleControllerTest {
         this.mockMvc.perform(get("/articles").
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
-                andExpect(jsonPath("$[0].content").value("내용"));
+                andExpect(jsonPath("$[0].content").value(TEST_CONTENT));
     }
 
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")

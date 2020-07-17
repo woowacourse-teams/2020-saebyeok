@@ -33,6 +33,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {
     public static final String CONTENT = "내용입니다";
+    public static final String EMOTION = "기뻐요";
+    public static final long ARTICLE_ID = 1L;
+
     @LocalServerPort
     int port;
 
@@ -55,20 +58,20 @@ class ArticleAcceptanceTest {
         assertThat(articles).isEmpty();
 
         //when: 글을 하나 추가한다.
-        createArticle(CONTENT, "기뻐요", true);
+        createArticle(CONTENT, EMOTION, true);
 
         //then: 글이 하나 있다.
         articles = getArticles();
         assertThat(articles).hasSize(1);
 
         //when: 글을 조회한다.
-        ArticleResponse articleResponse = readArticle(1L);
+        ArticleResponse articleResponse = readArticle(ARTICLE_ID);
 
         //then: 글의 내용이 방금 쓴 것과 일치한다.
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
 
         //when: 글을 삭제한다.
-        deleteArticle(1L);
+        deleteArticle(ARTICLE_ID);
         articles = getArticles();
         assertThat(articles).isEmpty();
     }
