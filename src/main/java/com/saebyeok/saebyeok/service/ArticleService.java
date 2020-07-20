@@ -37,13 +37,13 @@ public class ArticleService {
 
     public ArticleResponse readArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundException(articleId.toString()));
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
         return toArticleResponse(article);
     }
 
     public void deleteArticle(Long articleId) {
         articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundException(articleId.toString()));
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
         articleRepository.deleteById(articleId);
     }
 

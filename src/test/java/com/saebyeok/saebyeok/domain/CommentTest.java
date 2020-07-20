@@ -15,8 +15,6 @@ public class CommentTest {
         "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
         "1만4000원.\n";
 
-    // TODO: 2020/07/20 길이검증에 대한 테스트 추가 필요
-
     @DisplayName("Comment를 생성할 때 값들이 정상적으로 생성되야 한다")
     @Test
     void createCommentTest() {

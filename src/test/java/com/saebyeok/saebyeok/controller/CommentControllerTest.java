@@ -40,7 +40,6 @@ class CommentControllerTest {
     @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록 후 정상적으로 응답한다")
     @Test
     void createCommentTest() throws Exception {
-        //given
         Comment comment = Comment.builder().
             content(TEST_CONTENT).
             nickname(TEST_NICKNAME).
@@ -51,8 +50,6 @@ class CommentControllerTest {
 
         given(commentService.createComment(any())).willReturn(comment);
 
-        //when
-        //then
         this.mockMvc.perform(post("/articles/" + ARTICLE_ID + "/comments").
             content(content).
             accept(MediaType.APPLICATION_JSON).
@@ -64,9 +61,6 @@ class CommentControllerTest {
     @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다")
     @Test
     void deleteCommentTest() throws Exception {
-        //given
-        //when
-        //then
         this.mockMvc.perform(delete("/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID)).
             andExpect(status().isNoContent()).
             andDo(print());
