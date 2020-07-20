@@ -113,7 +113,7 @@ class ArticleControllerTest {
     @DisplayName("예외 테스트: 없는 ID의 글 삭제를 요청하면 ArticleNotFoundException이 발생한다")
     @Test
     void deleteArticleExceptionTest() throws Exception {
-        doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID.toString()))
+        doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID))
                 .when(articleService).deleteArticle(INVALID_ARTICLE_ID);
 
         this.mockMvc.perform(delete("/articles/" + INVALID_ARTICLE_ID).
