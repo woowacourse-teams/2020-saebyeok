@@ -5,6 +5,7 @@ import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,8 +22,10 @@ public class GlobalExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ArticleNotFoundException.class)
-    public ExceptionResponse articleNotFoundHandler(ArticleNotFoundException e) {
-        return new ExceptionResponse(e.getMessage());
+    public ResponseEntity<ExceptionResponse> articleNotFoundHandler(ArticleNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ExceptionResponse(e.getMessage()));
     }
 }
 
