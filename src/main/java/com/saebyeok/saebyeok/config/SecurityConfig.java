@@ -9,13 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * security 로그인 창 없애는 설정.
  * 프로덕션 환경에서는 사용하지 말라고 함!
  */
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/h2-console/**").permitAll();
+            .antMatchers("/").permitAll()
+            .antMatchers("/h2-console/**").permitAll();
+
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
