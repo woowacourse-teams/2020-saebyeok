@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
+import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 public class Comment {
+    public static final int MIN_LENGTH = 1;
+    public static final int MAX_LENGTH = 140;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,11 +35,18 @@ public class Comment {
     private Boolean isDeleted;
 
     @Builder
-    public Comment(String content, Member member, String nickname, Article article, Boolean isDeleted) {
+    public Comment(String content, String nickname, Boolean isDeleted) {
+        validateLength(content);
+
         this.content = content;
-        this.member = member;
         this.nickname = nickname;
-        this.article = article;
         this.isDeleted = isDeleted;
+    }
+
+    private void validateLength(String content) {
+        int contentLength = content.trim().length();
+        if (contentLength < MIN_LENGTH || contentLength > MAX_LENGTH) {
+            throw new InvalidLengthCommentException(contentLength);
+        }
     }
 }

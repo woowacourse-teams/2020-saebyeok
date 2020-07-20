@@ -4,7 +4,7 @@ import com.saebyeok.saebyeok.domain.Article;
 import com.saebyeok.saebyeok.domain.CommentRepository;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
-import com.saebyeok.saebyeok.exception.InvalidCommentException;
+import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,8 +58,8 @@ class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.createComment(commentCreateRequest)).
-            isInstanceOf(InvalidCommentException.class).
-            hasMessageContaining("댓글의 최소 길이는");
+            isInstanceOf(InvalidLengthCommentException.class).
+            hasMessageContaining("올바르지 않은 댓글입니다!");
     }
 
     @DisplayName("예외 테스트: 최대 길이보다 긴 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
@@ -73,8 +73,8 @@ class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.createComment(commentCreateRequest)).
-            isInstanceOf(InvalidCommentException.class).
-            hasMessageContaining("댓글의 최대 길이는");
+            isInstanceOf(InvalidLengthCommentException.class).
+            hasMessageContaining("올바르지 않은 댓글입니다!");
     }
 
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")

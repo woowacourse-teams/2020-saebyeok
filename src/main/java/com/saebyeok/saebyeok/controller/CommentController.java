@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.controller;
 
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ public class CommentController {
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Void> createComment(@PathVariable Long articleId,
                                               @RequestBody CommentCreateRequest commentCreateRequest) {
-        commentService.createComment(commentCreateRequest);
+        Comment comment = commentService.createComment(commentCreateRequest);
 
         return ResponseEntity.
-            created(URI.create("/articles/" + articleId)).
+            created(URI.create("/articles/" + articleId + "/comments/" + comment.getId())).
             build();
     }
 

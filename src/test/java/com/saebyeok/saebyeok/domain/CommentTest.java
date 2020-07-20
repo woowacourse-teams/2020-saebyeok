@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CommentTest {
-    private static final String TEST_CONTENT = "새벽 좋아요";
-    private static final String TEST_NICKNAME = "시라소니";
+public class CommentTest {
+    public static final String TEST_CONTENT = "새벽 좋아요";
+    public static final String TEST_NICKNAME = "시라소니";
+
+    // TODO: 2020/07/20 길이검증에 대한 테스트 추가 필요
 
     @DisplayName("Comment를 생성할 때 값들이 정상적으로 생성되야 한다")
     @Test
@@ -17,16 +19,12 @@ class CommentTest {
 
         Comment comment = Comment.builder().
             content(TEST_CONTENT).
-            member(member).
             nickname(TEST_NICKNAME).
-            article(article).
             isDeleted(false).
             build();
 
         assertThat(comment.getContent()).isEqualTo(TEST_CONTENT);
-        assertThat(comment.getMember()).isEqualTo(member);
         assertThat(comment.getNickname()).isEqualTo(TEST_NICKNAME);
-        assertThat(comment.getArticle()).isEqualTo(article);
         assertThat(comment.getIsDeleted()).isFalse();
     }
 

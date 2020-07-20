@@ -2,24 +2,24 @@ package com.saebyeok.saebyeok.repository;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.saebyeok.saebyeok.domain.CommentTest.TEST_CONTENT;
+import static com.saebyeok.saebyeok.domain.CommentTest.TEST_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Transactional
 @SpringBootTest
 class CommentRepositoryTest {
-    private static final String TEST_CONTENT = "새벽 좋아요";
-    private static final String TEST_NICKNAME = "시라소니";
-
     @Autowired
     private CommentRepository commentRepository;
 
@@ -41,17 +41,10 @@ class CommentRepositoryTest {
         memberRepository.save(member);
     }
 
-    @AfterEach
-    public void cleanup() {
-        commentRepository.deleteAll();
-    }
-
     private Comment createTestComment() {
         return Comment.builder().
             content(TEST_CONTENT).
-            member(member).
             nickname(TEST_NICKNAME).
-            article(article).
             isDeleted(false).
             build();
     }
@@ -66,14 +59,12 @@ class CommentRepositoryTest {
         commentRepository.save(comment);
         List<Comment> comments = commentRepository.findAll();
         Long id = comments.get(0).getId();
-        Comment savedComment = commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+        Comment savedComment = commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
 
         //then
         assertThat(comments.size()).isEqualTo(1);
         assertThat(savedComment.getContent()).isEqualTo(TEST_CONTENT);
-        assertThat(savedComment.getMember().getId()).isEqualTo(member.getId());
         assertThat(savedComment.getNickname()).isEqualTo(TEST_NICKNAME);
-        assertThat(savedComment.getArticle().getId()).isEqualTo(article.getId());
         assertThat(savedComment.getIsDeleted()).isFalse();
     }
 

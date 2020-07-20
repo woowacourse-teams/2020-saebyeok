@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -24,9 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
-    private static final String UNDER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최소 길이는 1글자입니다!";
-    private static final String OVER_LENGTH_EXCEPTION_MESSAGE = "댓글의 최대 길이는 140자입니다!";
-    private static final String COMMENT_NOT_FOUND_EXCEPTION_MESSAGE = "해당 댓글을 찾을 수 없습니다!";
     private static final long COMMENT_ID = 1L;
     private static final long NOT_EXIST_COMMENT_ID = 10L;
 
@@ -86,6 +84,7 @@ class CommentAcceptanceTest {
      * then 댓글 삭제에 실패한다.
      **/
 
+    @Sql("/truncate.sql")
     @DisplayName("댓글에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
     @Test
     void manageComment() {
@@ -97,10 +96,13 @@ class CommentAcceptanceTest {
 
         //given
         String underLengthContent = " ";
+        ExceptionResponse exceptionResponse = createInvalidComment(underLengthContent);
+        int length = underLengthContent.trim().length();
         //when
-        ExceptionResponse underLengthExceptionResponse = createInvalidComment(underLengthContent);
         //then
-        assertThat(underLengthExceptionResponse.getErrorMessage()).isEqualTo(UNDER_LENGTH_EXCEPTION_MESSAGE);
+        // TODO: 2020/07/20 exceptionResponse로 받아오니 thrownBy로 검증 안됨, 수정 필요!
+        assertThat(exceptionResponse.getErrorMessage())
+            .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
         //given
         String overLengthContent = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
@@ -108,8 +110,10 @@ class CommentAcceptanceTest {
             "1만4000원.\n";
         //when
         ExceptionResponse overLengthExceptionResponse = createInvalidComment(overLengthContent);
+        length = overLengthContent.trim().length();
         //then
-        assertThat(overLengthExceptionResponse.getErrorMessage()).isEqualTo(OVER_LENGTH_EXCEPTION_MESSAGE);
+        assertThat(overLengthExceptionResponse.getErrorMessage())
+            .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
         // TODO: 2020/07/15 댓글 조회의 경우, 댓글과 연관관계에 있는 Article을 불러와 getComments를 해서 확인해야 한다.
 
@@ -121,7 +125,8 @@ class CommentAcceptanceTest {
         //when
         ExceptionResponse commentNotFoundExceptionResponse = deleteNotFoundComment();
         //then
-        assertThat(commentNotFoundExceptionResponse.getErrorMessage()).isEqualTo(COMMENT_NOT_FOUND_EXCEPTION_MESSAGE);
+        assertThat(commentNotFoundExceptionResponse.getErrorMessage())
+            .contains("에 해당하는 댓글을 찾을 수 없습니다!");
     }
 
     private void createComment() {
@@ -137,7 +142,7 @@ class CommentAcceptanceTest {
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                header("Location","/articles/" + article.getId());
+                header("Location","/articles/" + article.getId() + "/comments/" + COMMENT_ID);
         //@formatter:on
     }
 
