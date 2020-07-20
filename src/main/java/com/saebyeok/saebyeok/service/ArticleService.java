@@ -1,11 +1,9 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
-import com.saebyeok.saebyeok.domain.Gender;
-import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -49,11 +48,22 @@ public class ArticleService {
 
     private ArticleResponse toArticleResponse(Article article) {
         return new ArticleResponse(
-                article.getId(),
-                article.getContent(),
-                article.getCreatedDate(),
-                article.getEmotion(),
-                article.getIsCommentAllowed(),
-                article.getComments());
+            article.getId(),
+            article.getContent(),
+            article.getCreatedDate(),
+            article.getEmotion(),
+            article.getIsCommentAllowed(),
+            toCommentResponses(article.getComments()));
+    }
+
+    private List<CommentResponse> toCommentResponses(List<Comment> comments) {
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        if (Objects.isNull(comments) || comments.isEmpty()) {
+            return commentResponses;
+        }
+        for (Comment comment : comments) {
+            commentResponses.add(new CommentResponse(comment));
+        }
+        return commentResponses;
     }
 }

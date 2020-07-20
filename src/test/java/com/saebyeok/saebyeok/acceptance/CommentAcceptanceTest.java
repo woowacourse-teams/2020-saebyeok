@@ -1,61 +1,48 @@
 package com.saebyeok.saebyeok.acceptance;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
-import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.MemberRepository;
+import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Sql("/truncate.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
-    private static final long COMMENT_ID = 1L;
+    private static final long ARTICLE_ID = 1L;
+    private static final long MEMBER_ID = 1L;
+    // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
     private static final long NOT_EXIST_COMMENT_ID = 10L;
 
     @LocalServerPort
     int port;
 
-    @Autowired
-    private ArticleRepository articleRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    private Article article;
-    private Member member;
     private Map<String, Object> params;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
 
-        article = new Article();
-        member = new Member();
-        params = new HashMap<>();
-        params.put("member", member);
-        params.put("nickname", "시라소니");
-        params.put("createdDate", LocalDateTime.now());
-        params.put("article", article);
-        params.put("isDeleted", false);
+        createArticle("content", "emotion", true);
 
-        articleRepository.save(article);
-        memberRepository.save(member);
+        params = new HashMap<>();
+        params.put("memberId", MEMBER_ID);
+        params.put("nickname", TEST_NICKNAME);
+        params.put("articleId", ARTICLE_ID);
+        params.put("isDeleted", false);
     }
 
     /**
@@ -84,43 +71,55 @@ class CommentAcceptanceTest {
      * then 댓글 삭제에 실패한다.
      **/
 
-    @Sql("/truncate.sql")
     @DisplayName("댓글에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
     @Test
     void manageComment() {
         //given
         //when
-        createComment();
+        createComment(1L);
         //then
-        // TODO: 2020/07/15 댓글과 연관관계가 있는 Article을 통해 댓글 정보를 조회하고, 저장이 되었는지 확인한다.
+        ArticleResponse articleResponse = readArticle(ARTICLE_ID);
+        assertThat(articleResponse.getComments()).
+            hasSize(1).
+            extracting("content").
+            contains(TEST_CONTENT);
 
         //given
-        String underLengthContent = " ";
-        ExceptionResponse exceptionResponse = createInvalidComment(underLengthContent);
-        int length = underLengthContent.trim().length();
         //when
+        ExceptionResponse exceptionResponse = createInvalidComment(UNDER_LENGTH_CONTENT);
+        int length = UNDER_LENGTH_CONTENT.trim().length();
         //then
-        // TODO: 2020/07/20 exceptionResponse로 받아오니 thrownBy로 검증 안됨, 수정 필요!
         assertThat(exceptionResponse.getErrorMessage())
             .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
         //given
-        String overLengthContent = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
-            "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
-            "1만4000원.\n";
         //when
-        ExceptionResponse overLengthExceptionResponse = createInvalidComment(overLengthContent);
-        length = overLengthContent.trim().length();
+        ExceptionResponse overLengthExceptionResponse = createInvalidComment(OVER_LENGTH_CONTENT);
+        length = OVER_LENGTH_CONTENT.trim().length();
         //then
         assertThat(overLengthExceptionResponse.getErrorMessage())
             .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
-        // TODO: 2020/07/15 댓글 조회의 경우, 댓글과 연관관계에 있는 Article을 불러와 getComments를 해서 확인해야 한다.
-
+        //given
+        createComment(2L);
+        createComment(3L);
         //when
-        deleteComment();
+        articleResponse = readArticle(ARTICLE_ID);
         //then
-        // TODO: 2020/07/15 댓글 삭제가 수행되었는지 댓글과 연관관계에 있는 Article을 통해 댓글을 조회하여 확인해야 한다.
+        assertThat(articleResponse.getComments()).
+            hasSize(3).
+            extracting("id").
+            containsOnly(1L, 2L, 3L);
+
+        //given
+        //when
+        deleteComment(1L);
+        //then
+        articleResponse = readArticle(ARTICLE_ID);
+        assertThat(articleResponse.getComments()).
+            hasSize(2).
+            extracting("id").
+            doesNotContain(1L);
 
         //when
         ExceptionResponse commentNotFoundExceptionResponse = deleteNotFoundComment();
@@ -129,7 +128,7 @@ class CommentAcceptanceTest {
             .contains("에 해당하는 댓글을 찾을 수 없습니다!");
     }
 
-    private void createComment() {
+    private void createComment(long createdId) {
         //@formatter:off
         params.put("content", "새벽 좋아요");
 
@@ -138,11 +137,11 @@ class CommentAcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                post("/articles/" + article.getId() + "/comments").
+                post("/articles/" + ARTICLE_ID + "/comments").
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                header("Location","/articles/" + article.getId() + "/comments/" + COMMENT_ID);
+                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
         //@formatter:on
     }
 
@@ -156,7 +155,7 @@ class CommentAcceptanceTest {
                     contentType(MediaType.APPLICATION_JSON_VALUE).
                     accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                    post("/articles/" + article.getId() + "/comments").
+                    post("/articles/" + ARTICLE_ID + "/comments").
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
@@ -164,11 +163,11 @@ class CommentAcceptanceTest {
         //@formatter:on
     }
 
-    private void deleteComment() {
+    private void deleteComment(long deletedId) {
         //@formatter:off
         given().
         when().
-                delete("/articles/" + article.getId() + "/comments/" + COMMENT_ID).
+                delete("/articles/" + ARTICLE_ID + "/comments/" + deletedId).
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
@@ -180,11 +179,45 @@ class CommentAcceptanceTest {
         return
             given().
             when().
-                    delete("/articles/" + article.getId() + "/comments/" + NOT_EXIST_COMMENT_ID).
+                    delete("/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
                     extract().as(ExceptionResponse.class);
+        //@formatter:on
+    }
+
+    // TODO: 2020/07/20 나중에 코드 통합시 중복 제거해야됨. Article 인수테스트 코드 그대로 사용..
+    private void createArticle(String content, String emotion, Boolean isCommentAllowed) {
+        Map<String, String> params = new HashMap<>();
+        params.put("content", content);
+        params.put("emotion", emotion);
+        params.put("isCommentAllowed", isCommentAllowed.toString());
+
+        //@formatter:off
+        given().
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post("/articles").
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value());
+        //@formatter:on
+    }
+
+    private ArticleResponse readArticle(long id) {
+        //@formatter:off
+        return
+            given().
+                    accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+                    get("/articles/" + id).
+            then().
+                    log().all().
+                    extract().
+                    as(ArticleResponse.class);
         //@formatter:on
     }
 }
