@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-
 /**
  * H2 데이터베이스의 스프링 보안 차단 / h2- 콘솔 (또는 application.yaml에 구성한 경로)
  * security 로그인 창 없애는 설정.

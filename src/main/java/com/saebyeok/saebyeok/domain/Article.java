@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Article {
@@ -29,4 +31,16 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    public Article(String content, String emotion, Boolean isCommentAllowed) {
+        this.content = content;
+        this.emotion = emotion;
+        this.isCommentAllowed = isCommentAllowed;
+    }
+
+    public void setMember(Member member) {
+        // Todo: 편의 메소드 리팩토링(기존에 member가 있는 경우, add를 중복으로 하는 경우 등)
+        this.member = member;
+        member.addArticle(this);
+    }
 }
