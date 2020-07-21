@@ -22,7 +22,7 @@ public class ArticleService {
 
     public List<ArticleResponse> getArticles() {
         return articleRepository.findAll().stream()
-                .map(this::toArticleResponse)
+                .map(ArticleResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -37,33 +37,12 @@ public class ArticleService {
     public ArticleResponse readArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        return toArticleResponse(article);
+        return new ArticleResponse(article);
     }
 
     public void deleteArticle(Long articleId) {
         articleRepository.findById(articleId)
             .orElseThrow(() -> new ArticleNotFoundException(articleId));
         articleRepository.deleteById(articleId);
-    }
-
-    private ArticleResponse toArticleResponse(Article article) {
-        return new ArticleResponse(
-            article.getId(),
-            article.getContent(),
-            article.getCreatedDate(),
-            article.getEmotion(),
-            article.getIsCommentAllowed(),
-            toCommentResponses(article.getComments()));
-    }
-
-    private List<CommentResponse> toCommentResponses(List<Comment> comments) {
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        if (Objects.isNull(comments) || comments.isEmpty()) {
-            return commentResponses;
-        }
-        for (Comment comment : comments) {
-            commentResponses.add(new CommentResponse(comment));
-        }
-        return commentResponses;
     }
 }
