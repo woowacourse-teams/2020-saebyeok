@@ -6,7 +6,9 @@ import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Article createArticle(Member member, ArticleCreateRequest request) {
         // Todo: 초기 개발을 위한 member 생성 로직 삭제하고 security 적용하면 member 받아오기
         Member test = new Member(1L, 1991, Gender.FEMALE, LocalDateTime.now(), false, new ArrayList<>());
@@ -40,9 +43,12 @@ public class ArticleService {
         return new ArticleResponse(article);
     }
 
-    public void deleteArticle(Long articleId) {
-        articleRepository.findById(articleId)
-            .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        articleRepository.deleteById(articleId);
+    @Transactional
+    public void deleteArticle(Long id) {
+        try {
+            articleRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ArticleNotFoundException(id);
+        }
     }
 }

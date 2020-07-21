@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,14 @@ public class GlobalExceptionAdvice {
         return ResponseEntity.
             badRequest().
             body(new ExceptionResponse(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ArticleNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> articleNotFoundHandler(ArticleNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ExceptionResponse(e.getMessage()));
     }
 }
 
