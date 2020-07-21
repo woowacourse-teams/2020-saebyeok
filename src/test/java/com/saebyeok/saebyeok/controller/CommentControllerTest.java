@@ -48,7 +48,7 @@ class CommentControllerTest {
 
         String content = objectMapper.writeValueAsString(comment);
 
-        given(commentService.createComment(any())).willReturn(comment);
+        given(commentService.createComment(any(), any())).willReturn(comment);
 
         this.mockMvc.perform(post("/articles/" + ARTICLE_ID + "/comments").
             content(content).

@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.dto;
 
+import com.saebyeok.saebyeok.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,12 @@ public class CommentCreateRequest {
     private String nickname;
     private Long articleId;
     private Boolean isDeleted;
+
+    public Comment toComment() {
+        return Comment.builder().
+                content(this.content).
+                nickname(this.nickname).
+                isDeleted(this.isDeleted).
+                build();
+    }
 }

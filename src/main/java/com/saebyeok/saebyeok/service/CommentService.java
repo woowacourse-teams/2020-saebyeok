@@ -4,11 +4,13 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import com.saebyeok.saebyeok.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Service
@@ -18,29 +20,19 @@ public class CommentService {
     private final ArticleRepository articleRepository;
 
     @Transactional
-    public Comment createComment(CommentCreateRequest commentCreateRequest) {
-        Comment comment = toComment(commentCreateRequest);
-        return commentRepository.save(comment);
-    }
-
-    private Comment toComment(CommentCreateRequest commentCreateRequest) {
-        Comment comment = Comment.builder().
-            content(commentCreateRequest.getContent()).
-            nickname(commentCreateRequest.getNickname()).
-            isDeleted(commentCreateRequest.getIsDeleted()).
-            build();
+    public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
+        // Todo: 초기 개발을 위한 member 생성 로직 삭제하고 security 적용하면 member 받아오기
+        Member test = new Member(1L, 1991, Gender.FEMALE, LocalDateTime.now(), false, new ArrayList<>());
 
         Long articleId = commentCreateRequest.getArticleId();
         Article article = articleRepository.findById(articleId).
-            orElseThrow(() -> new ArticleNotFoundException(articleId));
+                orElseThrow(() -> new ArticleNotFoundException(articleId));
+
+        Comment comment = commentCreateRequest.toComment();
         comment.setArticle(article);
+        comment.setMember(test);
 
-        Long memberId = commentCreateRequest.getMemberId();
-        Member member = memberRepository.findById(memberId).
-            orElseThrow(() -> new MemberNotFoundException(memberId));
-        comment.setMember(member);
-
-        return comment;
+        return commentRepository.save(comment);
     }
 
     @Transactional
