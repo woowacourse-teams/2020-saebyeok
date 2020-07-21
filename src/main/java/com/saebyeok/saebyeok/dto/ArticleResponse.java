@@ -1,7 +1,6 @@
 package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,16 +28,16 @@ public class ArticleResponse {
         this.createdDate = article.getCreatedDate();
         this.emotion = article.getEmotion();
         this.isCommentAllowed = article.getIsCommentAllowed();
-        transformComments(article);
+        this.comments = transformComments(article);
     }
 
-    private void transformComments(Article article) {
-        this.comments = new ArrayList<>();
+    private List<CommentResponse> transformComments(Article article) {
         if (Objects.isNull(article.getComments()) || article.getComments().isEmpty()) {
-            return;
+            return new ArrayList<>();
         }
-        for (Comment comment : article.getComments()) {
-            this.comments.add(new CommentResponse(comment));
-        }
+        return article.getComments().
+                stream().
+                map(CommentResponse::new).
+                collect(Collectors.toList());
     }
 }
