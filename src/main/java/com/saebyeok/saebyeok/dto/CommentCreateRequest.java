@@ -1,7 +1,6 @@
 package com.saebyeok.saebyeok.dto;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentCreateRequest {
-    // TODO: 2020/07/20 member, article은 id로 주입받게 수정 필요
     private String content;
-    private Member member;
+    private Long memberId;
     private String nickname;
-    private Article article;
+    private Long articleId;
     private Boolean isDeleted;
+
+    public Comment toComment() {
+        return Comment.builder().
+                content(this.content).
+                nickname(this.nickname).
+                isDeleted(this.isDeleted).
+                build();
+    }
 }

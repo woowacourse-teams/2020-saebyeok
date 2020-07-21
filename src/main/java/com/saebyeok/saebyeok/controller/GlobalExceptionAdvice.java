@@ -16,8 +16,10 @@ public class GlobalExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({InvalidLengthCommentException.class, CommentNotFoundException.class})
-    public ExceptionResponse validated(RuntimeException e) {
-        return new ExceptionResponse(e.getMessage());
+    public ResponseEntity<ExceptionResponse> validated(RuntimeException e) {
+        return ResponseEntity.
+            badRequest().
+            body(new ExceptionResponse(e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

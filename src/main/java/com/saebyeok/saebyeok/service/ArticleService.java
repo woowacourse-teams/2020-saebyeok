@@ -1,11 +1,9 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
-import com.saebyeok.saebyeok.domain.Gender;
-import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class ArticleService {
 
     public ArticleResponse readArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
         return new ArticleResponse(article);
     }
 

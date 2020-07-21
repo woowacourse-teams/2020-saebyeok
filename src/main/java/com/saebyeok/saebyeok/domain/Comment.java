@@ -49,4 +49,12 @@ public class Comment {
             throw new InvalidLengthCommentException(contentLength);
         }
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 }

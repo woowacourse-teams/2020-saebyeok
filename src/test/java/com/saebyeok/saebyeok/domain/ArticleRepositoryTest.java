@@ -67,7 +67,7 @@ class ArticleRepositoryTest {
     @Test
     void findByIdTest() {
         Article savedArticle = articleRepository.findById(article1.getId())
-                .orElseThrow(() -> new ArticleNotFoundException(article1.getId()));
+            .orElseThrow(() -> new ArticleNotFoundException(article1.getId()));
 
         assertThat(savedArticle).isEqualTo(article1);
     }
