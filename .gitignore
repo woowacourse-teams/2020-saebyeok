@@ -55,3 +55,6 @@ out/
 **/*.njsproj
 **/*.sln
 **/*.sw?
+
+
+**/npm-v*
