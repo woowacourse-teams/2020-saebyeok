@@ -1,56 +1,46 @@
 <template>
-  <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
+  <v-app id="inspire">
+    <v-app-bar app clipped-right color="blue-grey" dark>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title>Toolbar</v-toolbar-title>
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld />
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
+
+    <v-bottom-navigation v-model="bottomNav" dark shift>
+      <v-btn to="/feed">
+        <span>Feed</span>
+        <v-icon>mdi-rss</v-icon>
+      </v-btn>
+
+      <v-btn to="/write">
+        <span>Write</span>
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+
+      <v-btn to="/my-page">
+        <span>MyPage</span>
+        <v-icon>mdi-note</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld
+  props: {
+    source: String
   },
-
-  data: () => ({
-    //
-  })
+  data() {
+    return {
+      bottomNav: 3
+    };
+  }
 };
 </script>
