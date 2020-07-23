@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>글쓰기 화면</h1>
     <editor></editor>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>분석 화면</h1>
     <my-page-tabs></my-page-tabs>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>피드 화면</h1>
     <card></card>
   </div>
 </template>
@@ -17,7 +16,7 @@ export default {
     Card
   },
   created() {
-    this.articles = ApiService.get('/api/articles');
+    this.articles = ApiService.get('/articles');
   },
   props: {
     source: String

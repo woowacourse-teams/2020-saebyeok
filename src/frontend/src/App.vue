@@ -16,8 +16,12 @@ import BottomNavigation from './components/BottomNavigation';
 
 export default {
   components: { Header, BottomNavigation },
-  props: {
-    source: String
-  }
+  props: { source: String }
 };
 </script>
+
+<style scoped>
+#inspire {
+  background-color: rgba(227, 214, 244, 0.5);
+}
+</style>
