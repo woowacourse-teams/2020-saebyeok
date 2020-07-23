@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>피드 화면</h1>
-    <card></card>
+    <h1>글쓰기 화면</h1>
+    <editor></editor>
   </div>
 </template>
 
 <script>
-import Card from '@/components/Card.vue';
+import Editor from '@/components/Editor.vue';
 
 export default {
   components: {
-    Card
+    Editor
   },
   props: {
     source: String

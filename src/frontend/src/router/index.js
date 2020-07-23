@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Feed from '../views/Feed.vue';
-import Write from '../views/Write.vue';
-import MyPage from '../views/MyPage.vue';
+import Post from '../views/Post.vue';
+import Analysis from '../views/Analysis.vue';
+import Diary from '../views/Diary.vue';
 
 Vue.use(VueRouter);
 
@@ -13,14 +14,23 @@ const routes = [
     component: Feed
   },
   {
-    path: '/write',
-    name: 'Write',
-    component: Write
+    path: '/post',
+    name: 'Post',
+    component: Post
   },
   {
     path: '/my-page',
-    name: 'MyPage',
-    component: MyPage
+    redirect: '/my-page/analysis'
+  },
+  {
+    path: '/my-page/analysis',
+    name: 'Analysis',
+    component: Analysis
+  },
+  {
+    path: '/my-page/diary',
+    name: 'Diary',
+    component: Diary
   }
 ];
 

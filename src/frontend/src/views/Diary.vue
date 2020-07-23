@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>피드 화면</h1>
-    <card></card>
+    <h1>다이어리 화면</h1>
+    <my-page-tabs></my-page-tabs>
   </div>
 </template>
 
 <script>
-import Card from '@/components/Card.vue';
+import MyPageTabs from '@/components/MyPageTabs.vue';
 
 export default {
   components: {
-    Card
+    MyPageTabs
   },
   props: {
     source: String
