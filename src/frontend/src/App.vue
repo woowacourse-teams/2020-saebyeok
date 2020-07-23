@@ -13,34 +13,18 @@
       </v-container>
     </v-main>
 
-    <v-bottom-navigation v-model="bottomNav" dark shift>
-      <v-btn to="/feed">
-        <span>Feed</span>
-        <v-icon>mdi-rss</v-icon>
-      </v-btn>
-
-      <v-btn to="/write">
-        <span>Write</span>
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-
-      <v-btn to="/my-page">
-        <span>MyPage</span>
-        <v-icon>mdi-note</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
+    <bottom-navigation />
   </v-app>
 </template>
 
 <script>
+import BottomNavigation from './components/BottomNavigation';
 export default {
+  components: {
+    BottomNavigation
+  },
   props: {
     source: String
-  },
-  data() {
-    return {
-      bottomNav: 3
-    };
   }
 };
 </script>
