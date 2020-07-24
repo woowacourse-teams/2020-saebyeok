@@ -1,0 +1,7 @@
+insert into member values (1, 1991, '2020-07-15', 'FEMALE', null)
+insert into article values (1, '내용입니다1','2020-07-15','감정입니다1', true, 1)
+insert into article values (2, '내용입니다2','2020-07-15','감정입니다2', true, 1)
+insert into article values (3, '내용입니다3','2020-07-15','감정입니다3', true, 1)
+insert into comment values (1, '댓글입니다1', '2020-07-15', false, '닉네임', 1, 1)
+insert into comment values (2, '댓글입니다2', '2020-07-15', false, '닉네임', 1, 1)
+insert into comment values (3, '댓글입니다3', '2020-07-15', false, '닉네임', 1, 1)
