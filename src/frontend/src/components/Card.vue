@@ -23,13 +23,13 @@
 </template>
 
 <script>
-  export default {
-    name: 'Card',
-    props: {
-      article: {
-        type: Object,
-        required: true
-      }
+export default {
+  name: 'Card',
+  props: {
+    article: {
+      type: Object,
+      required: true
     }
-  };
+  }
+};
 </script>
