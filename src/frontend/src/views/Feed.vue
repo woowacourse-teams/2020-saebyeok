@@ -5,7 +5,7 @@
         <card
                 :article="article"
                 :key="article.content"
-                v-for="article in this.$store.state.articles"
+                v-for="article in articles"
         ></card>
       </div>
     </div>
@@ -13,30 +13,23 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from 'vuex';
   import Card from '@/components/Card.vue';
-  import FeedService from '@/api/modules/feed.js';
-  import {mapMutations} from 'vuex';
+  import {FETCH_ARTICLES} from '@/store/shared/actionTypes';
 
   export default {
+    name: 'Feed',
     components: {
       Card
     },
     created() {
-      this.getAll();
+      this.fetchArticles();
+    },
+    computed: {
+      ...mapGetters(['articles'])
     },
     methods: {
-      ...mapMutations(['setArticles']),
-      async getAll() {
-        FeedService.getAll()
-                .then(response => {
-                  this.$store.commit('setArticles', response.data);
-                  console.log(response.data);
-                  console.log('TWICE IS GREAT');
-                  console.log(this.$store.state.articles);
-                })
-                .catch(error => alert(error))
-                .then();
-      }
+      ...mapActions([FETCH_ARTICLES])
     },
     props: {
       source: String
