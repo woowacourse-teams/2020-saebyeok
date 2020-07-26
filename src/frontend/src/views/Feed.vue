@@ -1,18 +1,13 @@
 <template>
   <div>
     <div class="mt-4 overflow-y-auto">
-      <v-list-item-group color="grey darken-3" v-model="articles">
-        <v-list-item :key="article.content" v-for="article in articles">
-          <v-list-item-content>
-            <!--            <v-list-item-title @click="setLineDetail(line)">-->
-            <!--              -->
-            <!--              <span>{{ line.name }}</span>-->
-            <!--            </v-list-item-title>-->
-            <Card></Card>
-            {{ article.content }}
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
+      <div class="w-full" id="article-list">
+        <card
+                :article="article"
+                :key="article.content"
+                v-for="article in this.$store.state.articles"
+        ></card>
+      </div>
     </div>
   </div>
 </template>
@@ -20,29 +15,27 @@
 <script>
   import Card from '@/components/Card.vue';
   import FeedService from '@/api/modules/feed.js';
+  import {mapMutations} from 'vuex';
 
   export default {
-    data() {
-      return {articles: []};
-    },
     components: {
       Card
     },
     created() {
-      this.getAll()
-              .then(({data}) => {
-                this.articles = data;
-
-                console.log(this.articles);
-                console.log(data);
-              })
-              .catch(() => {
-                alert('에러가 발생했습니다.');
-              });
+      this.getAll();
     },
     methods: {
+      ...mapMutations(['setArticles']),
       async getAll() {
-        return FeedService.getAll();
+        FeedService.getAll()
+                .then(response => {
+                  this.$store.commit('setArticles', response.data);
+                  console.log(response.data);
+                  console.log('TWICE IS GREAT');
+                  console.log(this.$store.state.articles);
+                })
+                .catch(error => alert(error))
+                .then();
       }
     },
     props: {

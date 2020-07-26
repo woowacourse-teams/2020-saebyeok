@@ -6,8 +6,7 @@
     </v-card-title>
 
     <v-card-text class="headline">
-      "Turns out semicolon-less style is easier and safer in TS because most
-      gotcha edge cases are type invalid as well."
+      {{ article.content }}
     </v-card-text>
 
     <v-card-actions>
@@ -24,5 +23,13 @@
 </template>
 
 <script>
-export default {};
+  export default {
+    name: 'Card',
+    props: {
+      article: {
+        type: Object,
+        required: true
+      }
+    }
+  };
 </script>
