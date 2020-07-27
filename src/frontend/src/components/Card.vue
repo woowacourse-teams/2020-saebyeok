@@ -39,7 +39,7 @@
         <v-row>
           <v-col align="left" cols="6" justify="end">
             <v-icon class="mr-1">mdi-hand-heart</v-icon>
-            <span class="subheading mr-2">{{ recommand }}</span>
+            <span class="subheading mr-2">{{ recommend }}</span>
           </v-col>
           <v-col align="right" cols="4" justigy="end">
             <div v-if="article.isCommentAllowed">
@@ -64,7 +64,7 @@ export default {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommand: 42
+      recommend: 42
     };
   },
   computed: {

@@ -13,7 +13,7 @@ import { mapGetters } from 'vuex';
 import Card from '@/components/Card.vue';
 
 export default {
-  name: 'CardList',
+  name: 'Cards',
   components: {
     Card
   },
