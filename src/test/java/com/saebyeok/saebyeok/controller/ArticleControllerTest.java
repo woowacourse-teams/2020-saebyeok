@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = {ArticleController.class})
 class ArticleControllerTest {
-
+    private static final String API = "/api";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String TEST_CONTENT = "내용";
     private static final String TEST_EMOTION = "기쁨";
@@ -55,7 +55,7 @@ class ArticleControllerTest {
     void getArticlesTest() throws Exception {
         when(articleService.getArticles()).thenReturn(Arrays.asList(articleResponse));
 
-        this.mockMvc.perform(get("/articles").
+        this.mockMvc.perform(get(API + "/articles").
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT));
@@ -69,7 +69,7 @@ class ArticleControllerTest {
 
         when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(request.toArticle());
 
-        this.mockMvc.perform(post("/articles").
+        this.mockMvc.perform(post(API + "/articles").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
@@ -81,7 +81,7 @@ class ArticleControllerTest {
     void readArticleTest() throws Exception {
         when(articleService.readArticle(TEST_ID)).thenReturn(articleResponse);
 
-        this.mockMvc.perform(get("/articles/" + TEST_ID).
+        this.mockMvc.perform(get(API + "/articles/" + TEST_ID).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id").value(TEST_ID)).
@@ -96,7 +96,7 @@ class ArticleControllerTest {
         when(articleService.readArticle(INVALID_ARTICLE_ID))
                 .thenThrow(ArticleNotFoundException.class);
 
-        this.mockMvc.perform(get("/articles/" + INVALID_ARTICLE_ID).
+        this.mockMvc.perform(get(API + "/articles/" + INVALID_ARTICLE_ID).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest());
     }
@@ -106,7 +106,7 @@ class ArticleControllerTest {
     void deleteArticleTest() throws Exception {
         doNothing().when(articleService).deleteArticle(TEST_ID);
 
-        this.mockMvc.perform(delete("/articles/" + TEST_ID)).
+        this.mockMvc.perform(delete(API + "/articles/" + TEST_ID)).
                 andExpect(status().isNoContent());
     }
 
@@ -116,7 +116,7 @@ class ArticleControllerTest {
         doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID))
                 .when(articleService).deleteArticle(INVALID_ARTICLE_ID);
 
-        this.mockMvc.perform(delete("/articles/" + INVALID_ARTICLE_ID).
+        this.mockMvc.perform(delete(API + "/articles/" + INVALID_ARTICLE_ID).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest());
     }
