@@ -1,26 +1,27 @@
 <template>
   <div>
     <div class="mt-4 overflow-y-auto">
-      <div class="w-full" id="article-list">
+      <!-- <div class="w-full" id="article-list">
         <card
           :article="article"
           :key="article.content"
           v-for="article in articles"
         ></card>
-      </div>
+      </div> -->
+      <card-list />
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Card from '@/components/Card.vue';
+import CardList from '@/components/CardList.vue';
 import { FETCH_ARTICLES } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Feed',
   components: {
-    Card
+    CardList
   },
   created() {
     this.fetchArticles();
