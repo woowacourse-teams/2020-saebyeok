@@ -6,18 +6,15 @@
           <v-col
             cols="2"
             style="font-size: 60px; text-align: center; line-height: 60px"
+            >😊</v-col
           >
-            😊
-          </v-col>
           <v-col cols="10">
             <v-chip-group
               column
               multiple
               active-class="black--text text--accent-4"
             >
-              <v-chip v-for="tag in tags" :key="tag">
-                {{ tag }}
-              </v-chip>
+              <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
             </v-chip-group>
           </v-col>
         </v-row>
@@ -26,6 +23,8 @@
           <v-textarea
             solo
             no-resize
+            counter="300"
+            maxlength="300"
             rows="9"
             name="input-7-4"
             label="당신의 마음을 들려주세요."
@@ -56,9 +55,9 @@
 </template>
 
 <script>
-  import ApiService from '@/api/index.js';
+import ApiService from '@/api/index.js';
 
-  export default {
+export default {
   components: {},
   props: {
     source: String
@@ -85,8 +84,13 @@
         emotion: '기뻐요',
         isCommentAllowed: this.isCommentAllowed
       };
-      console.log(articleCreateRequest);
-      ApiService.post('/articles', articleCreateRequest);
+      ApiService.post('/articles', articleCreateRequest)
+        .then(response => {
+          if (response.status === 201) {
+            this.$router.replace({ name: 'Feed' });
+          }
+        })
+        .catch(alert('남기는 중에 오류가 발생했어요.'));
     }
   }
 };
