@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" color="#faf9f5" max-width="400">
+  <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
     <v-card-title>
       <v-row no-gutters>
         <v-col
@@ -16,12 +16,15 @@
         >
           {{ emotion }}
         </v-col>
-        <v-col align="right" cols="10" justify="end">
+        <v-col cols="10">
           <v-chip-group
             active-class="black--text text--accent-4"
             column
             multiple
+            align="right"
+            justify="end"
           >
+            <v-spacer />
             <v-chip :key="tag" v-for="tag in tags">
               {{ tag }}
             </v-chip>
@@ -37,17 +40,17 @@
     <v-card-actions>
       <v-list-item class="grow">
         <v-row>
-          <v-col align="left" cols="6" justify="end">
-            <v-icon class="mr-1">mdi-hand-heart</v-icon>
-            <span class="subheading mr-2">{{ recommend }}</span>
-          </v-col>
-          <v-col align="right" cols="4" justigy="end">
-            <div v-if="article.isCommentAllowed">
+          <v-col align="left" cols="10" justify="end">
+            <div style="float:left;">
+              <v-icon class="mr-1">mdi-hand-heart</v-icon>
+              <span class="subheading mr-2">{{ recommend }}</span>
+            </div>
+            <div v-if="article.isCommentAllowed" style="float:left;">
               <v-icon class="mr-1">mdi-comment</v-icon>
               <span class="subheading">{{ article.comments.length }}</span>
             </div>
           </v-col>
-          <v-col align="right" cols="2" justigy="end">
+          <v-col align="right" cols="2" justify="end">
             <v-icon class="mr-1">mdi-alarm-light</v-icon>
           </v-col>
         </v-row>
