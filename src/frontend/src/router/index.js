@@ -4,6 +4,7 @@ import Feed from '../views/Feed.vue';
 import Post from '../views/Post.vue';
 import Analysis from '../views/Analysis.vue';
 import Diary from '../views/Diary.vue';
+import ArticleDetail from '../views/ArticleDetail.vue';
 
 import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
@@ -16,6 +17,15 @@ const routes = [
     name: 'Feed',
     components: {
       default: Feed,
+      header: Header,
+      footer: BottomNavigation
+    }
+  },
+  {
+    path: '/feed/:articleId',
+    name: 'ArticleDetail',
+    component: {
+      default: ArticleDetail,
       header: Header,
       footer: BottomNavigation
     }

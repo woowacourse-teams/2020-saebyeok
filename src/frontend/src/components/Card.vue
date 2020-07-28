@@ -1,5 +1,10 @@
 <template>
-  <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
+  <v-card
+    class="mx-auto rounded-lg"
+    color="#faf9f5"
+    max-width="400"
+    v-on:click="onClickCard"
+  >
     <v-card-title>
       <v-row no-gutters>
         <v-col
@@ -69,6 +74,13 @@ export default {
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
       recommend: 42
     };
+  },
+  methods: {
+    onClickCard: function() {
+      this.$router.replace({
+        path: 'ArticleDetail/' + this.article.id
+      });
+    }
   },
   computed: {
     createdDate: function() {
