@@ -19,11 +19,6 @@
 
 <script>
 export default {
-  name: 'bottom-navigation',
-  data() {
-    return {
-      bottomNav: 3
-    };
-  }
+  name: 'bottom-navigation'
 };
 </script>

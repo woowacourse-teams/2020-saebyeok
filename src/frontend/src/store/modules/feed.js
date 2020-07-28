@@ -1,5 +1,9 @@
 import { SET_ARTICLE, SET_ARTICLES } from '@/store/shared/mutationTypes';
-import { FETCH_ARTICLE, FETCH_ARTICLES } from '@/store/shared/actionTypes';
+import {
+  FETCH_ARTICLE,
+  FETCH_ARTICLES,
+  CREATE_ARTICLE
+} from '@/store/shared/actionTypes';
 import ArticleService from '@/api/modules/feed';
 
 const state = {
@@ -26,6 +30,9 @@ const mutations = {
 };
 
 const actions = {
+  async [CREATE_ARTICLE](article) {
+    return ArticleService.create(article);
+  },
   async [FETCH_ARTICLE]({ commit }, articleId) {
     return ArticleService.get(articleId).then(({ data }) => {
       commit(SET_ARTICLE, data);
