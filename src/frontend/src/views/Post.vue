@@ -12,10 +12,18 @@
             <v-chip-group
               column
               multiple
+              max="3"
               active-class="black--text text--accent-4"
+              v-model="emotions"
             >
               <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
             </v-chip-group>
+            <h5
+              v-if="validateEmotionsLength"
+              style="color: red; font-weight: lighter"
+            >
+              감정 태그는 3개까지 선택할 수 있어요.
+            </h5>
           </v-col>
         </v-row>
         <br />
@@ -74,7 +82,8 @@ export default {
         '# 만족스러워요',
         '# 흥미진진해요',
         '# 기대돼요'
-      ]
+      ],
+      emotions: []
     };
   },
   methods: {
@@ -91,6 +100,11 @@ export default {
           }
         })
         .catch(alert('남기는 중에 오류가 발생했어요.'));
+    }
+  },
+  computed: {
+    validateEmotionsLength() {
+      return this.emotions.length === 3;
     }
   }
 };
