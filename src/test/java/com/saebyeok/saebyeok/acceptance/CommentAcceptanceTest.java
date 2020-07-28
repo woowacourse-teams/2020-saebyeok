@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql("/truncate.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
+    private static final String API = "/api";
     private static final long ARTICLE_ID = 1L;
     private static final long MEMBER_ID = 1L;
     // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
@@ -80,9 +81,9 @@ class CommentAcceptanceTest {
         //then
         ArticleResponse articleResponse = readArticle(ARTICLE_ID);
         assertThat(articleResponse.getComments()).
-            hasSize(1).
-            extracting("content").
-            contains(TEST_CONTENT);
+                hasSize(1).
+                extracting("content").
+                contains(TEST_CONTENT);
 
         //given
         //when
@@ -90,7 +91,7 @@ class CommentAcceptanceTest {
         int length = UNDER_LENGTH_CONTENT.trim().length();
         //then
         assertThat(exceptionResponse.getErrorMessage())
-            .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
+                .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
         //given
         //when
@@ -98,7 +99,7 @@ class CommentAcceptanceTest {
         length = OVER_LENGTH_CONTENT.trim().length();
         //then
         assertThat(overLengthExceptionResponse.getErrorMessage())
-            .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
+                .contains("글자수가 " + length + "이므로 올바르지 않은 댓글입니다!");
 
         //given
         createComment(2L);
@@ -107,9 +108,9 @@ class CommentAcceptanceTest {
         articleResponse = readArticle(ARTICLE_ID);
         //then
         assertThat(articleResponse.getComments()).
-            hasSize(3).
-            extracting("id").
-            containsOnly(1L, 2L, 3L);
+                hasSize(3).
+                extracting("id").
+                containsOnly(1L, 2L, 3L);
 
         //given
         //when
@@ -117,15 +118,15 @@ class CommentAcceptanceTest {
         //then
         articleResponse = readArticle(ARTICLE_ID);
         assertThat(articleResponse.getComments()).
-            hasSize(2).
-            extracting("id").
-            doesNotContain(1L);
+                hasSize(2).
+                extracting("id").
+                doesNotContain(1L);
 
         //when
         ExceptionResponse commentNotFoundExceptionResponse = deleteNotFoundComment();
         //then
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
-            .contains("에 해당하는 댓글을 찾을 수 없습니다!");
+                .contains("에 해당하는 댓글을 찾을 수 없습니다!");
     }
 
     private void createComment(long createdId) {
@@ -137,7 +138,7 @@ class CommentAcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                post("/articles/" + ARTICLE_ID + "/comments").
+                post(API + "/articles/" + ARTICLE_ID + "/comments").
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
@@ -155,7 +156,7 @@ class CommentAcceptanceTest {
                     contentType(MediaType.APPLICATION_JSON_VALUE).
                     accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                    post("/articles/" + ARTICLE_ID + "/comments").
+                    post(API + "/articles/" + ARTICLE_ID + "/comments").
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
@@ -167,7 +168,7 @@ class CommentAcceptanceTest {
         //@formatter:off
         given().
         when().
-                delete("/articles/" + ARTICLE_ID + "/comments/" + deletedId).
+                delete(API + "/articles/" + ARTICLE_ID + "/comments/" + deletedId).
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
@@ -179,7 +180,7 @@ class CommentAcceptanceTest {
         return
             given().
             when().
-                    delete("/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
+                    delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
@@ -200,7 +201,7 @@ class CommentAcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                post("/articles").
+                post(API + "/articles").
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
@@ -213,7 +214,7 @@ class CommentAcceptanceTest {
             given().
                     accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                    get("/articles/" + id).
+                    get(API + "/articles/" + id).
             then().
                     log().all().
                     extract().

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class CommentController {

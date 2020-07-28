@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class CommentControllerTest {
+    private static final String API = "/api";
     private static final long COMMENT_ID = 1L;
     private static final long ARTICLE_ID = 1L;
 
@@ -50,7 +51,7 @@ class CommentControllerTest {
 
         given(commentService.createComment(any(), any())).willReturn(comment);
 
-        this.mockMvc.perform(post("/articles/" + ARTICLE_ID + "/comments").
+        this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
             content(content).
             accept(MediaType.APPLICATION_JSON).
             contentType(MediaType.APPLICATION_JSON)).
@@ -61,7 +62,7 @@ class CommentControllerTest {
     @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다")
     @Test
     void deleteCommentTest() throws Exception {
-        this.mockMvc.perform(delete("/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID)).
+        this.mockMvc.perform(delete(API + "/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID)).
             andExpect(status().isNoContent()).
             andDo(print());
     }
