@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import feed from '@/store/modules/feed';
+import feed from '@/store/modules/article';
 
 Vue.use(Vuex);
 

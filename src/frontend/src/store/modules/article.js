@@ -4,7 +4,7 @@ import {
   FETCH_ARTICLES,
   CREATE_ARTICLE
 } from '@/store/shared/actionTypes';
-import ArticleService from '@/api/modules/feed';
+import ArticleService from '@/api/modules/article';
 
 const state = {
   article: {},
@@ -30,7 +30,8 @@ const mutations = {
 };
 
 const actions = {
-  async [CREATE_ARTICLE](article) {
+  // eslint-disable-next-line no-unused-vars
+  async [CREATE_ARTICLE]({ commit }, article) {
     return ArticleService.create(article);
   },
   async [FETCH_ARTICLE]({ commit }, articleId) {

@@ -2,7 +2,10 @@ import ApiService from '@/api';
 
 const BASE_URL = '/articles';
 
-const FeedService = {
+const ArticleService = {
+  create(article) {
+    return ApiService.post(`${BASE_URL}`, article);
+  },
   get(articleId) {
     return ApiService.get(`${BASE_URL}/${articleId}`);
   },
@@ -11,4 +14,4 @@ const FeedService = {
   }
 };
 
-export default FeedService;
+export default ArticleService;
