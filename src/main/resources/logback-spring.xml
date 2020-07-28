@@ -19,7 +19,7 @@
     <appender name="ERROR_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${home}/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>1mb</maxFileSize>
+            <maxFileSize>15mb</maxFileSize>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>

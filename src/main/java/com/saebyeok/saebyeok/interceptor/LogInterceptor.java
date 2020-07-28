@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LogInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("{}를 호출하였습니다.", handler.toString());
-        log.debug("METHOD : {}", request.getMethod());
+        // TODO: 2020/07/28 멤버 도메인이 완성되면 멤버 정보도 로그로 찍기!
+        log.info("{} {}", request.getMethod(), request.getRequestURL());
+
         return true;
     }
 }
