@@ -95,8 +95,6 @@ export default {
         isCommentAllowed: this.isCommentAllowed
       };
       this.createArticle(articleCreateRequest).then(response => {
-        console.log(response);
-        console.log(response.status);
         if (response.status === 201) {
           this.$router.replace({ name: 'Feed' });
         }
