@@ -19,7 +19,7 @@ public class MemberController {
     public ResponseEntity login(@RequestBody String snsToken) {
         // TODO: 2020/07/28 SNS API로 토큰이 유효한지 확인하는 로직 추가
 
-        String accessToken = memberService.createToken();
+        String accessToken = memberService.createToken(3L);
 
         return ResponseEntity.ok(new TokenResponse(accessToken, "Bearer"));
     }

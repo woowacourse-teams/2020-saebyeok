@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 
 import static com.saebyeok.saebyeok.acceptance.MemberAcceptanceTest.SNS_TOKEN;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -30,7 +31,7 @@ class MemberControllerTest {
     @DisplayName("유효한 소셜 로그인 토큰으로 로그인을 하면 토큰을 리턴받는다.")
     @Test
     void login() throws Exception {
-        when(memberService.createToken()).thenReturn("saebyeokToken");
+        when(memberService.createToken(any())).thenReturn("saebyeokToken");
 
         HashMap<String, String> request = new HashMap<>();
         request.put("snsToken", SNS_TOKEN);
