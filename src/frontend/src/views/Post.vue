@@ -88,16 +88,17 @@ export default {
     };
   },
   methods: {
-    submit() {
+    async submit() {
       const articleCreateRequest = {
         content: this.content,
         emotion: '기뻐요',
         isCommentAllowed: this.isCommentAllowed
       };
-      const response = this.createArticle(articleCreateRequest);
-      if (response.status === 201) {
-        this.$router.replace({ name: 'Feed' });
-      }
+      this.createArticle(articleCreateRequest).then(response => {
+        if (response.status === 201) {
+          this.$router.replace({ name: 'Feed' });
+        }
+      });
     },
     ...mapActions([CREATE_ARTICLE])
   },

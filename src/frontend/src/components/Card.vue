@@ -96,8 +96,12 @@ export default {
           date.getDate() +
           '일'
         );
-      } else {
+      } else if (gap > 3600) {
         return Math.floor(gap / 3600) + '시간 전';
+      } else if (gap > 60) {
+        return Math.floor(gap / 60) + '분 전';
+      } else {
+        return '방금 전';
       }
     }
   },

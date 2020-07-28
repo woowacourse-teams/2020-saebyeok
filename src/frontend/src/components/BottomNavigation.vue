@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation v-model="bottomNav" app color="#B2A4D4" shift>
+  <v-bottom-navigation app color="#B2A4D4" shift>
     <v-btn to="/feed" height="100%">
       <span>Feed</span>
       <v-icon large>mdi-rss</v-icon>
