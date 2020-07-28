@@ -1,22 +1,29 @@
 <template>
   <div>
-    <card></card>
+    <div class="mt-4 overflow-y-auto">
+      <cards />
+    </div>
   </div>
 </template>
 
 <script>
-import Card from '@/components/Card.vue';
-import ApiService from '@/api/index.js';
+import { mapActions, mapGetters } from 'vuex';
+import Cards from '@/components/Cards.vue';
+import { FETCH_ARTICLES } from '@/store/shared/actionTypes';
 
 export default {
-  data() {
-    return { articles: {} };
-  },
+  name: 'Feed',
   components: {
-    Card
+    Cards
   },
   created() {
-    this.articles = ApiService.get('/articles');
+    this.fetchArticles();
+  },
+  computed: {
+    ...mapGetters(['articles'])
+  },
+  methods: {
+    ...mapActions([FETCH_ARTICLES])
   },
   props: {
     source: String

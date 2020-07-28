@@ -5,18 +5,29 @@ import Post from '../views/Post.vue';
 import Analysis from '../views/Analysis.vue';
 import Diary from '../views/Diary.vue';
 
+import Header from '@/components/Header';
+import BottomNavigation from '@/components/BottomNavigation';
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/feed',
     name: 'Feed',
-    component: Feed
+    components: {
+      default: Feed,
+      header: Header,
+      footer: BottomNavigation
+    }
   },
   {
     path: '/post',
     name: 'Post',
-    component: Post
+    components: {
+      default: Post,
+      header: Header,
+      footer: BottomNavigation
+    }
   },
   {
     path: '/my-page',
@@ -25,12 +36,24 @@ const routes = [
   {
     path: '/my-page/analysis',
     name: 'Analysis',
-    component: Analysis
+    components: {
+      default: Analysis,
+      header: Header,
+      footer: BottomNavigation
+    }
   },
   {
     path: '/my-page/diary',
     name: 'Diary',
-    component: Diary
+    components: {
+      default: Diary,
+      header: Header,
+      footer: BottomNavigation
+    }
+  },
+  {
+    path: '/',
+    redirect: '/feed'
   }
 ];
 

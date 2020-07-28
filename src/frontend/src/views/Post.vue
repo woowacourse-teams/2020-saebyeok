@@ -63,7 +63,8 @@
 </template>
 
 <script>
-import ApiService from '@/api/index.js';
+import { CREATE_ARTICLE } from '@/store/shared/actionTypes';
+import { mapActions } from 'vuex';
 
 export default {
   components: {},
@@ -93,14 +94,12 @@ export default {
         emotion: '기뻐요',
         isCommentAllowed: this.isCommentAllowed
       };
-      ApiService.post('/articles', articleCreateRequest)
-        .then(response => {
-          if (response.status === 201) {
-            this.$router.replace({ name: 'Feed' });
-          }
-        })
-        .catch(alert('남기는 중에 오류가 발생했어요.'));
-    }
+      const response = this.createArticle(articleCreateRequest);
+      if (response.status === 201) {
+        this.$router.replace({ name: 'Feed' });
+      }
+    },
+    ...mapActions([CREATE_ARTICLE])
   },
   computed: {
     validateEmotionsLength() {
