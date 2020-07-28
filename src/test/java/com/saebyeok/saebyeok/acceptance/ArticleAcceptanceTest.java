@@ -34,9 +34,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql("/truncate.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {
-    public static final String CONTENT = "내용입니다";
-    public static final String EMOTION = "기뻐요";
-    public static final long ARTICLE_ID = 1L;
+    private static final String API = "/api";
+    private static final String CONTENT = "내용입니다";
+    private static final String EMOTION = "기뻐요";
+    private static final long ARTICLE_ID = 1L;
 
     @LocalServerPort
     int port;
@@ -84,7 +85,7 @@ class ArticleAcceptanceTest {
         return
                 given().
                 when().
-                        get("/articles").
+                        get(API + "/articles").
                 then().
                         log().all().
                         extract().
@@ -105,7 +106,7 @@ class ArticleAcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                post("/articles").
+                post(API + "/articles").
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
@@ -118,7 +119,7 @@ class ArticleAcceptanceTest {
                 given().
                         accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
-                        get("/articles/" + id).
+                        get(API + "/articles/" + id).
                 then().
                         log().all().
                         extract().
@@ -130,7 +131,7 @@ class ArticleAcceptanceTest {
         //@formatter:off
         given().
                 when().
-                delete("/articles/" + id).
+                delete(API + "/articles/" + id).
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
