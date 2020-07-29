@@ -1,6 +1,8 @@
 package com.saebyeok.saebyeok.controller;
 
+import com.saebyeok.saebyeok.dto.LoginRequest;
 import com.saebyeok.saebyeok.dto.TokenResponse;
+import com.saebyeok.saebyeok.exception.IllegalSocialLoginException;
 import com.saebyeok.saebyeok.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,11 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody String snsToken) {
-        // TODO: 2020/07/28 SNS API로 토큰이 유효한지 확인하는 로직 추가
+    public ResponseEntity login(@RequestBody LoginRequest request) {
+        // TODO: 2020/07/28 SNS API로 토큰이 유효한지 확인 하는 로직 수정
+        if (!"This is a social login token".equals(request.getSnsToken())) {
+            throw new IllegalSocialLoginException(request.getSnsToken());
+        }
 
         String accessToken = memberService.createToken(3L);
 
