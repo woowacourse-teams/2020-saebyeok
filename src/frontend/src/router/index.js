@@ -35,7 +35,7 @@ const routes = [
     name: 'Post',
     components: {
       default: Post,
-      header: Header,
+      header: EmotionsHeader,
       footer: BottomNavigation
     }
   },

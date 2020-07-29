@@ -6,24 +6,36 @@
 
       <v-row class="mt-16">
         <v-col style="text-align: right">
-          <v-btn text fab x-large dark> <div class="emoji">😊</div></v-btn>
+          <v-btn text fab x-large dark to="/post">
+            <div class="emoji">😊</div>
+          </v-btn>
         </v-col>
         <v-col style="text-align: center">
-          <v-btn text fab x-large dark> <div class="emoji">😭</div></v-btn>
+          <v-btn text fab x-large dark to="/post">
+            <div class="emoji">😭</div>
+          </v-btn>
         </v-col>
         <v-col style="text-align: left">
-          <v-btn text fab x-large dark> <div class="emoji">😠</div></v-btn>
+          <v-btn text fab x-large dark to="/post">
+            <div class="emoji">😠</div>
+          </v-btn>
         </v-col>
       </v-row>
       <v-row>
         <v-col style="text-align: right">
-          <v-btn text fab x-large dark> <div class="emoji">😶</div></v-btn>
+          <v-btn text fab x-large dark to="/post">
+            <div class="emoji">😶</div>
+          </v-btn>
         </v-col>
-        <v-col style="text-align: center">
-          <v-btn text fab x-large dark> <div class="emoji">😶</div></v-btn>
+        <v-col style="text-align: center" to="/post">
+          <v-btn text fab x-large dark>
+            <div class="emoji">😶</div>
+          </v-btn>
         </v-col>
-        <v-col style="text-align: left">
-          <v-btn text fab x-large dark> <div class="emoji">😶</div></v-btn>
+        <v-col style="text-align: left" to="/post">
+          <v-btn text fab x-large dark>
+            <div class="emoji">😶</div>
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
