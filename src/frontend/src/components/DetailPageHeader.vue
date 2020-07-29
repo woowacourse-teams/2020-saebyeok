@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app clipped-right color="#B2A4D4" flat dark>
-    <v-app-bar-nav-icon to="/feed">
+    <v-app-bar-nav-icon>
       <v-icon large @click="$router.go(-1)">mdi-arrow-left</v-icon>
     </v-app-bar-nav-icon>
     <v-spacer></v-spacer>
