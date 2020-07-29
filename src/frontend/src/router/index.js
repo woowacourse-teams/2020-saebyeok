@@ -8,6 +8,7 @@ import ArticleDetail from '../views/ArticleDetail.vue';
 
 import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
+import DetailPageHeader from '@/components/DetailPageHeader';
 
 Vue.use(VueRouter);
 
@@ -26,7 +27,7 @@ const routes = [
     name: 'ArticleDetail',
     components: {
       default: ArticleDetail,
-      header: Header,
+      header: DetailPageHeader,
       footer: BottomNavigation
     }
   },

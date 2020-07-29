@@ -1,18 +1,18 @@
 <template>
   <div>
-    <card :article="article" />
+    <detail-page-card :article="article" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
-import Card from '@/components/Card';
+import DetailPageCard from '@/components/DetailPageCard';
 
 export default {
   name: 'ArticleDetail',
   components: {
-    Card
+    DetailPageCard
   },
   created() {
     this.fetchArticle(this.$route.params.articleId);

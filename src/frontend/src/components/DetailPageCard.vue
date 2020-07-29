@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    class="mx-auto rounded-lg"
-    color="#faf9f5"
-    max-width="400"
-    v-on:click="onClickCard"
-  >
+  <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
     <v-card-title>
       <v-row no-gutters>
         <v-col
@@ -66,7 +61,7 @@
 
 <script>
 export default {
-  name: 'Card',
+  name: 'DetailPageCard',
   data() {
     return {
       //아직 article에 없는 값을 임시로 설정
@@ -77,7 +72,7 @@ export default {
   },
   methods: {
     onClickCard: function() {
-      this.$router.push({
+      this.$router.replace({
         path: 'feed/' + this.article.id
       });
     }
