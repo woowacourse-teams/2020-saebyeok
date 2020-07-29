@@ -27,13 +27,13 @@
             <div class="emoji">😶</div>
           </v-btn>
         </v-col>
-        <v-col style="text-align: center" to="/post">
-          <v-btn text fab x-large dark>
+        <v-col style="text-align: center">
+          <v-btn text fab x-large dark to="/post">
             <div class="emoji">😶</div>
           </v-btn>
         </v-col>
-        <v-col style="text-align: left" to="/post">
-          <v-btn text fab x-large dark>
+        <v-col style="text-align: left">
+          <v-btn text fab x-large dark to="/post">
             <div class="emoji">😶</div>
           </v-btn>
         </v-col>
