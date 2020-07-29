@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'GyeonggiBatang';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/GyeonggiBatang.woff')
+  format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// 현재: '경기바탕' & 후보: '마포꽃섬'
+$body-font-family: 'GyeonggiBatang', serif;
