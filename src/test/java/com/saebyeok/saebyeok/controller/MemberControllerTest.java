@@ -29,7 +29,7 @@ class MemberControllerTest {
     @DisplayName("유효한 소셜 로그인 토큰으로 로그인을 하면 토큰을 리턴받는다.")
     @Test
     void login() throws Exception {
-        when(memberService.createToken(any())).thenReturn("saebyeokToken");
+        when(memberService.createToken(any(), any())).thenReturn("saebyeokToken");
 
         HashMap<String, String> request = new HashMap<>();
         request.put("snsToken", SNS_TOKEN);

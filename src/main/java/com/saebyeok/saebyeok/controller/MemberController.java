@@ -19,12 +19,14 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest request) {
-        // TODO: 2020/07/28 SNS API로 토큰이 유효한지 확인 하는 로직 수정
-        if (!"This is a social login token".equals(request.getSnsToken())) {
-            throw new IllegalSocialLoginException(request.getSnsToken());
+        // TODO: 2020/07/28 소셜 로그인 API로 받은 토큰이 유효한지 확인 하는 로직 수정
+        String snsToken = request.getSnsToken();
+        if (!"This is a social login token".equals(snsToken)) {
+            throw new IllegalSocialLoginException(snsToken);
         }
 
-        String accessToken = memberService.createToken(3L);
+        // TODO: 2020/07/29 소셜 로그인 API로부터 사용자 정보 받아오기
+        String accessToken = memberService.createToken(3L, snsToken);
 
         return ResponseEntity.ok(new TokenResponse(accessToken, "Bearer"));
     }
