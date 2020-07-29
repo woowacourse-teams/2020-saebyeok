@@ -1,21 +1,17 @@
 <template>
   <v-app id="inspire">
-    <Header></Header>
+    <router-view name="header" />
     <v-main>
       <v-container fluid>
         <router-view />
       </v-container>
     </v-main>
-    <bottom-navigation />
+    <router-view name="footer" />
   </v-app>
 </template>
 
 <script>
-import Header from './components/Header';
-import BottomNavigation from './components/BottomNavigation';
-
 export default {
-  components: { Header, BottomNavigation },
   props: { source: String }
 };
 </script>

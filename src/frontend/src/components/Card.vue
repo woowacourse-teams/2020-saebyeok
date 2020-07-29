@@ -78,7 +78,7 @@ export default {
   methods: {
     onClickCard: function() {
       this.$router.replace({
-        path: 'ArticleDetail/' + this.article.id
+        path: 'feed/' + this.article.id
       });
     }
   },

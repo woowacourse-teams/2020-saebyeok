@@ -24,7 +24,7 @@ const routes = [
   {
     path: '/feed/:articleId',
     name: 'ArticleDetail',
-    component: {
+    components: {
       default: ArticleDetail,
       header: Header,
       footer: BottomNavigation
