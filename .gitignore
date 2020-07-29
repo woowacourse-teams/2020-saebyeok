@@ -6,6 +6,7 @@ build/
 !**/src/test/**
 **/src/main/resources/application-oauth.properties
 **/src/main/resources/static
+**/logs
 
 ### STS ###
 .apt_generated
