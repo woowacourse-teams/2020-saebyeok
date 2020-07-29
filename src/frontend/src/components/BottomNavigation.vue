@@ -5,7 +5,7 @@
       <v-icon large>mdi-rss</v-icon>
     </v-btn>
 
-    <v-btn to="/post" height="100%">
+    <v-btn to="/emotions" height="100%">
       <span>Write</span>
       <v-icon large>mdi-pencil</v-icon>
     </v-btn>
