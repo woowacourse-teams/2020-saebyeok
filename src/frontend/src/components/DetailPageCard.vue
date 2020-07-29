@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container ma-0 pa-0>
     <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
       <v-card-title>
         <v-row no-gutters>
@@ -66,27 +66,10 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-
-    <div>
-      <v-row v-if="article.isCommentAllowed" dense>
-        <v-col v-for="comment in article.comments" :key="comment.id" cols="12">
-          <comment :comment="comment"></comment>
-        </v-col>
-      </v-row>
-      <v-row v-else>
-        <v-col
-          class="d-flex justify-center"
-          style="font-size: 15px; font-color: #FFFFFF; line-height: 15px;"
-        >
-          {{ commentNotAllowedMessage }}
-        </v-col>
-      </v-row>
-    </div>
   </v-container>
 </template>
 
 <script>
-import Comment from '@/components/Comment';
 export default {
   name: 'DetailPageCard',
   data() {
@@ -97,16 +80,6 @@ export default {
       recommend: 42,
       commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
     };
-  },
-  components: {
-    Comment
-  },
-  methods: {
-    onClickCard: function() {
-      this.$router.replace({
-        path: 'feed/' + this.article.id
-      });
-    }
   },
   computed: {
     createdDate: function() {

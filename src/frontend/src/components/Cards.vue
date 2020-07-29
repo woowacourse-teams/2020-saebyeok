@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container ma-0 pa-0>
     <v-row dense>
       <v-col v-for="article in articles" :key="article.id" cols="12">
         <card :article="article"></card>
