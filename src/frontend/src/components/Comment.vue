@@ -1,12 +1,12 @@
 <template>
-  <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
+  <v-card color="#faf9f5" max-width="400">
     <v-card-title>
       {{ comment.nickname }}
     </v-card-title>
 
-    <v-card-text class="headline">
+    <v-card-text class="text-h6">
       <div v-if="comment.isDeleted">
-        삭제된 댓글입니다.
+        {{ deletedCommentMessage }}
       </div>
       <div v-else>
         {{ comment.content }}
@@ -40,7 +40,8 @@ export default {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42
+      recommend: 42,
+      deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
   computed: {

@@ -68,9 +68,17 @@
     </v-card>
 
     <div>
-      <v-row dense>
+      <v-row v-if="article.isCommentAllowed" dense>
         <v-col v-for="comment in article.comments" :key="comment.id" cols="12">
           <comment :comment="comment"></comment>
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col
+          class="d-flex justify-center"
+          style="font-size: 15px; font-color: #FFFFFF; line-height: 15px;"
+        >
+          {{ commentNotAllowedMessage }}
         </v-col>
       </v-row>
     </div>
@@ -86,7 +94,8 @@ export default {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42
+      recommend: 42,
+      commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
     };
   },
   components: {
