@@ -2,7 +2,12 @@
   <div>
     <my-page-tabs></my-page-tabs>
 
-    <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
+    <v-card
+      class="mx-auto rounded-lg"
+      color="#faf9f5"
+      max-width="400"
+      style="margin: 12px"
+    >
       <v-row>
         <v-col
           style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
