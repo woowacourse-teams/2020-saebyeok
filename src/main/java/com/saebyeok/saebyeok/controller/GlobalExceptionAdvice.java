@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.controller;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
+import com.saebyeok.saebyeok.exception.IllegalSocialLoginException;
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,10 @@ public class GlobalExceptionAdvice {
     // TODO: 2020/07/20 exception을 어떻게 응답 처리할 것인지 방법을 고민해보자
 
     @ExceptionHandler({
-        InvalidLengthCommentException.class,
-        CommentNotFoundException.class,
-        ArticleNotFoundException.class})
+            InvalidLengthCommentException.class,
+            CommentNotFoundException.class,
+            ArticleNotFoundException.class,
+            IllegalSocialLoginException.class})
     public ResponseEntity<ExceptionResponse> validated(RuntimeException exception) {
         return ResponseEntity.
             badRequest().
