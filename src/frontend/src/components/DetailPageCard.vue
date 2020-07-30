@@ -1,18 +1,21 @@
 <template>
   <v-container ma-0 pa-0>
-    <v-card
-      class="mx-auto rounded-lg"
-      color="#faf9f5"
-      max-width="400"
-      v-on:click="onClickCard"
-    >
+    <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
       <v-card-title>
         <v-row no-gutters>
           <v-col
             class="d-flex justify-end"
             style="font-size: 15px; line-height: 15px"
+            align="center"
           >
-            <created-date :createdDate="article.createdDate" />
+            <div style="display: flex;align-items: center;">
+              <created-date :createdDate="article.createdDate" />
+            </div>
+            <div>
+              <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
         <v-row no-gutters>
@@ -69,7 +72,7 @@
 <script>
 import CreatedDate from '@/components/CreatedDate';
 export default {
-  name: 'Card',
+  name: 'DetailPageCard',
   components: {
     CreatedDate
   },
@@ -80,13 +83,6 @@ export default {
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
       recommend: 42
     };
-  },
-  methods: {
-    onClickCard: function() {
-      this.$router.push({
-        path: 'feed/' + this.article.id
-      });
-    }
   },
   props: {
     article: {

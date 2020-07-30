@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row dense>
-      <v-col :key="article.id" cols="12" v-for="article in articles">
+      <v-col v-for="article in articles" :key="article.id" cols="12">
         <card :article="article"></card>
       </v-col>
     </v-row>

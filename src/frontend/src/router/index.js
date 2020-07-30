@@ -4,11 +4,12 @@ import Feed from '../views/Feed.vue';
 import Post from '../views/Post.vue';
 import Analysis from '../views/Analysis/Analysis.vue';
 import Diary from '../views/Diary/Diary.vue';
+import ArticleDetail from '../views/ArticleDetail.vue';
 import Emotions from '../views/Emotions.vue';
-
 import Header from '@/components/Header';
 import EmotionsHeader from '@/components/EmotionsHeader';
 import BottomNavigation from '@/components/BottomNavigation';
+import DetailPageHeader from '@/components/DetailPageHeader';
 
 Vue.use(VueRouter);
 
@@ -19,6 +20,15 @@ const routes = [
     components: {
       default: Feed,
       header: Header,
+      footer: BottomNavigation
+    }
+  },
+  {
+    path: '/feed/:articleId',
+    name: 'ArticleDetail',
+    components: {
+      default: ArticleDetail,
+      header: DetailPageHeader,
       footer: BottomNavigation
     }
   },
@@ -70,7 +80,11 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  // eslint-disable-next-line no-unused-vars
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  }
 });
 
 export default router;

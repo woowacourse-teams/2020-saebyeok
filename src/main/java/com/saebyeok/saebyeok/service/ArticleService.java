@@ -23,7 +23,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     public List<ArticleResponse> getArticles() {
-        return articleRepository.findAll().stream()
+        return articleRepository.findAllByOrderByIdDesc().stream()
                 .map(ArticleResponse::new)
                 .collect(Collectors.toList());
     }

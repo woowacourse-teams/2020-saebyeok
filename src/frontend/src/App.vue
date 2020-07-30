@@ -12,7 +12,6 @@
 
 <script>
 export default {
-  components: {},
   props: { source: String }
 };
 </script>

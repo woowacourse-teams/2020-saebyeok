@@ -1,17 +1,17 @@
 <template>
   <v-bottom-navigation app color="#B2A4D4" shift>
     <v-btn to="/feed" height="100%">
-      <span>Feed</span>
+      <span>피드</span>
       <v-icon large>mdi-rss</v-icon>
     </v-btn>
 
     <v-btn to="/emotions" height="100%">
-      <span>Write</span>
+      <span>글쓰기</span>
       <v-icon large>mdi-pencil</v-icon>
     </v-btn>
 
     <v-btn to="/my-page" height="100%">
-      <span>MyPage</span>
+      <span>다이어리</span>
       <v-icon large>mdi-note</v-icon>
     </v-btn>
   </v-bottom-navigation>

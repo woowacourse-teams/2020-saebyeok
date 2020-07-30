@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import feed from '@/store/modules/article';
+import Article from '@/store/modules/article';
+import Comment from '@/store/modules/comment';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    feed
+    Article,
+    Comment
   }
 });
