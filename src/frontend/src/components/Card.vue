@@ -39,7 +39,7 @@
         </v-row>
       </v-card-title>
 
-      <v-card-text class="headline">
+      <v-card-text class="headline text-body-1">
         {{ article.content }}
       </v-card-text>
 

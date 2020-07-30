@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" color="#faf9f5" max-width="400">
-    <v-card-title>
+    <v-card-title class="text-body-1">
       <v-row>
         <v-col cols="6">
           {{ comment.nickname }}

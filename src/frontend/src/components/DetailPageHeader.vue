@@ -5,7 +5,7 @@
     </v-app-bar-nav-icon>
     <v-spacer></v-spacer>
     <v-toolbar-title>
-      <span class="title">새벽</span>
+      <span class="title text-h4">새벽</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
