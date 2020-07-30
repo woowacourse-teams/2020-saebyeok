@@ -20,52 +20,30 @@
       </v-row>
     </v-layout>
 
-    <v-layout column v-if="article.isCommentAllowed" max-width="400">
-      <v-flex>
-        <v-textarea
-          solo
-          no-resize
-          counter="140"
-          maxlength="140"
-          rows="3"
-          name="input-7-4"
-          label="댓글을 달아주세요~"
-          v-model="content"
-        ></v-textarea>
-      </v-flex>
-      <v-flex>
-        <v-btn
-          class="ma-2"
-          depressed
-          block
-          dark
-          width="100%"
-          color="rgba(230, 197, 234)"
-          @click="submitComment"
-          >남기기</v-btn
-        >
-      </v-flex>
+    <v-layout v-if="article.isCommentAllowed">
+      <comment-create-form :articleId="article.id" />
     </v-layout>
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLE, CREATE_COMMENT } from '@/store/shared/actionTypes';
+import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
 import DetailPageCard from '@/components/DetailPageCard';
 import Comment from '@/components/Comment';
+import CommentCreateForm from '@/components/CommentCreateForm';
 
 export default {
   name: 'ArticleDetail',
   data() {
     return {
-      content: '',
       commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
     };
   },
   components: {
     DetailPageCard,
-    Comment
+    Comment,
+    CommentCreateForm
   },
   created() {
     this.fetchArticle(this.$route.params.articleId);
@@ -74,25 +52,7 @@ export default {
     ...mapGetters(['article'])
   },
   methods: {
-    ...mapActions([FETCH_ARTICLE]),
-    ...mapActions([CREATE_COMMENT]),
-    async submitComment() {
-      const commentCreateRequest = {
-        content: this.content,
-        memberId: 1,
-        nickname: 'TEST_NICKNAME',
-        articleId: this.article.id,
-        isDeleted: false
-      };
-      this.createComment(commentCreateRequest).then(response => {
-        if (response.status === 201) {
-          console.log(response.status);
-          this.$router.go();
-        }
-      });
-    }
+    ...mapActions([FETCH_ARTICLE])
   }
 };
 </script>
-/** private String content; private Long memberId; private String nickname;
-private Long articleId; private Boolean isDeleted; */
