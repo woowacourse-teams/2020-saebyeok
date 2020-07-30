@@ -1,7 +1,13 @@
 <template>
-  <v-tabs fixed-tabs background-color="indigo" dark>
-    <v-tab to="/my-page/analysis">분석</v-tab>
-    <v-tab to="/my-page/diary">기록</v-tab>
+  <v-tabs
+    fixed-tabs
+    background-color="#B2A4D4"
+    class="rounded-lg"
+    dark
+    margin="0px"
+  >
+    <v-tab to="/my-page/analysis"><big>분석</big></v-tab>
+    <v-tab to="/my-page/diary"><big>기록</big></v-tab>
   </v-tabs>
 </template>
 
