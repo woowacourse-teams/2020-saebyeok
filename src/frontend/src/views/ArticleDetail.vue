@@ -51,7 +51,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
+import { FETCH_ARTICLE, CREATE_COMMENT } from '@/store/shared/actionTypes';
 import DetailPageCard from '@/components/DetailPageCard';
 import Comment from '@/components/Comment';
 
@@ -59,6 +59,7 @@ export default {
   name: 'ArticleDetail',
   data() {
     return {
+      content: '',
       commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
     };
   },
@@ -74,9 +75,24 @@ export default {
   },
   methods: {
     ...mapActions([FETCH_ARTICLE]),
-    submitComment() {
-      return;
+    ...mapActions([CREATE_COMMENT]),
+    async submitComment() {
+      const commentCreateRequest = {
+        content: this.content,
+        memberId: 1,
+        nickname: 'TEST_NICKNAME',
+        articleId: this.article.id,
+        isDeleted: false
+      };
+      this.createComment(commentCreateRequest).then(response => {
+        if (response.status === 201) {
+          console.log(response.status);
+          this.$router.go();
+        }
+      });
     }
   }
 };
 </script>
+/** private String content; private Long memberId; private String nickname;
+private Long articleId; private Boolean isDeleted; */
