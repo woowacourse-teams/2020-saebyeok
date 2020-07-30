@@ -1,30 +1,32 @@
 <template>
-  <v-layout column max-width="400">
-    <v-flex>
-      <v-textarea
-        solo
-        no-resize
-        counter="140"
-        maxlength="140"
-        rows="3"
-        name="input-7-4"
-        label="댓글을 달아주세요~"
-        v-model="content"
-      ></v-textarea>
-    </v-flex>
-    <v-flex>
-      <v-btn
-        class="ma-2"
-        depressed
-        block
-        dark
-        width="100%"
-        color="rgba(230, 197, 234)"
-        @click="submitComment"
-        >남기기</v-btn
-      >
-    </v-flex>
-  </v-layout>
+  <v-container pa-0 class="d-flex justify-center" style="max-width: 400px">
+    <v-layout column>
+      <v-flex class="d-flex justify-center">
+        <v-textarea
+          solo
+          no-resize
+          counter="140"
+          maxlength="140"
+          rows="3"
+          name="input-7-4"
+          label="댓글을 달아주세요~"
+          v-model="content"
+        ></v-textarea>
+      </v-flex>
+      <v-flex class="d-flex justify-center">
+        <v-btn
+          class="ma-2"
+          depressed
+          block
+          dark
+          width="100%"
+          color="rgba(230, 197, 234)"
+          @click="submitComment"
+          >남기기</v-btn
+        >
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
