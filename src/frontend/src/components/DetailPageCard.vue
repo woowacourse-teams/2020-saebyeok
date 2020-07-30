@@ -9,7 +9,7 @@
             align="center"
           >
             <div style="display: flex;align-items: center;">
-              {{ createdDate }}
+              <created-date :createdDate="article.createdDate" />
             </div>
             <div>
               <v-btn icon>
@@ -70,39 +70,19 @@
 </template>
 
 <script>
+import CreatedDate from '@/components/CreatedDate';
 export default {
   name: 'DetailPageCard',
+  components: {
+    CreatedDate
+  },
   data() {
     return {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42,
-      commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
+      recommend: 42
     };
-  },
-  computed: {
-    createdDate: function() {
-      const date = new Date(this.article.createdDate);
-      const now = new Date();
-      const gap = (now.getTime() - date.getTime()) / 1000;
-      if (gap > 86400) {
-        return (
-          date.getFullYear() +
-          '년 ' +
-          (date.getMonth() + 1) +
-          '월 ' +
-          date.getDate() +
-          '일'
-        );
-      } else if (gap > 3600) {
-        return Math.floor(gap / 3600) + '시간 전';
-      } else if (gap > 60) {
-        return Math.floor(gap / 60) + '분 전';
-      } else {
-        return '방금 전';
-      }
-    }
   },
   props: {
     article: {

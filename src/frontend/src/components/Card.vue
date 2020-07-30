@@ -10,9 +10,9 @@
         <v-row no-gutters>
           <v-col
             class="d-flex justify-end"
-            style="font-size: 15px; text-align: center; line-height: 15px"
+            style="font-size: 15px; line-height: 15px"
           >
-            {{ createdDate }}
+            <created-date :createdDate="article.createdDate" />
           </v-col>
         </v-row>
         <v-row no-gutters>
@@ -67,8 +67,12 @@
 </template>
 
 <script>
+import CreatedDate from '@/components/CreatedDate';
 export default {
   name: 'Card',
+  components: {
+    CreatedDate
+  },
   data() {
     return {
       //아직 article에 없는 값을 임시로 설정
@@ -82,29 +86,6 @@ export default {
       this.$router.push({
         path: 'feed/' + this.article.id
       });
-    }
-  },
-  computed: {
-    createdDate: function() {
-      const date = new Date(this.article.createdDate);
-      const now = new Date();
-      const gap = (now.getTime() - date.getTime()) / 1000;
-      if (gap > 86400) {
-        return (
-          date.getFullYear() +
-          '년 ' +
-          (date.getMonth() + 1) +
-          '월 ' +
-          date.getDate() +
-          '일'
-        );
-      } else if (gap > 3600) {
-        return Math.floor(gap / 3600) + '시간 전';
-      } else if (gap > 60) {
-        return Math.floor(gap / 60) + '분 전';
-      } else {
-        return '방금 전';
-      }
     }
   },
   props: {
