@@ -18,7 +18,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest request) {
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
         // TODO: 2020/07/28 소셜 로그인 API로 받은 토큰이 유효한지 확인 하는 로직 수정
         String snsToken = request.getSnsToken();
         if (!"This is a social login token".equals(snsToken)) {

@@ -69,15 +69,15 @@ public class MemberAcceptanceTest {
 
         //@formatter:off
         return given().
-                body(content).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
+                    body(content).
+                    contentType(MediaType.APPLICATION_JSON_VALUE).
+                    accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
-                post("/api/login").
+                    post("/api/login").
                 then().
-                log().all().
-                statusCode(HttpStatus.OK.value()).
-                extract().as(TokenResponse.class);
+                    log().all().
+                    statusCode(HttpStatus.OK.value()).
+                    extract().as(TokenResponse.class);
         //@formatter:on
     }
 
@@ -88,15 +88,15 @@ public class MemberAcceptanceTest {
 
         //@formatter:off
         return given().
-                body(content).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
+                    body(content).
+                    contentType(MediaType.APPLICATION_JSON_VALUE).
+                    accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
-                post("/api/login").
+                    post("/api/login").
                 then().
-                log().all().
-                statusCode(HttpStatus.BAD_REQUEST.value()).
-                extract().as(ExceptionResponse.class);
+                    log().all().
+                    statusCode(HttpStatus.BAD_REQUEST.value()).
+                    extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 }
