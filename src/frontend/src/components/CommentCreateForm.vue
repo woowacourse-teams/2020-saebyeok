@@ -20,7 +20,7 @@
           block
           dark
           width="100%"
-          color="rgba(230, 197, 234)"
+          color="rgba(164, 63, 176)"
           @click="submitComment"
           >남기기</v-btn
         >

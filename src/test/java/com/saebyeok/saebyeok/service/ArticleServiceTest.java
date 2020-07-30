@@ -56,7 +56,7 @@ class ArticleServiceTest {
     void getArticlesTest() {
         List<Article> articles = new ArrayList<>();
         articles.add(article);
-        when(articleRepository.findAll()).thenReturn(articles);
+        when(articleRepository.findAllByOrderByIdDesc()).thenReturn(articles);
 
         List<ArticleResponse> articleResponses = articleService.getArticles();
 
