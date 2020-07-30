@@ -4,8 +4,10 @@ import Feed from '../views/Feed.vue';
 import Post from '../views/Post.vue';
 import Analysis from '../views/Analysis.vue';
 import Diary from '../views/Diary.vue';
+import Emotions from '../views/Emotions.vue';
 
 import Header from '@/components/Header';
+import EmotionsHeader from '@/components/EmotionsHeader';
 import BottomNavigation from '@/components/BottomNavigation';
 
 Vue.use(VueRouter);
@@ -21,11 +23,19 @@ const routes = [
     }
   },
   {
+    path: '/emotions',
+    name: 'Emotions',
+    components: {
+      default: Emotions,
+      header: EmotionsHeader
+    }
+  },
+  {
     path: '/post',
     name: 'Post',
     components: {
       default: Post,
-      header: Header,
+      header: EmotionsHeader,
       footer: BottomNavigation
     }
   },
