@@ -1,7 +1,10 @@
 package com.saebyeok.saebyeok.config;
 
+import com.saebyeok.saebyeok.security.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
@@ -10,16 +13,35 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * 프로덕션 환경에서는 사용하지 말라고 함!
  */
 
+@RequiredArgsConstructor
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/h2-console/**").permitAll();
-
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+        //@formatter:off
+        http.csrf().disable()
+            .headers().frameOptions().disable()
+            .and()
+                .authorizeRequests()
+                .antMatchers("/h2-console/**", "/css/**", "/images/**", "/js/**", "/profile").permitAll()
+                .anyRequest().authenticated()
+            .and()
+                .formLogin()
+                    .loginPage("/sign-in")
+                    .permitAll()
+                    .defaultSuccessUrl("/feed")
+            .and()
+                .logout()
+                    .logoutSuccessUrl("/")
+            .and()
+                .oauth2Login()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/")
+                    .userInfoEndpoint()
+                        .userService(customOAuth2UserService);
+        //@formatter:on
     }
 }
