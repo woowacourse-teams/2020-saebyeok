@@ -31,8 +31,8 @@ public class EmotionDetailResponse {
             return new ArrayList<>();
         }
         return emotion.getSubEmotions().
-                stream().
-                map(SubEmotionResponse::new).
-                collect(Collectors.toList());
+            stream().
+            map(SubEmotionResponse::new).
+            collect(Collectors.toList());
     }
 }

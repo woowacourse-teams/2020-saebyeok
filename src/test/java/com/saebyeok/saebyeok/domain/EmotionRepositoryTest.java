@@ -39,16 +39,16 @@ class EmotionRepositoryTest {
     void findAllTest() {
         List<Emotion> emotions = this.emotionRepository.findAll();
         assertThat(emotions).
-                hasSize(3).
-                extracting("name").
-                containsOnly(emotion1.getName(), emotion2.getName(), emotion3.getName());
+            hasSize(3).
+            extracting("name").
+            containsOnly(emotion1.getName(), emotion2.getName(), emotion3.getName());
     }
 
     @DisplayName("특정 Id의 Emotion을 조회한다")
     @Test
     void findByIdTest() {
         Emotion emotion = emotionRepository.findById(emotion1.getId())
-                .orElseThrow(() -> new EmotionNotFoundException(emotion1.getId()));
+            .orElseThrow(() -> new EmotionNotFoundException(emotion1.getId()));
         assertThat(emotion.getId()).isEqualTo(emotion1.getId());
         assertThat(emotion.getName()).isEqualTo(emotion1.getName());
         assertThat(emotion.getImageResource()).isEqualTo(emotion1.getImageResource());

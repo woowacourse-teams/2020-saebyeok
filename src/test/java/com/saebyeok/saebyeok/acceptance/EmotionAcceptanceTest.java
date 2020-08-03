@@ -53,19 +53,19 @@ public class EmotionAcceptanceTest {
         List<EmotionResponse> emotions = getEmotions();
         //then
         assertThat(emotions).
-                hasSize(3).
-                extracting("id").
-                containsOnly(1L, 2L, 3L);
+            hasSize(3).
+            extracting("id").
+            containsOnly(1L, 2L, 3L);
 
         //when
         EmotionDetailResponse emotion = readEmotion(1L);
         //then
         assertThat(emotion).hasFieldOrPropertyWithValue("name", "기뻐요").
-                hasFieldOrPropertyWithValue("imageResource", "리소스");
+            hasFieldOrPropertyWithValue("imageResource", "리소스");
         assertThat(emotion.getSubEmotions()).
-                hasSize(2).
-                extracting("id").
-                containsOnly(1L, 2L);
+            hasSize(2).
+            extracting("id").
+            containsOnly(1L, 2L);
 
         //when
         ExceptionResponse emotionNotFoundExceptionResponse = getNotFoundEmotion();
@@ -77,9 +77,9 @@ public class EmotionAcceptanceTest {
         //@formatter:off
         return
                 given().
-                        when().
+                when().
                         get(API + "/emotions").
-                        then().
+                then().
                         log().all().
                         extract().
                         jsonPath().
@@ -92,9 +92,9 @@ public class EmotionAcceptanceTest {
         return
                 given().
                         accept(MediaType.APPLICATION_JSON_VALUE).
-                        when().
+                when().
                         get(API + "/emotions/" + id).
-                        then().
+                then().
                         log().all().
                         extract().
                         as(EmotionDetailResponse.class);
@@ -105,9 +105,9 @@ public class EmotionAcceptanceTest {
         //@formatter:off
         return
                 given().
-                        when().
+                when().
                         get(API + "/emotions/" + NOT_EXIST_EMOTION_ID).
-                        then().
+                then().
                         log().all().
                         statusCode(HttpStatus.BAD_REQUEST.value()).
                         extract().as(ExceptionResponse.class);

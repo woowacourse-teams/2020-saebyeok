@@ -19,14 +19,14 @@ public class EmotionService {
 
     public List<EmotionResponse> getEmotions() {
         return emotionRepository.findAll().
-                stream().
-                map(EmotionResponse::new).
-                collect(Collectors.toList());
+            stream().
+            map(EmotionResponse::new).
+            collect(Collectors.toList());
     }
 
     public EmotionDetailResponse readEmotion(Long emotionId) {
         Emotion emotion = emotionRepository.findById(emotionId).
-                orElseThrow(() -> new EmotionNotFoundException(emotionId));
+            orElseThrow(() -> new EmotionNotFoundException(emotionId));
 
         return new EmotionDetailResponse(emotion);
     }
