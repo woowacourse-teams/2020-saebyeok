@@ -1,10 +1,7 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
-import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
-import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import com.saebyeok.saebyeok.exception.IllegalSocialLoginException;
-import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
+import com.saebyeok.saebyeok.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +17,8 @@ public class GlobalExceptionAdvice {
             InvalidLengthCommentException.class,
             CommentNotFoundException.class,
             ArticleNotFoundException.class,
-            IllegalSocialLoginException.class})
+            EmotionNotFoundException.class,
+            IllegalSocialLoginException.class,})
     public ResponseEntity<ExceptionResponse> validated(RuntimeException exception) {
         return ResponseEntity.
             badRequest().
