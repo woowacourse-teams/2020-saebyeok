@@ -22,10 +22,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EmotionServiceTest {
-    private static final long EMOTION_ID = 1L;
+    private static final Long EMOTION_ID = 1L;
     private static final String EMOTION_NAME = "기뻐요";
     private static final String EMOTION_IMAGE_RESOURCE = "리소스";
-    private static final long INVALID_EMOTION_ID = 1000L;
+    private static final Long INVALID_EMOTION_ID = 1000L;
 
     private EmotionService emotionService;
 

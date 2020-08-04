@@ -85,7 +85,7 @@ class CommentServiceTest {
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() {
-        long savedCommentId = 1L;
+        Long savedCommentId = 1L;
 
         commentService.deleteComment(savedCommentId);
 

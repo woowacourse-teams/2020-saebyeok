@@ -30,11 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class EmotionControllerTest {
     private static final String API = "/api";
-    private static final long TEST_ID = 1L;
+    private static final Long TEST_ID = 1L;
     private static final String TEST_NAME = "기뻐요";
     private static final String TEST_IMAGE_RESOURCE = "리소스";
-    private static final long TEST_SUBEMOTION_FIRST_ID = 1L;
-    private static final long TEST_SUBEMOTION_SECOND_ID = 2L;
+    private static final Long TEST_SUBEMOTION_FIRST_ID = 1L;
+    private static final Long TEST_SUBEMOTION_SECOND_ID = 2L;
     private static final String TEST_SUBEMOTION_NAME = "이름";
     private static final Long INVALID_EMOTION_ID = 1000L;
 
