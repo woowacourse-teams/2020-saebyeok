@@ -37,7 +37,7 @@ class ArticleAcceptanceTest {
     private static final String API = "/api";
     private static final String CONTENT = "내용입니다";
     private static final String EMOTION = "기뻐요";
-    private static final long ARTICLE_ID = 1L;
+    private static final Long ARTICLE_ID = 1L;
 
     @LocalServerPort
     int port;
@@ -113,7 +113,7 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 
-    private ArticleResponse readArticle(long id) {
+    private ArticleResponse readArticle(Long id) {
         //@formatter:off
         return
                 given().
@@ -127,7 +127,7 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 
-    private void deleteArticle(long id) {
+    private void deleteArticle(Long id) {
         //@formatter:off
         given().
                 when().

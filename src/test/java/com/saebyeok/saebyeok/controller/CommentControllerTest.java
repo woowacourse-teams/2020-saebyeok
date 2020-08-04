@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class CommentControllerTest {
     private static final String API = "/api";
-    private static final long COMMENT_ID = 1L;
-    private static final long ARTICLE_ID = 1L;
+    private static final Long COMMENT_ID = 1L;
+    private static final Long ARTICLE_ID = 1L;
 
     @MockBean
     private CommentService commentService;
