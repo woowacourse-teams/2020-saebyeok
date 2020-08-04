@@ -1,25 +1,30 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.*;
+import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.ArticleRepository;
+import com.saebyeok.saebyeok.domain.Gender;
+import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
-import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
 
+    public static final int LIMIT_DAYS = 7;
     private final ArticleRepository articleRepository;
 
     public List<ArticleResponse> getArticles() {
@@ -50,5 +55,13 @@ public class ArticleService {
         } catch (EmptyResultDataAccessException e) {
             throw new ArticleNotFoundException(id);
         }
+    }
+
+    public List<ArticleResponse> getArticlesByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
+                stream().
+                map(ArticleResponse::new).
+                collect(Collectors.toList());
     }
 }

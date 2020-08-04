@@ -25,6 +25,12 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
+    @GetMapping("/articles/page")
+    public ResponseEntity<List<ArticleResponse>> getArticlesByPage(Member member, @RequestParam int page, @RequestParam int size) {
+        List<ArticleResponse> articles = articleService.getArticlesByPage(page, size);
+        return ResponseEntity.ok(articles);
+    }
+
     @PostMapping("/articles")
     public ResponseEntity<Void> createArticle(Member member, @RequestBody ArticleCreateRequest request) {
         Article article = articleService.createArticle(member, request);
