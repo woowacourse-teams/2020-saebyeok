@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.config;
 
+import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import com.saebyeok.saebyeok.security.CustomOAuth2UserService;
 import com.saebyeok.saebyeok.security.SuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final SuccessHandler successHandler;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -28,19 +31,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/h2-console/**", "/css/**", "/images/**", "/js/**", "/auth").permitAll()
-                    .anyRequest().authenticated()
+//                  .antMatchers("/h2-console/**", "/css/**", "/images/**", "/js/**", "/auth").permitAll()
+//                  .anyRequest().authenticated()
+                    .antMatchers("/api/**").authenticated()
                 .and()
                     .logout()
                     .logoutSuccessUrl("/")
                 .and()
                     .oauth2Login()
-                    .loginPage("/sign-in")
-                    .permitAll()
+//                    .loginPage("/sign-in")
+//                    .permitAll()
                     .userInfoEndpoint()
                     .userService(customOAuth2UserService)
                 .and()
-                    .successHandler(successHandler);
+                    .successHandler(successHandler)
+                .and()
+                    .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
+                            OAuth2LoginAuthenticationFilter.class);
         //@formatter:on
     }
 }

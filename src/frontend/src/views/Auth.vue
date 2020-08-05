@@ -10,7 +10,7 @@ export default {
   },
   methods: {
     storeAuth() {
-      localStorage.setItem('authorization', this.getParam('token'));
+      localStorage.setItem('token', this.getParam('token'));
     },
     getParam(sname) {
       var params = location.search.substr(location.search.indexOf('?') + 1);
