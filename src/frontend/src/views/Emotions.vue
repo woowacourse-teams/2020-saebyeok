@@ -5,6 +5,11 @@
         지금 당신의
         <p>기분은 어떤가요?</p>
       </div>
+      <v-row dense>
+        <v-col v-for="emotion in emotions" :key="emotion.id" cols="12">
+          {{ emotion.name }}
+        </v-col>
+      </v-row>
       <v-row class="mt-16">
         <v-col style="text-align: right">
           <v-btn text fab x-large dark to="/post">
@@ -44,7 +49,20 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from 'vuex';
+import { FETCH_EMOTIONS } from '@/store/shared/actionTypes';
+export default {
+  name: 'Emotions',
+  created() {
+    this.fetchEmotions();
+  },
+  computed: {
+    ...mapGetters(['emotions'])
+  },
+  methods: {
+    ...mapActions([FETCH_EMOTIONS])
+  }
+};
 </script>
 
 <style scoped></style>
