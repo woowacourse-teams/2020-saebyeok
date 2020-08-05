@@ -37,7 +37,9 @@ class ArticleAcceptanceTest {
     private static final String API = "/api";
     private static final String CONTENT = "내용입니다";
     private static final String EMOTION = "기뻐요";
-    private static final long ARTICLE_ID = 1L;
+    private static final Integer PAGE_NUMBER = 0;
+    private static final Integer PAGE_SIZE = 10;
+    private static final Long ARTICLE_ID = 1L;
 
     @LocalServerPort
     int port;
@@ -84,9 +86,11 @@ class ArticleAcceptanceTest {
         //@formatter:off
         return
                 given().
-                when().
-                        get(API + "/articles").
-                then().
+                        pathParam("page", PAGE_NUMBER).
+                        pathParam("size", PAGE_SIZE).
+                        when().
+                        get(API + "/articles/?page={page}&size={size}").
+                        then().
                         log().all().
                         extract().
                         jsonPath().

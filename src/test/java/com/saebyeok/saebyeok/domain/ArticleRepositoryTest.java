@@ -6,9 +6,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 class ArticleRepositoryTest {
+    private static final LocalDateTime LIMIT_DATE = LocalDateTime.now().minusDays(7);
+    private static final PageRequest PAGE_REQUEST = PageRequest.of(0, 10);
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -38,8 +42,12 @@ class ArticleRepositoryTest {
 
     @DisplayName("게시글 전체 조회를 한다")
     @Test
-    void findAllTest() {
-        List<Article> articles = articleRepository.findAll();
+    void findAllByCreatedDateTest() {
+        List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LIMIT_DATE, PAGE_REQUEST);
+        for (Article article : articles) {
+            System.out.println("TWICE : " + article.getCreatedDate());
+            System.out.println("ID : " + article.getId());
+        }
 
         assertThat(articles).
                 hasSize(3).
@@ -67,9 +75,9 @@ class ArticleRepositoryTest {
 
     @DisplayName("ID로 게시글을 조회하면 해당 게시글이 반환된다")
     @Test
-    void findByIdTest() {
-        Article savedArticle = articleRepository.findById(article1.getId())
-            .orElseThrow(() -> new ArticleNotFoundException(article1.getId()));
+    void findByIdAndCreatedDateTest() {
+        Article savedArticle = articleRepository.findByIdAndCreatedDateGreaterThanEqual(article1.getId(), LIMIT_DATE)
+                .orElseThrow(() -> new ArticleNotFoundException(article1.getId()));
 
         assertThat(savedArticle).isEqualTo(article1);
     }

@@ -31,7 +31,7 @@ export default {
   created() {
     async function getArticlesFromApi() {
       try {
-        const init = await axios.get(`/api/articles/page`, {
+        const init = await axios.get(`/api/articles`, {
           params: {
             page: 0,
             size: 5
@@ -47,7 +47,6 @@ export default {
     }
 
     getArticlesFromApi().then(data => {
-      console.log('From...Api...!!' + data);
       this.articles = data;
     });
   },
@@ -58,7 +57,7 @@ export default {
   methods: {
     infiniteHandler($state) {
       axios
-        .get(`/api/articles/page`, {
+        .get(`/api/articles`, {
           params: {
             page: this.page,
             size: 5

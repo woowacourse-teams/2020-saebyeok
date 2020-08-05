@@ -36,6 +36,8 @@ class ArticleServiceTest {
     private static final String CONTENT = "내용";
     private static final String EMOTION = "기뻐요";
     private static final boolean IS_COMMENT_ALLOWED = true;
+    private static final int PAGE_NUMBER = 0;
+    private static final int PAGE_SIZE = 10;
     private ArticleService articleService;
 
     @Mock
@@ -56,9 +58,9 @@ class ArticleServiceTest {
     void getArticlesTest() {
         List<Article> articles = new ArrayList<>();
         articles.add(article);
-        when(articleRepository.findAllByOrderByIdDesc()).thenReturn(articles);
+        when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
 
-        List<ArticleResponse> articleResponses = articleService.getArticles();
+        List<ArticleResponse> articleResponses = articleService.getArticles(PAGE_NUMBER, PAGE_SIZE);
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT);
@@ -69,7 +71,7 @@ class ArticleServiceTest {
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() {
-        when(articleRepository.findById(ARTICLE_ID)).thenReturn(Optional.of(article));
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article));
 
         ArticleResponse articleResponse = articleService.readArticle(ARTICLE_ID);
 
@@ -82,7 +84,7 @@ class ArticleServiceTest {
     @DisplayName("예외 테스트: 요청에 해당하는 ID가 없으면 ArticleNotFoundException이 발생한다")
     @Test
     void readArticleExceptionTest() {
-        when(articleRepository.findById(INVALID_ARTICLE_ID)).thenReturn(Optional.empty());
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> articleService.readArticle(INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)

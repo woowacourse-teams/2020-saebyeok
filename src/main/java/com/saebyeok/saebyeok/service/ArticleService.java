@@ -27,10 +27,12 @@ public class ArticleService {
     public static final int LIMIT_DAYS = 7;
     private final ArticleRepository articleRepository;
 
-    public List<ArticleResponse> getArticles() {
-        return articleRepository.findAllByOrderByIdDesc().stream()
-                .map(ArticleResponse::new)
-                .collect(Collectors.toList());
+    public List<ArticleResponse> getArticles(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
+                stream().
+                map(ArticleResponse::new).
+                collect(Collectors.toList());
     }
 
     @Transactional
@@ -43,8 +45,8 @@ public class ArticleService {
     }
 
     public ArticleResponse readArticle(Long articleId) {
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
         return new ArticleResponse(article);
     }
 
@@ -55,13 +57,5 @@ public class ArticleService {
         } catch (EmptyResultDataAccessException e) {
             throw new ArticleNotFoundException(id);
         }
-    }
-
-    public List<ArticleResponse> getArticlesByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
-                stream().
-                map(ArticleResponse::new).
-                collect(Collectors.toList());
     }
 }

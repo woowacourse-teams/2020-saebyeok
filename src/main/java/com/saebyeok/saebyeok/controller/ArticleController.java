@@ -20,14 +20,8 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> getArticles(Member member) {
-        List<ArticleResponse> articles = articleService.getArticles();
-        return ResponseEntity.ok(articles);
-    }
-
-    @GetMapping("/articles/page")
-    public ResponseEntity<List<ArticleResponse>> getArticlesByPage(Member member, @RequestParam int page, @RequestParam int size) {
-        List<ArticleResponse> articles = articleService.getArticlesByPage(page, size);
+    public ResponseEntity<List<ArticleResponse>> getArticles(Member member, @RequestParam int page, @RequestParam int size) {
+        List<ArticleResponse> articles = articleService.getArticles(page, size);
         return ResponseEntity.ok(articles);
     }
 
