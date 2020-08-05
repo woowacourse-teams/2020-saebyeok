@@ -117,7 +117,7 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 
-    private ArticleResponse readArticle(long id) {
+    private ArticleResponse readArticle(Long id) {
         //@formatter:off
         return
                 given().
@@ -131,7 +131,7 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 
-    private void deleteArticle(long id) {
+    private void deleteArticle(Long id) {
         //@formatter:off
         given().
                 when().

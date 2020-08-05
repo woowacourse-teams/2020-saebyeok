@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
     private static final String API = "/api";
-    private static final long ARTICLE_ID = 1L;
-    private static final long MEMBER_ID = 1L;
+    private static final Long ARTICLE_ID = 1L;
+    private static final Long MEMBER_ID = 1L;
     // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
-    private static final long NOT_EXIST_COMMENT_ID = 10L;
+    private static final Long NOT_EXIST_COMMENT_ID = 10L;
 
     @LocalServerPort
     int port;
@@ -129,7 +129,7 @@ class CommentAcceptanceTest {
                 .contains("에 해당하는 댓글을 찾을 수 없습니다!");
     }
 
-    private void createComment(long createdId) {
+    private void createComment(Long createdId) {
         //@formatter:off
         params.put("content", "새벽 좋아요");
 
@@ -164,7 +164,7 @@ class CommentAcceptanceTest {
         //@formatter:on
     }
 
-    private void deleteComment(long deletedId) {
+    private void deleteComment(Long deletedId) {
         //@formatter:off
         given().
         when().
@@ -208,7 +208,7 @@ class CommentAcceptanceTest {
         //@formatter:on
     }
 
-    private ArticleResponse readArticle(long id) {
+    private ArticleResponse readArticle(Long id) {
         //@formatter:off
         return
             given().

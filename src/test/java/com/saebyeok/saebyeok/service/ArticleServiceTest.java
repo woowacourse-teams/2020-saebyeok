@@ -28,11 +28,11 @@ import static org.mockito.Mockito.*;
 @Sql("/truncate.sql")
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
-    private static final long MEMBER_ID = 1L;
+    private static final Long MEMBER_ID = 1L;
     private static final int BIRTH_YEAR = 1996;
     private static final boolean IS_DELETED = false;
-    private static final long ARTICLE_ID = 1L;
-    private static final long INVALID_ARTICLE_ID = 2L;
+    private static final Long ARTICLE_ID = 1L;
+    private static final Long INVALID_ARTICLE_ID = 2L;
     private static final String CONTENT = "내용";
     private static final String EMOTION = "기뻐요";
     private static final boolean IS_COMMENT_ALLOWED = true;

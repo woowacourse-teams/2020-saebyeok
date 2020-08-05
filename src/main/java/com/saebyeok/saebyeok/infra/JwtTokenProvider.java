@@ -10,9 +10,10 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private String secretKey;
-    private long validityInMilliseconds;
+    private Long validityInMilliseconds;
 
-    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey, @Value("${security.jwt.token.expire-length}") long validityInMilliseconds) {
+    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey, @Value("${security.jwt.token" +
+        ".expire-length}") Long validityInMilliseconds) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.validityInMilliseconds = validityInMilliseconds;
     }
@@ -22,7 +23,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date validity = new Date(now.getTime()
-                + validityInMilliseconds);
+                                     + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)
