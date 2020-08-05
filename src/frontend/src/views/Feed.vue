@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-4 overflow-y-auto">
-      <cards :articles="articles" />
+      <cards />
     </div>
     <infinite-loading
       v-if="articles.length"
@@ -9,23 +9,23 @@
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
     >
+      <div slot="no-more">모든 글을 다 읽으셨네요 :)</div>
     </infinite-loading>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
 import Cards from '@/components/Cards.vue';
-// import { FETCH_ARTICLES } from '@/store/shared/actionTypes';
-import axios from 'axios';
 import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   name: 'Feed',
   data() {
     return {
-      articles: [],
-      page: 1
+      page: 0,
+      size: 5
     };
   },
   components: {
@@ -33,61 +33,42 @@ export default {
     InfiniteLoading
   },
   created() {
-    // this.fetchArticles();
-    async function getArticlesFromApi() {
-      try {
-        const init = await axios.get(`/api/articles`, {
-          params: {
-            page: 0,
-            size: 5
-          }
-        });
-        // const data = await init.json();
-        // return data;
-        console.log('TWICE   ', init.data);
-        return init.data;
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      this.fetchArticles({
+        page: this.page,
+        size: this.size
+      }).then(() => {
+        this.page++;
+      });
+    } catch (error) {
+      console.error(error);
     }
-
-    getArticlesFromApi().then(data => {
-      this.articles = data;
-    });
   },
   computed: {
     ...mapGetters(['articles'])
   },
   methods: {
-    // ...mapActions([FETCH_ARTICLES])
+    ...mapActions([FETCH_ARTICLES]),
+    ...mapActions([PAGING_ARTICLES]),
     infiniteHandler($state) {
-      axios
-        .get(`/api/articles`, {
-          params: {
-            page: this.page,
-            size: 5
-          }
+      setTimeout(() => {
+        this.pagingArticles({
+          page: this.page,
+          size: this.size
         })
-        .then(({ data }) => {
-          console.log('OHMYGIRL ', data);
-          setTimeout(() => {
+          .then(data => {
             if (data.length) {
               this.page++;
-              this.articles = this.articles.concat(data);
               $state.loaded();
-              console.log('after : ', this.articles.length, this.page);
             } else {
               $state.complete();
             }
-          }, 1000);
-        })
-        .catch(err => {
-          console.error(err);
-        });
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }, 500);
     }
-  },
-  props: {
-    source: String
   }
 };
 </script>

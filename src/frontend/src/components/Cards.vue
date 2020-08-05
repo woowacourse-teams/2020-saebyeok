@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Card from '@/components/Card.vue';
 
 export default {
@@ -16,11 +17,8 @@ export default {
   components: {
     Card
   },
-  props: {
-    articles: {
-      type: Object,
-      required: true
-    }
+  computed: {
+    ...mapGetters(['articles'])
   }
 };
 </script>
