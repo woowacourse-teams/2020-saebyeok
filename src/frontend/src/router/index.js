@@ -7,6 +7,7 @@ import Diary from '../views/Diary/Diary.vue';
 import ArticleDetail from '../views/ArticleDetail.vue';
 import Emotions from '../views/Emotions.vue';
 import Login from '../views/Login.vue';
+import Auth from '../views/Auth.vue';
 import Header from '@/components/Header';
 import EmotionsHeader from '@/components/EmotionsHeader';
 import BottomNavigation from '@/components/BottomNavigation';
@@ -81,6 +82,13 @@ const routes = [
     name: 'Login',
     components: {
       default: Login
+    }
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    components: {
+      default: Auth
     }
   }
 ];
