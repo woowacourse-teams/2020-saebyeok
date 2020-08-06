@@ -44,10 +44,6 @@ class ArticleRepositoryTest {
     @Test
     void findAllByCreatedDateTest() {
         List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LIMIT_DATE, PAGE_REQUEST);
-        for (Article article : articles) {
-            System.out.println("TWICE : " + article.getCreatedDate());
-            System.out.println("ID : " + article.getId());
-        }
 
         assertThat(articles).
                 hasSize(3).
