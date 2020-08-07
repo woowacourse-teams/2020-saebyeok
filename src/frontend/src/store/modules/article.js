@@ -1,7 +1,12 @@
-import { SET_ARTICLE, SET_ARTICLES } from '@/store/shared/mutationTypes';
+import {
+  SET_ARTICLE,
+  SET_ARTICLES,
+  ADD_ARTICLES
+} from '@/store/shared/mutationTypes';
 import {
   FETCH_ARTICLE,
   FETCH_ARTICLES,
+  PAGING_ARTICLES,
   CREATE_ARTICLE
 } from '@/store/shared/actionTypes';
 import ArticleService from '@/api/modules/article';
@@ -26,6 +31,9 @@ const mutations = {
   },
   [SET_ARTICLES](state, articles) {
     state.articles = articles;
+  },
+  [ADD_ARTICLES](state, articles) {
+    state.articles = state.articles.concat(articles);
   }
 };
 
@@ -40,9 +48,16 @@ const actions = {
       return data;
     });
   },
-  async [FETCH_ARTICLES]({ commit }) {
-    return ArticleService.getAll().then(({ data }) => {
+  async [FETCH_ARTICLES]({ commit }, params) {
+    return ArticleService.getAll(params).then(({ data }) => {
       commit(SET_ARTICLES, data);
+      return data;
+    });
+  },
+  async [PAGING_ARTICLES]({ commit }, params) {
+    return ArticleService.getAll(params).then(({ data }) => {
+      commit(ADD_ARTICLES, data);
+      return data;
     });
   }
 };

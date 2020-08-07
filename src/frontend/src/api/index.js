@@ -15,6 +15,14 @@ const ApiService = {
       }
     });
   },
+  getWithParams(uri, params) {
+    return Vue.axios.get(API_PREFIX + `${uri}`, {
+      headers: {
+        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+      },
+      params: params
+    });
+  },
   login(uri, config) {
     return Vue.axios.post(API_PREFIX + `${uri}`, {}, config);
   },
