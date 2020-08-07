@@ -88,9 +88,9 @@ class ArticleAcceptanceTest {
                 given().
                         pathParam("page", PAGE_NUMBER).
                         pathParam("size", PAGE_SIZE).
-                        when().
+                when().
                         get(API + "/articles/?page={page}&size={size}").
-                        then().
+                then().
                         log().all().
                         extract().
                         jsonPath().
@@ -134,7 +134,7 @@ class ArticleAcceptanceTest {
     private void deleteArticle(Long id) {
         //@formatter:off
         given().
-                when().
+        when().
                 delete(API + "/articles/" + id).
         then().
                 log().all().
