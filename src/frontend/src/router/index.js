@@ -5,7 +5,7 @@ import Post from '../views/Post.vue';
 import Analysis from '../views/Analysis/Analysis.vue';
 import Diary from '../views/Diary/Diary.vue';
 import ArticleDetail from '../views/ArticleDetail.vue';
-import Emotions from '../views/Emotions.vue';
+import Emotions from '../views/emotions/Emotions.vue';
 import Header from '@/components/Header';
 import EmotionsHeader from '@/components/EmotionsHeader';
 import BottomNavigation from '@/components/BottomNavigation';
@@ -41,7 +41,7 @@ const routes = [
     }
   },
   {
-    path: '/post',
+    path: '/post/:emotionId',
     name: 'Post',
     components: {
       default: Post,
