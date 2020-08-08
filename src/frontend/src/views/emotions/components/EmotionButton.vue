@@ -1,7 +1,6 @@
 <template>
   <v-container>
     <v-layout v-on:click="onClickEmotionButton" justify-center align-center>
-      <!-- <div class="text-h2">😊</div> -->
       <v-img
         :src="emotion.imageResource"
         :alt="emotion.name"

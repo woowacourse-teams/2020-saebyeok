@@ -3,23 +3,31 @@
     <v-container>
       <v-layout column>
         <v-row no-gutters>
-          <v-col
-            cols="2"
-            style="font-size: 60px; text-align: center; line-height: 60px"
-            >😊</v-col
-          >
+          <v-col cols="2" style="line-height: 60px">
+            <v-img
+              :src="emotion.imageResource"
+              :alt="emotion.name"
+              max-height="60"
+              max-width="60"
+            >
+            </v-img>
+          </v-col>
           <v-col cols="10">
             <v-chip-group
               column
               multiple
               max="3"
               active-class="black--text text--accent-4"
-              v-model="emotions"
             >
-              <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
+              <v-chip
+                v-for="subEmotion in emotion.subEmotions"
+                :key="subEmotion.id"
+                v-on:click="onClickSubEmotionTag(subEmotion.id)"
+                ># {{ subEmotion.name }}</v-chip
+              >
             </v-chip-group>
             <h5
-              v-if="validateEmotionsLength"
+              v-if="invalidEmotionLength"
               style="color: red; font-weight: lighter"
             >
               감정 태그는 3개까지 선택할 수 있어요.
@@ -54,8 +62,8 @@
             width="100%"
             color="rgba(164, 63, 176)"
             @click="submit"
-            >남기기</v-btn
-          >
+            >남기기
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -63,35 +71,31 @@
 </template>
 
 <script>
-import { CREATE_ARTICLE } from '@/store/shared/actionTypes';
-import { mapActions } from 'vuex';
+import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {},
-  props: {
-    source: String
+  created() {
+    this.fetchEmotion(this.$route.params.emotionId);
   },
   data() {
     return {
       content: '',
       isCommentAllowed: true,
-      tags: [
-        '# 즐거워요',
-        '# 기뻐요',
-        '# 행복해요',
-        '# 재밌어요',
-        '# 만족스러워요',
-        '# 흥미진진해요',
-        '# 기대돼요'
-      ],
-      emotions: []
+      chooseSubEmotions: [],
+      invalidEmotionLength: false
     };
   },
   methods: {
+    ...mapActions([CREATE_ARTICLE]),
+    ...mapActions([FETCH_EMOTION]),
     async submit() {
       const articleCreateRequest = {
+        //todo : 여기서 emotion : this.emotion.id,
+        //subEmotions : this.chooseSubEmotion 을 전달하면 된다.
         content: this.content,
-        emotion: '기뻐요',
+        emotion: this.emotion.name + this.chooseSubEmotions[0],
         isCommentAllowed: this.isCommentAllowed
       };
       this.createArticle(articleCreateRequest).then(response => {
@@ -100,12 +104,23 @@ export default {
         }
       });
     },
-    ...mapActions([CREATE_ARTICLE])
+    onClickSubEmotionTag(subEmotionId) {
+      if (this.chooseSubEmotions.includes(subEmotionId)) {
+        const index = this.chooseSubEmotions.indexOf(subEmotionId);
+        this.chooseSubEmotions.splice(index, 1);
+        this.invalidEmotionLength = false;
+        return;
+      }
+      if (this.chooseSubEmotions.length >= 3) {
+        this.invalidEmotionLength = true;
+        return;
+      }
+      this.chooseSubEmotions.push(subEmotionId);
+      this.invalidEmotionLength = false;
+    }
   },
   computed: {
-    validateEmotionsLength() {
-      return this.emotions.length === 3;
-    }
+    ...mapGetters(['emotion'])
   }
 };
 </script>
