@@ -37,6 +37,8 @@ class ArticleAcceptanceTest {
     private static final String API = "/api";
     private static final String CONTENT = "내용입니다";
     private static final String EMOTION = "기뻐요";
+    private static final Integer PAGE_NUMBER = 0;
+    private static final Integer PAGE_SIZE = 10;
     private static final Long ARTICLE_ID = 1L;
 
     @LocalServerPort
@@ -84,8 +86,10 @@ class ArticleAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        pathParam("page", PAGE_NUMBER).
+                        pathParam("size", PAGE_SIZE).
                 when().
-                        get(API + "/articles").
+                        get(API + "/articles/?page={page}&size={size}").
                 then().
                         log().all().
                         extract().
@@ -130,7 +134,7 @@ class ArticleAcceptanceTest {
     private void deleteArticle(Long id) {
         //@formatter:off
         given().
-                when().
+        when().
                 delete(API + "/articles/" + id).
         then().
                 log().all().

@@ -36,6 +36,8 @@ class ArticleControllerTest {
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
     private static final Long TEST_ID = 1L;
     private static final Long INVALID_ARTICLE_ID = 2L;
+    private static final Integer TEST_PAGE_NUMBER = 0;
+    private static final Integer TEST_PAGE_SIZE = 10;
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,9 +55,9 @@ class ArticleControllerTest {
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
     @Test
     void getArticlesTest() throws Exception {
-        when(articleService.getArticles()).thenReturn(Arrays.asList(articleResponse));
+        when(articleService.getArticles(TEST_PAGE_NUMBER, TEST_PAGE_SIZE)).thenReturn(Arrays.asList(articleResponse));
 
-        this.mockMvc.perform(get(API + "/articles").
+        this.mockMvc.perform(get(API + "/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT));

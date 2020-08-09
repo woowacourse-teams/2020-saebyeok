@@ -9,8 +9,8 @@ const ArticleService = {
   get(articleId) {
     return ApiService.get(`${BASE_URL}/${articleId}`);
   },
-  getAll() {
-    return ApiService.get(`${BASE_URL}`);
+  getAll(params) {
+    return ApiService.getWithParams(`${BASE_URL}`, params);
   }
 };
 
