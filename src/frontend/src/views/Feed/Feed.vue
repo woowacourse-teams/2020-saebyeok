@@ -8,7 +8,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Cards from '@/components/Cards.vue';
+import Cards from '@/components/Card/Cards.vue';
 import { FETCH_ARTICLES } from '@/store/shared/actionTypes';
 
 export default {

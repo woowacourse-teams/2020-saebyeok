@@ -29,7 +29,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
-import DetailPageCard from '@/components/DetailPageCard';
+import DetailPageCard from '@/components/Card/DetailPageCard';
 import Comment from '@/components/Comment';
 import CommentCreateForm from '@/components/CommentCreateForm';
 

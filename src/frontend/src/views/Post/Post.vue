@@ -18,6 +18,8 @@
               multiple
               max="3"
               active-class="black--text text--accent-4"
+              align="right"
+              justify="end"
             >
               <v-chip
                 v-for="subEmotion in emotion.subEmotions"
@@ -75,7 +77,7 @@ import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  components: {},
+  name: 'Post',
   created() {
     this.fetchEmotion(this.$route.params.emotionId);
   },
