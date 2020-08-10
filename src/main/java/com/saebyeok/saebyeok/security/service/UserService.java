@@ -1,8 +1,8 @@
-package com.saebyeok.saebyeok.service;
+package com.saebyeok.saebyeok.security.service;
 
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.MemberRepository;
-import com.saebyeok.saebyeok.domain.User;
+import com.saebyeok.saebyeok.security.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

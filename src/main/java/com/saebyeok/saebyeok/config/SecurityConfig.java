@@ -1,8 +1,8 @@
 package com.saebyeok.saebyeok.config;
 
 import com.saebyeok.saebyeok.infra.JwtTokenProvider;
-import com.saebyeok.saebyeok.security.CustomOAuth2UserService;
 import com.saebyeok.saebyeok.security.SuccessHandler;
+import com.saebyeok.saebyeok.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

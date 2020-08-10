@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.security;
+package com.saebyeok.saebyeok.security.service;
 
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.MemberRepository;
