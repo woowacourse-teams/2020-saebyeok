@@ -1,7 +1,8 @@
 package com.saebyeok.saebyeok.security.dto;
 
-import com.saebyeok.saebyeok.domain.Role;
+import com.saebyeok.saebyeok.domain.Gender;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,17 +12,15 @@ import java.util.Map;
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
-    private String name;
     private String email;
-    private String picture;
+    private Gender gender;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String email, Gender gender) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
-        this.name = name;
         this.email = email;
-        this.picture = picture;
+        this.gender = gender;
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -33,9 +32,8 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
+                .gender(Gender.findGender((String) attributes.get("gender")))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -44,19 +42,18 @@ public class OAuthAttributes {
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
-                .name((String) response.get("name"))
                 .email((String) response.get("email"))
-                .picture((String) response.get("profile_image"))
+                .gender(Gender.findGender((String) response.get("gender")))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
 
-    //처음 가입할때 실행됨
     public Member toEntity() {
         return Member.builder()
                 .email(email)
-                .role(Role.GUEST)//가입할때의 기본권한 GUEST
+                .role(Role.USER)
+                .gender(gender)
                 .build();
     }
 }

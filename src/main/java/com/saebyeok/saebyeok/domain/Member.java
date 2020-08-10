@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Member {
     @Id
@@ -28,7 +30,9 @@ public class Member {
 
     @CreatedDate
     private LocalDateTime createdDate;
-    private Boolean isDeleted;
+
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
