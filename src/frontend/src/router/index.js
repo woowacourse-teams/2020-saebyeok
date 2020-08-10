@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Feed from '../views/Feed/Feed.vue';
-import Post from '../views/Post/Post.vue';
-import Analysis from '../views/Analysis/Analysis.vue';
-import Diary from '../views/Diary/Diary.vue';
-import ArticleDetail from '../views/ArticleDetail/ArticleDetail.vue';
-import Emotions from '../views/Emotions/Emotions.vue';
-import Header from '@/components/Header';
-import EmotionsHeader from '@/components/EmotionsHeader';
-import BottomNavigation from '@/components/BottomNavigation';
-import DetailPageHeader from '@/components/DetailPageHeader';
+import Feed from '../views/feed/Feed.vue';
+import Post from '../views/post/Post.vue';
+import Analysis from '../views/analysis/Analysis.vue';
+import Diary from '../views/diary/Diary.vue';
+import ArticleDetail from '../views/articleDetail/ArticleDetail.vue';
+import Emotions from '../views/emotions/Emotions.vue';
+import Header from '@/components/header/Header';
+import EmotionsHeader from '@/components/header/EmotionsHeader';
+import BottomNavigation from '@/components/footer/BottomNavigation';
+import DetailPageHeader from '@/components/header/DetailPageHeader';
 
 Vue.use(VueRouter);
 

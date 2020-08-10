@@ -73,20 +73,20 @@
 </template>
 
 <script>
-import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
-import { mapActions, mapGetters } from 'vuex';
+    import {CREATE_ARTICLE, FETCH_EMOTION} from '@/store/shared/actionTypes';
+    import {mapActions, mapGetters} from 'vuex';
 
-export default {
-  name: 'Post',
-  created() {
-    this.fetchEmotion(this.$route.params.emotionId);
-  },
-  data() {
-    return {
-      content: '',
-      isCommentAllowed: true,
-      chooseSubEmotions: [],
-      invalidEmotionLength: false
+    export default {
+        name: 'Post',
+        created() {
+            this.fetchEmotion(this.$route.params.emotionId);
+        },
+        data() {
+            return {
+                content: '',
+                isCommentAllowed: true,
+                chooseSubEmotions: [],
+                invalidEmotionLength: false
     };
   },
   methods: {

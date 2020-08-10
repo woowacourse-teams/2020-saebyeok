@@ -33,18 +33,19 @@
 </template>
 
 <script>
-import MyPageTabs from '@/components/MyPageTabs.vue';
-import RadarChart from './components/RadarChart.vue';
-export default {
-  data() {
-    return {};
-  },
-  components: {
-    MyPageTabs,
-    RadarChart
-  },
-  props: {
-    source: String
-  }
+    import MyPageTabs from '@/components/MyPageTabs.vue';
+    import RadarChart from './components/RadarChart.vue';
+
+    export default {
+        data() {
+            return {};
+        },
+        components: {
+            MyPageTabs,
+            RadarChart
+        },
+        props: {
+            source: String
+        }
 };
 </script>

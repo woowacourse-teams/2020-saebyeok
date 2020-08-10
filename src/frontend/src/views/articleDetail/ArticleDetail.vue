@@ -27,23 +27,23 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
-import DetailPageCard from '@/components/Card/DetailPageCard';
-import Comment from '@/components/Comment';
-import CommentCreateForm from '@/components/CommentCreateForm';
+  import {mapActions, mapGetters} from 'vuex';
+  import {FETCH_ARTICLE} from '@/store/shared/actionTypes';
+  import DetailPageCard from '@/components/card/DetailPageCard';
+  import Comment from '@/components/Comment';
+  import CommentCreateForm from '@/components/CommentCreateForm';
 
-export default {
-  name: 'ArticleDetail',
-  data() {
-    return {
-      commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
-    };
-  },
-  components: {
-    DetailPageCard,
-    Comment,
-    CommentCreateForm
+  export default {
+    name: 'ArticleDetail',
+    data() {
+      return {
+        commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
+      };
+    },
+    components: {
+      DetailPageCard,
+      Comment,
+      CommentCreateForm
   },
   created() {
     this.fetchArticle(this.$route.params.articleId);
