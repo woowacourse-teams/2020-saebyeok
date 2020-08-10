@@ -1,7 +1,7 @@
 package com.saebyeok.saebyeok.security.dto;
 
 import com.saebyeok.saebyeok.domain.Role;
-import com.saebyeok.saebyeok.domain.User;
+import com.saebyeok.saebyeok.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -53,11 +53,9 @@ public class OAuthAttributes {
     }
 
     //처음 가입할때 실행됨
-    public User toEntity() {
-        return User.builder()
-                .name(name)
+    public Member toEntity() {
+        return Member.builder()
                 .email(email)
-                .picture(picture)
                 .role(Role.GUEST)//가입할때의 기본권한 GUEST
                 .build();
     }

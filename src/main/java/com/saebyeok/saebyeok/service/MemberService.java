@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.service;
 import com.saebyeok.saebyeok.domain.Gender;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.MemberRepository;
+import com.saebyeok.saebyeok.domain.Role;
 import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 

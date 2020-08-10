@@ -18,7 +18,7 @@ const ApiService = {
   getWithParams(uri, params) {
     return Vue.axios.get(API_PREFIX + `${uri}`, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       },
       params: params
     });
