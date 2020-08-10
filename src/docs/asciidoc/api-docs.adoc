@@ -1,0 +1,27 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
+
+[[resources]]
+= Resources
+
+[[resources-comments]]
+== Comments
+
+[[resources-comments-create]]
+=== 댓글 생성
+
+operation::comments/create[snippets='http-request,http-response,path-parameters,request-headers,request-fields,response-headers']
+
+[[resources-comments-delete]]
+=== 댓글 삭제
+
+operation::comments/delete[snippets='http-request,http-response,path-parameters,request-headers']

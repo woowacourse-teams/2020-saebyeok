@@ -45,9 +45,16 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    // rest docs
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+
+    // rest assured
+    implementation 'io.rest-assured:rest-assured-common:3.3.0'
+    testImplementation 'io.rest-assured:spring-mock-mvc:3.3.0'
 }
 
 test {
@@ -60,6 +67,23 @@ asciidoctor {
     dependsOn test
 }
 
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/asciidoc/html5")
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 task setUp(type: NpmTask) {
     description = "Install Node.js packages"
     args = ['install']
@@ -70,6 +94,10 @@ task setUp(type: NpmTask) {
 task buildFrontEnd(type: NpmTask, dependsOn: setUp) {
     description = "Build vue.js"
     args = ['run', 'build']
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
 
 processResources.dependsOn 'buildFrontEnd'
