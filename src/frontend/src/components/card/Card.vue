@@ -62,21 +62,21 @@
 </template>
 
 <script>
-  import CreatedDate from '@/components/CreatedDate';
-  import EmotionTab from '@/components/card/EmotionTab';
-  import SubEmotionTab from '@/components/card/SubEmotionTab';
+import CreatedDate from '@/components/CreatedDate';
+import EmotionTab from '@/components/card/EmotionTab';
+import SubEmotionTab from '@/components/card/SubEmotionTab';
 
-  export default {
-    name: 'Card',
-    components: {
-      CreatedDate,
-      EmotionTab,
-      SubEmotionTab
-    },
-    data() {
-      return {
-        //아직 article에 없는 값을 임시로 설정
-        emotion: {
+export default {
+  name: 'Card',
+  components: {
+    CreatedDate,
+    EmotionTab,
+    SubEmotionTab
+  },
+  data() {
+    return {
+      //아직 article에 없는 값을 임시로 설정
+      emotion: {
         id: 1,
         name: '화나요',
         imageResource:

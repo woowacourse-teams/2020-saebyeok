@@ -17,24 +17,24 @@
 </template>
 
 <script>
-  import MyPageTabs from '@/components/MyPageTabs.vue';
-  import {mapActions, mapGetters} from 'vuex';
-  import {FETCH_ARTICLES, PAGING_ARTICLES} from '@/store/shared/actionTypes';
-  import Cards from '@/components/card/Cards.vue';
-  import EmotionFilter from './components/EmotionFilter.vue';
-  import InfiniteLoading from 'vue-infinite-loading';
+import MyPageTabs from '@/components/MyPageTabs.vue';
+import { mapActions, mapGetters } from 'vuex';
+import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
+import Cards from '@/components/card/Cards.vue';
+import EmotionFilter from './components/EmotionFilter.vue';
+import InfiniteLoading from 'vue-infinite-loading';
 
-  export default {
-    name: 'Diary',
-    data() {
-      return {
-        page: 0,
-        size: 5
-      };
-    },
-    components: {
-      MyPageTabs,
-      Cards,
+export default {
+  name: 'Diary',
+  data() {
+    return {
+      page: 0,
+      size: 5
+    };
+  },
+  components: {
+    MyPageTabs,
+    Cards,
     EmotionFilter,
     InfiniteLoading
   },

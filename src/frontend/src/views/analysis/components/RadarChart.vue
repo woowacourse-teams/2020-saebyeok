@@ -1,17 +1,17 @@
 <script>
-    import {Radar} from 'vue-chartjs';
+import { Radar } from 'vue-chartjs';
 
-    export default {
-        extends: Radar,
-        mounted() {
-            this.renderChart(this.data, this.options);
-        },
-        data() {
-            return {
-                data: {
-                    labels: ['😄', '😭', '😩', '😍', '😊', '😂'],
-                    datasets: [
-                        {
+export default {
+  extends: Radar,
+  mounted() {
+    this.renderChart(this.data, this.options);
+  },
+  data() {
+    return {
+      data: {
+        labels: ['😄', '😭', '😩', '😍', '😊', '😂'],
+        datasets: [
+          {
             label: '감정 분포도',
             borderColor: '#B2A4D4',
             data: [30, 20, 18, 39, 10, 40]

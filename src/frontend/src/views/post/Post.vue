@@ -3,23 +3,26 @@
     <v-container>
       <v-layout column>
         <v-row no-gutters>
-          <v-col cols="2" style="line-height: 60px">
+          <v-col
+            cols="3"
+            style="line-height: 80px"
+            align="center"
+            justify="center"
+          >
             <v-img
               :src="emotion.imageResource"
               :alt="emotion.name"
-              max-height="60"
-              max-width="60"
+              max-height="80"
+              max-width="80"
             >
             </v-img>
           </v-col>
-          <v-col cols="10">
+          <v-col cols="9">
             <v-chip-group
               column
               multiple
               max="3"
               active-class="black--text text--accent-4"
-              align="right"
-              justify="end"
             >
               <v-chip
                 v-for="subEmotion in emotion.subEmotions"
@@ -73,20 +76,20 @@
 </template>
 
 <script>
-    import {CREATE_ARTICLE, FETCH_EMOTION} from '@/store/shared/actionTypes';
-    import {mapActions, mapGetters} from 'vuex';
+import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
+import { mapActions, mapGetters } from 'vuex';
 
-    export default {
-        name: 'Post',
-        created() {
-            this.fetchEmotion(this.$route.params.emotionId);
-        },
-        data() {
-            return {
-                content: '',
-                isCommentAllowed: true,
-                chooseSubEmotions: [],
-                invalidEmotionLength: false
+export default {
+  name: 'Post',
+  created() {
+    this.fetchEmotion(this.$route.params.emotionId);
+  },
+  data() {
+    return {
+      content: '',
+      isCommentAllowed: true,
+      chooseSubEmotions: [],
+      invalidEmotionLength: false
     };
   },
   methods: {
