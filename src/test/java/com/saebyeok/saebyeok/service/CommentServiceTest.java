@@ -24,8 +24,6 @@ class CommentServiceTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private MemberRepository memberRepository;
-    @Mock
     private ArticleRepository articleRepository;
 
     private Member member;
@@ -33,7 +31,7 @@ class CommentServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.commentService = new CommentService(commentRepository, memberRepository, articleRepository);
+        this.commentService = new CommentService(commentRepository, articleRepository);
         this.member = new Member();
         this.article = new Article();
     }
@@ -84,10 +82,10 @@ class CommentServiceTest {
 
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
-    void deleteCommentTest() {
+    void deleteCommentTest() throws IllegalAccessException {
         Long savedCommentId = 1L;
 
-        commentService.deleteComment(savedCommentId);
+        commentService.deleteComment(any(Member.class), savedCommentId);
 
         verify(commentRepository).deleteById(any());
     }

@@ -60,7 +60,7 @@ class ArticleServiceTest {
         articles.add(article);
         when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
 
-        List<ArticleResponse> articleResponses = articleService.getArticles(PAGE_NUMBER, PAGE_SIZE);
+        List<ArticleResponse> articleResponses = articleService.getArticles(any(Member.class), PAGE_NUMBER, PAGE_SIZE);
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT);
@@ -73,7 +73,7 @@ class ArticleServiceTest {
     void readArticleTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article));
 
-        ArticleResponse articleResponse = articleService.readArticle(ARTICLE_ID);
+        ArticleResponse articleResponse = articleService.readArticle(any(Member.class), ARTICLE_ID);
 
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
@@ -86,15 +86,15 @@ class ArticleServiceTest {
     void readArticleExceptionTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> articleService.readArticle(INVALID_ARTICLE_ID))
+        assertThatThrownBy(() -> articleService.readArticle(any(Member.class), INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
                 .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
     }
 
     @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
     @Test
-    void deleteArticleTest() {
-        articleService.deleteArticle(ARTICLE_ID);
+    void deleteArticleTest() throws IllegalAccessException {
+        articleService.deleteArticle(any(Member.class), ARTICLE_ID);
 
         verify(articleRepository).deleteById(any());
     }
@@ -107,7 +107,7 @@ class ArticleServiceTest {
         doThrow(new EmptyResultDataAccessException(expectedSize))
                 .when(articleRepository).deleteById(INVALID_ARTICLE_ID);
 
-        assertThatThrownBy(() -> articleService.deleteArticle(INVALID_ARTICLE_ID))
+        assertThatThrownBy(() -> articleService.deleteArticle(any(Member.class), INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
                 .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
     }

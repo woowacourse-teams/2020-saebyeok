@@ -39,6 +39,7 @@ public class Member {
     private Role role;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
     public String getRoleKey() {

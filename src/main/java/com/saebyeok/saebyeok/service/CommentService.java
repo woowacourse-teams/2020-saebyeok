@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-    public static final String NOT_YOUR_COMMENT = "자신의 댓글이 아닙니다!";
+    private static final String NOT_YOUR_COMMENT = "자신의 댓글이 아닙니다!";
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
@@ -30,12 +30,12 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Member member, Long id) throws IllegalAccessException {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentNotFoundException(id));
+    public void deleteComment(Member member, Long commentId) throws IllegalAccessException {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
         if (!comment.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_COMMENT);
         }
-        commentRepository.deleteById(id);
+        commentRepository.deleteById(commentId);
     }
 }
