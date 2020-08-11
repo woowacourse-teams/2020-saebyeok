@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id "org.asciidoctor.convert" version "1.5.9.2"
     id "com.moowork.node" version "1.3.1"
     id 'java'
 }
@@ -57,9 +57,13 @@ dependencies {
     testImplementation 'io.rest-assured:spring-mock-mvc:3.3.0'
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
+    outputs.dir snippetsDir
 }
 
 asciidoctor {
@@ -80,10 +84,6 @@ bootJar {
     }
 }
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
-
 task setUp(type: NpmTask) {
     description = "Install Node.js packages"
     args = ['install']
@@ -96,8 +96,5 @@ task buildFrontEnd(type: NpmTask, dependsOn: setUp) {
     args = ['run', 'build']
 }
 
-javadoc {
-    options.encoding = 'UTF-8'
-}
 
 processResources.dependsOn 'buildFrontEnd'
