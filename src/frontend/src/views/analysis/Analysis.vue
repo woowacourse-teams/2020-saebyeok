@@ -35,6 +35,7 @@
 <script>
 import MyPageTabs from '@/components/MyPageTabs.vue';
 import RadarChart from './components/RadarChart.vue';
+
 export default {
   data() {
     return {};

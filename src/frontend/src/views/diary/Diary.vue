@@ -20,7 +20,7 @@
 import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
-import Cards from '@/components/Cards.vue';
+import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from './components/EmotionFilter.vue';
 import InfiniteLoading from 'vue-infinite-loading';
 
