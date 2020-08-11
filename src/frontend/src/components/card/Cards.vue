@@ -10,7 +10,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Card from '@/components/Card.vue';
+import Card from '@/components/card/Card.vue';
 
 export default {
   name: 'Cards',
