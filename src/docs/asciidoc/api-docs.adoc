@@ -13,6 +13,29 @@ endif::[]
 [[resources]]
 = Resources
 
+[[resources-articles]]
+== Articles
+
+[[resources-articles-create]]
+=== 게시물 생성
+
+operation::articles/create[snippets='http-request,http-response,request-headers,request-fields,response-headers']
+
+[[resources-articles-get]]
+=== 게시물 전체 조회
+
+operation::articles/get[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
+
+[[resources-articles-read]]
+=== 게시물 조회
+
+operation::articles/read[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
+
+[[resources-articles-delete]]
+=== 게시물 삭제
+
+operation::articles/delete[snippets='http-request,http-response,path-parameters,request-headers']
+
 [[resources-comments]]
 == Comments
 
