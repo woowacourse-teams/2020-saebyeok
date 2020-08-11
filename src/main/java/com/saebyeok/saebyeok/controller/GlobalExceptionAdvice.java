@@ -18,11 +18,12 @@ public class GlobalExceptionAdvice {
             CommentNotFoundException.class,
             ArticleNotFoundException.class,
             EmotionNotFoundException.class,
-            IllegalSocialLoginException.class,})
-    public ResponseEntity<ExceptionResponse> validated(RuntimeException exception) {
+            IllegalSocialLoginException.class,
+            IllegalAccessException.class})
+    public ResponseEntity<ExceptionResponse> validated(Exception exception) {
         return ResponseEntity.
-            badRequest().
-            body(new ExceptionResponse(exception.getMessage()));
+                badRequest().
+                body(new ExceptionResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
