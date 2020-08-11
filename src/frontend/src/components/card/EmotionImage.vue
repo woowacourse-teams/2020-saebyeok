@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'EmotionTab',
+  name: 'EmotionImage',
   props: {
     emotion: {
       type: Object,

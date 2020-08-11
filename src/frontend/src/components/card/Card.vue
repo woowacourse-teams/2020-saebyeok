@@ -9,7 +9,7 @@
       <v-card-title>
         <v-row no-gutters>
           <v-col cols="3">
-            <emotion-tab :emotion="emotion" />
+            <emotion-image :emotion="emotion" />
           </v-col>
           <v-col cols="9">
             <v-row no-gutters>
@@ -27,7 +27,7 @@
                 class="d-flex justify-end"
                 style="font-size: 15px; line-height: 15px"
               >
-                <sub-emotion-tab :subEmotions="subEmotions" />
+                <sub-emotion-chips :subEmotions="subEmotions" />
               </v-col>
             </v-row>
           </v-col>
@@ -63,15 +63,15 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
-import EmotionTab from '@/components/card/EmotionTab';
-import SubEmotionTab from '@/components/card/SubEmotionTab';
+import EmotionImage from '@/components/card/EmotionImage';
+import SubEmotionChips from '@/components/card/SubEmotionChips';
 
 export default {
   name: 'Card',
   components: {
     CreatedDate,
-    EmotionTab,
-    SubEmotionTab
+    EmotionImage,
+    SubEmotionChips
   },
   data() {
     return {

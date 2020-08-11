@@ -18,19 +18,15 @@
             </v-img>
           </v-col>
           <v-col cols="9">
-            <v-chip-group
-              column
-              multiple
-              max="3"
-              active-class="black--text text--accent-4"
-            >
+            <v-row no-gutters>
               <v-chip
                 v-for="subEmotion in emotion.subEmotions"
                 :key="subEmotion.id"
                 v-on:click="onClickSubEmotionTag(subEmotion.id)"
+                class="ma-1"
                 ># {{ subEmotion.name }}</v-chip
               >
-            </v-chip-group>
+            </v-row>
             <h5
               v-if="invalidEmotionLength"
               style="color: red; font-weight: lighter"
