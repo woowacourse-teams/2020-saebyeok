@@ -25,13 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,9 +81,10 @@ public class ArticleDocumentation extends Documentation {
                                headerWithName("Authorization").description("Bearer auth credentials")
                            ),
                            requestFields(
-                               fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
-                               fieldWithPath("emotion").type(JsonFieldType.STRING).description("게시글 감정"),
-                               fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("댓글 허용 여부")),
+                               fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
+                               fieldWithPath("emotion").type(JsonFieldType.STRING).description("게시물 감정"),
+                               fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 " +
+                                                                                                             "여부")),
                            responseHeaders(
                                headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
                            )
@@ -129,6 +130,55 @@ public class ArticleDocumentation extends Documentation {
                                                                                                                "닉네임"),
                                fieldWithPath("comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                fieldWithPath("comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간")
+                           )
+            ));
+    }
+
+    @Test
+    void getArticles() throws Exception {
+        List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
+                                                                           LocalDateTime.now()));
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), "기뻐요", true,
+                                                              comments);
+
+        List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
+
+        given(articleService.getArticles(anyInt(), anyInt())).willReturn(articleResponses);
+
+        this.mockMvc.perform(get("/api/articles?page=0&size=5").
+            header("Authorization", tokenResponse.getAccessToken()).
+            accept(MediaType.APPLICATION_JSON)).
+            andExpect(status().isOk()).
+            andDo(print()).
+            andDo(document("articles/get",
+                           getDocumentRequest(),
+                           getDocumentResponse(),
+                           requestHeaders(
+                               headerWithName("Authorization").description("Bearer auth credentials")
+                           ),
+                           requestParameters(
+                               parameterWithName("page").description("확인할 게시물의 페이지"),
+                               parameterWithName("size").description("확인할 게시물의 개수")
+                           ),
+                           responseFields(
+                               fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 게시물의 목록"),
+                               fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("게시물의 ID"),
+                               fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시물의 내용"),
+                               fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("게시물의 작성 시간"),
+                               fieldWithPath("[].emotion").type(JsonFieldType.STRING).description("게시물의 감정"),
+                               fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글" +
+                                                                                                                " 허용 " +
+                                                                                                                "여부"),
+                               fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
+                               fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
+                                                                                                            " ID"),
+                               fieldWithPath("[].comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
+                                                                                                                 "댓글의 내용"),
+                               fieldWithPath("[].comments[].nickname").type(JsonFieldType.STRING).description("조회할 게시물의 " +
+                                                                                                                  "댓글의 " +
+                                                                                                                  "닉네임"),
+                               fieldWithPath("[].comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
+                               fieldWithPath("[].comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간")
                            )
             ));
     }
