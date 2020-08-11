@@ -18,6 +18,7 @@ import java.util.List;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ARTICLE_ID")
     private Long id;
 
     @Column(length = 300)
@@ -33,6 +34,12 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    @ManyToMany
+    @JoinTable(name = "ARTICLE_SUB_EMOTION",
+        joinColumns = @JoinColumn(name = "ARTICLE_ID"),
+        inverseJoinColumns = @JoinColumn(name = "SUB_EMOTION_ID"))
+    private List<SubEmotion> subEmotions;
 
     public Article(String content, String emotion, Boolean isCommentAllowed) {
         this.content = content;

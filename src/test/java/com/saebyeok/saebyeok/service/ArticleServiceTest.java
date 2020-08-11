@@ -50,7 +50,8 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(articleRepository);
         member = new Member(MEMBER_ID, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, null);
-        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), EMOTION, IS_COMMENT_ALLOWED, null);
+        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), EMOTION, IS_COMMENT_ALLOWED, null,
+                              null);
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
