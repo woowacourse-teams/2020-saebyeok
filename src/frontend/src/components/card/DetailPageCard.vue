@@ -3,41 +3,35 @@
     <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
       <v-card-title>
         <v-row no-gutters>
-          <v-col
-            class="d-flex justify-end"
-            style="font-size: 15px; line-height: 15px"
-            align="center"
-          >
-            <div style="display: flex;align-items: center;">
-              <created-date :createdDate="article.createdDate" />
-            </div>
-            <div>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </div>
+          <v-col cols="3">
+            <emotion-image :emotion="emotion" />
           </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col
-            cols="2"
-            style="font-size: 60px; text-align: center; line-height: 60px"
-          >
-            {{ emotion }}
-          </v-col>
-          <v-col cols="10">
-            <v-chip-group
-              active-class="black--text text--accent-4"
-              column
-              multiple
-              align="right"
-              justify="end"
-            >
-              <v-spacer />
-              <v-chip :key="tag" v-for="tag in tags">
-                {{ tag }}
-              </v-chip>
-            </v-chip-group>
+          <v-col cols="9">
+            <v-row no-gutters>
+              <v-col
+                cols="12"
+                class="d-flex justify-end align-center"
+                style="font-size: 15px; line-height: 15px"
+              >
+                <div>
+                  <created-date :createdDate="article.createdDate" />
+                </div>
+                <div>
+                  <v-btn icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col
+                cols="12"
+                class="d-flex justify-end"
+                style="font-size: 15px; line-height: 15px"
+              >
+                <sub-emotion-chips :subEmotions="subEmotions" />
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-title>
@@ -71,15 +65,30 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+import EmotionImage from '@/components/card/EmotionImage';
+import SubEmotionChips from '@/components/card/SubEmotionChips';
+
 export default {
   name: 'DetailPageCard',
   components: {
-    CreatedDate
+    CreatedDate,
+    EmotionImage,
+    SubEmotionChips
   },
   data() {
     return {
       //아직 article에 없는 값을 임시로 설정
-      emotion: '😊',
+      emotion: {
+        id: 1,
+        name: '화나요',
+        imageResource:
+          'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojipedia/240/smiling-face-with-tear_1f972.png'
+      },
+      subEmotions: [
+        { id: 1, name: '서브1' },
+        { id: 2, name: '서브2' },
+        { id: 3, name: '서브3' }
+      ],
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
       recommend: 42
     };

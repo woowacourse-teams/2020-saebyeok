@@ -1,5 +1,5 @@
 <template>
-  <v-container class="d-flex justify-end">
+  <v-container ma-0 pa-0 class="d-flex justify-end">
     <div class="text-body-2">
       {{ createdDateWithFormat }}
     </div>
