@@ -46,13 +46,11 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    // rest docs
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // rest assured
     implementation 'io.rest-assured:rest-assured-common:3.3.0'
     testImplementation 'io.rest-assured:spring-mock-mvc:3.3.0'
 }
