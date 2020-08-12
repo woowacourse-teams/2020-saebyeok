@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.dto.ArticleResponse;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * then: 이제 글이 하나도 없다.
  */
 
+@Disabled
 @Sql("/truncate.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {
