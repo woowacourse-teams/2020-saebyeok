@@ -8,22 +8,22 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class ArticleSubEmotion {
+public class ArticleEmotion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 
     @ManyToOne
-    @JoinColumn(name = "SUB_EMOTION_ID")
-    private SubEmotion subEmotion;
+    @JoinColumn(name = "EMOTION_ID")
+    private Emotion emotion;
 
-    public ArticleSubEmotion(Article article, SubEmotion subEmotion) {
+    public ArticleEmotion(Article article, Emotion emotion) {
         this.article = article;
-        this.subEmotion = subEmotion;
+        this.emotion = emotion;
     }
 }
