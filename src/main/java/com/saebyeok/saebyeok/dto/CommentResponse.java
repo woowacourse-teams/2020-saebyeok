@@ -2,11 +2,13 @@ package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class CommentResponse {
