@@ -8,12 +8,13 @@ import com.saebyeok.saebyeok.service.EmotionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,12 +23,13 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
 @SpringBootTest
-@AutoConfigureMockMvc
 public class EmotionControllerTest {
     private static final String API = "/api";
     private static final Long TEST_ID = 1L;
@@ -41,14 +43,16 @@ public class EmotionControllerTest {
     @MockBean
     private EmotionService emotionService;
 
-    @Autowired
     private MockMvc mockMvc;
-
     private EmotionResponse emotionResponse;
     private EmotionDetailResponse emotionDetailResponse;
 
     @BeforeEach
-    void setUp() {
+    void setUp(WebApplicationContext context) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+
         this.emotionResponse = new EmotionResponse(TEST_ID, TEST_NAME, TEST_IMAGE_RESOURCE);
 
         List<SubEmotionResponse> subEmotions = new ArrayList<>();
@@ -63,9 +67,9 @@ public class EmotionControllerTest {
         when(emotionService.getEmotions()).thenReturn(Arrays.asList(this.emotionResponse));
 
         this.mockMvc.perform(get(API + "/emotions").
-            accept(MediaType.APPLICATION_JSON_VALUE)).
-            andExpect(jsonPath("$", hasSize(1))).
-            andExpect(jsonPath("$[0].name").value(TEST_NAME));
+                accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(jsonPath("$", hasSize(1))).
+                andExpect(jsonPath("$[0].name").value(TEST_NAME));
     }
 
     @DisplayName("ID로 개별 Emotion 조회를 요청하면 해당 Emotion을 전달 받는다")
@@ -74,26 +78,26 @@ public class EmotionControllerTest {
         when(emotionService.readEmotion(TEST_ID)).thenReturn(emotionDetailResponse);
 
         this.mockMvc.perform(get(API + "/emotions/" + TEST_ID).
-            contentType(MediaType.APPLICATION_JSON)).
-            andExpect(status().isOk()).
-            andExpect(jsonPath("$.id").value(TEST_ID)).
-            andExpect(jsonPath("$.name").value(TEST_NAME)).
-            andExpect(jsonPath("$.imageResource").value(TEST_IMAGE_RESOURCE)).
-            andExpect(jsonPath("$.subEmotions[0].id").value(TEST_SUBEMOTION_FIRST_ID)).
-            andExpect(jsonPath("$.subEmotions[0].name").value(TEST_SUBEMOTION_NAME)).
-            andExpect(jsonPath("$.subEmotions[1].id").value(TEST_SUBEMOTION_SECOND_ID)).
-            andExpect(jsonPath("$.subEmotions[1].name").value(TEST_SUBEMOTION_NAME));
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.id").value(TEST_ID)).
+                andExpect(jsonPath("$.name").value(TEST_NAME)).
+                andExpect(jsonPath("$.imageResource").value(TEST_IMAGE_RESOURCE)).
+                andExpect(jsonPath("$.subEmotions[0].id").value(TEST_SUBEMOTION_FIRST_ID)).
+                andExpect(jsonPath("$.subEmotions[0].name").value(TEST_SUBEMOTION_NAME)).
+                andExpect(jsonPath("$.subEmotions[1].id").value(TEST_SUBEMOTION_SECOND_ID)).
+                andExpect(jsonPath("$.subEmotions[1].name").value(TEST_SUBEMOTION_NAME));
     }
 
     @DisplayName("예외 테스트: 없는 ID의 Emotion 조회를 요청하면 EmotionNotFoundException이 발생한다")
     @Test
     void readNotExistEmotionExceptionTest() throws Exception {
         doThrow(new EmotionNotFoundException(INVALID_EMOTION_ID))
-            .when(emotionService).readEmotion(INVALID_EMOTION_ID);
+                .when(emotionService).readEmotion(INVALID_EMOTION_ID);
 
         this.mockMvc.perform(get(API + "/emotions/" + INVALID_EMOTION_ID).
-            contentType(MediaType.APPLICATION_JSON)).
-            andExpect(status().isBadRequest());
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest());
     }
 
 }

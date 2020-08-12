@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.config;
+package com.saebyeok.saebyeok.security;
 
 import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import org.springframework.security.core.Authentication;

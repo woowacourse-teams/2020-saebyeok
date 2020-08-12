@@ -9,11 +9,13 @@ import com.saebyeok.saebyeok.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -21,13 +23,14 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@WebMvcTest(value = {ArticleController.class})
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@SpringBootTest
 class ArticleControllerTest {
     private static final String API = "/api";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -40,23 +43,24 @@ class ArticleControllerTest {
     private static final Integer TEST_PAGE_NUMBER = 0;
     private static final Integer TEST_PAGE_SIZE = 10;
 
-    @Autowired
     private MockMvc mockMvc;
+    private ArticleResponse articleResponse;
 
     @MockBean
     private ArticleService articleService;
 
-    private ArticleResponse articleResponse;
-
     @BeforeEach
-    void setUp() {
-        articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), TEST_EMOTION, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null);
+    void setUp(WebApplicationContext context) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+        this.articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), TEST_EMOTION, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null);
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
     @Test
     void getArticlesTest() throws Exception {
-        when(articleService.getArticles(any(Member.class), TEST_PAGE_NUMBER, TEST_PAGE_SIZE)).thenReturn(Arrays.asList(articleResponse));
+        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(Arrays.asList(articleResponse));
 
         this.mockMvc.perform(get(API + "/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).
@@ -82,7 +86,7 @@ class ArticleControllerTest {
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() throws Exception {
-        when(articleService.readArticle(any(Member.class), TEST_ID)).thenReturn(articleResponse);
+        when(articleService.readArticle(any(Member.class), eq(TEST_ID))).thenReturn(articleResponse);
 
         this.mockMvc.perform(get(API + "/articles/" + TEST_ID).
                 contentType(MediaType.APPLICATION_JSON)).
@@ -96,7 +100,7 @@ class ArticleControllerTest {
     @DisplayName("예외 테스트: 없는 ID의 글 조회를 요청하면 ArticleNotFoundException이 발생한다")
     @Test
     void readArticleExceptionTest() throws Exception {
-        when(articleService.readArticle(any(Member.class), INVALID_ARTICLE_ID))
+        when(articleService.readArticle(any(Member.class), eq(INVALID_ARTICLE_ID)))
                 .thenThrow(ArticleNotFoundException.class);
 
         this.mockMvc.perform(get(API + "/articles/" + INVALID_ARTICLE_ID).
@@ -107,7 +111,7 @@ class ArticleControllerTest {
     @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
     @Test
     void deleteArticleTest() throws Exception {
-        doNothing().when(articleService).deleteArticle(any(Member.class), TEST_ID);
+        doNothing().when(articleService).deleteArticle(any(Member.class), eq(TEST_ID));
 
         this.mockMvc.perform(delete(API + "/articles/" + TEST_ID)).
                 andExpect(status().isNoContent());
@@ -117,7 +121,7 @@ class ArticleControllerTest {
     @Test
     void deleteArticleExceptionTest() throws Exception {
         doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID))
-                .when(articleService).deleteArticle(any(Member.class), INVALID_ARTICLE_ID);
+                .when(articleService).deleteArticle(any(Member.class), eq(INVALID_ARTICLE_ID));
 
         this.mockMvc.perform(delete(API + "/articles/" + INVALID_ARTICLE_ID).
                 contentType(MediaType.APPLICATION_JSON)).

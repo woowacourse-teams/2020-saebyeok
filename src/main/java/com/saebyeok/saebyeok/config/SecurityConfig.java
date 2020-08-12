@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.config;
 
 import com.saebyeok.saebyeok.infra.JwtTokenProvider;
+import com.saebyeok.saebyeok.security.JwtAuthenticationFilter;
 import com.saebyeok.saebyeok.security.SuccessHandler;
 import com.saebyeok.saebyeok.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
