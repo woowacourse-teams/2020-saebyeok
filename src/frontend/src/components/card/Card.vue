@@ -9,7 +9,7 @@
       <v-card-title>
         <v-row no-gutters>
           <v-col cols="3">
-            <emotion-image :emotion="emotion" />
+            <emotion-image :emotion="article.emotion" />
           </v-col>
           <v-col cols="9">
             <v-row no-gutters>
@@ -27,7 +27,7 @@
                 class="d-flex justify-end"
                 style="font-size: 15px; line-height: 15px"
               >
-                <sub-emotion-chips :subEmotions="subEmotions" />
+                <sub-emotion-chips :subEmotions="article.subEmotions" />
               </v-col>
             </v-row>
           </v-col>
@@ -75,18 +75,6 @@ export default {
   },
   data() {
     return {
-      //아직 article에 없는 값을 임시로 설정
-      emotion: {
-        id: 1,
-        name: '화나요',
-        imageResource:
-          'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojipedia/240/smiling-face-with-tear_1f972.png'
-      },
-      subEmotions: [
-        { id: 1, name: '서브1' },
-        { id: 2, name: '서브2' },
-        { id: 3, name: '서브3' }
-      ],
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
       recommend: 42
     };

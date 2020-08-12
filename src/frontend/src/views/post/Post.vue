@@ -18,15 +18,20 @@
             </v-img>
           </v-col>
           <v-col cols="9">
-            <v-row no-gutters>
+            <v-chip-group
+              active-class="black--text text--accent-4"
+              column
+              multiple
+              align="right"
+              justify="end"
+            >
               <v-chip
                 v-for="subEmotion in emotion.subEmotions"
                 :key="subEmotion.id"
                 v-on:click="onClickSubEmotionTag(subEmotion.id)"
-                class="ma-1"
                 ># {{ subEmotion.name }}</v-chip
               >
-            </v-row>
+            </v-chip-group>
             <h5
               v-if="invalidEmotionLength"
               style="color: red; font-weight: lighter"
@@ -93,10 +98,9 @@ export default {
     ...mapActions([FETCH_EMOTION]),
     async submit() {
       const articleCreateRequest = {
-        //todo : 여기서 emotion : this.emotion.id,
-        //subEmotions : this.chooseSubEmotion 을 전달하면 된다.
         content: this.content,
-        emotion: this.emotion.name + this.chooseSubEmotions[0],
+        emotionId: this.emotion.id,
+        subEmotionIds: this.chooseSubEmotions,
         isCommentAllowed: this.isCommentAllowed
       };
       this.createArticle(articleCreateRequest).then(response => {
