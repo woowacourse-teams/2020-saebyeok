@@ -12,18 +12,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Sql("/truncate.sql")
+@Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
     private static final String API = "/api";
     private static final Long ARTICLE_ID = 1L;
+    private static final Long EMOTION_ID = 1L;
+    private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Long MEMBER_ID = 1L;
     // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
     private static final Long NOT_EXIST_COMMENT_ID = 10L;
@@ -37,7 +41,7 @@ class CommentAcceptanceTest {
     void setUp() {
         RestAssured.port = port;
 
-        createArticle("content", "emotion", true);
+        createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
 
         params = new HashMap<>();
         params.put("memberId", MEMBER_ID);
@@ -189,10 +193,11 @@ class CommentAcceptanceTest {
     }
 
     // TODO: 2020/07/20 나중에 코드 통합시 중복 제거해야됨. Article 인수테스트 코드 그대로 사용..
-    private void createArticle(String content, String emotion, Boolean isCommentAllowed) {
-        Map<String, String> params = new HashMap<>();
+    private void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
+        Map<String, Object> params = new HashMap<>();
         params.put("content", content);
-        params.put("emotion", emotion);
+        params.put("emotionId", emotionId);
+        params.put("subEmotionIds", subEmotionIds);
         params.put("isCommentAllowed", isCommentAllowed.toString());
 
         //@formatter:off
@@ -200,9 +205,9 @@ class CommentAcceptanceTest {
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
+                when().
                 post(API + "/articles").
-        then().
+                then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
         //@formatter:on

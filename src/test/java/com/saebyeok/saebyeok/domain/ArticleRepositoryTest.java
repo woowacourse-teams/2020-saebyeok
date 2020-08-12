@@ -31,9 +31,10 @@ class ArticleRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        article1 = new Article("내용1", "기뻐요", true);
-        article2 = new Article("내용2", "슬퍼요", false);
-        article3 = new Article("내용3", "화나요", true);
+        // TODO: 2020/08/12  emotion,sql 실행시킨 다음에, null 대신 진짜 값 넣어주면 어떨까? 고민
+        article1 = new Article("내용1", true);
+        article2 = new Article("내용2", false);
+        article3 = new Article("내용3", true);
 
         articleRepository.save(article1);
         articleRepository.save(article2);
@@ -50,9 +51,6 @@ class ArticleRepositoryTest {
                 extracting("content").
                 containsOnly(article1.getContent(), article2.getContent(), article3.getContent());
         assertThat(articles).
-                extracting("emotion").
-                containsOnly(article1.getEmotion(), article2.getEmotion(), article3.getEmotion());
-        assertThat(articles).
                 extracting("isCommentAllowed").
                 containsOnly(article1.getIsCommentAllowed(), article2.getIsCommentAllowed(), article3.getIsCommentAllowed());
     }
@@ -60,7 +58,7 @@ class ArticleRepositoryTest {
     @DisplayName("게시글을 저장한다")
     @Test
     void saveTest() {
-        Article newArticle = new Article("내용4", "행복해요", true);
+        Article newArticle = new Article("내용4", true);
         int articleSize = articleRepository.findAll().size();
 
         articleRepository.save(newArticle);

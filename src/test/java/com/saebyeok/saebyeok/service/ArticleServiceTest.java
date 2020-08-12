@@ -1,9 +1,6 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
-import com.saebyeok.saebyeok.domain.Gender;
-import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
@@ -34,24 +30,32 @@ class ArticleServiceTest {
     private static final Long ARTICLE_ID = 1L;
     private static final Long INVALID_ARTICLE_ID = 2L;
     private static final String CONTENT = "내용";
-    private static final String EMOTION = "기뻐요";
     private static final boolean IS_COMMENT_ALLOWED = true;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 10;
+
     private ArticleService articleService;
 
     @Mock
     private ArticleRepository articleRepository;
 
+    @Mock
+    private ArticleEmotionService articleEmotionService;
+
+    @Mock
+    private ArticleSubEmotionService articleSubEmotionService;
+
     private Member member;
     private Article article;
+    private Emotion emotion;
+    private List<SubEmotion> subEmotions;
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(articleRepository);
+        articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, null);
-        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), EMOTION, IS_COMMENT_ALLOWED, null,
-                              null);
+
+        article = new Article(CONTENT, IS_COMMENT_ALLOWED);
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
@@ -65,7 +69,6 @@ class ArticleServiceTest {
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT);
-        assertThat(articleResponses.get(0).getEmotion()).isEqualTo(EMOTION);
         assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
     }
 
@@ -78,7 +81,6 @@ class ArticleServiceTest {
 
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
-        assertThat(articleResponse.getEmotion()).isEqualTo(EMOTION);
         assertThat(articleResponse.getIsCommentAllowed()).isTrue();
     }
 
@@ -95,6 +97,8 @@ class ArticleServiceTest {
     @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
     @Test
     void deleteArticleTest() {
+        when(articleRepository.findById(any())).thenReturn(Optional.of(article));
+
         articleService.deleteArticle(ARTICLE_ID);
 
         verify(articleRepository).deleteById(any());
@@ -103,10 +107,8 @@ class ArticleServiceTest {
     @DisplayName("예외 테스트: 잘못된 ID의 글 삭제를 요청하면 오류를 발생시킨다")
     @Test
     void deleteArticleExceptionTest() {
-        int expectedSize = 1;
-
-        doThrow(new EmptyResultDataAccessException(expectedSize))
-                .when(articleRepository).deleteById(INVALID_ARTICLE_ID);
+        doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID))
+                .when(articleRepository).findById(INVALID_ARTICLE_ID);
 
         assertThatThrownBy(() -> articleService.deleteArticle(INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
