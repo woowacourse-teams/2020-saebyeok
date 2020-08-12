@@ -1,0 +1,63 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
+
+[[resources]]
+= Resources
+
+[[resources-articles]]
+== Articles
+
+[[resources-articles-create]]
+=== 게시물 생성
+
+operation::articles/create[snippets='http-request,http-response,request-headers,request-fields,response-headers']
+
+[[resources-articles-get]]
+=== 게시물 전체 조회
+
+operation::articles/get[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
+
+[[resources-articles-read]]
+=== 게시물 조회
+
+operation::articles/read[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
+
+[[resources-articles-delete]]
+=== 게시물 삭제
+
+operation::articles/delete[snippets='http-request,http-response,path-parameters,request-headers']
+
+[[resources-comments]]
+== Comments
+
+[[resources-comments-create]]
+=== 댓글 생성
+
+operation::comments/create[snippets='http-request,http-response,path-parameters,request-headers,request-fields,response-headers']
+
+[[resources-comments-delete]]
+=== 댓글 삭제
+
+operation::comments/delete[snippets='http-request,http-response,path-parameters,request-headers']
+
+[[resources-emotions]]
+== Emotions
+
+[[resources-emotions-get]]
+=== 감정 대분류 전체 조회
+
+operation::emotions/get[snippets='http-request,http-response,request-headers,response-fields']
+
+[[resources-emotions-read]]
+=== 감정 대분류 상세 조회
+
+operation::emotions/read[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
