@@ -21,4 +21,9 @@ public class SubEmotion {
 
     @ManyToOne
     private Emotion emotion;
+
+    public SubEmotion(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
