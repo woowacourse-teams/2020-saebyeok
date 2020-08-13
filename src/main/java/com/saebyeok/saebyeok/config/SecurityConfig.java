@@ -1,25 +1,50 @@
 package com.saebyeok.saebyeok.config;
 
+import com.saebyeok.saebyeok.infra.JwtTokenProvider;
+import com.saebyeok.saebyeok.security.JwtAuthenticationFilter;
+import com.saebyeok.saebyeok.security.SuccessHandler;
+import com.saebyeok.saebyeok.security.service.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 
-/**
- * H2 데이터베이스의 스프링 보안 차단 / h2- 콘솔 (또는 application.yaml에 구성한 경로)
- * security 로그인 창 없애는 설정.
- * 프로덕션 환경에서는 사용하지 말라고 함!
- */
-
+@RequiredArgsConstructor
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final SuccessHandler successHandler;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/h2-console/**").permitAll();
-
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+        //@formatter:off
+        http
+                .csrf().disable()
+                .httpBasic().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    .headers().frameOptions().disable()
+                .and()
+                    .authorizeRequests()
+                    .antMatchers("/api/**").authenticated()
+                .and()
+                    .logout()
+                    .logoutSuccessUrl("/")
+                .and()
+                    .oauth2Login()
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                .and()
+                    .successHandler(successHandler)
+                .and()
+                    .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
+                            OAuth2LoginAuthenticationFilter.class);
+        //@formatter:on
     }
 }

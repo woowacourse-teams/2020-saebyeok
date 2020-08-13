@@ -1,7 +1,7 @@
 package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Comment;
+import com.saebyeok.saebyeok.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,25 +22,27 @@ public class ArticleResponse {
     private EmotionResponse emotion;
     private List<SubEmotionResponse> subEmotions;
     private Boolean isCommentAllowed;
+    private Boolean isMine;
     private List<CommentResponse> comments;
 
-    public ArticleResponse(Article article, EmotionResponse emotion, List<SubEmotionResponse> subEmotions) {
+    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions){
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();
         this.emotion = emotion;
         this.subEmotions = subEmotions;
         this.isCommentAllowed = article.getIsCommentAllowed();
-        this.comments = transformComments(article.getComments());
+        this.isMine = article.isWrittenBy(member);
+        this.comments = transformComments(article, member);
     }
 
-    private List<CommentResponse> transformComments(List<Comment> comments) {
-        if (Objects.isNull(comments) || comments.isEmpty()) {
+    private List<CommentResponse> transformComments(Article article, Member member) {
+        if (Objects.isNull(article.getComments()) || article.getComments().isEmpty()) {
             return new ArrayList<>();
         }
-        return comments.
+        return article.getComments().
                 stream().
-                map(CommentResponse::new).
+                map(comment -> new CommentResponse(comment, member)).
                 collect(Collectors.toList());
     }
 }

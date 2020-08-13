@@ -44,4 +44,8 @@ public class Article {
         this.member = member;
         member.addArticle(this);
     }
+
+    public boolean isWrittenBy(Member member) {
+        return this.member == member;
+    }
 }

@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,7 @@ import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentAcceptanceTest {
