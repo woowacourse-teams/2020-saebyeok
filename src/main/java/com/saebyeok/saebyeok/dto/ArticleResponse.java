@@ -25,7 +25,7 @@ public class ArticleResponse {
     private Boolean isMine;
     private List<CommentResponse> comments;
 
-    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions){
+    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions) {
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();

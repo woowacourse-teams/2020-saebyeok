@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import static com.saebyeok.saebyeok.domain.CommentTest.TEST_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ActiveProfiles("test")
 @Sql("/truncate.sql")
 @Transactional
 @SpringBootTest
@@ -46,10 +48,10 @@ class CommentRepositoryTest {
 
     private Comment createTestComment() {
         Comment comment = Comment.builder().
-            content(TEST_CONTENT).
-            nickname(TEST_NICKNAME).
-            isDeleted(false).
-            build();
+                content(TEST_CONTENT).
+                nickname(TEST_NICKNAME).
+                isDeleted(false).
+                build();
 
         comment.setMember(member);
         comment.setArticle(article);
@@ -87,9 +89,9 @@ class CommentRepositoryTest {
         List<Comment> comments = commentRepository.findAll();
 
         assertThat(comments).
-            hasSize(3).
-            extracting("id").
-            containsOnly(comment1.getId(), comment2.getId(), comment3.getId());
+                hasSize(3).
+                extracting("id").
+                containsOnly(comment1.getId(), comment2.getId(), comment3.getId());
     }
 
     @DisplayName("존재하지 않는 댓글을 조회할 경우, 빈 값을 반환한다")
@@ -119,6 +121,6 @@ class CommentRepositoryTest {
         Long notExistCommentId = 1L;
 
         assertThatThrownBy(() -> commentRepository.deleteById(notExistCommentId)).
-            isInstanceOf(EmptyResultDataAccessException.class);
+                isInstanceOf(EmptyResultDataAccessException.class);
     }
 }

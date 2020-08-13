@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Arrays;
@@ -32,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * when: 글을 삭제한다.
  * then: 이제 글이 하나도 없다.
  */
-
 @Disabled
+@ActiveProfiles("test")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {

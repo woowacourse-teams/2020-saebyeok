@@ -15,8 +15,8 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private String secretKey;
-    private long validityInMilliseconds;
     private final UserDetailsService userDetailsService;
+    private long validityInMilliseconds;
 
     public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey, @Value("${security.jwt.token.expire-length}") long validityInMilliseconds, @Qualifier("userService") UserDetailsService userDetailsService) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -29,7 +29,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date validity = new Date(now.getTime()
-                                     + validityInMilliseconds);
+                + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)

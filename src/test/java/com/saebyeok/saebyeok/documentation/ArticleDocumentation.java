@@ -99,7 +99,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true,comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
 
         given(articleService.readArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -151,7 +151,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true,comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
