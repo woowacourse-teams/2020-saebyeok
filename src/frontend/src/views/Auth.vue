@@ -12,17 +12,17 @@ export default {
     storeAuth() {
       localStorage.setItem('token', this.getParam('token'));
     },
-    getParam(sname) {
-      var params = location.search.substr(location.search.indexOf('?') + 1);
-      var sval = '';
+    getParam(paramName) {
+      let params = location.search.substr(location.search.indexOf('?') + 1);
+      let extractedToken = '';
       params = params.split('&');
-      for (var i = 0; i < params.length; i++) {
+      for (let i = 0; i < params.length; i++) {
         let temp = params[i].split('=');
-        if ([temp[0]] == sname) {
-          sval = temp[1].replace('%20', ' ');
+        if ([temp[0]] === paramName) {
+          extractedToken = temp[1].replace('%20', ' ');
         }
       }
-      return sval;
+      return extractedToken;
     }
   }
 };

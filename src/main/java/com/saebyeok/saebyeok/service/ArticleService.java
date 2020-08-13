@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
     public static final int LIMIT_DAYS = 7;
-    private static final String NOT_YOUR_ARTICLE = "자신의 게시글이 아닙니다!";
+    private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
 
     private final ArticleRepository articleRepository;
 
@@ -52,7 +52,7 @@ public class ArticleService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         if (!article.isWrittenBy(member)) {
-            throw new IllegalAccessException(NOT_YOUR_ARTICLE);
+            throw new IllegalAccessException(NOT_YOUR_ARTICLE_MESSAGE);
         }
         articleRepository.deleteById(articleId);
     }
