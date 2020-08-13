@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.documentation;
 
-import com.saebyeok.saebyeok.controller.EmotionController;
 import com.saebyeok.saebyeok.documentation.common.Documentation;
 import com.saebyeok.saebyeok.dto.EmotionDetailResponse;
 import com.saebyeok.saebyeok.dto.EmotionResponse;
@@ -9,13 +8,14 @@ import com.saebyeok.saebyeok.dto.TokenResponse;
 import com.saebyeok.saebyeok.service.EmotionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
@@ -26,23 +26,22 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {EmotionController.class})
+@SpringBootTest
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
 public class EmotionDocumentation extends Documentation {
     private static final Long EMOTION_ID = 1L;
+
     protected TokenResponse tokenResponse;
-
-    @Autowired
-    private EmotionController emotionController;
-
-    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
@@ -50,7 +49,10 @@ public class EmotionDocumentation extends Documentation {
 
     @BeforeEach
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
-        super.setUp(context, restDocumentation);
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentation))
+                .apply(springSecurity())
+                .build();
         tokenResponse = new TokenResponse("token", "bearer");
     }
 
@@ -62,7 +64,7 @@ public class EmotionDocumentation extends Documentation {
         given(emotionService.readEmotion(any())).willReturn(emotionDetailResponse);
 
         this.mockMvc.perform(get("/api/emotions/{emotionId}", EMOTION_ID).
-                header("Authorization", tokenResponse.getAccessToken()).
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andDo(print()).
@@ -93,7 +95,7 @@ public class EmotionDocumentation extends Documentation {
         given(emotionService.getEmotions()).willReturn(emotionResponses);
 
         this.mockMvc.perform(get("/api/emotions").
-                header("Authorization", tokenResponse.getAccessToken()).
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andDo(print()).

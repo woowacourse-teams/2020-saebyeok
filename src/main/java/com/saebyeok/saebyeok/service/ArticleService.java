@@ -2,13 +2,13 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.Article;
 import com.saebyeok.saebyeok.domain.ArticleRepository;
-import com.saebyeok.saebyeok.domain.Gender;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.EmotionResponse;
+import com.saebyeok.saebyeok.dto.SubEmotionResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,37 +24,54 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
     public static final int LIMIT_DAYS = 7;
-    private final ArticleRepository articleRepository;
+    private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
 
-    public List<ArticleResponse> getArticles(int page, int size) {
+    private final ArticleRepository articleRepository;
+    private final ArticleEmotionService articleEmotionService;
+    private final ArticleSubEmotionService articleSubEmotionService;
+
+    public List<ArticleResponse> getArticles(Member member, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
         return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
                 stream().
-                map(ArticleResponse::new).
+                map(article -> {
+                    EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                }).
                 collect(Collectors.toList());
     }
 
     @Transactional
     public Article createArticle(Member member, ArticleCreateRequest request) {
-        // Todo: 초기 개발을 위한 member 생성 로직 삭제하고 security 적용하면 member 받아오기
-        Member test = new Member(1L, 1991, Gender.FEMALE, LocalDateTime.now(), false, new ArrayList<>());
         Article article = request.toArticle();
-        article.setMember(test);
+        article.setMember(member);
+
+        articleEmotionService.createArticleEmotion(article, request.getEmotionId());
+        articleSubEmotionService.createArticleSubEmotion(article, request.getSubEmotionIds());
+
         return articleRepository.save(article);
     }
 
-    public ArticleResponse readArticle(Long articleId) {
+    public ArticleResponse readArticle(Member member, Long articleId) {
         Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        return new ArticleResponse(article);
+        EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+        List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+
+        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
 
     @Transactional
-    public void deleteArticle(Long id) {
-        try {
-            articleRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ArticleNotFoundException(id);
+    public void deleteArticle(Member member, Long articleId) throws IllegalAccessException {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        if (!article.isWrittenBy(member)) {
+            throw new IllegalAccessException(NOT_YOUR_ARTICLE_MESSAGE);
         }
+        articleEmotionService.deleteArticleEmotion(article);
+        articleSubEmotionService.deleteArticleSubEmotion(article);
+        articleRepository.deleteById(articleId);
     }
 }

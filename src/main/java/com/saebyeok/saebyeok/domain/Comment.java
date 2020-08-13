@@ -52,6 +52,10 @@ public class Comment {
         }
     }
 
+    public boolean isWrittenBy(Member member) {
+        return this.member == member;
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }

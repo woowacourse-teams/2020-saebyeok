@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+
 const API_PREFIX = '/api';
 
 const ApiService = {
@@ -10,14 +11,14 @@ const ApiService = {
   get(uri) {
     return Vue.axios.get(API_PREFIX + `${uri}`, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       }
     });
   },
   getWithParams(uri, params) {
     return Vue.axios.get(API_PREFIX + `${uri}`, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       },
       params: params
     });
@@ -28,21 +29,21 @@ const ApiService = {
   post(uri, params) {
     return Vue.axios.post(API_PREFIX + `${uri}`, params, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       }
     });
   },
   update(uri, params) {
     return Vue.axios.put(API_PREFIX + uri, params, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       }
     });
   },
   delete(uri) {
     return Vue.axios.delete(API_PREFIX + uri, {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}` || ''
+        Authorization: `${localStorage.getItem('token')}` || ''
       }
     });
   }

@@ -6,6 +6,8 @@ import Analysis from '../views/analysis/Analysis.vue';
 import Diary from '../views/diary/Diary.vue';
 import ArticleDetail from '../views/articleDetail/ArticleDetail.vue';
 import Emotions from '../views/emotions/Emotions.vue';
+import Login from '../views/Login.vue';
+import Auth from '../views/Auth.vue';
 import Header from '@/components/header/Header';
 import EmotionsHeader from '@/components/header/EmotionsHeader';
 import BottomNavigation from '@/components/footer/BottomNavigation';
@@ -74,6 +76,20 @@ const routes = [
   {
     path: '/',
     redirect: '/feed'
+  },
+  {
+    path: '/sign-in',
+    name: 'Login',
+    components: {
+      default: Login
+    }
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    components: {
+      default: Auth
+    }
   }
 ];
 

@@ -18,6 +18,7 @@ import java.util.List;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ARTICLE_ID")
     private Long id;
 
     @Column(length = 300)
@@ -28,15 +29,13 @@ public class Article {
 
     @CreatedDate
     private LocalDateTime createdDate;
-    private String emotion;
     private Boolean isCommentAllowed;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    public Article(String content, String emotion, Boolean isCommentAllowed) {
+    public Article(String content, Boolean isCommentAllowed) {
         this.content = content;
-        this.emotion = emotion;
         this.isCommentAllowed = isCommentAllowed;
     }
 
@@ -44,5 +43,9 @@ public class Article {
         // Todo: 편의 메소드 리팩토링(기존에 member가 있는 경우, add를 중복으로 하는 경우 등)
         this.member = member;
         member.addArticle(this);
+    }
+
+    public boolean isWrittenBy(Member member) {
+        return this.member == member;
     }
 }

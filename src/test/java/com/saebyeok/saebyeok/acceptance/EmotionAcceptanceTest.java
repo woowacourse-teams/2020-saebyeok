@@ -5,6 +5,7 @@ import com.saebyeok.saebyeok.dto.EmotionResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @ActiveProfiles("test")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -72,7 +74,7 @@ public class EmotionAcceptanceTest {
         //when
         ExceptionResponse emotionNotFoundExceptionResponse = getNotFoundEmotion();
         //then
-        assertThat(emotionNotFoundExceptionResponse.getErrorMessage()).contains("에 해당하는 감정을 찾을 수 없습니다.");
+        assertThat(emotionNotFoundExceptionResponse.getErrorMessage()).contains("에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
 
     private List<EmotionResponse> getEmotions() {

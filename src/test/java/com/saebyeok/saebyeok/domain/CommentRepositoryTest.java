@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.saebyeok.saebyeok.domain.CommentTest.TEST_CONTENT;
@@ -38,7 +40,7 @@ class CommentRepositoryTest {
     @BeforeEach
     void setUp() {
         article = new Article();
-        member = new Member();
+        member = new Member(1L, "a@a.com", null, Gender.MALE, LocalDateTime.now(), false, Role.USER, new ArrayList<>());
 
         articleRepository.save(article);
         memberRepository.save(member);
