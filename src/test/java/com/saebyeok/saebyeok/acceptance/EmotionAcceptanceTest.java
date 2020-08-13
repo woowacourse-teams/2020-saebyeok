@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmotionAcceptanceTest {
@@ -53,19 +55,19 @@ public class EmotionAcceptanceTest {
         List<EmotionResponse> emotions = getEmotions();
         //then
         assertThat(emotions).
-            hasSize(3).
-            extracting("id").
-            containsOnly(1L, 2L, 3L);
+                hasSize(3).
+                extracting("id").
+                containsOnly(1L, 2L, 3L);
 
         //when
         EmotionDetailResponse emotion = readEmotion(1L);
         //then
         assertThat(emotion).hasFieldOrPropertyWithValue("name", "기뻐요").
-            hasFieldOrPropertyWithValue("imageResource", "리소스");
+                hasFieldOrPropertyWithValue("imageResource", "리소스");
         assertThat(emotion.getSubEmotions()).
-            hasSize(2).
-            extracting("id").
-            containsOnly(1L, 2L);
+                hasSize(2).
+                extracting("id").
+                containsOnly(1L, 2L);
 
         //when
         ExceptionResponse emotionNotFoundExceptionResponse = getNotFoundEmotion();
