@@ -19,16 +19,18 @@ public class ArticleResponse {
     private Long id;
     private String content;
     private LocalDateTime createdDate;
-    private String emotion;
+    private EmotionResponse emotion;
+    private List<SubEmotionResponse> subEmotions;
     private Boolean isCommentAllowed;
     private Boolean isMine;
     private List<CommentResponse> comments;
 
-    public ArticleResponse(Article article, Member member) {
+    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions){
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();
-        this.emotion = article.getEmotion();
+        this.emotion = emotion;
+        this.subEmotions = subEmotions;
         this.isCommentAllowed = article.getIsCommentAllowed();
         this.isMine = article.isWrittenBy(member);
         this.comments = transformComments(article, member);

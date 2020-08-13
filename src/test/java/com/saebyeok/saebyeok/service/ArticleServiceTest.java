@@ -31,23 +31,31 @@ class ArticleServiceTest {
     private static final Long ARTICLE_ID = 1L;
     private static final Long INVALID_ARTICLE_ID = 2L;
     private static final String CONTENT = "내용";
-    private static final String EMOTION = "기뻐요";
     private static final boolean IS_COMMENT_ALLOWED = true;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 10;
+
     private ArticleService articleService;
 
     @Mock
     private ArticleRepository articleRepository;
 
+    @Mock
+    private ArticleEmotionService articleEmotionService;
+
+    @Mock
+    private ArticleSubEmotionService articleSubEmotionService;
+
     private Member member;
     private Article article;
+    private Emotion emotion;
+    private List<SubEmotion> subEmotions;
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(articleRepository);
+        articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, MEMBER_EMAIL, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, Role.USER, null);
-        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), EMOTION, IS_COMMENT_ALLOWED, null);
+        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), IS_COMMENT_ALLOWED, null);
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
@@ -61,7 +69,6 @@ class ArticleServiceTest {
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT);
-        assertThat(articleResponses.get(0).getEmotion()).isEqualTo(EMOTION);
         assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
     }
 
@@ -75,7 +82,6 @@ class ArticleServiceTest {
 
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
-        assertThat(articleResponse.getEmotion()).isEqualTo(EMOTION);
         assertThat(articleResponse.getIsCommentAllowed()).isTrue();
     }
 

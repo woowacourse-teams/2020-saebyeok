@@ -18,7 +18,7 @@ export default {
       params = params.split('&');
       for (let i = 0; i < params.length; i++) {
         let temp = params[i].split('=');
-        if ([temp[0]] === paramName) {
+        if ([temp[0]] == paramName) {
           extractedToken = temp[1].replace('%20', ' ');
         }
       }

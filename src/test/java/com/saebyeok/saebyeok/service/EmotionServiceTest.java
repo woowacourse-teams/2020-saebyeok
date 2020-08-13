@@ -74,7 +74,7 @@ public class EmotionServiceTest {
         when(emotionRepository.findById(INVALID_EMOTION_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> emotionService.readEmotion(INVALID_EMOTION_ID))
-            .isInstanceOf(EmotionNotFoundException.class)
-            .hasMessage(INVALID_EMOTION_ID + "에 해당하는 감정을 찾을 수 없습니다.");
+                .isInstanceOf(EmotionNotFoundException.class)
+                .hasMessage(INVALID_EMOTION_ID + "에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
 }

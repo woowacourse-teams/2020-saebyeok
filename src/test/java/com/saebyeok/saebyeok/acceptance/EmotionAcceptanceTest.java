@@ -72,7 +72,7 @@ public class EmotionAcceptanceTest {
         //when
         ExceptionResponse emotionNotFoundExceptionResponse = getNotFoundEmotion();
         //then
-        assertThat(emotionNotFoundExceptionResponse.getErrorMessage()).contains("에 해당하는 감정을 찾을 수 없습니다.");
+        assertThat(emotionNotFoundExceptionResponse.getErrorMessage()).contains("에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
 
     private List<EmotionResponse> getEmotions() {

@@ -1,9 +1,14 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Emotion;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.SubEmotion;
 import com.saebyeok.saebyeok.dto.ArticleCreateRequest;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.EmotionResponse;
+import com.saebyeok.saebyeok.dto.SubEmotionResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +42,8 @@ class ArticleControllerTest {
     private static final String API = "/api";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String TEST_CONTENT = "내용";
-    private static final String TEST_EMOTION = "기쁨";
+    private static final Emotion TEST_EMOTION = new Emotion(1L, "기뻐요", "이미지 리소스");
+    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
     private static final Boolean TEST_IS_MINE = false;
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
     private static final Long TEST_ID = 1L;
@@ -54,7 +62,8 @@ class ArticleControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
-        this.articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), TEST_EMOTION, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null);
+        List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
+        this.articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null);
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
@@ -71,10 +80,11 @@ class ArticleControllerTest {
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createArticleTest() throws Exception {
-        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT, TEST_EMOTION, TEST_IS_COMMENT_ALLOWED);
+        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT, TEST_EMOTION.getId(), Arrays.asList(), TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+        Article article = new Article(TEST_CONTENT, TEST_IS_COMMENT_ALLOWED);
 
-        when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(request.toArticle());
+        when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(article);
 
         this.mockMvc.perform(post(API + "/articles").
                 content(requestAsString).
@@ -93,7 +103,7 @@ class ArticleControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id").value(TEST_ID)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT)).
-                andExpect(jsonPath("$.emotion").value(TEST_EMOTION)).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 

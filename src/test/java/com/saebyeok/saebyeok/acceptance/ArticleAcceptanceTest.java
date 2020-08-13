@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +34,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Disabled
-@Sql("/truncate.sql")
+@Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {
     private static final String API = "/api";
     private static final String CONTENT = "내용입니다";
-    private static final String EMOTION = "기뻐요";
+    private static final Long EMOTION_ID = 1L;
+    private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 10;
     private static final Long ARTICLE_ID = 1L;
@@ -65,7 +67,7 @@ class ArticleAcceptanceTest {
         assertThat(articles).isEmpty();
 
         //when: 글을 하나 추가한다.
-        createArticle(CONTENT, EMOTION, true);
+        createArticle(CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
 
         //then: 글이 하나 있다.
         articles = getArticles();
@@ -100,10 +102,11 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 
-    private void createArticle(String content, String emotion, Boolean isCommentAllowed) {
-        Map<String, String> params = new HashMap<>();
+    private void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
+        Map<String, Object> params = new HashMap<>();
         params.put("content", content);
-        params.put("emotion", emotion);
+        params.put("emotionId", emotionId);
+        params.put("subEmotionIds", subEmotionIds);
         params.put("isCommentAllowed", isCommentAllowed.toString());
 
         //@formatter:off
