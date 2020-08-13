@@ -20,6 +20,7 @@ public class SubEmotion {
     private String name;
 
     @ManyToOne
+    @Column(name = "EMOTION_ID")
     private Emotion emotion;
 
     public SubEmotion(Long id, String name) {

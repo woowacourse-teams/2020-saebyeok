@@ -33,7 +33,7 @@ public class ArticleSubEmotionService {
         }
     }
 
-    public List<SubEmotionResponse> getSubEmotionResponses(Article article) {
+    public List<SubEmotionResponse> findSubEmotionResponses(Article article) {
         List<ArticleSubEmotion> articleSubEmotions = articleSubEmotionRepository.findAllByArticleId(article.getId());
 
         return articleSubEmotions.
