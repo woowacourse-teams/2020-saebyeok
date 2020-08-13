@@ -26,7 +26,7 @@ public class ArticleEmotionService {
         articleEmotionRepository.save(articleEmotion);
     }
 
-    public EmotionResponse findEmotionResponse(Article article) {
+    public EmotionResponse findEmotion(Article article) {
         ArticleEmotion articleEmotion = articleEmotionRepository.findByArticleId(article.getId()).
                 orElseThrow(() -> new ArticleEmotionNotFoundException(article.getId()));
 

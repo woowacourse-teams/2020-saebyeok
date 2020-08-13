@@ -37,8 +37,8 @@ public class ArticleService {
         return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
                 stream().
                 map(article -> {
-                    EmotionResponse emotionResponse = articleEmotionService.findEmotionResponse(article);
-                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotionResponses(article);
+                    EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
                     return new ArticleResponse(article, emotionResponse, subEmotionResponses);
                 }).
                 collect(Collectors.toList());
@@ -60,8 +60,8 @@ public class ArticleService {
     public ArticleResponse readArticle(Long articleId) {
         Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        EmotionResponse emotionResponse = articleEmotionService.findEmotionResponse(article);
-        List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotionResponses(article);
+        EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+        List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
 
         return new ArticleResponse(article, emotionResponse, subEmotionResponses);
     }
