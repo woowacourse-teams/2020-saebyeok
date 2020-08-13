@@ -3,10 +3,7 @@ package com.saebyeok.saebyeok.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +17,7 @@ public class SubEmotion {
     private String name;
 
     @ManyToOne
-    @Column(name = "EMOTION_ID")
+    @JoinColumn(name = "EMOTION_ID")
     private Emotion emotion;
 
     public SubEmotion(Long id, String name) {
