@@ -49,6 +49,7 @@ export default {
       for (let index in this.emotions) {
         this.allFilter.push(this.emotions[index].id);
       }
+      this.allFilter = this.allFilter.sort();
       this.viewAll();
     });
   },
@@ -63,6 +64,7 @@ export default {
         this.filter.splice(idx, 1);
       } else {
         this.filter.push(emotion.id);
+        this.filter = this.filter.sort();
       }
       this.$emit('select', this.filter);
     },
