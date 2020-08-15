@@ -10,7 +10,9 @@
         class="col-3"
         style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
       >
-        <v-chip @click="viewAll()">모두 보기</v-chip>
+        <v-chip @click="viewAll()" :disabled="isSelectedAll()"
+          >모두 보기</v-chip
+        >
       </v-col>
       <v-col
         v-for="emotion in emotions"
@@ -67,12 +69,12 @@ export default {
     isSelected(emotion) {
       return this.filter.includes(emotion.id);
     },
+    isSelectedAll() {
+      return this.filter.length === this.allFilter.length;
+    },
     viewAll() {
-      //모두가 선택된 상태에서 전체선택을 누르는 등의 무의미한 행동은 인정되지 않는다.
-      if (this.filter.length < this.allFilter.length) {
-        this.filter = this.allFilter.slice();
-        this.$emit('select', this.filter);
-      }
+      this.filter = this.allFilter.slice();
+      this.$emit('select', this.filter);
     }
   }
 };
