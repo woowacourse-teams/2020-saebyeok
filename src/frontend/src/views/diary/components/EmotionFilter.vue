@@ -46,10 +46,8 @@ export default {
     this.fetchEmotions().then(() => {
       for (let index in this.emotions) {
         this.allFilter.push(this.emotions[index].id);
-        console.log(index + '???' + this.emotions[index]);
       }
-      this.filter = this.allFilter.slice();
-      console.log('TWICE' + this.allFilter);
+      this.viewAll();
     });
   },
   computed: {
@@ -64,13 +62,17 @@ export default {
       } else {
         this.filter.push(emotion.id);
       }
-      console.log(this.filter);
+      this.$emit('select', this.filter);
     },
     isSelected(emotion) {
       return this.filter.includes(emotion.id);
     },
     viewAll() {
-      this.filter = this.allFilter.slice();
+      //모두가 선택된 상태에서 전체선택을 누르는 등의 무의미한 행동은 인정되지 않는다.
+      if (this.filter.length < this.allFilter.length) {
+        this.filter = this.allFilter.slice();
+        this.$emit('select', this.filter);
+      }
     }
   }
 };
