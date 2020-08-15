@@ -10,7 +10,7 @@
         class="col-3"
         style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
       >
-        <v-chip @click="viewAll()" :disabled="isSelectedAll()"
+        <v-chip @click="selectAll()" :disabled="isSelectedAll()"
           >모두 보기</v-chip
         >
       </v-col>
@@ -50,7 +50,7 @@ export default {
         this.allFilter.push(this.emotions[index].id);
       }
       this.allFilter = this.allFilter.sort();
-      this.viewAll();
+      this.selectAll();
     });
   },
   computed: {
@@ -74,7 +74,7 @@ export default {
     isSelectedAll() {
       return this.filter.length === this.allFilter.length;
     },
-    viewAll() {
+    selectAll() {
       this.filter = this.allFilter.slice();
       this.$emit('select', this.filter);
     }
