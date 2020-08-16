@@ -77,4 +77,16 @@ public class EmotionServiceTest {
                 .isInstanceOf(EmotionNotFoundException.class)
                 .hasMessage(INVALID_EMOTION_ID + "에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
+
+    @Test
+    void getAllEmotionsIdsTest() {
+        List<Emotion> emotions = new ArrayList<>();
+        emotions.add(emotion);
+        when(emotionRepository.findAll()).thenReturn(emotions);
+
+        List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
+
+        assertThat(allEmotionsIds).hasSize(1);
+        assertThat(allEmotionsIds.get(0)).isEqualTo(emotion.getId());
+    }
 }
