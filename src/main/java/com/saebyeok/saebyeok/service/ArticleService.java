@@ -55,12 +55,17 @@ public class ArticleService {
     }
 
     public ArticleResponse readArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId,
+                                                                                   LocalDateTime.now().minusDays(LIMIT_DAYS))
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
 
         return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+    }
+
+    public List<Long> getMemberArticlesIds(Member member) {
+        return articleRepository.findArticlesByMemberId(member.getId());
     }
 
     @Transactional
