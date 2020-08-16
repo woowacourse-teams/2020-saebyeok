@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ArticlesAnalysisResponse {
     private long[] articleEmotionsCount;
+    private String articleAnalysisMessage;
 }
