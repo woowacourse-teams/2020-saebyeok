@@ -65,7 +65,7 @@ public class ArticleService {
     }
 
     public List<Long> getMemberArticlesIds(Member member) {
-        return articleRepository.findArticlesByMemberId(member.getId());
+        return articleRepository.findArticlesIdsByMemberId(member.getId());
     }
 
     @Transactional

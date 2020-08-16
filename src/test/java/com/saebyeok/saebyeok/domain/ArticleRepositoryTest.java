@@ -106,7 +106,7 @@ class ArticleRepositoryTest {
     @DisplayName("Member의 ID로 게시글을 조회하면 해당 게시글의 ID가 반환된다")
     @Test
     void findArticlesByMemberIdTest() {
-        List<Long> memberArticlesIds = articleRepository.findArticlesByMemberId(member.getId());
+        List<Long> memberArticlesIds = articleRepository.findArticlesIdsByMemberId(member.getId());
 
         assertThat(memberArticlesIds.size()).isEqualTo(3);
         assertThat(memberArticlesIds.get(0)).isEqualTo(1L);
@@ -121,7 +121,7 @@ class ArticleRepositoryTest {
                                        false, Role.USER, new ArrayList<>());
         memberRepository.save(tempMember);
 
-        List<Long> memberArticlesIds = articleRepository.findArticlesByMemberId(tempMember.getId());
+        List<Long> memberArticlesIds = articleRepository.findArticlesIdsByMemberId(tempMember.getId());
 
         assertThat(memberArticlesIds.size()).isZero();
     }

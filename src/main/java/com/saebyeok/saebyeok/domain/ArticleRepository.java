@@ -15,5 +15,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     public List<Article> findAllByCreatedDateGreaterThanEqual(LocalDateTime date, Pageable pageable);
 
     @Query(value = "select ARTICLE_ID from ARTICLE where MEMBER_ID = :memberId", nativeQuery = true)
-    public List<Long> findArticlesByMemberId(@Param("memberId") Long memberId);
+    public List<Long> findArticlesIdsByMemberId(@Param("memberId") Long memberId);
+
+    @Query(value = "select ARTICLE_ID from ARTICLE where MEMBER_ID = :memberId and CREATED_DATE >= :cutDate",
+            nativeQuery = true)
+    public List<Long> findArticlesIdsByMemberIdAndCutDate(@Param("memberId") Long memberId,
+                                                          @Param("cutDate") LocalDateTime date);
 }
