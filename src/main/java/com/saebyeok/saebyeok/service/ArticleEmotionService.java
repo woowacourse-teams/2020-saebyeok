@@ -55,4 +55,16 @@ public class ArticleEmotionService {
         }
     }
 
+    public long[] getArticleEmotionsCount(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
+        long[] articleEmotionsCount = new long[allEmotionsIds.size()];
+
+        List<ArticleEmotionCount> articleEmotionCounts =
+                articleEmotionRepository.countArticlesByEmotionIds(memberArticlesIds, allEmotionsIds);
+        for (ArticleEmotionCount count : articleEmotionCounts) {
+            int index = count.getEmotionId().intValue() - 1;
+            articleEmotionsCount[index] = count.getArticleCount();
+        }
+
+        return articleEmotionsCount;
+    }
 }
