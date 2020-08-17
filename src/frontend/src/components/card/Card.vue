@@ -82,7 +82,7 @@ export default {
   methods: {
     onClickCard: function() {
       this.$router.push({
-        path: 'feed/' + this.article.id
+        path: this.$router.history.current.path + '/' + this.article.id
       });
     }
   },

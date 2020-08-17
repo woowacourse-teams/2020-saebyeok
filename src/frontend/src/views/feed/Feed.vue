@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-4 overflow-y-auto">
-      <cards />
+      <cards :articles="articles" />
     </div>
     <infinite-loading
       v-if="articles.length"

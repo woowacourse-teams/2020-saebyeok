@@ -3,10 +3,10 @@
     <my-page-tabs></my-page-tabs>
     <emotion-filter />
     <div>
-      <cards />
+      <cards :articles="memberArticles" />
     </div>
     <infinite-loading
-      v-if="articles.length"
+      v-if="memberArticles.length"
       @infinite="infiniteHandler"
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
@@ -19,7 +19,10 @@
 <script>
 import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
+import {
+  FETCH_MEMBER_ARTICLES,
+  PAGING_MEMBER_ARTICLES
+} from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from './components/EmotionFilter.vue';
 import InfiniteLoading from 'vue-infinite-loading';
@@ -40,7 +43,7 @@ export default {
   },
   created() {
     try {
-      this.fetchArticles({
+      this.fetchMemberArticles({
         page: this.page,
         size: this.size
       }).then(() => {
@@ -51,14 +54,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['articles'])
+    ...mapGetters(['memberArticles'])
   },
   methods: {
-    ...mapActions([FETCH_ARTICLES]),
-    ...mapActions([PAGING_ARTICLES]),
+    ...mapActions([FETCH_MEMBER_ARTICLES]),
+    ...mapActions([PAGING_MEMBER_ARTICLES]),
     infiniteHandler($state) {
       setTimeout(() => {
-        this.pagingArticles({
+        this.pagingMemberArticles({
           page: this.page,
           size: this.size
         })

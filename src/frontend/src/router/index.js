@@ -4,6 +4,7 @@ import Feed from '../views/feed/Feed.vue';
 import Post from '../views/post/Post.vue';
 import Analysis from '../views/analysis/Analysis.vue';
 import Diary from '../views/diary/Diary.vue';
+import DiaryDetail from '../views/diary/DiaryDetail.vue';
 import ArticleDetail from '../views/articleDetail/ArticleDetail.vue';
 import Emotions from '../views/emotions/Emotions.vue';
 import Login from '../views/Login.vue';
@@ -70,6 +71,15 @@ const routes = [
     components: {
       default: Diary,
       header: Header,
+      footer: BottomNavigation
+    }
+  },
+  {
+    path: '/my-page/diary/:articleId',
+    name: 'DiaryDetail',
+    components: {
+      default: DiaryDetail,
+      header: DetailPageHeader,
       footer: BottomNavigation
     }
   },
