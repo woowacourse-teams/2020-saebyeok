@@ -12,5 +12,14 @@ module.exports = {
         //pathRewrite: { '/api': '/' }
       }
     }
+    // devServer: { index: 'login.html' }
+  },
+  pages: {
+    login: {
+      entry: 'src/pages/login/main.js'
+    },
+    index: {
+      entry: 'src/main.js'
+    }
   }
 };
