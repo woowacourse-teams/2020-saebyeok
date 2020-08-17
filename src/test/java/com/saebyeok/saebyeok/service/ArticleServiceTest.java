@@ -28,10 +28,13 @@ class ArticleServiceTest {
     private static final String MEMBER_EMAIL = "a@a.com";
     private static final int BIRTH_YEAR = 1996;
     private static final boolean IS_DELETED = false;
-    private static final Long ARTICLE_ID = 1L;
-    private static final Long INVALID_ARTICLE_ID = 2L;
-    private static final String CONTENT = "내용";
-    private static final boolean IS_COMMENT_ALLOWED = true;
+    private static final Long ARTICLE_ID_1 = 1L;
+    private static final Long ARTICLE_ID_2 = 2L;
+    private static final Long INVALID_ARTICLE_ID = 3L;
+    private static final String CONTENT1 = "내용1";
+    private static final String CONTENT2 = "내용2";
+    private static final boolean IS_COMMENT_ALLOWED_1 = true;
+    private static final boolean IS_COMMENT_ALLOWED_2 = false;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 10;
 
@@ -47,7 +50,8 @@ class ArticleServiceTest {
     private ArticleSubEmotionService articleSubEmotionService;
 
     private Member member;
-    private Article article;
+    private Article article1;
+    private Article article2;
     private Emotion emotion;
     private List<SubEmotion> subEmotions;
 
@@ -55,33 +59,34 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, MEMBER_EMAIL, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, Role.USER, null);
-        article = new Article(ARTICLE_ID, CONTENT, member, LocalDateTime.now(), IS_COMMENT_ALLOWED, null);
+        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null);
+        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null);
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
     @Test
     void getArticlesTest() {
         List<Article> articles = new ArrayList<>();
-        articles.add(article);
+        articles.add(article1);
         when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
 
         List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE);
 
         assertThat(articleResponses).hasSize(1);
-        assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT);
+        assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
         assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
     }
 
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article));
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article1));
 
 
-        ArticleResponse articleResponse = articleService.readArticle(any(Member.class), eq(ARTICLE_ID));
+        ArticleResponse articleResponse = articleService.readArticle(any(Member.class), eq(ARTICLE_ID_1));
 
         assertThat(articleResponse).isNotNull();
-        assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
+        assertThat(articleResponse.getContent()).isEqualTo(CONTENT1);
         assertThat(articleResponse.getIsCommentAllowed()).isTrue();
     }
 
@@ -98,8 +103,8 @@ class ArticleServiceTest {
     @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
     @Test
     void deleteArticleTest() throws IllegalAccessException {
-        when(articleRepository.findById(any())).thenReturn(Optional.of(article));
-        articleService.deleteArticle(member, ARTICLE_ID);
+        when(articleRepository.findById(any())).thenReturn(Optional.of(article1));
+        articleService.deleteArticle(member, ARTICLE_ID_1);
 
         verify(articleRepository).deleteById(any());
     }
@@ -113,5 +118,23 @@ class ArticleServiceTest {
         assertThatThrownBy(() -> articleService.deleteArticle(member, INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
                 .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
+    }
+
+    @DisplayName("내 게시글 목록을 조회하면 게시글 목록이 작성 시간에 관계없이 리턴된다")
+    @Test
+    void getMemberArticlesTest() {
+        List<Article> articles = new ArrayList<>();
+        articles.add(article1);
+        articles.add(article2);
+        when(articleRepository.findAllByMember(eq(member), any())).thenReturn(articles);
+
+
+        List<ArticleResponse> articleResponses = articleService.getMemberArticles(member, PAGE_NUMBER, PAGE_SIZE);
+
+        assertThat(articleResponses).hasSize(2);
+        assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
+        assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
+        assertThat(articleResponses.get(1).getContent()).isEqualTo(CONTENT2);
+        assertThat(articleResponses.get(1).getIsCommentAllowed()).isFalse();
     }
 }

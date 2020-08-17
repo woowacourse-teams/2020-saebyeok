@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,9 +28,14 @@ class ArticleRepositoryTest {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     private Article article1;
     private Article article2;
     private Article article3;
+
+    private Member member;
 
     @BeforeEach
     void setUp() {
@@ -37,6 +43,11 @@ class ArticleRepositoryTest {
         article1 = new Article("내용1", true);
         article2 = new Article("내용2", false);
         article3 = new Article("내용3", true);
+
+        member = new Member(1L, "a@a.com", 1996, Gender.MALE, LocalDateTime.now(), false, Role.USER, new ArrayList<>());
+        memberRepository.save(member);
+
+        article2.setMember(member);
 
         articleRepository.save(article1);
         articleRepository.save(article2);
@@ -87,5 +98,19 @@ class ArticleRepositoryTest {
 
         List<Article> articlesAfterDelete = articleRepository.findAll();
         assertThat(articlesAfterDelete).hasSize(articleSize - 1).doesNotContain(article1);
+    }
+
+    @DisplayName("로그인한 사용자의 게시글 전체 조회를 한다")
+    @Test
+    void findAllByMemberTest() {
+        List<Article> articles = articleRepository.findAllByMember(member, PAGE_REQUEST);
+
+        assertThat(articles).
+                hasSize(1).
+                extracting("content").
+                containsOnly(article2.getContent());
+        assertThat(articles).
+                extracting("isCommentAllowed").
+                containsOnly(article2.getIsCommentAllowed());
     }
 }
