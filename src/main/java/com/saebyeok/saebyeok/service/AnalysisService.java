@@ -13,8 +13,8 @@ import static com.saebyeok.saebyeok.service.ArticleEmotionService.NOT_EXIST_MOST
 public class AnalysisService {
     private final ArticleAnalysisMessageRepository articleAnalysisMessageRepository;
 
-    public String getArticlesAnalysisMessage(long mostArticleEmotionId) {
-        if (mostArticleEmotionId == NOT_EXIST_MOST_EMOTION_ID) {
+    public String findArticlesAnalysisMessage(Long mostArticleEmotionId) {
+        if (NOT_EXIST_MOST_EMOTION_ID.equals(mostArticleEmotionId)) {
             return "아직 작성한 글이 없네요~ 새벽에 이야기를 들려주시면 좋겠어요 :)";
         }
 

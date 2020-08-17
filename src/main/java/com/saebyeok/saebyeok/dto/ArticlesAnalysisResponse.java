@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ArticlesAnalysisResponse {
-    private long[] articleEmotionsCount;
+    private int[] articleEmotionsCount;
     private String articleAnalysisMessage;
 }

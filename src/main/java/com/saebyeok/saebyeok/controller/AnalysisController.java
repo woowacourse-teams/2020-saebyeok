@@ -38,28 +38,28 @@ public class AnalysisController {
                 .orElseThrow(() -> new MemberNotFoundException(user.getId()));
         List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
-        long[] articleEmotionsCount = createArticleEmotionsCount(member, allEmotionsIds);
-        String articlesAnalysisMessage = createArticlesAnalysisMessage(member, allEmotionsIds);
+        int[] articleEmotionsCount = findArticleEmotionsCount(member, allEmotionsIds);
+        String articlesAnalysisMessage = findArticlesAnalysisMessage(member, allEmotionsIds);
         ArticlesAnalysisResponse articlesAnalysisResponse = new ArticlesAnalysisResponse(articleEmotionsCount,
                                                                                          articlesAnalysisMessage);
         return ResponseEntity.ok(articlesAnalysisResponse);
     }
 
-    private long[] createArticleEmotionsCount(Member member, List<Long> allEmotionsIds) {
+    private int[] findArticleEmotionsCount(Member member, List<Long> allEmotionsIds) {
         List<Long> memberArticlesIds = articleService.getMemberArticlesIds(member);
 
-        return articleEmotionService.getArticleEmotionsCount(memberArticlesIds, allEmotionsIds);
+        return articleEmotionService.findArticleEmotionsCount(memberArticlesIds, allEmotionsIds);
     }
 
-    private String createArticlesAnalysisMessage(Member member, List<Long> allEmotionsIds) {
+    private String findArticlesAnalysisMessage(Member member, List<Long> allEmotionsIds) {
         LocalDateTime cutDate = LocalDateTime.now().minusDays(INQUIRY_DAYS);
 
         List<Long> articlesIdsByMemberIdAndCutDate =
                 articleService.getMemberArticlesIdsByCutDate(member, cutDate);
-        long mostArticleEmotionId = articleEmotionService.getMostEmotionIdInArticles(articlesIdsByMemberIdAndCutDate,
-                                                                                     allEmotionsIds);
+        Long mostArticleEmotionId = articleEmotionService.findMostEmotionIdInArticles(articlesIdsByMemberIdAndCutDate,
+                                                                                      allEmotionsIds);
 
-        return analysisService.getArticlesAnalysisMessage(mostArticleEmotionId);
+        return analysisService.findArticlesAnalysisMessage(mostArticleEmotionId);
     }
 
     @GetMapping("/analysis/comments")
@@ -69,7 +69,7 @@ public class AnalysisController {
         Member member = memberRepository.findById(user.getId())
                 .orElseThrow(() -> new MemberNotFoundException(user.getId()));
 
-        Long totalCommentsCount = commentService.findTotalCommentsCountByMember(member);
+        int totalCommentsCount = commentService.findTotalCommentsCountByMember(member);
 
         // TODO: 2020/08/17 차후 추천받은 댓글의 수와, 그에 따른 메세지도 같이 전달?
         CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount);

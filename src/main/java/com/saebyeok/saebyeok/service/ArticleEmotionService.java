@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ArticleEmotionService {
-    public static final long NOT_EXIST_MOST_EMOTION_ID = 0L;
+    public static final Long NOT_EXIST_MOST_EMOTION_ID = 0L;
 
     private final EmotionRepository emotionRepository;
     private final ArticleEmotionRepository articleEmotionRepository;
@@ -56,20 +56,20 @@ public class ArticleEmotionService {
         }
     }
 
-    public long[] getArticleEmotionsCount(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
-        long[] articleEmotionsCount = new long[allEmotionsIds.size()];
+    public int[] findArticleEmotionsCount(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
+        int[] articleEmotionsCount = new int[allEmotionsIds.size()];
 
         List<ArticleEmotionCount> articleEmotionCounts =
                 articleEmotionRepository.countArticlesByEmotionIds(memberArticlesIds, allEmotionsIds);
         for (ArticleEmotionCount count : articleEmotionCounts) {
             int index = count.getEmotionId().intValue() - 1;
-            articleEmotionsCount[index] = count.getArticleCount();
+            articleEmotionsCount[index] = Math.toIntExact(count.getArticleCount());
         }
 
         return articleEmotionsCount;
     }
 
-    public long getMostEmotionIdInArticles(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
+    public Long findMostEmotionIdInArticles(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
         if (memberArticlesIds.isEmpty()) {
             return NOT_EXIST_MOST_EMOTION_ID;
         }
