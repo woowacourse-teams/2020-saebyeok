@@ -29,6 +29,10 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public Long findTotalCommentsCountByMember(Member member) {
+        return commentRepository.countCommentsByMember(member);
+    }
+
     @Transactional
     public void deleteComment(Member member, Long commentId) throws IllegalAccessException {
         Comment comment = commentRepository.findById(commentId)
