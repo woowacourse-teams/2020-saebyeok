@@ -95,6 +95,7 @@ export default {
     toggleRecommend(event) {
       event.stopPropagation();
       this.recommendedByMe = !this.recommendedByMe;
+      this.recommendedByMe ? this.recommendCount++ : this.recommendCount--;
     }
   },
   props: {
