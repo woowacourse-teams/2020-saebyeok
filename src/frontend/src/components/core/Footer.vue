@@ -19,6 +19,8 @@
 
 <script>
 export default {
-  name: 'bottom-navigation'
+  name: 'Footer'
 };
 </script>
+
+<style></style>
