@@ -12,17 +12,5 @@ module.exports = {
         //pathRewrite: { '/api': '/' }
       }
     }
-    // devServer: { index: 'login.html' }
   }
-  // pages: {
-  //   // signin: {
-  //   //   entry: 'src/pages/signin/main.js'
-  //   //   // template: 'public/signin.html',
-  //   //   // filename: 'signin.html',
-  //   //   // title: '로딩중',
-  //   //   // chunks: ['chunk-vendors', 'chunk-common', 'signin']
-  //   // },
-  //   signin: 'src/pages/signin/main.js',
-  //   index: 'src/main.js'
-  // }
 };
