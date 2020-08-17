@@ -45,8 +45,14 @@
           <v-row>
             <v-col align="left" cols="10" justify="end">
               <div style="float:left;">
-                <v-icon class="mr-1">mdi-hand-heart</v-icon>
-                <span class="subheading mr-2">{{ recommend }}</span>
+                <div class="recommend-button" v-on:click="toggleRecommend">
+                  <v-icon
+                    class="mr-1"
+                    v-bind:class="{ recommended: recommendedByMe }"
+                    >mdi-hand-heart
+                  </v-icon>
+                  <span class="subheading mr-2">{{ recommendCount }}</span>
+                </div>
               </div>
               <div v-if="article.isCommentAllowed" style="float:left;">
                 <v-icon class="mr-1">mdi-comment</v-icon>
@@ -78,7 +84,8 @@ export default {
   data() {
     return {
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42
+      recommendCount: 42, // 추후 백엔드에서 받아올 정보
+      recommendedByMe: false // 추후 백엔드에서 받아올 정보
     };
   },
   props: {
@@ -86,6 +93,17 @@ export default {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    toggleRecommend() {
+      this.recommendedByMe = !this.recommendedByMe;
+    }
   }
 };
 </script>
+
+<style scoped>
+.recommended {
+  color: #96589b;
+}
+</style>

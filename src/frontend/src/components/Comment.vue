@@ -25,8 +25,14 @@
         <v-row>
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
-              <v-icon class="mr-1">mdi-hand-heart</v-icon>
-              <span class="subheading mr-2">{{ recommend }}</span>
+              <div class="recommend-button" v-on:click="toggleRecommend">
+                <v-icon
+                  class="mr-1"
+                  v-bind:class="{ recommended: recommendedByMe }"
+                  >mdi-hand-heart
+                </v-icon>
+                <span class="subheading mr-2">{{ recommendCount }}</span>
+              </div>
             </div>
           </v-col>
           <v-col align="right" cols="2" justify="end">
@@ -40,6 +46,7 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+
 export default {
   //id, content, nickname, isDeleted, createdDate
   name: 'Comment',
@@ -51,7 +58,8 @@ export default {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42,
+      recommendCount: 42, // 추후 백엔드에서 받아올 정보
+      recommendedByMe: false, // 추후 백엔드에서 받아올 정보
       deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
@@ -60,6 +68,17 @@ export default {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    toggleRecommend() {
+      this.recommendedByMe = !this.recommendedByMe;
+    }
   }
 };
 </script>
+
+<style scoped>
+.recommended {
+  color: #96589b;
+}
+</style>
