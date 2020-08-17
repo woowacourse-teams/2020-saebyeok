@@ -1,18 +1,20 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from './Login.vue';
+import SignIn from './SignIn.vue';
 
 Vue.use(VueRouter);
 
+alert('라우터 로딩됨');
+
 const routes = [
+  // {
+  //   path: '/',
+  //   redirect: '/sign-in'
+  // },
   {
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: '/signin',
+    name: 'SignIn',
+    component: SignIn
   }
 ];
 

@@ -6,6 +6,8 @@ import vuetify from '../../plugins/vuetify';
 
 Vue.config.productionTip = false;
 
+alert('signin의 main.js 로딩됨');
+
 new Vue({
   router,
   store,

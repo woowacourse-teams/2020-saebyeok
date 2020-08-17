@@ -7,6 +7,8 @@ import Diary from '../views/diary/Diary.vue';
 import ArticleDetail from '../views/articleDetail/ArticleDetail.vue';
 import Emotions from '../views/emotions/Emotions.vue';
 // import Login from '../pages/login/Login.vue';
+import SignIn from '../pages/signin/SignIn.vue';
+// import Index from '../views/Index.vue';
 import Auth from '../views/Auth.vue';
 import Header from '@/components/header/Header';
 import EmotionsHeader from '@/components/header/EmotionsHeader';
@@ -73,10 +75,10 @@ const routes = [
       footer: BottomNavigation
     }
   },
-  // {
-  //   path: '/',
-  //   redirect: '/login'
-  // },
+  {
+    path: '/',
+    component: SignIn
+  },
   // {
   //   path: '/login',
   //   name: 'Login',
