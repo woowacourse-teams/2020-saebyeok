@@ -113,4 +113,19 @@ class ArticleRepositoryTest {
                 extracting("isCommentAllowed").
                 containsOnly(article2.getIsCommentAllowed());
     }
+
+    @DisplayName("ID와 Member 객체로 해당 사용자의 게시글을 조회하면 해당 게시글이 반환된다")
+    @Test
+    void findByIdAndMemberTest() {
+        Article savedArticle = articleRepository.findByIdAndMemberEquals(article2.getId(), member)
+                .orElseThrow(() -> new ArticleNotFoundException(article2.getId()));
+
+        assertThat(savedArticle).isEqualTo(article2);
+    }
+
+    @DisplayName("다른 사용자의 게시글을 조회할 수 없다")
+    @Test
+    void findByIdAndWrongMemberTest() {
+        assertThat(articleRepository.findByIdAndMemberEquals(article1.getId(), member)).isEmpty();
+    }
 }

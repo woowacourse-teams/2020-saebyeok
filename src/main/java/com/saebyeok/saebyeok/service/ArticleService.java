@@ -85,4 +85,13 @@ public class ArticleService {
                 }).
                 collect(Collectors.toList());
     }
+
+    public ArticleResponse readMemberArticle(Member member, Long articleId) {
+        Article article = articleRepository.findByIdAndMemberEquals(articleId, member)
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+        List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+
+        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+    }
 }

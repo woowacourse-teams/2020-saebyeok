@@ -75,4 +75,14 @@ public class ArticleController {
         List<ArticleResponse> articles = articleService.getMemberArticles(member, page, size);
         return ResponseEntity.ok(articles);
     }
+
+    @GetMapping("/member/articles/{articleId}")
+    public ResponseEntity<ArticleResponse> readMemberArticle(Authentication authentication, @PathVariable Long articleId) {
+        // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
+        User user = (User) authentication.getPrincipal();
+        Member member = memberRepository.findById(user.getId())
+                .orElseThrow(() -> new MemberNotFoundException(user.getId()));
+        ArticleResponse articleResponse = articleService.readMemberArticle(member, articleId);
+        return ResponseEntity.ok(articleResponse);
+    }
 }

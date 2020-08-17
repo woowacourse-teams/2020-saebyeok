@@ -155,4 +155,18 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$[1].content").value(TEST_CONTENT_2));
     }
+
+    @DisplayName("ID로 사용자가 쓴 글 조회를 요청하면 해당 글을 전달 받는다")
+    @Test
+    void memberArticleReadTest() throws Exception {
+        when(articleService.readMemberArticle(any(Member.class), eq(TEST_ID_2))).thenReturn(articles.get(1));
+
+        this.mockMvc.perform(get(API + "/member/articles/" + TEST_ID_2).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.id").value(TEST_ID_2)).
+                andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
+                andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
+    }
 }

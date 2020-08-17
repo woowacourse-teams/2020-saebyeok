@@ -137,4 +137,16 @@ class ArticleServiceTest {
         assertThat(articleResponses.get(1).getContent()).isEqualTo(CONTENT2);
         assertThat(articleResponses.get(1).getIsCommentAllowed()).isFalse();
     }
+
+    @DisplayName("ID로 내가 쓴 개별 글 조회를 요청하면 만료 시간과 상관없이 해당 글을 전달 받는다")
+    @Test
+    void readMemberArticleTest() {
+        when(articleRepository.findByIdAndMemberEquals(any(), any())).thenReturn(Optional.of(article2));
+
+        ArticleResponse articleResponse = articleService.readMemberArticle(eq(member), eq(ARTICLE_ID_2));
+
+        assertThat(articleResponse).isNotNull();
+        assertThat(articleResponse.getContent()).isEqualTo(CONTENT2);
+        assertThat(articleResponse.getIsCommentAllowed()).isFalse();
+    }
 }
