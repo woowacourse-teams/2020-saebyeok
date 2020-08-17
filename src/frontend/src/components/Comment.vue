@@ -25,13 +25,11 @@
         <v-row>
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
-              <div class="recommend-button" v-on:click="toggleRecommend">
-                <v-icon
-                  class="mr-1"
-                  v-bind:class="{ recommended: recommendedByMe }"
+              <div class="like-button" v-on:click="toggleLike">
+                <v-icon class="mr-1" v-bind:class="{ liked: likedByMe }"
                   >mdi-hand-heart
                 </v-icon>
-                <span class="subheading mr-2">{{ recommendCount }}</span>
+                <span class="subheading mr-2">{{ likesCount }}</span>
               </div>
             </div>
           </v-col>
@@ -58,8 +56,8 @@ export default {
       //아직 article에 없는 값을 임시로 설정
       emotion: '😊',
       tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommendCount: 42, // 추후 백엔드에서 받아올 정보
-      recommendedByMe: false, // 추후 백엔드에서 받아올 정보
+      likesCount: 42, // 추후 백엔드에서 받아올 정보
+      likedByMe: false, // 추후 백엔드에서 받아올 정보
       deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
@@ -70,16 +68,16 @@ export default {
     }
   },
   methods: {
-    toggleRecommend() {
-      this.recommendedByMe = !this.recommendedByMe;
-      this.recommendedByMe ? this.recommendCount++ : this.recommendCount--;
+    toggleLike() {
+      this.likedByMe = !this.likedByMe;
+      this.likedByMe ? this.likesCount++ : this.likesCount--;
     }
   }
 };
 </script>
 
 <style scoped>
-.recommended {
+.liked {
   color: #96589b;
 }
 </style>
