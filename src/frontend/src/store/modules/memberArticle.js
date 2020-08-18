@@ -1,5 +1,13 @@
-import {ADD_MEMBER_ARTICLES, SET_MEMBER_ARTICLE, SET_MEMBER_ARTICLES} from '@/store/shared/mutationTypes';
-import {FETCH_MEMBER_ARTICLE, FETCH_MEMBER_ARTICLES, PAGING_MEMBER_ARTICLES} from '@/store/shared/actionTypes';
+import {
+  ADD_MEMBER_ARTICLES,
+  SET_MEMBER_ARTICLE,
+  SET_MEMBER_ARTICLES
+} from '@/store/shared/mutationTypes';
+import {
+  FETCH_MEMBER_ARTICLE,
+  FETCH_MEMBER_ARTICLES,
+  PAGING_MEMBER_ARTICLES
+} from '@/store/shared/actionTypes';
 import MemberArticleService from '@/api/modules/memberArticle';
 
 const state = {
@@ -30,20 +38,20 @@ const mutations = {
 
 const actions = {
   // eslint-disable-next-line no-unused-vars
-  async [FETCH_MEMBER_ARTICLE]({commit}, articleId) {
-    return MemberArticleService.get(articleId).then(({data}) => {
+  async [FETCH_MEMBER_ARTICLE]({ commit }, articleId) {
+    return MemberArticleService.get(articleId).then(({ data }) => {
       commit(SET_MEMBER_ARTICLE, data);
       return data;
     });
   },
-  async [FETCH_MEMBER_ARTICLES]({commit}, params) {
-    return MemberArticleService.getAll(params).then(({data}) => {
+  async [FETCH_MEMBER_ARTICLES]({ commit }, params) {
+    return MemberArticleService.getAll(params).then(({ data }) => {
       commit(SET_MEMBER_ARTICLES, data);
       return data;
     });
   },
-  async [PAGING_MEMBER_ARTICLES]({commit}, params) {
-    return MemberArticleService.getAll(params).then(({data}) => {
+  async [PAGING_MEMBER_ARTICLES]({ commit }, params) {
+    return MemberArticleService.getAll(params).then(({ data }) => {
       commit(ADD_MEMBER_ARTICLES, data);
       return data;
     });

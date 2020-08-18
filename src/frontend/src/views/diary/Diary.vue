@@ -1,12 +1,13 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter />
+    <emotion-filter v-on:select="readArticles" />
     <div>
       <cards :articles="memberArticles" />
     </div>
     <infinite-loading
       v-if="memberArticles.length"
+      :identifier="infiniteId"
       @infinite="infiniteHandler"
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
@@ -32,7 +33,8 @@ export default {
   data() {
     return {
       page: 0,
-      size: 5
+      size: 5,
+      infiniteId: +new Date()
     };
   },
   components: {
@@ -77,6 +79,25 @@ export default {
             console.error(err);
           });
       }, 500);
+    },
+    // eslint-disable-next-line no-unused-vars
+    async readArticles(emotions) {
+      //todo : 여기서 emotions를 page, size와 함께 api로 보낸다.
+      this.page = 0;
+      this.infiniteId += 1;
+
+      await this.fetchMemberArticles({
+        page: this.page,
+        size: this.size
+      })
+        .then(data => {
+          if (data.length) {
+            this.page++;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   },
   props: {

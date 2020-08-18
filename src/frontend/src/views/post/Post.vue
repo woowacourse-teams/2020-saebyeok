@@ -22,6 +22,7 @@
               active-class="black--text text--accent-4"
               column
               multiple
+              max="3"
               align="right"
               justify="end"
             >
