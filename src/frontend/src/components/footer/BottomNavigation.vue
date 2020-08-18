@@ -22,3 +22,5 @@ export default {
   name: 'bottom-navigation'
 };
 </script>
+
+<style></style>
