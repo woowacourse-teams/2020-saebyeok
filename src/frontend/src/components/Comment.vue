@@ -26,7 +26,7 @@
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
               <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" v-bind:class="{ liked: likedByMe }"
+                <v-icon class="mr-1" :class="{ liked: likedByMe }"
                   >mdi-hand-heart
                 </v-icon>
                 <span class="subheading mr-2">{{ likesCount }}</span>
@@ -53,9 +53,6 @@ export default {
   },
   data() {
     return {
-      //아직 article에 없는 값을 임시로 설정
-      emotion: '😊',
-      tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
       likesCount: 42, // 추후 백엔드에서 받아올 정보
       likedByMe: false, // 추후 백엔드에서 받아올 정보
       deletedCommentMessage: '삭제된 댓글입니다.'
