@@ -65,11 +65,11 @@ export default {
           });
       }, 500);
     },
+    // eslint-disable-next-line no-unused-vars
     readArticles(emotions) {
       //todo : 여기서 emotions를 page, size와 함께 api로 보낸다.
       this.page = 0;
       this.infiniteId += 1;
-      console.log(emotions);
 
       setTimeout(() => {
         this.fetchArticles({
