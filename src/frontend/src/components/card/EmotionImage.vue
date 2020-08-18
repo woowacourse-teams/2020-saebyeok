@@ -16,6 +16,12 @@ export default {
   props: {
     emotion: {
       type: Object,
+      default: function() {
+        return {
+          imageResource: '',
+          name: ''
+        };
+      },
       required: true
     }
   }

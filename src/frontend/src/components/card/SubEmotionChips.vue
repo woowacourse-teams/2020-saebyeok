@@ -19,6 +19,9 @@ export default {
   props: {
     subEmotions: {
       type: Array,
+      default: function() {
+        return [];
+      },
       required: true
     }
   }
