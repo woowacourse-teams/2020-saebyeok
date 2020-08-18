@@ -32,7 +32,6 @@ public class ArticleService {
 
     public List<ArticleResponse> getArticles(Member member, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-
         return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
                 stream().
                 map(article -> {
@@ -73,5 +72,26 @@ public class ArticleService {
         articleEmotionService.deleteArticleEmotion(article);
         articleSubEmotionService.deleteArticleSubEmotion(article);
         articleRepository.deleteById(articleId);
+    }
+
+    public List<ArticleResponse> getMemberArticles(Member member, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return articleRepository.findAllByMember(member, pageable).
+                stream().
+                map(article -> {
+                    EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                }).
+                collect(Collectors.toList());
+    }
+
+    public ArticleResponse readMemberArticle(Member member, Long articleId) {
+        Article article = articleRepository.findByIdAndMemberEquals(articleId, member)
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+        List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+
+        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
 }

@@ -3,10 +3,10 @@
     <my-page-tabs></my-page-tabs>
     <emotion-filter v-on:select="readArticles" />
     <div>
-      <cards />
+      <cards :articles="memberArticles" />
     </div>
     <infinite-loading
-      v-if="articles.length"
+      v-if="memberArticles.length"
       :identifier="infiniteId"
       @infinite="infiniteHandler"
       force-use-infinite-wrapper="cards"
@@ -20,7 +20,10 @@
 <script>
 import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
+import {
+  FETCH_MEMBER_ARTICLES,
+  PAGING_MEMBER_ARTICLES
+} from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from './components/EmotionFilter.vue';
 import InfiniteLoading from 'vue-infinite-loading';
@@ -40,15 +43,27 @@ export default {
     EmotionFilter,
     InfiniteLoading
   },
+  created() {
+    try {
+      this.fetchMemberArticles({
+        page: this.page,
+        size: this.size
+      }).then(() => {
+        this.page++;
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
   computed: {
-    ...mapGetters(['articles'])
+    ...mapGetters(['memberArticles'])
   },
   methods: {
-    ...mapActions([FETCH_ARTICLES]),
-    ...mapActions([PAGING_ARTICLES]),
+    ...mapActions([FETCH_MEMBER_ARTICLES]),
+    ...mapActions([PAGING_MEMBER_ARTICLES]),
     infiniteHandler($state) {
       setTimeout(() => {
-        this.pagingArticles({
+        this.pagingMemberArticles({
           page: this.page,
           size: this.size
         })
@@ -66,25 +81,23 @@ export default {
       }, 500);
     },
     // eslint-disable-next-line no-unused-vars
-    readArticles(emotions) {
+    async readArticles(emotions) {
       //todo : 여기서 emotions를 page, size와 함께 api로 보낸다.
       this.page = 0;
       this.infiniteId += 1;
 
-      setTimeout(() => {
-        this.fetchArticles({
-          page: this.page,
-          size: this.size
+      await this.fetchMemberArticles({
+        page: this.page,
+        size: this.size
+      })
+        .then(data => {
+          if (data.length) {
+            this.page++;
+          }
         })
-          .then(data => {
-            if (data.length) {
-              this.page++;
-            }
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      }, 500);
+        .catch(err => {
+          console.error(err);
+        });
     }
   },
   props: {

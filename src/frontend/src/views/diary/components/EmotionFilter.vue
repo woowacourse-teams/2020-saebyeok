@@ -50,7 +50,7 @@ export default {
         this.allFilter.push(this.emotions[index].id);
       }
       this.allFilter = this.allFilter.sort();
-      this.selectAll();
+      this.filter = this.allFilter.slice();
     });
   },
   computed: {

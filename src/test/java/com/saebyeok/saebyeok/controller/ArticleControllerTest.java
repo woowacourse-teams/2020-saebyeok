@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,18 +43,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ArticleControllerTest {
     private static final String API = "/api";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final String TEST_CONTENT = "내용";
     private static final Emotion TEST_EMOTION = new Emotion(1L, "기뻐요", "이미지 리소스");
     private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
-    private static final Boolean TEST_IS_MINE = false;
+    private static final Boolean TEST_IS_MINE = true;
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
-    private static final Long TEST_ID = 1L;
+    private static final Long TEST_ID_1 = 1L;
+    private static final String TEST_CONTENT_1 = "내용1";
+    private static final Long TEST_ID_2 = 2L;
+    private static final String TEST_CONTENT_2 = "내용2";
     private static final Long INVALID_ARTICLE_ID = 2L;
     private static final Integer TEST_PAGE_NUMBER = 0;
     private static final Integer TEST_PAGE_SIZE = 10;
 
     private MockMvc mockMvc;
-    private ArticleResponse articleResponse;
+    private List<ArticleResponse> articles;
 
     @MockBean
     private ArticleService articleService;
@@ -62,27 +66,29 @@ class ArticleControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+        this.articles = new ArrayList<>();
         List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        this.articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null);
+        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
+        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
     @Test
     void getArticlesTest() throws Exception {
-        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(Arrays.asList(articleResponse));
+        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(Arrays.asList(articles.get(0)));
 
         this.mockMvc.perform(get(API + "/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
-                andExpect(jsonPath("$[0].content").value(TEST_CONTENT));
+                andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1));
     }
 
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createArticleTest() throws Exception {
-        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT, TEST_EMOTION.getId(), Arrays.asList(), TEST_IS_COMMENT_ALLOWED);
+        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT_1, TEST_EMOTION.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-        Article article = new Article(TEST_CONTENT, TEST_IS_COMMENT_ALLOWED);
+        Article article = new Article(TEST_CONTENT_1, TEST_IS_COMMENT_ALLOWED);
 
         when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(article);
 
@@ -96,13 +102,13 @@ class ArticleControllerTest {
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() throws Exception {
-        when(articleService.readArticle(any(Member.class), eq(TEST_ID))).thenReturn(articleResponse);
+        when(articleService.readArticle(any(Member.class), eq(TEST_ID_1))).thenReturn(articles.get(0));
 
-        this.mockMvc.perform(get(API + "/articles/" + TEST_ID).
+        this.mockMvc.perform(get(API + "/articles/" + TEST_ID_1).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id").value(TEST_ID)).
-                andExpect(jsonPath("$.content").value(TEST_CONTENT)).
+                andExpect(jsonPath("$.id").value(TEST_ID_1)).
+                andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
@@ -121,9 +127,9 @@ class ArticleControllerTest {
     @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
     @Test
     void deleteArticleTest() throws Exception {
-        doNothing().when(articleService).deleteArticle(any(Member.class), eq(TEST_ID));
+        doNothing().when(articleService).deleteArticle(any(Member.class), eq(TEST_ID_1));
 
-        this.mockMvc.perform(delete(API + "/articles/" + TEST_ID)).
+        this.mockMvc.perform(delete(API + "/articles/" + TEST_ID_1)).
                 andExpect(status().isNoContent());
     }
 
@@ -136,5 +142,31 @@ class ArticleControllerTest {
         this.mockMvc.perform(delete(API + "/articles/" + INVALID_ARTICLE_ID).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("사용자가 쓴 게시글 목록을 날짜에 상관없이 불러온다")
+    @Test
+    void memberArticleLoadTest() throws Exception {
+        when(articleService.getMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(articles);
+
+        this.mockMvc.perform(get(API + "/member/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
+                accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(jsonPath("$", hasSize(2))).
+                andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
+                andExpect(jsonPath("$[1].content").value(TEST_CONTENT_2));
+    }
+
+    @DisplayName("ID로 사용자가 쓴 글 조회를 요청하면 해당 글을 전달 받는다")
+    @Test
+    void memberArticleReadTest() throws Exception {
+        when(articleService.readMemberArticle(any(Member.class), eq(TEST_ID_2))).thenReturn(articles.get(1));
+
+        this.mockMvc.perform(get(API + "/member/articles/" + TEST_ID_2).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.id").value(TEST_ID_2)).
+                andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
+                andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 }

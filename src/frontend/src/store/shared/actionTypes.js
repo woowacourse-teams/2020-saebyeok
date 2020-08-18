@@ -1,6 +1,9 @@
 export const FETCH_ARTICLE = 'fetchArticle';
 export const FETCH_ARTICLES = 'fetchArticles';
 export const PAGING_ARTICLES = 'pagingArticles';
+export const FETCH_MEMBER_ARTICLE = 'fetchMemberArticle';
+export const FETCH_MEMBER_ARTICLES = 'fetchMemberArticles';
+export const PAGING_MEMBER_ARTICLES = 'pagingMemberArticles';
 export const CREATE_ARTICLE = 'createArticle';
 export const CREATE_COMMENT = 'createComment';
 export const FETCH_EMOTION = 'fetchEmotion';
