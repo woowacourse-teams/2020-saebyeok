@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Index from '../views/Index.vue';
 import Feed from '../views/feed/Feed.vue';
 import Post from '../views/post/Post.vue';
 import Analysis from '../views/analysis/Analysis.vue';
@@ -11,21 +12,22 @@ import Auth from '../views/signin/Auth.vue';
 import Header from '@/components/header/Header';
 import EmotionsHeader from '@/components/header/EmotionsHeader';
 import DetailPageHeader from '@/components/header/DetailPageHeader';
+import BottomNavigation from '@/components/footer/BottomNavigation';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/signin'
   },
   {
-    path: '/login',
+    path: '/signin',
     component: SignIn
   },
   {
     path: '/',
-    component: () => import('../views/Index.vue'),
+    component: Index,
     children: [
       {
         path: 'auth',
@@ -38,14 +40,16 @@ const routes = [
         name: 'Feed',
         components: {
           header: Header,
-          main: Feed
+          main: Feed,
+          footer: BottomNavigation
         }
       },
       {
         path: 'feed/:articleId',
         components: {
           header: DetailPageHeader,
-          main: ArticleDetail
+          main: ArticleDetail,
+          footer: BottomNavigation
         }
       },
       {
@@ -59,7 +63,8 @@ const routes = [
         path: 'post/:emotionId',
         components: {
           header: EmotionsHeader,
-          main: Post
+          main: Post,
+          footer: BottomNavigation
         }
       },
       {
@@ -70,14 +75,16 @@ const routes = [
         path: 'my-page/analysis',
         components: {
           header: Header,
-          main: Analysis
+          main: Analysis,
+          footer: BottomNavigation
         }
       },
       {
         path: 'my-page/diary',
         components: {
           header: Header,
-          main: Diary
+          main: Diary,
+          footer: BottomNavigation
         }
       }
     ]
