@@ -43,8 +43,12 @@
           <v-row>
             <v-col align="left" cols="10" justify="end">
               <div style="float:left;">
-                <v-icon class="mr-1">mdi-hand-heart</v-icon>
-                <span class="subheading mr-2">{{ recommend }}</span>
+                <div class="like-button" v-on:click="toggleLike">
+                  <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                    >mdi-hand-heart
+                  </v-icon>
+                  <span class="subheading mr-2">{{ likesCount }}</span>
+                </div>
               </div>
               <div v-if="article.isCommentAllowed" style="float:left;">
                 <v-icon class="mr-1">mdi-comment</v-icon>
@@ -75,8 +79,8 @@ export default {
   },
   data() {
     return {
-      tags: ['# 즐거워요', '# 기뻐요', '# 행복해요'],
-      recommend: 42
+      likesCount: 42, // 추후 백엔드에서 받아올 정보
+      likedByMe: false // 추후 백엔드에서 받아올 정보
     };
   },
   methods: {
@@ -84,6 +88,11 @@ export default {
       this.$router.push({
         path: 'feed/' + this.article.id
       });
+    },
+    toggleLike() {
+      event.stopPropagation();
+      this.likedByMe = !this.likedByMe;
+      this.likedByMe ? this.likesCount++ : this.likesCount--;
     }
   },
   props: {
@@ -94,3 +103,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.liked {
+  color: #96589b;
+}
+</style>
