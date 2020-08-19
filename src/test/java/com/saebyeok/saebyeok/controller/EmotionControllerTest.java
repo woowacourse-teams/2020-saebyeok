@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
 public class EmotionControllerTest {
     private static final String API = "/api";

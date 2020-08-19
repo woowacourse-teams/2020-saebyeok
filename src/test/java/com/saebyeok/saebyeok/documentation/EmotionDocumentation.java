@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 public class EmotionDocumentation extends Documentation {
     private static final Long EMOTION_ID = 1L;
 

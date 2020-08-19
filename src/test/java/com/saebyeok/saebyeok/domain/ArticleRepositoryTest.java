@@ -44,7 +44,7 @@ class ArticleRepositoryTest {
         article2 = new Article("내용2", false);
         article3 = new Article("내용3", true);
 
-        member = new Member(1L, "a@a.com", 1996, Gender.MALE, LocalDateTime.now(), false, Role.USER, new ArrayList<>());
+        member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 
         article2.setMember(member);
