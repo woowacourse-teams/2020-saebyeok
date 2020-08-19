@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -56,35 +58,41 @@ public class ArticleEmotionService {
         }
     }
 
-    public int[] findArticleEmotionsCount(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
-        int[] articleEmotionsCount = new int[allEmotionsIds.size()];
+    public List<Integer> findArticleEmotionsCount(List<Article> memberArticles, List<Long> allEmotionsIds) {
+        List<ArticleEmotion> memberArticleEmotions = articleEmotionRepository.findAllByArticleIn(memberArticles);
 
-        List<ArticleEmotionCount> articleEmotionCounts =
-                articleEmotionRepository.countArticlesByEmotionIds(memberArticlesIds, allEmotionsIds);
-        for (ArticleEmotionCount count : articleEmotionCounts) {
-            int index = count.getEmotionId().intValue() - 1;
-            articleEmotionsCount[index] = Math.toIntExact(count.getArticleCount());
-        }
+        Map<Long, Integer> articlesCounter = countArticlesPerEmotion(memberArticleEmotions);
 
-        return articleEmotionsCount;
+        return allEmotionsIds.stream()
+                .map(emotionId -> articlesCounter.getOrDefault(emotionId, 0))
+                .collect(Collectors.toList());
     }
 
-    public Long findMostEmotionIdInArticles(List<Long> memberArticlesIds, List<Long> allEmotionsIds) {
-        if (memberArticlesIds.isEmpty()) {
+    public Long findMostEmotionIdInArticles(List<Article> memberArticles) {
+        if (memberArticles.isEmpty()) {
             return NOT_EXIST_MOST_EMOTION_ID;
         }
 
-        List<ArticleEmotionCount> articleEmotionCounts =
-                articleEmotionRepository.countArticlesByEmotionIds(memberArticlesIds, allEmotionsIds);
+        List<ArticleEmotion> memberArticleEmotions = articleEmotionRepository.findAllByArticleIn(memberArticles);
 
-        ArticleEmotionCount mostArticleEmotionCount = articleEmotionCounts.get(0);
-        for (int i = 1; i < articleEmotionCounts.size(); i++) {
-            ArticleEmotionCount nextArticleEmotionCount = articleEmotionCounts.get(i);
-            if (mostArticleEmotionCount.getArticleCount() < nextArticleEmotionCount.getArticleCount()) {
-                mostArticleEmotionCount = nextArticleEmotionCount;
-            }
-        }
+        Map<Long, Integer> articlesCounter = countArticlesPerEmotion(memberArticleEmotions);
 
-        return mostArticleEmotionCount.getEmotionId();
+        return articlesCounter.keySet().stream()
+                .reduce((id1, id2) -> articlesCounter.get(id1) > articlesCounter.get(id2) ? id1 : id2)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    private Map<Long, Integer> countArticlesPerEmotion(List<ArticleEmotion> memberArticleEmotions) {
+        Map<Long, Integer> articlesCounter = new HashMap<>();
+
+        memberArticleEmotions.stream()
+                .map(ArticleEmotion::getEmotion)
+                .map(Emotion::getId)
+                .forEach(emotionId -> {
+                    int articleCount = articlesCounter.getOrDefault(emotionId, 0);
+                    articlesCounter.put(emotionId, ++articleCount);
+                });
+
+        return articlesCounter;
     }
 }

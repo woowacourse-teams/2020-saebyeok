@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CommentsAnalysisResponse {
-    private int totalCommentsCount;
+    private Long totalCommentsCount;
 }

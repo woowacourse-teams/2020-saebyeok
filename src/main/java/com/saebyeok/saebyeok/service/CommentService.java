@@ -29,10 +29,8 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public int findTotalCommentsCountByMember(Member member) {
-        Long countCommentsByMember = commentRepository.countCommentsByMember(member);
-
-        return Math.toIntExact(countCommentsByMember);
+    public Long countTotalCommentsBy(Member member) {
+        return commentRepository.countCommentsByMember(member);
     }
 
     @Transactional

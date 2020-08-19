@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class ArticlesAnalysisResponse {
-    private int[] articleEmotionsCount;
-    private String articleAnalysisMessage;
+    private List<Integer> articleEmotionsCount;
+    private Long mostEmotionId;
 }

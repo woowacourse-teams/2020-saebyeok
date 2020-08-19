@@ -1,27 +1,38 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.ArticleAnalysisMessage;
-import com.saebyeok.saebyeok.domain.ArticleAnalysisMessageRepository;
-import com.saebyeok.saebyeok.exception.ArticleAnalysisMessageNotFoundException;
+import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.saebyeok.saebyeok.service.ArticleEmotionService.NOT_EXIST_MOST_EMOTION_ID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class AnalysisService {
-    private final ArticleAnalysisMessageRepository articleAnalysisMessageRepository;
+    private static final int INQUIRY_DAYS = 30;
 
-    public String findArticlesAnalysisMessage(Long mostArticleEmotionId) {
-        if (NOT_EXIST_MOST_EMOTION_ID.equals(mostArticleEmotionId)) {
-            return "아직 작성한 글이 없네요~ 새벽에 이야기를 들려주시면 좋겠어요 :)";
-        }
+    private final EmotionService emotionService;
+    private final ArticleEmotionService articleEmotionService;
+    private final CommentService commentService;
 
-        ArticleAnalysisMessage articleAnalysisMessage =
-                articleAnalysisMessageRepository.findById(mostArticleEmotionId)
-                        .orElseThrow(() -> new ArticleAnalysisMessageNotFoundException(mostArticleEmotionId));
+    public List<Integer> findArticleEmotionsCount(Member member) {
+        List<Article> memberArticles = member.getArticles();
+        List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
-        return articleAnalysisMessage.getMessage();
+        return articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds);
+    }
+
+    public Long findMostEmotionId(Member member) {
+        List<Article> articlesByMemberAndInquiryDays = member.getArticles().stream()
+                .filter(article -> article.getCreatedDate().isAfter(article.getCreatedDate().minusDays(INQUIRY_DAYS)))
+                .collect(Collectors.toList());
+
+        return articleEmotionService.findMostEmotionIdInArticles(articlesByMemberAndInquiryDays);
+    }
+
+    public Long countTotalCommentsBy(Member member) {
+        return commentService.countTotalCommentsBy(member);
     }
 }
