@@ -54,4 +54,11 @@ public class LikeService {
             throw new DuplicateCommentLikeException(member.getId(), commentId);
         }
     }
+
+    public void unlikeComment(Member member, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        commentLikeRepository.deleteByMemberAndComment(member, comment);
+    }
 }

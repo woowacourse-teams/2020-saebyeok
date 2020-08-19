@@ -62,4 +62,15 @@ public class LikeController {
                 .build();
     }
 
+    @DeleteMapping("/likes/comment/{commentId}")
+    public ResponseEntity<Void> unlikeComment(Authentication authentication, @PathVariable Long commentId) {
+        // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
+        User user = (User) authentication.getPrincipal();
+        Member member = memberRepository.findById(user.getId())
+                .orElseThrow(() -> new MemberNotFoundException(user.getId()));
+
+        likeService.unlikeComment(member, commentId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

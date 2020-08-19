@@ -144,4 +144,27 @@ class LikeServiceTest {
                 .isInstanceOf(DuplicateCommentLikeException.class)
                 .hasMessage("이미 공감한 댓글에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", commentId: " + ALREADY_LIKED_COMMENT_ID);
     }
+
+
+    @DisplayName("댓글 공감 취소 메서드를 실행하면 공감이 삭제된다")
+    @Test
+    void unlikeCommentTest() {
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
+
+        likeService.unlikeComment(member, COMMENT_ID);
+
+        verify(commentLikeRepository).deleteByMemberAndComment(member, comment);
+    }
+
+    @DisplayName("예외 테스트: 잘못된 댓글에 공감 취소를 요청하면 예외가 발생한다")
+    @Test
+    void unlikeInvalidCommentTest() {
+        when(commentRepository.findById(INVALID_COMMENT_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
+                .isInstanceOf(CommentNotFoundException.class)
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+
+        verify(commentLikeRepository, never()).deleteByMemberAndComment(any(), any());
+    }
 }

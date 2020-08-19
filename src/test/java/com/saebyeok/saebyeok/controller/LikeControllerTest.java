@@ -119,4 +119,22 @@ class LikeControllerTest {
         this.mockMvc.perform(post("/api/likes/comment/" + ALREADY_LIKED_COMMENT_ID)).
                 andExpect(status().isBadRequest());
     }
+
+    @DisplayName("'/api/likes/comment/{commentId}'로 공감 취소 요청을 보내면 공감이 삭제된다")
+    @Test
+    void unlikeCommentTest() throws Exception {
+        doNothing().when(likeService).unlikeComment(any(Member.class), eq(COMMENT_ID));
+
+        this.mockMvc.perform((delete("/api/likes/comment/" + COMMENT_ID))).
+                andExpect(status().isNoContent());
+    }
+
+    @DisplayName("예외 테스트: 잘못된 댓글에 공감 취소 요청을 보내면 예외가 발생한다")
+    @Test
+    void unlikeInvalidCommentTest() throws Exception {
+        doThrow(ArticleNotFoundException.class).when(likeService).unlikeComment(any(Member.class), eq(INVALID_COMMENT_ID));
+
+        this.mockMvc.perform(delete("/api/likes/comment/" + INVALID_COMMENT_ID)).
+                andExpect(status().isBadRequest());
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -48,34 +49,48 @@ class CommentLikeRepositoryTest {
 
     @DisplayName("예외 테스트: Member와 Comment 참조가 없이 공감 등록을 하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithoutMemberAndArticleTest() {
+    void saveCommentLikeWithoutMemberAndCommentTest() {
         CommentLike like = new CommentLike();
 
         assertThatThrownBy(() -> commentLikeRepository.save(like))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
-    @DisplayName("예외 테스트: 참조할 수 없는 Member 혹은 Article 로 공감 등록을 하면 예외가 발생한다")
+    @DisplayName("예외 테스트: 참조할 수 없는 Member 혹은 Comment 로 공감 등록을 하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithInvalidMemberOrArticleTest() {
+    void saveCommentLikeWithInvalidMemberOrCommentTest() {
         CommentLike likeWithInvalidMember = new CommentLike(new Member(), comment);
-        CommentLike likeWithInvalidArticle = new CommentLike(member, new Comment());
+        CommentLike likeWithInvalidComment = new CommentLike(member, new Comment());
 
         assertThatThrownBy(() -> commentLikeRepository.save(likeWithInvalidMember))
                 .isInstanceOf(InvalidDataAccessApiUsageException.class);
 
-        assertThatThrownBy(() -> commentLikeRepository.save(likeWithInvalidArticle))
+        assertThatThrownBy(() -> commentLikeRepository.save(likeWithInvalidComment))
                 .isInstanceOf(InvalidDataAccessApiUsageException.class);
     }
 
     @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithExistingArticleLikeTest() {
+    void saveCommentLikeWithExistingCommentLikeTest() {
         CommentLike like = new CommentLike(member, comment);
         CommentLike likeAgain = new CommentLike(member, comment);
         commentLikeRepository.save(like);
 
         assertThatThrownBy(() -> commentLikeRepository.save(likeAgain))
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("댓글 공감을 취소할 수 있다")
+    @Test
+    void deleteCommentLikeTest() {
+        CommentLike like = new CommentLike(member, comment);
+        commentLikeRepository.save(like);
+        List<CommentLike> beforeDelete = commentLikeRepository.findAll();
+
+        commentLikeRepository.deleteByMemberAndComment(member, comment);
+
+        List<CommentLike> afterDelete = commentLikeRepository.findAll();
+
+        assertThat(afterDelete.size()).isEqualTo(beforeDelete.size() - 1);
     }
 }
