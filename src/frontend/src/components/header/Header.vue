@@ -1,8 +1,6 @@
 <template>
   <v-app-bar app clipped-right color="#B2A4D4" flat dark>
-    <v-app-bar-nav-icon>
-      <v-icon large>mdi-filter</v-icon>
-    </v-app-bar-nav-icon>
+    <filter-button />
     <v-spacer></v-spacer>
     <v-toolbar-title>
       <span class="title text-h4">새벽</span>
@@ -30,8 +28,13 @@
 </template>
 
 <script>
+import FilterButton from '@/components/FilterButton';
+
 export default {
   name: 'Header',
+  components: {
+    FilterButton
+  },
   data() {
     return {
       dialog: false
