@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -75,5 +76,19 @@ class ArticleLikeRepositoryTest {
 
         assertThatThrownBy(() -> articleLikeRepository.save(likeAgain))
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("게시글 공감을 취소할 수 있다")
+    @Test
+    void deleteArticleLikeTest() {
+        ArticleLike like = new ArticleLike(member, article);
+        articleLikeRepository.save(like);
+        List<ArticleLike> beforeDelete = articleLikeRepository.findAll();
+
+        articleLikeRepository.deleteByMemberAndArticle(member, article);
+
+        List<ArticleLike> afterDelete = articleLikeRepository.findAll();
+
+        assertThat(afterDelete.size()).isEqualTo(beforeDelete.size() - 1);
     }
 }

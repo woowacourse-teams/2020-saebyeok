@@ -90,6 +90,28 @@ class LikeServiceTest {
                 .hasMessage("이미 공감한 게시물에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", articleId: " + ALREADY_LIKED_ARTICLE_ID);
     }
 
+    @DisplayName("게시글 공감 취소 메서드를 실행하면 공감이 삭제된다")
+    @Test
+    void unlikeArticleTest() {
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(ARTICLE_ID), any())).thenReturn(Optional.of(article));
+
+        likeService.unlikeArticle(member, ARTICLE_ID);
+
+        verify(articleLikeRepository).deleteByMemberAndArticle(member, article);
+    }
+
+    @DisplayName("예외 테스트: 잘못된 게시물에 공감 취소를 요청하면 예외가 발생한다")
+    @Test
+    void unlikeInvalidArticleTest() {
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(INVALID_ARTICLE_ID), any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> likeService.likeArticle(member, INVALID_ARTICLE_ID))
+                .isInstanceOf(ArticleNotFoundException.class)
+                .hasMessage(INVALID_ARTICLE_ID + "에 해당하는 게시글을 찾을 수 없습니다.");
+
+        verify(articleLikeRepository, never()).deleteByMemberAndArticle(any(), any());
+    }
+
     @DisplayName("댓글 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
     void likeCommentTest() {

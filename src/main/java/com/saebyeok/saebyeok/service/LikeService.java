@@ -35,6 +35,13 @@ public class LikeService {
         }
     }
 
+    public void unlikeArticle(Member member, Long articleId) {
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+
+        articleLikeRepository.deleteByMemberAndArticle(member, article);
+    }
+
     public CommentLike likeComment(Member member, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));
@@ -46,9 +53,5 @@ public class LikeService {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateCommentLikeException(member.getId(), commentId);
         }
-    }
-
-    public void unlikeArticle(Member member, Long articleId) {
-
     }
 }
