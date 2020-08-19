@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,5 +149,20 @@ class ArticleServiceTest {
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT2);
         assertThat(articleResponse.getIsCommentAllowed()).isFalse();
+    }
+
+    @DisplayName("내 게시글 목록을 감정 대분류로 필터링 요청하면 분류된 게시글 목록이 반환된다")
+    @Test
+    void filterMemberArticleTest() {
+        // TODO: 2020/08/19 추후 테스트코드 보강하기. 현재는 두 서비스가 얽힌 부분이라 서비스 테스트가 어려움
+        List<Article> filterArticles = new ArrayList<>();
+        filterArticles.add(article1);
+        when(articleEmotionService.findArticlesByEmotionIds(any(), any(), any())).thenReturn(filterArticles);
+
+        List<ArticleResponse> articleResponses = articleService.filterMemberArticles(member, PAGE_NUMBER, PAGE_SIZE, Arrays.asList(1L));
+
+        assertThat(articleResponses).hasSize(1);
+        assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
+        assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
     }
 }

@@ -94,4 +94,17 @@ public class ArticleService {
 
         return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
+
+    public List<ArticleResponse> filterMemberArticles(Member member, int page, int size, List<Long> emotionIds) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        return articleEmotionService.findArticlesByEmotionIds(member.getArticles(), emotionIds, pageable).
+                stream().
+                map(article -> {
+                    EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                }).
+                collect(Collectors.toList());
+    }
 }

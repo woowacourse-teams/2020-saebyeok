@@ -43,7 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ArticleControllerTest {
     private static final String API = "/api";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final Emotion TEST_EMOTION = new Emotion(1L, "기뻐요", "이미지 리소스");
+    private static final Emotion TEST_EMOTION_1 = new Emotion(1L, "기뻐요", "이미지 리소스");
+    private static final Emotion TEST_EMOTION_2 = new Emotion(2L, "슬퍼요", "이미지 리소스");
     private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
     private static final Boolean TEST_IS_MINE = true;
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
@@ -68,8 +69,8 @@ class ArticleControllerTest {
                 .build();
         this.articles = new ArrayList<>();
         List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
-        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
+        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
+        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, null));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
@@ -86,7 +87,7 @@ class ArticleControllerTest {
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createArticleTest() throws Exception {
-        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT_1, TEST_EMOTION.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
+        ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT_1, TEST_EMOTION_1.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
         Article article = new Article(TEST_CONTENT_1, TEST_IS_COMMENT_ALLOWED);
 
@@ -109,7 +110,7 @@ class ArticleControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id").value(TEST_ID_1)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
-                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_1.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 
@@ -151,6 +152,7 @@ class ArticleControllerTest {
 
         this.mockMvc.perform(get(API + "/member/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(status().isOk()).
                 andExpect(jsonPath("$", hasSize(2))).
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$[1].content").value(TEST_CONTENT_2));
@@ -166,7 +168,21 @@ class ArticleControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id").value(TEST_ID_2)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
-                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION.getName())).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_2.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
+    }
+
+    @DisplayName("사용자가 쓴 게시글 목록을 감정 대분류로 필터링해서 불러온다")
+    @Test
+    void memberArticleFilterTest() throws Exception {
+        when(articleService.filterMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(Arrays.asList(articles.get(1)));
+
+        this.mockMvc.perform(get(API + "/member/articles/filter?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE + "&emotionIds=1,3").
+                accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(jsonPath("$", hasSize(1))).
+                andExpect(jsonPath("$[0].id").value(TEST_ID_2)).
+                andExpect(jsonPath("$[0].content").value(TEST_CONTENT_2)).
+                andExpect(jsonPath("$[0].emotion.name").value(TEST_EMOTION_2.getName())).
+                andExpect(jsonPath("$[0].isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 }
