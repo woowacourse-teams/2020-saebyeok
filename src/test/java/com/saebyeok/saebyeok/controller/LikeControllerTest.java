@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.domain.ArticleLike;
+import com.saebyeok.saebyeok.domain.CommentLike;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
@@ -28,6 +29,7 @@ class LikeControllerTest {
     private static final Long ARTICLE_ID = 1L;
     public static final long INVALID_ARTICLE_ID = 100L;
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
+    public static final long COMMENT_ID = 1L;
 
     private MockMvc mockMvc;
 
@@ -41,7 +43,7 @@ class LikeControllerTest {
                 .build();
     }
 
-    @DisplayName("'/api/likes/article/{articleID}'로 post 요청을 보내면 해당 게시글에 공감이 추가된다")
+    @DisplayName("'/api/likes/article/{articleId}'로 post 요청을 보내면 해당 게시글에 공감이 추가된다")
     @Test
     void likeArticle() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
@@ -66,5 +68,14 @@ class LikeControllerTest {
 
         this.mockMvc.perform(post("/api/likes/article/" + ALREADY_LIKED_ARTICLE_ID)).
                 andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("'/api/likes/comment/{commentId}'로 post 요청을 보내면 해당 댓글 공감이 추가된다")
+    @Test
+    void likeComment() throws Exception {
+        when(likeService.likeComment(any(Member.class), eq(COMMENT_ID))).thenReturn(new CommentLike());
+
+        this.mockMvc.perform(post("/api/likes/comment/" + COMMENT_ID)).
+                andExpect(status().isCreated());
     }
 }

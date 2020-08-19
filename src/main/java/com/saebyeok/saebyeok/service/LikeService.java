@@ -30,4 +30,8 @@ public class LikeService {
             throw new DuplicateArticleLikeException(member.getId(), articleId);
         }
     }
+
+    public CommentLike likeComment(Member member, Long commentId) {
+        return null;
+    }
 }

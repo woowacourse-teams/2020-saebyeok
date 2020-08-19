@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.domain.ArticleLike;
+import com.saebyeok.saebyeok.domain.CommentLike;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.MemberRepository;
 import com.saebyeok.saebyeok.exception.MemberNotFoundException;
@@ -34,7 +35,21 @@ public class LikeController {
         ArticleLike articleLike = likeService.likeArticle(member, articleId);
 
         return ResponseEntity
-                .created(URI.create("/likes/" + articleId + "/" + articleLike.getId()))
+                .created(URI.create("/likes/article/" + articleId + "/" + articleLike.getId()))
+                .build();
+    }
+
+    @PostMapping("/likes/comment/{commentId}")
+    public ResponseEntity<Void> likeComment(Authentication authentication, @PathVariable Long commentId) {
+        // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
+        User user = (User) authentication.getPrincipal();
+        Member member = memberRepository.findById(user.getId())
+                .orElseThrow(() -> new MemberNotFoundException(user.getId()));
+
+        CommentLike commentLike = likeService.likeComment(member, commentId);
+
+        return ResponseEntity
+                .created(URI.create("/likes/comment/" + commentId + "/" + commentLike.getId()))
                 .build();
     }
 
