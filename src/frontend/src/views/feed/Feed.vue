@@ -1,6 +1,5 @@
 <template>
   <div>
-    <emotion-filter v-on:select="filteringArticles" />
     <div class="mt-4 overflow-y-auto">
       <cards :articles="articles" />
     </div>
@@ -21,7 +20,6 @@ import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import InfiniteLoading from 'vue-infinite-loading';
-import EmotionFilter from './components/EmotionFilter.vue';
 
 export default {
   name: 'Feed',
@@ -36,8 +34,7 @@ export default {
   },
   components: {
     Cards,
-    InfiniteLoading,
-    EmotionFilter
+    InfiniteLoading
   },
   created() {
     try {
@@ -86,6 +83,7 @@ export default {
         }
       }, 500);
     },
+    //todo : 이후 피드의 필터가 구현되면, 이 메서드와 연결해서 사용하면 된다.
     filteringArticles(emotionIds, isSelectedAll) {
       this.emotionIds = emotionIds.toString();
       this.isFiltered = !isSelectedAll;
