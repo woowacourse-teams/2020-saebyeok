@@ -9,7 +9,7 @@ class ArticleLikeTest {
 
     @DisplayName("예외 테스트: Member 혹은 Article에 null이 오면 예외가 발생한")
     @Test
-    void createWithNullArgs() {
+    void createWithNullArgsTest() {
         Article article = new Article();
         Member member = new Member();
 

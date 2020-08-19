@@ -49,7 +49,7 @@ class LikeControllerTest {
 
     @DisplayName("'/api/likes/article/{articleId}'로 post 요청을 보내면 해당 게시글에 공감이 추가된다")
     @Test
-    void likeArticle() throws Exception {
+    void likeArticleTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
 
         this.mockMvc.perform(post("/api/likes/article/" + ARTICLE_ID)).
@@ -58,7 +58,7 @@ class LikeControllerTest {
 
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 요청을 보내면 예외가 발생한다")
     @Test
-    void likeInvalidArticle() throws Exception {
+    void likeInvalidArticleTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(INVALID_ARTICLE_ID))).thenThrow(ArticleNotFoundException.class);
 
         this.mockMvc.perform(post("/api/likes/article/" + INVALID_ARTICLE_ID)).
@@ -67,7 +67,7 @@ class LikeControllerTest {
 
     @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void likeArticleAgain() throws Exception {
+    void likeArticleAgainTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ALREADY_LIKED_ARTICLE_ID))).thenThrow(DuplicateArticleLikeException.class);
 
         this.mockMvc.perform(post("/api/likes/article/" + ALREADY_LIKED_ARTICLE_ID)).
@@ -76,7 +76,7 @@ class LikeControllerTest {
 
     @DisplayName("'/api/likes/comment/{commentId}'로 post 요청을 보내면 해당 댓글 공감이 추가된다")
     @Test
-    void likeComment() throws Exception {
+    void likeCommentTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(COMMENT_ID))).thenReturn(new CommentLike());
 
         this.mockMvc.perform(post("/api/likes/comment/" + COMMENT_ID)).
@@ -85,7 +85,7 @@ class LikeControllerTest {
 
     @DisplayName("예외 테스트: 잘못된 댓글에 공감 요청을 보내면 예외가 발생한다")
     @Test
-    void likeInvalidComment() throws Exception {
+    void likeInvalidCommentTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(INVALID_COMMENT_ID))).thenThrow(CommentNotFoundException.class);
 
         this.mockMvc.perform(post("/api/likes/comment/" + INVALID_COMMENT_ID)).
@@ -94,7 +94,7 @@ class LikeControllerTest {
 
     @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void likeCommentAgain() throws Exception {
+    void likeCommentAgainTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(ALREADY_LIKED_COMMENT_ID))).thenThrow(DuplicateCommentLikeException.class);
 
         this.mockMvc.perform(post("/api/likes/comment/" + ALREADY_LIKED_COMMENT_ID)).

@@ -59,7 +59,7 @@ class LikeServiceTest {
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
-    void likeArticle() {
+    void likeArticleTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(ARTICLE_ID), any())).thenReturn(Optional.of(article));
 
         likeService.likeArticle(new Member(), ARTICLE_ID);
@@ -69,7 +69,7 @@ class LikeServiceTest {
 
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 등록을 요청하면 예외가 발생한다")
     @Test
-    void likeInvalidArticle() {
+    void likeInvalidArticleTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(INVALID_ARTICLE_ID), any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> likeService.likeArticle(member, INVALID_ARTICLE_ID))
@@ -81,7 +81,7 @@ class LikeServiceTest {
 
     @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void likeArticleAgain() {
+    void likeArticleAgainTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(ALREADY_LIKED_ARTICLE_ID), any())).thenReturn(Optional.of(article));
         when(articleLikeRepository.save(any(ArticleLike.class))).thenThrow(DataIntegrityViolationException.class);
 
@@ -92,7 +92,7 @@ class LikeServiceTest {
 
     @DisplayName("댓글 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
-    void likeComment() {
+    void likeCommentTest() {
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
 
         likeService.likeComment(new Member(), COMMENT_ID);
@@ -102,7 +102,7 @@ class LikeServiceTest {
 
     @DisplayName("예외 테스트: 잘못된 댓글에 공감 등록을 요청하면 예외가 발생한다")
     @Test
-    void likeInvalidComment() {
+    void likeInvalidCommentTest() {
         when(commentRepository.findById(INVALID_COMMENT_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
@@ -114,7 +114,7 @@ class LikeServiceTest {
 
     @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void likeCommentAgain() {
+    void likeCommentAgainTest() {
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
         when(commentLikeRepository.save(any(CommentLike.class))).thenThrow(DataIntegrityViolationException.class);
 

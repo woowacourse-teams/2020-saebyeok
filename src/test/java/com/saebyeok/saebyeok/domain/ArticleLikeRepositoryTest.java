@@ -34,7 +34,7 @@ class ArticleLikeRepositoryTest {
 
     @DisplayName("게시물에 공감을 등록할 수 있다")
     @Test
-    void saveArticleLike() {
+    void saveArticleLikeTest() {
         ArticleLike like = new ArticleLike(member, article);
 
         ArticleLike savedLike = articleLikeRepository.save(like);
@@ -46,7 +46,7 @@ class ArticleLikeRepositoryTest {
 
     @DisplayName("예외 테스트: Member와 Article 참조가 없이 공감 등록을 하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithoutMemberAndArticle() {
+    void saveArticleLikeWithoutMemberAndArticleTest() {
         ArticleLike like = new ArticleLike();
 
         assertThatThrownBy(() -> articleLikeRepository.save(like))
@@ -55,7 +55,7 @@ class ArticleLikeRepositoryTest {
 
     @DisplayName("예외 테스트: 참조할 수 없는 Member 혹은 Article 로 공감 등록을 하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithInvalidMemberOrArticle() {
+    void saveArticleLikeWithInvalidMemberOrArticleTest() {
         ArticleLike likeWithInvalidMember = new ArticleLike(new Member(), article);
         ArticleLike likeWithInvalidArticle = new ArticleLike(member, new Article());
 
@@ -68,7 +68,7 @@ class ArticleLikeRepositoryTest {
 
     @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
     @Test
-    void saveArticleLikeWithExistingArticleLike() {
+    void saveArticleLikeWithExistingArticleLikeTest() {
         ArticleLike like = new ArticleLike(member, article);
         ArticleLike likeAgain = new ArticleLike(member, article);
         articleLikeRepository.save(like);

@@ -9,7 +9,7 @@ class CommentLikeTest {
 
     @DisplayName("예외 테스트: Member 혹은 Comment에 null이 오면 예외가 발생한")
     @Test
-    void createWithNullArgs() {
+    void createWithNullArgsTest() {
         Comment comment = new Comment();
         Member member = new Member();
 
