@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.domain.ArticleLike;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.service.LikeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class LikeControllerTest {
     private static final Long ARTICLE_ID = 1L;
+    public static final long INVALID_ARTICLE_ID = 100L;
 
     private MockMvc mockMvc;
 
@@ -37,12 +39,21 @@ class LikeControllerTest {
                 .build();
     }
 
-    @DisplayName("'/api/likes/article/{articleID}'로 post 요청을 보내면 해당 게시글에 공감이 추가된")
+    @DisplayName("'/api/likes/article/{articleID}'로 post 요청을 보내면 해당 게시글에 공감이 추가된다")
     @Test
     void likeArticle() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
 
         this.mockMvc.perform(post("/api/likes/article/" + ARTICLE_ID)).
                 andExpect(status().isCreated());
+    }
+
+    @DisplayName("예외 테스트: 잘못된 게시물에 공감 요청을 보내면 예외가 발생한다")
+    @Test
+    void likeInvalidArticle() throws Exception {
+        when(likeService.likeArticle(any(Member.class), eq(INVALID_ARTICLE_ID))).thenThrow(ArticleNotFoundException.class);
+
+        this.mockMvc.perform(post("/api/likes/article/" + INVALID_ARTICLE_ID)).
+                andExpect(status().isBadRequest());
     }
 }
