@@ -12,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +27,9 @@ class ArticleRepositoryTest {
     @Autowired
     private ArticleRepository articleRepository;
 
-    @Autowired
-    private MemberRepository memberRepository;
-
     private Article article1;
     private Article article2;
     private Article article3;
-    private Member member;
 
     @BeforeEach
     @Transactional
@@ -43,14 +38,6 @@ class ArticleRepositoryTest {
         article1 = new Article("내용1", true);
         article2 = new Article("내용2", false);
         article3 = new Article("내용3", true);
-
-        member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(),
-                            false, Role.USER, new ArrayList<>());
-        memberRepository.save(member);
-
-        article1.setMember(member);
-        article2.setMember(member);
-        article3.setMember(member);
 
         articleRepository.save(article1);
         articleRepository.save(article2);
@@ -101,28 +88,5 @@ class ArticleRepositoryTest {
 
         List<Article> articlesAfterDelete = articleRepository.findAll();
         assertThat(articlesAfterDelete).hasSize(articleSize - 1).doesNotContain(article1);
-    }
-
-    @DisplayName("Member의 ID로 게시글을 조회하면 해당 게시글의 ID가 반환된다")
-    @Test
-    void findArticlesByMemberIdTest() {
-        List<Long> memberArticlesIds = articleRepository.findArticlesIdsByMemberId(member.getId());
-
-        assertThat(memberArticlesIds.size()).isEqualTo(3);
-        assertThat(memberArticlesIds.get(0)).isEqualTo(1L);
-        assertThat(memberArticlesIds.get(1)).isEqualTo(2L);
-        assertThat(memberArticlesIds.get(2)).isEqualTo(3L);
-    }
-
-    @DisplayName("글을 한 개도 작성하지 않은 Member의 ID로 게시글을 조회하면 빈 리스트가 반환된다")
-    @Test
-    void findNoArticleByMemberIdTest() {
-        Member tempMember = new Member(2L, "b@b.com", 1991, Gender.FEMALE, LocalDateTime.now(),
-                                       false, Role.USER, new ArrayList<>());
-        memberRepository.save(tempMember);
-
-        List<Long> memberArticlesIds = articleRepository.findArticlesIdsByMemberId(tempMember.getId());
-
-        assertThat(memberArticlesIds.size()).isZero();
     }
 }

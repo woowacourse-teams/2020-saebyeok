@@ -64,14 +64,6 @@ public class ArticleService {
         return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
 
-    public List<Long> getMemberArticlesIds(Member member) {
-        return articleRepository.findArticlesIdsByMemberId(member.getId());
-    }
-
-    public List<Long> getMemberArticlesIdsByCutDate(Member member, LocalDateTime cutDate) {
-        return articleRepository.findArticlesIdsByMemberIdAndCutDate(member.getId(), cutDate);
-    }
-
     @Transactional
     public void deleteArticle(Member member, Long articleId) throws IllegalAccessException {
         Article article = articleRepository.findById(articleId)
