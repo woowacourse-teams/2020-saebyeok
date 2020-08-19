@@ -25,7 +25,7 @@ import {
   PAGING_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
-import EmotionFilter from './components/EmotionFilter.vue';
+import EmotionFilter from '../../components/EmotionFilter.vue';
 import InfiniteLoading from 'vue-infinite-loading';
 
 export default {

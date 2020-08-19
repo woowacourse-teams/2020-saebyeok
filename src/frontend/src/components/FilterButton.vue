@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import EmotionFilter from '../views/diary/components/EmotionFilter';
+import EmotionFilter from '../components/EmotionFilter';
 
 export default {
   components: { EmotionFilter },
