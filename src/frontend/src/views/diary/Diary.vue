@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter v-on:select="readArticles" />
+    <emotion-filter v-on:select="filteringArticles" />
     <div>
       <cards :articles="memberArticles" />
     </div>
@@ -13,7 +13,6 @@
       spinner="waveDots"
     >
       <div slot="no-more">모든 글을 다 읽으셨네요 :)</div>
-      <div slot="no-result">모든 글을 다 읽으셨네요 :)</div>
     </infinite-loading>
   </div>
 </template>
@@ -49,7 +48,16 @@ export default {
     InfiniteLoading
   },
   created() {
-    this.initMemberArticles();
+    try {
+      this.fetchMemberArticles({
+        page: this.page,
+        size: this.size
+      }).then(() => {
+        this.page++;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   },
   computed: {
     ...mapGetters(['memberArticles'])
@@ -59,82 +67,63 @@ export default {
     ...mapActions([PAGING_MEMBER_ARTICLES]),
     ...mapActions([FETCH_MEMBER_FILTERING_ARTICLES]),
     ...mapActions([PAGING_MEMBER_FILTERING_ARTICLES]),
-    initMemberArticles() {
-      this.page = 0;
-      try {
-        this.fetchMemberArticles({
-          page: this.page,
-          size: this.size
-        }).then(() => {
-          this.page++;
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    initMemberFilteringArticles() {
-      this.page = 0;
-      try {
-        this.fetchMemberFilteringArticles({
+    scrollMemberArticles() {
+      if (this.isFiltered) {
+        return this.pagingMemberFilteringArticles({
           page: this.page,
           size: this.size,
           emotionIds: this.emotionIds
-        }).then(() => {
-          this.page++;
         });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    scrollMemberArticles($state) {
-      try {
-        this.pagingMemberArticles({
+      } else {
+        return this.pagingMemberArticles({
           page: this.page,
           size: this.size
-        }).then(data => {
-          if (data.length) {
-            this.page++;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
         });
-      } catch (error) {
-        console.error(error);
       }
     },
-    scrollMemberFilteringArticles($state) {
-      try {
-        this.pagingMemberFilteringArticles({
+    reloadArticles() {
+      if (this.isFiltered) {
+        return this.fetchMemberFilteringArticles({
           page: this.page,
           size: this.size,
           emotionIds: this.emotionIds
-        }).then(data => {
-          if (data.length) {
-            this.page++;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
         });
-      } catch (error) {
-        console.error(error);
+      } else {
+        return this.fetchMemberArticles({
+          page: this.page,
+          size: this.size
+        });
       }
     },
     infiniteHandler($state) {
       setTimeout(() => {
-        if (this.isFiltered) {
-          this.scrollMemberFilteringArticles($state);
-        } else {
-          this.scrollMemberArticles($state);
+        try {
+          this.scrollMemberArticles().then(data => {
+            if (data.length) {
+              this.page++;
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+        } catch (error) {
+          console.error(error);
         }
       }, 500);
     },
-    async readArticles(emotionIds, isSelectedAll) {
+    filteringArticles(emotionIds, isSelectedAll) {
       this.emotionIds = emotionIds.toString();
       this.isFiltered = !isSelectedAll;
-      this.initMemberFilteringArticles();
-      this.infiniteId += 1;
+      this.page = 0;
+
+      try {
+        this.reloadArticles().then(() => {
+          this.page++;
+          this.infiniteId += 1;
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   props: {
