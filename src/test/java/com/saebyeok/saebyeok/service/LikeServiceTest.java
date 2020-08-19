@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
+import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ class LikeServiceTest {
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
     public static final long COMMENT_ID = 1L;
     public static final long INVALID_COMMENT_ID = 100L;
+    public static final long ALREADY_LIKED_COMMENT_ID = 1L;
 
     private LikeService likeService;
 
@@ -45,12 +47,14 @@ class LikeServiceTest {
 
     private Member member;
     private Article article;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
         this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
+        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false);
     }
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
@@ -83,13 +87,13 @@ class LikeServiceTest {
 
         assertThatThrownBy(() -> likeService.likeArticle(member, ALREADY_LIKED_ARTICLE_ID))
                 .isInstanceOf(DuplicateArticleLikeException.class)
-                .hasMessage("이미 공감한 게시물에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + "articleId" + ALREADY_LIKED_ARTICLE_ID);
+                .hasMessage("이미 공감한 게시물에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", articleId: " + ALREADY_LIKED_ARTICLE_ID);
     }
 
     @DisplayName("댓글 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
     void likeComment() {
-        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(new Comment()));
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
 
         likeService.likeComment(new Member(), COMMENT_ID);
 
@@ -106,5 +110,16 @@ class LikeServiceTest {
                 .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
 
         verify(commentLikeRepository, never()).save(any());
+    }
+
+    @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
+    @Test
+    void likeCommentAgain() {
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
+        when(commentLikeRepository.save(any(CommentLike.class))).thenThrow(DataIntegrityViolationException.class);
+
+        assertThatThrownBy(() -> likeService.likeComment(member, ALREADY_LIKED_COMMENT_ID))
+                .isInstanceOf(DuplicateCommentLikeException.class)
+                .hasMessage("이미 공감한 댓글에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", commentId: " + ALREADY_LIKED_COMMENT_ID);
     }
 }

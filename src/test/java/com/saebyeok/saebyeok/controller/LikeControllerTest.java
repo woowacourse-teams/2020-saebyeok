@@ -6,6 +6,7 @@ import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
+import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import com.saebyeok.saebyeok.service.LikeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,7 @@ class LikeControllerTest {
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
     public static final long COMMENT_ID = 1L;
     public static final long INVALID_COMMENT_ID = 100L;
+    public static final long ALREADY_LIKED_COMMENT_ID = 1L;
 
     private MockMvc mockMvc;
 
@@ -87,6 +89,15 @@ class LikeControllerTest {
         when(likeService.likeComment(any(Member.class), eq(INVALID_COMMENT_ID))).thenThrow(CommentNotFoundException.class);
 
         this.mockMvc.perform(post("/api/likes/comment/" + INVALID_COMMENT_ID)).
+                andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
+    @Test
+    void likeCommentAgain() throws Exception {
+        when(likeService.likeComment(any(Member.class), eq(ALREADY_LIKED_COMMENT_ID))).thenThrow(DuplicateCommentLikeException.class);
+
+        this.mockMvc.perform(post("/api/likes/comment/" + ALREADY_LIKED_COMMENT_ID)).
                 andExpect(status().isBadRequest());
     }
 }

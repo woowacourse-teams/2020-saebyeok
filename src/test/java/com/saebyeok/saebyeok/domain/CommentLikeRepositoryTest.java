@@ -31,7 +31,6 @@ class CommentLikeRepositoryTest {
     void setUp() {
         this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
-        ;
         this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false);
     }
 
@@ -67,5 +66,16 @@ class CommentLikeRepositoryTest {
 
         assertThatThrownBy(() -> commentLikeRepository.save(likeWithInvalidArticle))
                 .isInstanceOf(InvalidDataAccessApiUsageException.class);
+    }
+
+    @DisplayName("예외 테스트: 이미 공감한 댓글에 다시 공감을 요청하면 예외가 발생한다")
+    @Test
+    void saveArticleLikeWithExistingArticleLike() {
+        CommentLike like = new CommentLike(member, comment);
+        CommentLike likeAgain = new CommentLike(member, comment);
+        commentLikeRepository.save(like);
+
+        assertThatThrownBy(() -> commentLikeRepository.save(likeAgain))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }

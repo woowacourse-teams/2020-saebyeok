@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
+import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class LikeService {
 
         CommentLike like = new CommentLike(member, comment);
 
-        return commentLikeRepository.save(like);
+        try {
+            return commentLikeRepository.save(like);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateCommentLikeException(member.getId(), commentId);
+        }
     }
 }

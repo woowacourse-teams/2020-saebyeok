@@ -19,7 +19,8 @@ public class GlobalExceptionAdvice {
             ArticleNotFoundException.class,
             EmotionNotFoundException.class,
             IllegalAccessException.class,
-            DuplicateArticleLikeException.class})
+            DuplicateArticleLikeException.class,
+            DuplicateCommentLikeException.class})
     public ResponseEntity<ExceptionResponse> validated(Exception exception) {
         return ResponseEntity.
                 badRequest().
