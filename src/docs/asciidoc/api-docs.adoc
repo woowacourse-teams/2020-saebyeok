@@ -61,3 +61,16 @@ operation::emotions/get[snippets='http-request,http-response,request-headers,res
 === 감정 대분류 상세 조회
 
 operation::emotions/read[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
+
+[[resources-analysis]]
+== Analysis
+
+[[resources-analysis-articles]]
+=== 게시물 분석 조회
+
+operation::analysis/articles[snippets='http-request,http-response,request-headers,response-fields']
+
+[[resources-analysis-comments]]
+=== 댓글 분석 조회
+
+operation::analysis/comments[snippets='http-request,http-response,request-headers,response-fields']

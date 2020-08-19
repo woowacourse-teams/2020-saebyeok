@@ -11,4 +11,6 @@ public interface ArticleEmotionRepository extends JpaRepository<ArticleEmotion, 
     public List<ArticleEmotion> findAllByEmotionId(Long emotionId);
 
     public void deleteByArticleId(Long articleId);
+
+    public List<ArticleEmotion> findAllByArticleIn(List<Article> article);
 }
