@@ -12,15 +12,15 @@ import java.util.Map;
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
-    private String email;
-    private Gender gender;
+    private String id;
+    private String loginMethod;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String email, Gender gender) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String id, String loginMethod) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
-        this.email = email;
-        this.gender = gender;
+        this.id = id;
+        this.loginMethod = loginMethod;
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -32,8 +32,8 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .email((String) attributes.get("email"))
-                .gender(Gender.findGender((String) attributes.get("gender")))
+                .id((String) attributes.get("id"))
+                .loginMethod("google")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -42,8 +42,8 @@ public class OAuthAttributes {
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
-                .email((String) response.get("email"))
-                .gender(Gender.findGender((String) response.get("gender")))
+                .id((String) response.get("id"))
+                .loginMethod("naver")
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -51,9 +51,9 @@ public class OAuthAttributes {
 
     public Member toEntity() {
         return Member.builder()
-                .email(email)
+                .oauthId(id)
+                .loginMethod(loginMethod)
                 .role(Role.USER)
-                .gender(gender)
                 .build();
     }
 }
