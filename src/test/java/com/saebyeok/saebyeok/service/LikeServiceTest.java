@@ -25,6 +25,7 @@ class LikeServiceTest {
     public static final long ARTICLE_ID = 1L;
     public static final long INVALID_ARTICLE_ID = 100L;
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
+    public static final long COMMENT_ID = 1L;
 
     private LikeService likeService;
 
@@ -34,17 +35,23 @@ class LikeServiceTest {
     @Mock
     private ArticleRepository articleRepository;
 
+    @Mock
+    private CommentLikeRepository commentLikeRepository;
+
+    @Mock
+    private CommentRepository commentRepository;
+
     private Member member;
     private Article article;
 
     @BeforeEach
     void setUp() {
-        this.likeService = new LikeService(articleLikeRepository, articleRepository);
+        this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
     }
 
-    @DisplayName("게시물에 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
+    @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
     void likeArticle() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(ARTICLE_ID), any())).thenReturn(Optional.of(article));
@@ -75,5 +82,15 @@ class LikeServiceTest {
         assertThatThrownBy(() -> likeService.likeArticle(member, ALREADY_LIKED_ARTICLE_ID))
                 .isInstanceOf(DuplicateArticleLikeException.class)
                 .hasMessage("이미 공감한 게시물에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + "articleId" + ALREADY_LIKED_ARTICLE_ID);
+    }
+
+    @DisplayName("댓글 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
+    @Test
+    void likeComment() {
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.of(new Comment()));
+
+        likeService.likeComment(new Member(), COMMENT_ID);
+
+        verify(commentLikeRepository).save(any());
     }
 }

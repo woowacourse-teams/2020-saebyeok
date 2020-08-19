@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,8 @@ public class LikeService {
 
     private final ArticleLikeRepository articleLikeRepository;
     private final ArticleRepository articleRepository;
+    private final CommentLikeRepository commentLikeRepository;
+    private final CommentRepository commentRepository;
 
     public ArticleLike likeArticle(Member member, Long articleId) {
         Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
@@ -32,6 +35,11 @@ public class LikeService {
     }
 
     public CommentLike likeComment(Member member, Long commentId) {
-        return null;
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        CommentLike like = new CommentLike(member, comment);
+
+        return commentLikeRepository.save(like);
     }
 }

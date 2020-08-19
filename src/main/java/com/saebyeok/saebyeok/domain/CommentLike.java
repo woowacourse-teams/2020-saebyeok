@@ -18,12 +18,19 @@ public class CommentLike {
     @Id
     private Long id;
 
+    @JoinColumn(name = "MEMBER_ID")
     @ManyToOne
     private Member member;
 
+    @JoinColumn(name = "COMMENT_ID")
     @ManyToOne
-    private Article article;
+    private Comment comment;
 
     @CreatedDate
     private LocalDateTime createdDate;
+
+    public CommentLike(Member member, Comment comment) {
+        this.member = member;
+        this.comment = comment;
+    }
 }
