@@ -1,10 +1,12 @@
 <template>
   <div>
+    <emotion-filter v-on:select="filteringArticles" />
     <div class="mt-4 overflow-y-auto">
       <cards :articles="articles" />
     </div>
     <infinite-loading
       v-if="articles.length"
+      :identifier="infiniteId"
       @infinite="infiniteHandler"
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
@@ -19,18 +21,23 @@ import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import InfiniteLoading from 'vue-infinite-loading';
+import EmotionFilter from './components/EmotionFilter.vue';
 
 export default {
   name: 'Feed',
   data() {
     return {
       page: 0,
-      size: 5
+      size: 5,
+      emotionIds: '',
+      infiniteId: +new Date(),
+      isFiltered: false
     };
   },
   components: {
     Cards,
-    InfiniteLoading
+    InfiniteLoading,
+    EmotionFilter
   },
   created() {
     try {
@@ -50,24 +57,48 @@ export default {
   methods: {
     ...mapActions([FETCH_ARTICLES]),
     ...mapActions([PAGING_ARTICLES]),
+    createParams() {
+      if (this.isFiltered) {
+        return {
+          page: this.page,
+          size: this.size,
+          emotionIds: this.emotionIds
+        };
+      }
+      return {
+        page: this.page,
+        size: this.size
+      };
+    },
     infiniteHandler($state) {
       setTimeout(() => {
-        this.pagingArticles({
-          page: this.page,
-          size: this.size
-        })
-          .then(data => {
+        try {
+          this.pagingArticles(this.createParams()).then(data => {
             if (data.length) {
               this.page++;
               $state.loaded();
             } else {
               $state.complete();
             }
-          })
-          .catch(err => {
-            console.error(err);
           });
+        } catch (error) {
+          console.error(error);
+        }
       }, 500);
+    },
+    filteringArticles(emotionIds, isSelectedAll) {
+      this.emotionIds = emotionIds.toString();
+      this.isFiltered = !isSelectedAll;
+      this.page = 0;
+
+      try {
+        this.fetchArticles(this.createParams()).then(() => {
+          this.page++;
+          this.infiniteId += 1;
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 };
