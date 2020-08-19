@@ -13,6 +13,7 @@
       spinner="waveDots"
     >
       <div slot="no-more">모든 글을 다 읽으셨네요 :)</div>
+      <div slot="no-result">모든 글을 다 읽으셨네요 :)</div>
     </infinite-loading>
   </div>
 </template>
@@ -22,7 +23,9 @@ import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES
+  PAGING_MEMBER_ARTICLES,
+  FETCH_MEMBER_FILTERING_ARTICLES,
+  PAGING_MEMBER_FILTERING_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from './components/EmotionFilter.vue';
@@ -34,7 +37,9 @@ export default {
     return {
       page: 0,
       size: 5,
-      infiniteId: +new Date()
+      emotionIds: '',
+      infiniteId: +new Date(),
+      isFiltered: false
     };
   },
   components: {
@@ -44,16 +49,7 @@ export default {
     InfiniteLoading
   },
   created() {
-    try {
-      this.fetchMemberArticles({
-        page: this.page,
-        size: this.size
-      }).then(() => {
-        this.page++;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    this.initMemberArticles();
   },
   computed: {
     ...mapGetters(['memberArticles'])
@@ -61,43 +57,84 @@ export default {
   methods: {
     ...mapActions([FETCH_MEMBER_ARTICLES]),
     ...mapActions([PAGING_MEMBER_ARTICLES]),
-    infiniteHandler($state) {
-      setTimeout(() => {
+    ...mapActions([FETCH_MEMBER_FILTERING_ARTICLES]),
+    ...mapActions([PAGING_MEMBER_FILTERING_ARTICLES]),
+    initMemberArticles() {
+      this.page = 0;
+      try {
+        this.fetchMemberArticles({
+          page: this.page,
+          size: this.size
+        }).then(() => {
+          this.page++;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    initMemberFilteringArticles() {
+      this.page = 0;
+      try {
+        this.fetchMemberFilteringArticles({
+          page: this.page,
+          size: this.size,
+          emotionIds: this.emotionIds
+        }).then(() => {
+          this.page++;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    scrollMemberArticles($state) {
+      try {
         this.pagingMemberArticles({
           page: this.page,
           size: this.size
-        })
-          .then(data => {
-            if (data.length) {
-              this.page++;
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      }, 500);
-    },
-    // eslint-disable-next-line no-unused-vars
-    async readArticles(emotions) {
-      //todo : 여기서 emotions를 page, size와 함께 api로 보낸다.
-      this.page = 0;
-      this.infiniteId += 1;
-
-      await this.fetchMemberArticles({
-        page: this.page,
-        size: this.size
-      })
-        .then(data => {
+        }).then(data => {
           if (data.length) {
             this.page++;
+            $state.loaded();
+          } else {
+            $state.complete();
           }
-        })
-        .catch(err => {
-          console.error(err);
         });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    scrollMemberFilteringArticles($state) {
+      try {
+        this.pagingMemberFilteringArticles({
+          page: this.page,
+          size: this.size,
+          emotionIds: this.emotionIds
+        }).then(data => {
+          if (data.length) {
+            this.page++;
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    infiniteHandler($state) {
+      setTimeout(() => {
+        if (this.isFiltered) {
+          this.scrollMemberFilteringArticles($state);
+        } else {
+          this.scrollMemberArticles($state);
+        }
+      }, 500);
+    },
+    async readArticles(emotionIds, isSelectedAll) {
+      this.emotionIds = emotionIds.toString();
+      this.isFiltered = !isSelectedAll;
+      this.initMemberFilteringArticles();
+      this.infiniteId += 1;
     }
   },
   props: {

@@ -66,7 +66,7 @@ export default {
         this.filter.push(emotion.id);
         this.filter = this.filter.sort();
       }
-      this.$emit('select', this.filter);
+      this.$emit('select', this.filter, this.isSelectedAll());
     },
     isSelected(emotion) {
       return this.filter.includes(emotion.id);
@@ -76,7 +76,7 @@ export default {
     },
     selectAll() {
       this.filter = this.allFilter.slice();
-      this.$emit('select', this.filter);
+      this.$emit('select', this.filter, this.isSelectedAll());
     }
   }
 };
