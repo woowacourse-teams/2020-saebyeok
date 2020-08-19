@@ -26,10 +26,25 @@ operation::articles/create[snippets='http-request,http-response,request-headers,
 
 operation::articles/get[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
 
+[[resources-articles-getByMember]]
+=== 사용자 게시물 전체 조회
+
+operation::articles/getByMember[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
+
+[[resources-articles-getByMemberWithFilter]]
+=== 사용자 게시물 분류하여 조회
+
+operation::articles/getByMemberWithFilter[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
+
 [[resources-articles-read]]
 === 게시물 조회
 
 operation::articles/read[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
+
+[[resources-articles-readByMember]]
+=== 사용자 게시물 조회
+
+operation::articles/readBymember[snippets='http-request,http-response,path-parameters,request-headers,response-fields']
 
 [[resources-articles-delete]]
 === 게시물 삭제

@@ -154,7 +154,6 @@ class ArticleServiceTest {
     @DisplayName("내 게시글 목록을 감정 대분류로 필터링 요청하면 분류된 게시글 목록이 반환된다")
     @Test
     void filterMemberArticleTest() {
-        // TODO: 2020/08/19 추후 테스트코드 보강하기. 현재는 두 서비스가 얽힌 부분이라 서비스 테스트가 어려움
         List<Article> filterArticles = new ArrayList<>();
         filterArticles.add(article1);
         when(articleEmotionService.findArticlesByEmotionIds(any(), any(), any())).thenReturn(filterArticles);
