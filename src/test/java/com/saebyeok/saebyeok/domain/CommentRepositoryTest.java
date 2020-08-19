@@ -123,4 +123,20 @@ class CommentRepositoryTest {
         assertThatThrownBy(() -> commentRepository.deleteById(notExistCommentId)).
                 isInstanceOf(EmptyResultDataAccessException.class);
     }
+
+    @DisplayName("Member가 작성한 댓글의 개수를 정확히 반환한다.")
+    @Test
+    void CommentsTest() {
+        Comment comment1 = createTestComment();
+        Comment comment2 = createTestComment();
+        Comment comment3 = createTestComment();
+
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        commentRepository.save(comment3);
+
+        Long totalCommentsCount = commentRepository.countCommentsByMember(member);
+
+        assertThat(totalCommentsCount).isEqualTo(3L);
+    }
 }
