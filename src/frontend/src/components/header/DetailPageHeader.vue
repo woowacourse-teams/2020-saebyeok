@@ -9,7 +9,7 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
-      <v-icon large>mdi-cog</v-icon>
+      <v-icon large>mdi-logout</v-icon>
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
