@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @ActiveProfiles("test")
+@Sql("/truncate.sql")
 @SpringBootTest
 class CommentLikeRepositoryTest {
 
@@ -28,11 +30,24 @@ class CommentLikeRepositoryTest {
     private Article article;
     private Comment comment;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @BeforeEach
     void setUp() {
         this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
         this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false);
+
+        memberRepository.save(member);
+        articleRepository.save(article);
+        commentRepository.save(comment);
     }
 
     @DisplayName("댓글에 공감을 등록할 수 있다")
@@ -83,6 +98,8 @@ class CommentLikeRepositoryTest {
     @DisplayName("댓글 공감을 취소할 수 있다")
     @Test
     void deleteCommentLikeTest() {
+        System.out.println(commentRepository.findAll().size());
+
         CommentLike like = new CommentLike(member, comment);
         commentLikeRepository.save(like);
         List<CommentLike> beforeDelete = commentLikeRepository.findAll();

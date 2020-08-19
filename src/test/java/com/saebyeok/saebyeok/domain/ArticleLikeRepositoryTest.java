@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @ActiveProfiles("test")
+@Sql("/truncate.sql")
 @SpringBootTest
 class ArticleLikeRepositoryTest {
 
@@ -27,10 +29,19 @@ class ArticleLikeRepositoryTest {
     private Member member;
     private Article article;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
     @BeforeEach
     void setUp() {
         this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
+
+        memberRepository.save(member);
+        articleRepository.save(article);
     }
 
     @DisplayName("게시물에 공감을 등록할 수 있다")
