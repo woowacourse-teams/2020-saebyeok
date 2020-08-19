@@ -2,7 +2,9 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,10 @@ public class LikeService {
 
         ArticleLike like = new ArticleLike(member, article);
 
-        return articleLikeRepository.save(like);
+        try {
+            return articleLikeRepository.save(like);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateArticleLikeException(member.getId(), articleId);
+        }
     }
 }

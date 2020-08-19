@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.controller;
 import com.saebyeok.saebyeok.domain.ArticleLike;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import com.saebyeok.saebyeok.service.LikeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LikeControllerTest {
     private static final Long ARTICLE_ID = 1L;
     public static final long INVALID_ARTICLE_ID = 100L;
+    public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
 
     private MockMvc mockMvc;
 
@@ -54,6 +56,15 @@ class LikeControllerTest {
         when(likeService.likeArticle(any(Member.class), eq(INVALID_ARTICLE_ID))).thenThrow(ArticleNotFoundException.class);
 
         this.mockMvc.perform(post("/api/likes/article/" + INVALID_ARTICLE_ID)).
+                andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
+    @Test
+    void likeArticleAgain() throws Exception {
+        when(likeService.likeArticle(any(Member.class), eq(ALREADY_LIKED_ARTICLE_ID))).thenThrow(DuplicateArticleLikeException.class);
+
+        this.mockMvc.perform(post("/api/likes/article/" + ALREADY_LIKED_ARTICLE_ID)).
                 andExpect(status().isBadRequest());
     }
 }

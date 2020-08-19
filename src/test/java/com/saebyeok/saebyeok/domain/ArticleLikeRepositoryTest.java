@@ -65,4 +65,15 @@ class ArticleLikeRepositoryTest {
         assertThatThrownBy(() -> articleLikeRepository.save(likeWithInvalidArticle))
                 .isInstanceOf(InvalidDataAccessApiUsageException.class);
     }
+
+    @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
+    @Test
+    void saveArticleLikeWithExistingArticleLike() {
+        ArticleLike like = new ArticleLike(member, article);
+        ArticleLike likeAgain = new ArticleLike(member, article);
+        articleLikeRepository.save(like);
+
+        assertThatThrownBy(() -> articleLikeRepository.save(likeAgain))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
 }

@@ -13,6 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(name = "MEMBER_ARTICLE_UNIUQE", columnNames = {"MEMBER_ID", "ARTICLE_ID"}))
 public class ArticleLike {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
