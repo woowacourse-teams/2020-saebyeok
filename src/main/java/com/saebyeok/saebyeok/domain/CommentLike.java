@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -18,11 +19,11 @@ public class CommentLike {
     @Id
     private Long id;
 
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
     @ManyToOne
     private Member member;
 
-    @JoinColumn(name = "COMMENT_ID")
+    @JoinColumn(name = "COMMENT_ID", nullable = false)
     @ManyToOne
     private Comment comment;
 
@@ -30,6 +31,9 @@ public class CommentLike {
     private LocalDateTime createdDate;
 
     public CommentLike(Member member, Comment comment) {
+        Objects.requireNonNull(member);
+        Objects.requireNonNull(comment);
+
         this.member = member;
         this.comment = comment;
     }

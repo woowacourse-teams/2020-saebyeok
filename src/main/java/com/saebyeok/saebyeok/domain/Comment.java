@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.domain;
 
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Comment {
