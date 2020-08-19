@@ -1,9 +1,8 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.ArticleAnalysisMessage;
-import com.saebyeok.saebyeok.domain.ArticleAnalysisMessageRepository;
-import com.saebyeok.saebyeok.domain.Emotion;
-import com.saebyeok.saebyeok.exception.ArticleAnalysisMessageNotFoundException;
+import com.saebyeok.saebyeok.domain.Gender;
+import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,55 +11,87 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.saebyeok.saebyeok.service.ArticleEmotionService.NOT_EXIST_MOST_EMOTION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @Sql("/truncate.sql")
 @ExtendWith(MockitoExtension.class)
 public class AnalysisServiceTest {
+    private Member member;
     private AnalysisService analysisService;
 
     @Mock
-    private ArticleAnalysisMessageRepository articleAnalysisMessageRepository;
+    private EmotionService emotionService;
+
+    @Mock
+    private ArticleEmotionService articleEmotionService;
+
+    @Mock
+    private CommentService commentService;
 
     @BeforeEach
     void setUp() {
-        analysisService = new AnalysisService(articleAnalysisMessageRepository);
+        analysisService = new AnalysisService(emotionService, articleEmotionService, commentService);
+
+        this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(),
+                                 false, Role.USER, new ArrayList<>());
     }
 
-    @DisplayName("특정 Emotion ID로 분석 메세지를 받아온다")
+    @DisplayName("Member가 작성한 Article 개수를 Emotion 별로 받아온다")
     @Test
-    void findArticlesAnalysisMessageTest() {
-        Long mostArticleEmotionId = 1L;
-        Emotion emotion = new Emotion(mostArticleEmotionId, "기뻐요", "이미지 리소스");
-        String message = "기쁜 일이 많았네요! 앞으로도 행복한 일이 가득하기를 바랄게요~";
-        ArticleAnalysisMessage articleAnalysisMessage = new ArticleAnalysisMessage(emotion, message);
-        when(articleAnalysisMessageRepository.findById(any())).thenReturn(java.util.Optional.of(articleAnalysisMessage));
+    void findArticleEmotionsCountTest() {
+        List<Integer> expected = Arrays.asList(2, 1, 1, 0, 3, 0);
+        when(emotionService.getAllEmotionsIds()).thenReturn(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
+        when(articleEmotionService.findArticleEmotionsCount(any(), any())).thenReturn(expected);
 
-        String resultMessage = analysisService.findArticlesAnalysisMessage(mostArticleEmotionId);
+        List<Integer> result = analysisService.findArticleEmotionsCount(member);
 
-        assertThat(articleAnalysisMessage.getMessage()).isEqualTo(resultMessage);
+        assertThat(result.get(0)).isEqualTo(expected.get(0));
+        assertThat(result.get(1)).isEqualTo(expected.get(1));
+        assertThat(result.get(2)).isEqualTo(expected.get(2));
+        assertThat(result.get(3)).isEqualTo(expected.get(3));
+        assertThat(result.get(4)).isEqualTo(expected.get(4));
+        assertThat(result.get(5)).isEqualTo(expected.get(5));
     }
 
-    @DisplayName("NOT_EXIST_MOST_EMOTION_ID로 게시글 작성 유도 메세지를 받아온다")
+    @DisplayName("Member가 작성한 Article 중 가장 많은 감정 대분류 ID를 받아온다")
     @Test
-    void findArticlesInducementMessageTest() {
-        String expected = "아직 작성한 글이 없네요~ 새벽에 이야기를 들려주시면 좋겠어요 :)";
-        String resultMessage = analysisService.findArticlesAnalysisMessage(NOT_EXIST_MOST_EMOTION_ID);
+    void findMostEmotionIdTest() {
+        Long expected = 1L;
+        when(articleEmotionService.findMostEmotionIdInArticles(any())).thenReturn(expected);
 
-        assertThat(resultMessage).isEqualTo(expected);
+        Long result = analysisService.findMostEmotionId(member);
+
+        assertThat(result).isEqualTo(expected);
     }
 
-    @DisplayName("예외 테스트: 존재하지 않는 Emotion ID로 분석 메세지를 찾으면 예외가 발생한다")
+    @DisplayName("Member가 작성한 Article이 없으면 NOT_EXIST_MOST_EMOTION_ID를 받아온다")
     @Test
-    void findArticlesAnalysisMessageExceptionTest() {
-        Long notExistEmotionId = 10L;
+    void findNotExistMostEmotionIdTest() {
+        Long expected = NOT_EXIST_MOST_EMOTION_ID;
 
-        assertThatThrownBy(() -> analysisService.findArticlesAnalysisMessage(notExistEmotionId))
-                .isInstanceOf(ArticleAnalysisMessageNotFoundException.class)
-                .hasMessage(notExistEmotionId + "에 해당하는 게시글 분석 메시지를 찾을 수 없습니다.");
+        Member tempMember = new Member();
+        when(articleEmotionService.findMostEmotionIdInArticles(any())).thenReturn(expected);
+        Long result = analysisService.findMostEmotionId(tempMember);
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @DisplayName("Member가 작성한 Comment의 총 개수를 받아온다")
+    @Test
+    void countTotalCommentsByTest() {
+        Long expected = 1L;
+        when(commentService.countTotalCommentsBy(any())).thenReturn(expected);
+
+        Long result = analysisService.countTotalCommentsBy(member);
+
+        assertThat(result).isEqualTo(expected);
     }
 }

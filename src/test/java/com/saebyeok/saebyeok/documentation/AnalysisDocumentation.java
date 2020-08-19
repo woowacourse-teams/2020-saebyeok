@@ -2,10 +2,8 @@ package com.saebyeok.saebyeok.documentation;
 
 import com.saebyeok.saebyeok.documentation.common.Documentation;
 import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.dto.ArticlesAnalysisResponse;
-import com.saebyeok.saebyeok.dto.CommentsAnalysisResponse;
 import com.saebyeok.saebyeok.dto.TokenResponse;
-import com.saebyeok.saebyeok.service.*;
+import com.saebyeok.saebyeok.service.AnalysisService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -40,18 +39,6 @@ public class AnalysisDocumentation extends Documentation {
     private MockMvc mockMvc;
 
     @MockBean
-    private EmotionService emotionService;
-
-    @MockBean
-    private ArticleService articleService;
-
-    @MockBean
-    private ArticleEmotionService articleEmotionService;
-
-    @MockBean
-    private CommentService commentService;
-
-    @MockBean
     private AnalysisService analysisService;
 
     @BeforeEach
@@ -65,16 +52,11 @@ public class AnalysisDocumentation extends Documentation {
 
     @Test
     void getArticlesAnalysis() throws Exception {
-        int[] articleEmotionsCount = {5, 3, 4, 0, 1, 1};
-        String articleAnalysisMessage = "기쁜 일이 많았네요! 앞으로도 행복한 일이 가득하기를 바랄게요~";
-        ArticlesAnalysisResponse response = new ArticlesAnalysisResponse(articleEmotionsCount, articleAnalysisMessage);
+        List<Integer> articleEmotionsCount = Arrays.asList(5, 3, 4, 0, 1, 1);
+        Long mostEmotionId = 1L;
 
-        given(emotionService.getAllEmotionsIds()).willReturn(new ArrayList<>());
-        given(articleService.getMemberArticlesIds(any(Member.class))).willReturn(new ArrayList<>());
-        given(articleEmotionService.findArticleEmotionsCount(any(), any())).willReturn(articleEmotionsCount);
-        given(articleService.getMemberArticlesIdsByCutDate(any(Member.class), any())).willReturn(new ArrayList<>());
-        given(articleEmotionService.findMostEmotionIdInArticles(any(), any())).willReturn(1L);
-        given(analysisService.findArticlesAnalysisMessage(any())).willReturn(articleAnalysisMessage);
+        given(analysisService.findArticleEmotionsCount(any(Member.class))).willReturn(articleEmotionsCount);
+        given(analysisService.findMostEmotionId(any(Member.class))).willReturn(mostEmotionId);
 
         this.mockMvc.perform(get("/api/analysis/articles").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
@@ -90,18 +72,16 @@ public class AnalysisDocumentation extends Documentation {
                                responseFields(
                                        fieldWithPath("articleEmotionsCount").type(JsonFieldType.ARRAY)
                                                .description("감정 대분류 별 사용자가 작성한 게시글의 개수 (감정 대분류 순서대로 배열)"),
-                                       fieldWithPath("articleAnalysisMessage").type(JsonFieldType.STRING)
-                                               .description("사용자가 최근 일정 기간 동안 작성한 게시글의 감정 대분류 경향을 분석한 메세지")
+                                       fieldWithPath("mostEmotionId").type(JsonFieldType.NUMBER)
+                                               .description("사용자가 최근 일정 기간 동안 작성한 게시글 중 가장 많은 감정 대분류의 ID")
                                )
                 ));
     }
 
     @Test
     void getCommentsAnalysis() throws Exception {
-        int totalCommentsCount = 77;
-        CommentsAnalysisResponse response = new CommentsAnalysisResponse(totalCommentsCount);
-
-        given(commentService.findTotalCommentsCountByMember(any(Member.class))).willReturn(totalCommentsCount);
+        Long totalCommentsCount = 42L;
+        given(analysisService.countTotalCommentsBy(any(Member.class))).willReturn(totalCommentsCount);
 
         this.mockMvc.perform(get("/api/analysis/comments").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
