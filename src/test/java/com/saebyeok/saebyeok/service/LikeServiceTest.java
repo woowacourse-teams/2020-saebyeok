@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ class LikeServiceTest {
     public static final long INVALID_ARTICLE_ID = 100L;
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
     public static final long COMMENT_ID = 1L;
+    public static final long INVALID_COMMENT_ID = 100L;
 
     private LikeService likeService;
 
@@ -92,5 +94,17 @@ class LikeServiceTest {
         likeService.likeComment(new Member(), COMMENT_ID);
 
         verify(commentLikeRepository).save(any());
+    }
+
+    @DisplayName("예외 테스트: 잘못된 댓글에 공감 등록을 요청하면 예외가 발생한다")
+    @Test
+    void likeInvalidComment() {
+        when(commentRepository.findById(INVALID_COMMENT_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
+                .isInstanceOf(CommentNotFoundException.class)
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+
+        verify(commentLikeRepository, never()).save(any());
     }
 }

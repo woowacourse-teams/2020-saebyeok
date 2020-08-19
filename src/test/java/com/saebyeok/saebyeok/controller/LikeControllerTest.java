@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.domain.ArticleLike;
 import com.saebyeok.saebyeok.domain.CommentLike;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import com.saebyeok.saebyeok.service.LikeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,7 @@ class LikeControllerTest {
     public static final long INVALID_ARTICLE_ID = 100L;
     public static final long ALREADY_LIKED_ARTICLE_ID = 1L;
     public static final long COMMENT_ID = 1L;
+    public static final long INVALID_COMMENT_ID = 100L;
 
     private MockMvc mockMvc;
 
@@ -77,5 +79,14 @@ class LikeControllerTest {
 
         this.mockMvc.perform(post("/api/likes/comment/" + COMMENT_ID)).
                 andExpect(status().isCreated());
+    }
+
+    @DisplayName("예외 테스트: 잘못된 댓글에 공감 요청을 보내면 예외가 발생한다")
+    @Test
+    void likeInvalidComment() throws Exception {
+        when(likeService.likeComment(any(Member.class), eq(INVALID_COMMENT_ID))).thenThrow(CommentNotFoundException.class);
+
+        this.mockMvc.perform(post("/api/likes/comment/" + INVALID_COMMENT_ID)).
+                andExpect(status().isBadRequest());
     }
 }
