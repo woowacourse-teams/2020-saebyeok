@@ -12,7 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -68,7 +71,7 @@ class ArticleServiceTest {
         articles.add(article1);
         when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
 
-        List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE);
+        List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE, Collections.emptyList());
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);

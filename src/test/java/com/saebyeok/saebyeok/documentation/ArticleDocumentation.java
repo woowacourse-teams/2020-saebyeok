@@ -206,9 +206,9 @@ public class ArticleDocumentation extends Documentation {
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
-        given(articleService.getArticles(any(Member.class), anyInt(), anyInt())).willReturn(articleResponses);
+        given(articleService.getArticles(any(Member.class), anyInt(), anyInt(), anyList())).willReturn(articleResponses);
 
-        this.mockMvc.perform(get("/api/articles?page=0&size=5").
+        this.mockMvc.perform(get("/api/articles?page=0&size=5&emotionIds=1,2,3").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
@@ -221,7 +221,9 @@ public class ArticleDocumentation extends Documentation {
                         ),
                         requestParameters(
                                 parameterWithName("page").description("확인할 게시물의 페이지"),
-                                parameterWithName("size").description("확인할 게시물의 개수")
+                                parameterWithName("size").description("확인할 게시물의 개수"),
+                                parameterWithName("emotionIds").description("필터링할 게시물의 감정 대분류 목록")
+                                // TODO: 2020/08/19 위 값은 필수가 아니다. 추후 문서화를 수정하면서 필수/비필수 칼럼을 만들면 도움이 될듯
                         ),
                         responseFields(
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 게시물의 목록"),

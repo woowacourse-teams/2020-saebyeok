@@ -76,7 +76,7 @@ class ArticleControllerTest {
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
     @Test
     void getArticlesTest() throws Exception {
-        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(Arrays.asList(articles.get(0)));
+        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(Arrays.asList(articles.get(0)));
 
         this.mockMvc.perform(get(API + "/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).

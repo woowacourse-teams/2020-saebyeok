@@ -31,8 +31,13 @@ public class ArticleService {
     private final ArticleEmotionService articleEmotionService;
     private final ArticleSubEmotionService articleSubEmotionService;
 
-    public List<ArticleResponse> getArticles(Member member, int page, int size) {
+    public List<ArticleResponse> getArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
+            return filterArticles(member, pageable, emotionIds);
+        }
+
         return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
                 stream().
                 map(article -> {
@@ -102,10 +107,7 @@ public class ArticleService {
         return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
 
-    // TODO: 2020/08/19 얘는 피드용!!
-    public List<ArticleResponse> filterArticles(Member member, int page, int size, List<Long> emotionIds) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-
+    private List<ArticleResponse> filterArticles(Member member, Pageable pageable, List<Long> emotionIds) {
         List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS));
 
         return articleEmotionService.findArticlesByEmotionIds(articles, emotionIds, pageable).

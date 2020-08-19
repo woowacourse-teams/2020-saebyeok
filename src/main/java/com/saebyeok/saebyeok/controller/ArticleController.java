@@ -25,12 +25,12 @@ public class ArticleController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> getArticles(Authentication authentication, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<List<ArticleResponse>> getArticles(Authentication authentication, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<Long> emotionIds) {
         // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
         User user = (User) authentication.getPrincipal();
         Member member = memberRepository.findById(user.getId())
                 .orElseThrow(() -> new MemberNotFoundException(user.getId()));
-        List<ArticleResponse> articles = articleService.getArticles(member, page, size);
+        List<ArticleResponse> articles = articleService.getArticles(member, page, size, emotionIds);
         return ResponseEntity.ok(articles);
     }
 
