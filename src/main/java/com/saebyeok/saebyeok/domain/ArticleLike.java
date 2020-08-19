@@ -18,12 +18,19 @@ public class ArticleLike {
     @Id
     private Long id;
 
+    @JoinColumn(name = "MEMBER_ID")
     @ManyToOne
     private Member member;
 
+    @JoinColumn(name = "ARTICLE_ID")
     @ManyToOne
     private Article article;
 
     @CreatedDate
     private LocalDateTime createdDate;
+
+    public ArticleLike(Member member, Article article) {
+        this.member = member;
+        this.article = article;
+    }
 }

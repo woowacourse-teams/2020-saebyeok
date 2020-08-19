@@ -1,12 +1,27 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.ArticleLike;
-import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.*;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
+import static com.saebyeok.saebyeok.service.ArticleService.LIMIT_DAYS;
+
+@RequiredArgsConstructor
 @Service
 public class LikeService {
+
+    private final ArticleLikeRepository articleLikeRepository;
+    private final ArticleRepository articleRepository;
+
     public ArticleLike likeArticle(Member member, Long articleId) {
-        return null;
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+                .orElseThrow(() -> new ArticleNotFoundException(articleId));
+
+        ArticleLike like = new ArticleLike(member, article);
+
+        return articleLikeRepository.save(like);
     }
 }
