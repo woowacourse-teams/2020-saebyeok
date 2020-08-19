@@ -1,14 +1,20 @@
 package com.saebyeok.saebyeok.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @ActiveProfiles("test")
@@ -17,16 +23,46 @@ class ArticleLikeRepositoryTest {
 
     @Autowired
     private ArticleLikeRepository articleLikeRepository;
+    private Member member;
+    private Article article;
+
+    @BeforeEach
+    void setUp() {
+        this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
+        this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
+    }
 
     @DisplayName("게시물에 공감을 등록할 수 있다")
     @Test
     void saveArticleLike() {
-        ArticleLike like = new ArticleLike(new Member(), new Article());
+        ArticleLike like = new ArticleLike(member, article);
 
         ArticleLike savedLike = articleLikeRepository.save(like);
 
         assertThat(savedLike).isNotNull();
         assertThat(savedLike).isEqualTo(like);
-        assertThat(savedLike.getId()).isNotNegative();
+        assertThat(savedLike.getId()).isNotNull();
+    }
+
+    @DisplayName("예외 테스트: Member와 Article 참조가 없이 공감 등록을 하면 예외가 발생한다")
+    @Test
+    void saveArticleLikeWithoutMemberAndArticle() {
+        ArticleLike like = new ArticleLike();
+
+        assertThatThrownBy(() -> articleLikeRepository.save(like))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("예외 테스트: 참조할 수 없는 Member 혹은 Article 로 공감 등록을 하면 예외가 발생한다")
+    @Test
+    void saveArticleLikeWithInvalidMemberOrArticle() {
+        ArticleLike likeWithInvalidMember = new ArticleLike(new Member(), article);
+        ArticleLike likeWithInvalidArticle = new ArticleLike(member, new Article());
+
+        assertThatThrownBy(() -> articleLikeRepository.save(likeWithInvalidMember))
+                .isInstanceOf(InvalidDataAccessApiUsageException.class);
+
+        assertThatThrownBy(() -> articleLikeRepository.save(likeWithInvalidArticle))
+                .isInstanceOf(InvalidDataAccessApiUsageException.class);
     }
 }
