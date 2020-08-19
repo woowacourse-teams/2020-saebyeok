@@ -8,9 +8,6 @@ const MemberArticleService = {
   },
   getAll(params) {
     return ApiService.getWithParams(`${BASE_URL}`, params);
-  },
-  getWithFilter(params) {
-    return ApiService.getWithParams(`${BASE_URL}/filter`, params);
   }
 };
 

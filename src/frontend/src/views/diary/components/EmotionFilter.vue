@@ -62,6 +62,9 @@ export default {
       if (this.isSelected(emotion)) {
         const idx = this.filter.indexOf(emotion.id);
         this.filter.splice(idx, 1);
+        if (this.filter.length === 0) {
+          this.filter = this.allFilter.slice();
+        }
       } else {
         this.filter.push(emotion.id);
         this.filter = this.filter.sort();

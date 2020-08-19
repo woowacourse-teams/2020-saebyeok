@@ -6,9 +6,7 @@ import {
 import {
   FETCH_MEMBER_ARTICLE,
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES,
-  FETCH_MEMBER_FILTERING_ARTICLES,
-  PAGING_MEMBER_FILTERING_ARTICLES
+  PAGING_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import MemberArticleService from '@/api/modules/memberArticle';
 
@@ -54,18 +52,6 @@ const actions = {
   },
   async [PAGING_MEMBER_ARTICLES]({ commit }, params) {
     return MemberArticleService.getAll(params).then(({ data }) => {
-      commit(ADD_MEMBER_ARTICLES, data);
-      return data;
-    });
-  },
-  async [FETCH_MEMBER_FILTERING_ARTICLES]({ commit }, params) {
-    return MemberArticleService.getWithFilter(params).then(({ data }) => {
-      commit(SET_MEMBER_ARTICLES, data);
-      return data;
-    });
-  },
-  async [PAGING_MEMBER_FILTERING_ARTICLES]({ commit }, params) {
-    return MemberArticleService.getWithFilter(params).then(({ data }) => {
       commit(ADD_MEMBER_ARTICLES, data);
       return data;
     });

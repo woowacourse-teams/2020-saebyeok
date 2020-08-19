@@ -264,9 +264,9 @@ public class ArticleDocumentation extends Documentation {
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
-        given(articleService.getMemberArticles(any(Member.class), anyInt(), anyInt())).willReturn(articleResponses);
+        given(articleService.getMemberArticles(any(Member.class), anyInt(), anyInt(), anyList())).willReturn(articleResponses);
 
-        this.mockMvc.perform(get("/api/member/articles?page=0&size=5").
+        this.mockMvc.perform(get("/api/member/articles?page=0&size=5&emotionIds=1,2,3").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
@@ -279,66 +279,9 @@ public class ArticleDocumentation extends Documentation {
                         ),
                         requestParameters(
                                 parameterWithName("page").description("확인할 게시물의 페이지"),
-                                parameterWithName("size").description("확인할 게시물의 개수")
-                        ),
-                        responseFields(
-                                fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 게시물의 목록"),
-                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("게시물의 ID"),
-                                fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시물의 내용"),
-                                fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("게시물의 작성 시간"),
-                                fieldWithPath("[].emotion").type(JsonFieldType.OBJECT).description("게시물의 감정 대분류"),
-                                fieldWithPath("[].emotion.id").type(JsonFieldType.NUMBER).description("게시물의 감정 대분류의 ID"),
-                                fieldWithPath("[].emotion.name").type(JsonFieldType.STRING).description("게시물의 감정 대분류의 이름"),
-                                fieldWithPath("[].emotion.imageResource").type(JsonFieldType.STRING).description("게시물의 감정 대분류의 이미지 리소스 링크"),
-                                fieldWithPath("[].subEmotions[]").type(JsonFieldType.ARRAY).description("게시물의 감정 소분류 목록"),
-                                fieldWithPath("[].subEmotions[].id").type(JsonFieldType.NUMBER).description("게시물의 감정 소분류의 ID"),
-                                fieldWithPath("[].subEmotions[].name").type(JsonFieldType.STRING).description("게시물의 감정 소분류의 이름"),
-                                fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글" +
-                                        " 허용 " +
-                                        "여부"),
-                                fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
-                                fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
-                                fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
-                                        " ID"),
-                                fieldWithPath("[].comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
-                                        "댓글의 내용"),
-                                fieldWithPath("[].comments[].nickname").type(JsonFieldType.STRING).description("조회할 게시물의 " +
-                                        "댓글의 " +
-                                        "닉네임"),
-                                fieldWithPath("[].comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
-                                fieldWithPath("[].comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
-                        )
-                ));
-    }
-
-    @Test
-    void filterMemberArticles() throws Exception {
-        List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
-        EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
-        List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
-
-        List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
-
-        given(articleService.filterMemberArticles(any(Member.class), anyInt(), anyInt(), anyList())).willReturn(articleResponses);
-
-        this.mockMvc.perform(get("/api/member/articles/filter?page=0&size=5&emotionIds=1,2,3").
-                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
-                accept(MediaType.APPLICATION_JSON)).
-                andExpect(status().isOk()).
-                andDo(print()).
-                andDo(document("articles/getByMemberWithFilter",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")
-                        ),
-                        requestParameters(
-                                parameterWithName("page").description("필터링할 게시물의 페이지"),
-                                parameterWithName("size").description("필터링할 게시물의 개수"),
+                                parameterWithName("size").description("확인할 게시물의 개수"),
                                 parameterWithName("emotionIds").description("필터링할 게시물의 감정 대분류 목록")
+                                // TODO: 2020/08/19 위 값은 필수가 아니다. 추후 문서화를 수정하면서 필수/비필수 칼럼을 만들면 도움이 될듯
                         ),
                         responseFields(
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 게시물의 목록"),

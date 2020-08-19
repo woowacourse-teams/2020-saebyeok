@@ -148,7 +148,7 @@ class ArticleControllerTest {
     @DisplayName("사용자가 쓴 게시글 목록을 날짜에 상관없이 불러온다")
     @Test
     void memberArticleLoadTest() throws Exception {
-        when(articleService.getMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE))).thenReturn(articles);
+        when(articleService.getMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(articles);
 
         this.mockMvc.perform(get(API + "/member/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
                 accept(MediaType.APPLICATION_JSON_VALUE)).
@@ -170,19 +170,5 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_2.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
-    }
-
-    @DisplayName("사용자가 쓴 게시글 목록을 감정 대분류로 필터링해서 불러온다")
-    @Test
-    void memberArticleFilterTest() throws Exception {
-        when(articleService.filterMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(Arrays.asList(articles.get(1)));
-
-        this.mockMvc.perform(get(API + "/member/articles/filter?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE + "&emotionIds=1,3").
-                accept(MediaType.APPLICATION_JSON_VALUE)).
-                andExpect(jsonPath("$", hasSize(1))).
-                andExpect(jsonPath("$[0].id").value(TEST_ID_2)).
-                andExpect(jsonPath("$[0].content").value(TEST_CONTENT_2)).
-                andExpect(jsonPath("$[0].emotion.name").value(TEST_EMOTION_2.getName())).
-                andExpect(jsonPath("$[0].isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED));
     }
 }

@@ -22,9 +22,7 @@ import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES,
-  FETCH_MEMBER_FILTERING_ARTICLES,
-  PAGING_MEMBER_FILTERING_ARTICLES
+  PAGING_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from './components/EmotionFilter.vue';
@@ -65,40 +63,23 @@ export default {
   methods: {
     ...mapActions([FETCH_MEMBER_ARTICLES]),
     ...mapActions([PAGING_MEMBER_ARTICLES]),
-    ...mapActions([FETCH_MEMBER_FILTERING_ARTICLES]),
-    ...mapActions([PAGING_MEMBER_FILTERING_ARTICLES]),
-    scrollMemberArticles() {
+    createParams() {
       if (this.isFiltered) {
-        return this.pagingMemberFilteringArticles({
+        return {
           page: this.page,
           size: this.size,
           emotionIds: this.emotionIds
-        });
-      } else {
-        return this.pagingMemberArticles({
-          page: this.page,
-          size: this.size
-        });
+        };
       }
-    },
-    reloadArticles() {
-      if (this.isFiltered) {
-        return this.fetchMemberFilteringArticles({
-          page: this.page,
-          size: this.size,
-          emotionIds: this.emotionIds
-        });
-      } else {
-        return this.fetchMemberArticles({
-          page: this.page,
-          size: this.size
-        });
-      }
+      return {
+        page: this.page,
+        size: this.size
+      };
     },
     infiniteHandler($state) {
       setTimeout(() => {
         try {
-          this.scrollMemberArticles().then(data => {
+          this.pagingMemberArticles(this.createParams()).then(data => {
             if (data.length) {
               this.page++;
               $state.loaded();
@@ -117,7 +98,7 @@ export default {
       this.page = 0;
 
       try {
-        this.reloadArticles().then(() => {
+        this.fetchMemberArticles(this.createParams()).then(() => {
           this.page++;
           this.infiniteId += 1;
         });

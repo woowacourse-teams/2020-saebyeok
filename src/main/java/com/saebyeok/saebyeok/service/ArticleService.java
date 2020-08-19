@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -75,8 +76,13 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
-    public List<ArticleResponse> getMemberArticles(Member member, int page, int size) {
+    public List<ArticleResponse> getMemberArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        if(!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
+            return filterMemberArticles(member, pageable, emotionIds);
+        }
+
         return articleRepository.findAllByMember(member, pageable).
                 stream().
                 map(article -> {
@@ -96,9 +102,23 @@ public class ArticleService {
         return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
     }
 
-    public List<ArticleResponse> filterMemberArticles(Member member, int page, int size, List<Long> emotionIds) {
+    // TODO: 2020/08/19 얘는 피드용!!
+    public List<ArticleResponse> filterArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
+        List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS));
+
+        return articleEmotionService.findArticlesByEmotionIds(articles, emotionIds, pageable).
+                stream().
+                map(article -> {
+                    EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
+                    List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                }).
+                collect(Collectors.toList());
+    }
+
+    private List<ArticleResponse> filterMemberArticles(Member member, Pageable pageable, List<Long> emotionIds) {
         return articleEmotionService.findArticlesByEmotionIds(member.getArticles(), emotionIds, pageable).
                 stream().
                 map(article -> {

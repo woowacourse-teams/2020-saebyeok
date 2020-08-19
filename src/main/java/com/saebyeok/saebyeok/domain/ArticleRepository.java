@@ -12,6 +12,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     public List<Article> findAllByCreatedDateGreaterThanEqual(LocalDateTime date, Pageable pageable);
 
+    public List<Article> findAllByCreatedDateGreaterThanEqual(LocalDateTime date);
+
     public List<Article> findAllByMember(Member member, Pageable pageable);
 
     public Optional<Article> findByIdAndMemberEquals(Long id, Member member);
