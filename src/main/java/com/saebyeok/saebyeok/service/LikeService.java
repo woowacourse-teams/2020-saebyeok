@@ -47,4 +47,8 @@ public class LikeService {
             throw new DuplicateCommentLikeException(member.getId(), commentId);
         }
     }
+
+    public void unlikeArticle(Member member, Long articleId) {
+
+    }
 }

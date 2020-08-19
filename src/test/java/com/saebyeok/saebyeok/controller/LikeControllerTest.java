@@ -20,9 +20,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
@@ -72,6 +74,15 @@ class LikeControllerTest {
 
         this.mockMvc.perform(post("/api/likes/article/" + ALREADY_LIKED_ARTICLE_ID)).
                 andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("'/api/likes/article/{articleId}'로 공감 취소 요청을 보내면 공감이 삭제된다")
+    @Test
+    void unlikeArticleTest() throws Exception {
+        doNothing().when(likeService).unlikeArticle(any(Member.class), eq(ARTICLE_ID));
+
+        this.mockMvc.perform((delete("/api/likes/article/" + ARTICLE_ID))).
+                andExpect(status().isNoContent());
     }
 
     @DisplayName("'/api/likes/comment/{commentId}'로 post 요청을 보내면 해당 댓글 공감이 추가된다")

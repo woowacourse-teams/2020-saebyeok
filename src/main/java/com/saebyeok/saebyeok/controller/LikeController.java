@@ -10,10 +10,7 @@ import com.saebyeok.saebyeok.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -37,6 +34,18 @@ public class LikeController {
         return ResponseEntity
                 .created(URI.create("/likes/article/" + articleId + "/" + articleLike.getId()))
                 .build();
+    }
+
+    @DeleteMapping("/likes/article/{articleId}")
+    public ResponseEntity<Void> unlikeArticle(Authentication authentication, @PathVariable Long articleId) {
+        // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
+        User user = (User) authentication.getPrincipal();
+        Member member = memberRepository.findById(user.getId())
+                .orElseThrow(() -> new MemberNotFoundException(user.getId()));
+
+        likeService.unlikeArticle(member, articleId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/likes/comment/{commentId}")
