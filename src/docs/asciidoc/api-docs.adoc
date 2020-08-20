@@ -31,11 +31,6 @@ operation::articles/get[snippets='http-request,http-response,request-headers,req
 
 operation::articles/getByMember[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
 
-[[resources-articles-getByMemberWithFilter]]
-=== 사용자 게시물 분류하여 조회
-
-operation::articles/getByMemberWithFilter[snippets='http-request,http-response,request-headers,request-parameters,response-fields']
-
 [[resources-articles-read]]
 === 게시물 조회
 
