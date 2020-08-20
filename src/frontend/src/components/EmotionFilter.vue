@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    class="mx-auto rounded-lg"
-    color="#faf9f5"
-    max-width="400"
-    style="margin: 12px"
-  >
+  <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
     <v-row class="justify-center">
       <v-col
         class="col-3"
