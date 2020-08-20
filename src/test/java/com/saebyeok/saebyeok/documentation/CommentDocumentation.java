@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 public class CommentDocumentation extends Documentation {
     private static final Long COMMENT_ID = 1L;
     private static final Long ARTICLE_ID = 1L;

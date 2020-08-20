@@ -15,15 +15,13 @@ import java.util.Collections;
 @NoArgsConstructor
 public class User implements UserDetails {
     private Long id;
-    private String email;
-    private String gender;
+    private String oauthId;
     private Role role;
 
     @Builder
-    public User(Long id, String email, String gender, Role role) {
+    public User(Long id, String oauthId, Role role) {
         this.id = id;
-        this.email = email;
-        this.gender = gender;
+        this.oauthId = oauthId;
         this.role = role;
     }
 

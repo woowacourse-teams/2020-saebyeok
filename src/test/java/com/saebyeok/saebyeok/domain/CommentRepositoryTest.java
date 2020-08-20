@@ -40,7 +40,7 @@ class CommentRepositoryTest {
     @BeforeEach
     void setUp() {
         article = new Article();
-        member = new Member(1L, "a@a.com", null, Gender.MALE, LocalDateTime.now(), false, Role.USER, new ArrayList<>());
+        member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
 
         articleRepository.save(article);
         memberRepository.save(member);

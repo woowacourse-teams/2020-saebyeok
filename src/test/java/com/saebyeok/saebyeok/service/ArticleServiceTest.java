@@ -25,8 +25,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
     private static final Long MEMBER_ID = 1L;
-    private static final String MEMBER_EMAIL = "a@a.com";
-    private static final int BIRTH_YEAR = 1996;
+    private static final String MEMBER_OAUTH_ID = "123456789";
+    private static final String MEMBER_LOGIN_METHOD = "naver";
     private static final boolean IS_DELETED = false;
     private static final Long ARTICLE_ID_1 = 1L;
     private static final Long ARTICLE_ID_2 = 2L;
@@ -58,7 +58,7 @@ class ArticleServiceTest {
     @BeforeEach
     void setUp() {
         articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
-        member = new Member(MEMBER_ID, MEMBER_EMAIL, BIRTH_YEAR, Gender.MALE, LocalDateTime.now(), IS_DELETED, Role.USER, null);
+        member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
         article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null);
         article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null);
     }
