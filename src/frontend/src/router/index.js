@@ -14,6 +14,8 @@ import Header from '@/components/header/Header';
 import EmotionsHeader from '@/components/header/EmotionsHeader';
 import DetailPageHeader from '@/components/header/DetailPageHeader';
 import BottomNavigation from '@/components/footer/BottomNavigation';
+import ErrorPage from '@/views/ErrorPage.vue';
+import NotFoundPage from '@/views/NotFoundPage.vue';
 
 Vue.use(VueRouter);
 
@@ -97,6 +99,18 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '*',
+    redirect: '/404'
+  },
+  {
+    path: '/404',
+    component: NotFoundPage
+  },
+  {
+    path: '/error',
+    component: ErrorPage
   }
 ];
 
