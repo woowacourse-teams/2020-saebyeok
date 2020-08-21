@@ -25,7 +25,9 @@ public class ArticleController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> getArticles(Authentication authentication, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<Long> emotionIds) {
+    public ResponseEntity<List<ArticleResponse>> getArticles(Authentication authentication,
+                                                             @RequestParam int page, @RequestParam int size,
+                                                             @RequestParam(required = false) List<Long> emotionIds) {
         // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
         User user = (User) authentication.getPrincipal();
         Member member = memberRepository.findById(user.getId())
@@ -67,7 +69,9 @@ public class ArticleController {
     }
 
     @GetMapping("/member/articles")
-    public ResponseEntity<List<ArticleResponse>> getMemberArticles(Authentication authentication, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<Long> emotionIds) {
+    public ResponseEntity<List<ArticleResponse>> getMemberArticles(Authentication authentication,
+                                                                   @RequestParam int page, @RequestParam int size,
+                                                                   @RequestParam(required = false) List<Long> emotionIds) {
         // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
         User user = (User) authentication.getPrincipal();
         Member member = memberRepository.findById(user.getId())
