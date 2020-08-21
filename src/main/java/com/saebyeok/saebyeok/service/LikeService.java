@@ -8,11 +8,13 @@ import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static com.saebyeok.saebyeok.service.ArticleService.LIMIT_DAYS;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class LikeService {

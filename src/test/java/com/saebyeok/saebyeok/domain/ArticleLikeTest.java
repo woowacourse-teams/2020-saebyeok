@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ArticleLikeTest {
 
-    @DisplayName("예외 테스트: Member 혹은 Article에 null이 오면 예외가 발생한")
+    @DisplayName("예외 테스트: Member 혹은 Article에 null이 오면 예외가 발생한다")
     @Test
     void createWithNullArgsTest() {
         Article article = new Article();

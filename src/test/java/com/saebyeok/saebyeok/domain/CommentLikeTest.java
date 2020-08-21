@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CommentLikeTest {
 
-    @DisplayName("예외 테스트: Member 혹은 Comment에 null이 오면 예외가 발생한")
+    @DisplayName("예외 테스트: Member 혹은 Comment에 null이 오면 예외가 발생한다")
     @Test
     void createWithNullArgsTest() {
         Comment comment = new Comment();
