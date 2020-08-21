@@ -6,6 +6,7 @@ import com.saebyeok.saebyeok.exception.ArticleEmotionNotFoundException;
 import com.saebyeok.saebyeok.exception.EmotionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,15 +37,9 @@ public class ArticleEmotionService {
         return new EmotionResponse(articleEmotion.getEmotion());
     }
 
-    // TODO: 2020/08/12 추후 필터 사용 시 필요할 메시드 미리 만들어뒀음
-    // 프론트에서 선택한 필터 이모지의 아이디를 전달하면, 그 값을 articleService에서 받아서 얘를 다시 호출해주면
-    // 7일 제한에 대해서는 아티클서비스에서 관리해주세요
-    public List<Article> findArticles(Long emotionId) {
-        Emotion emotion = emotionRepository.findById(emotionId).
-                orElseThrow(() -> new EmotionNotFoundException(emotionId));
-        List<ArticleEmotion> articleEmotions = articleEmotionRepository.findAllByEmotionId(emotion.getId());
-
-        return articleEmotions.
+    public List<Article> findArticlesByEmotionIds(List<Article> articles, List<Long> emotionIds, Pageable pageable) {
+        List<Emotion> emotions = emotionRepository.findAllById(emotionIds);
+        return articleEmotionRepository.findAllByArticleInAndEmotionIn(articles, emotions, pageable).
                 stream().
                 map(ArticleEmotion::getArticle).
                 collect(Collectors.toList());

@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter class="ma-3" v-on:select="readArticles" />
+    <emotion-filter class="ma-3" />
     <div>
       <cards :articles="memberArticles" />
     </div>
@@ -22,7 +22,8 @@ import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES
+  PAGING_MEMBER_ARTICLES,
+  CLEAR_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from '../../components/EmotionFilter.vue';
@@ -34,7 +35,9 @@ export default {
     return {
       page: 0,
       size: 5,
-      infiniteId: +new Date()
+      emotionIds: '',
+      infiniteId: +new Date(),
+      isFiltered: false
     };
   },
   components: {
@@ -56,48 +59,66 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['memberArticles'])
+    ...mapGetters(['memberArticles']),
+    ...mapGetters(['filter'])
   },
   methods: {
     ...mapActions([FETCH_MEMBER_ARTICLES]),
     ...mapActions([PAGING_MEMBER_ARTICLES]),
-    infiniteHandler($state) {
-      setTimeout(() => {
-        this.pagingMemberArticles({
+    ...mapActions([CLEAR_MEMBER_ARTICLES]),
+    createParams() {
+      if (this.isFiltered) {
+        return {
           page: this.page,
-          size: this.size
-        })
-          .then(data => {
+          size: this.size,
+          emotionIds: this.emotionIds
+        };
+      }
+      return {
+        page: this.page,
+        size: this.size
+      };
+    },
+    infiniteHandler($state) {
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        $state.complete();
+        return;
+      }
+      setTimeout(() => {
+        try {
+          this.pagingMemberArticles(this.createParams()).then(data => {
             if (data.length) {
               this.page++;
               $state.loaded();
             } else {
               $state.complete();
             }
-          })
-          .catch(err => {
-            console.error(err);
           });
+        } catch (error) {
+          console.error(error);
+        }
       }, 500);
-    },
-    // eslint-disable-next-line no-unused-vars
-    async readArticles(emotions) {
-      //todo : 여기서 emotions를 page, size와 함께 api로 보낸다.
+    }
+  },
+  watch: {
+    filter: function() {
+      this.emotionIds = this.filter.emotionIds.toString();
+      this.isFiltered = this.filter.isFiltered;
       this.page = 0;
-      this.infiniteId += 1;
 
-      await this.fetchMemberArticles({
-        page: this.page,
-        size: this.size
-      })
-        .then(data => {
-          if (data.length) {
-            this.page++;
-          }
-        })
-        .catch(err => {
-          console.error(err);
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        this.clearMemberArticles();
+        return;
+      }
+
+      try {
+        this.fetchMemberArticles(this.createParams()).then(() => {
+          this.page++;
+          this.infiniteId += 1;
         });
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   props: {

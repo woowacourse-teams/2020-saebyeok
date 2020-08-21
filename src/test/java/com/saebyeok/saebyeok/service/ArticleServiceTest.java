@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +71,7 @@ class ArticleServiceTest {
         articles.add(article1);
         when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
 
-        List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE);
+        List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE, Collections.emptyList());
 
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
@@ -129,7 +130,7 @@ class ArticleServiceTest {
         when(articleRepository.findAllByMember(eq(member), any())).thenReturn(articles);
 
 
-        List<ArticleResponse> articleResponses = articleService.getMemberArticles(member, PAGE_NUMBER, PAGE_SIZE);
+        List<ArticleResponse> articleResponses = articleService.getMemberArticles(member, PAGE_NUMBER, PAGE_SIZE, Collections.emptyList());
 
         assertThat(articleResponses).hasSize(2);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
