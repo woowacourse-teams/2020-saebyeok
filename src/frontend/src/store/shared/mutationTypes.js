@@ -6,3 +6,4 @@ export const SET_MEMBER_ARTICLES = 'setMemberArticles';
 export const ADD_MEMBER_ARTICLES = 'addMemberArticles';
 export const SET_EMOTION = 'setEmotion';
 export const SET_EMOTIONS = 'setEmotions';
+export const SET_FILTER = 'setFilter';
