@@ -63,4 +63,8 @@ public class Comment {
     public void setArticle(Article article) {
         this.article = article;
     }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
