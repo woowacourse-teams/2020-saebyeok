@@ -55,7 +55,7 @@ class LikeServiceTest {
         this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), ARTICLE_LIKES_COUNT);
-        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false);
+        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, 0L);
     }
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")

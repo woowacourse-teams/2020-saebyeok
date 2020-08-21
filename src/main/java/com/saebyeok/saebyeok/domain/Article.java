@@ -35,7 +35,7 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    @Formula("select count(*) from ARTICLE_LIKE AL where AL.ARTICLE_ID = ARTICLE_ID")
+    @Formula("select count(*) from ARTICLE_LIKE as AL where AL.ARTICLE_ID = ARTICLE_ID")
     private Long likesCount;
 
     public Article(String content, Boolean isCommentAllowed) {

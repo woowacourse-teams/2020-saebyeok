@@ -96,7 +96,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void readArticle() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
@@ -141,7 +141,8 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수")
                         )
                 ));
     }
@@ -149,7 +150,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void getArticles() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
@@ -200,7 +201,8 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("[].comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("[].comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("[].comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수")
                         )
                 ));
     }
