@@ -13,6 +13,7 @@ import Auth from '../views/signin/Auth.vue';
 import Header from '@/components/header/Header';
 import EmotionsHeader from '@/components/header/EmotionsHeader';
 import DetailPageHeader from '@/components/header/DetailPageHeader';
+import DiaryHeader from '@/components/header/DiaryHeader';
 import BottomNavigation from '@/components/footer/BottomNavigation';
 import ErrorPage from '@/views/ErrorPage.vue';
 import NotFoundPage from '@/views/NotFoundPage.vue';
@@ -77,7 +78,7 @@ const routes = [
       {
         path: 'my-page/analysis',
         components: {
-          header: Header,
+          header: DiaryHeader,
           main: Analysis,
           footer: BottomNavigation
         }
@@ -85,7 +86,7 @@ const routes = [
       {
         path: 'my-page/diary',
         components: {
-          header: Header,
+          header: DiaryHeader,
           main: Diary,
           footer: BottomNavigation
         }

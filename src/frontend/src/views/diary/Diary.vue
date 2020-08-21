@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter v-on:select="readArticles" />
+    <emotion-filter class="ma-3" v-on:select="readArticles" />
     <div>
       <cards :articles="memberArticles" />
     </div>
@@ -25,7 +25,7 @@ import {
   PAGING_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
-import EmotionFilter from './components/EmotionFilter.vue';
+import EmotionFilter from '../../components/EmotionFilter.vue';
 import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
