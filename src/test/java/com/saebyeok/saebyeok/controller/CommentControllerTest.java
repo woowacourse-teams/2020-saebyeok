@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
 class CommentControllerTest {
     private static final String API = "/api";

@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.Gender;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,8 +39,8 @@ public class AnalysisServiceTest {
     void setUp() {
         analysisService = new AnalysisService(emotionService, articleEmotionService, commentService);
 
-        this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(),
-                                 false, Role.USER, new ArrayList<>());
+        this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(),
+                false, Role.USER, new ArrayList<>());
     }
 
     @DisplayName("Member가 작성한 Article 개수를 Emotion 별로 받아온다")

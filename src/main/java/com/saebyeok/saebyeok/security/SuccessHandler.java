@@ -21,9 +21,9 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Map<String, Object> userInfo = ((DefaultOAuth2User) (authentication.getPrincipal())).getAttributes();
-        String email = (String) userInfo.get("email");
+        String id = (String) userInfo.get("id");
 
-        String accessToken = jwtTokenProvider.createToken(email);
+        String accessToken = jwtTokenProvider.createToken(id);
 
         response.sendRedirect("/auth?token=bearer " + accessToken);
     }

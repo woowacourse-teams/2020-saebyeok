@@ -22,11 +22,8 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private Integer birthYear;
-
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
+    private String oauthId;
+    private String loginMethod;
 
     @CreatedDate
     private LocalDateTime createdDate;

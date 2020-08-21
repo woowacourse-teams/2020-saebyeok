@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter v-on:select="filteringArticles" />
+    <emotion-filter class="ma-3" v-on:select="filteringArticles" />
     <div>
       <cards :articles="memberArticles" />
     </div>
