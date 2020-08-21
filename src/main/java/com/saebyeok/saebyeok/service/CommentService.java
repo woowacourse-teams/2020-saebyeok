@@ -4,6 +4,7 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
+import com.saebyeok.saebyeok.util.NicknameGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
+    private final NicknameGenerator nicknameGenerator;
 
     @Transactional
     public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
@@ -25,6 +27,7 @@ public class CommentService {
         Comment comment = commentCreateRequest.toComment();
         comment.setArticle(article);
         comment.setMember(member);
+        comment.setNickname(nicknameGenerator.generate(member, article));
 
         return commentRepository.save(comment);
     }
