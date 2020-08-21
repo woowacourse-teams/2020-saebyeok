@@ -26,7 +26,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "a@a.com")
+@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
 class LikeControllerTest {
     private static final Long ARTICLE_ID = 1L;
