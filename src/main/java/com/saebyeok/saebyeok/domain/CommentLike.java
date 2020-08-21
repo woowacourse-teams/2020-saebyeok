@@ -2,6 +2,8 @@ package com.saebyeok.saebyeok.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,10 +22,12 @@ public class CommentLike {
     @Id
     private Long id;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     @ManyToOne
     private Member member;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "COMMENT_ID", nullable = false)
     @ManyToOne
     private Comment comment;

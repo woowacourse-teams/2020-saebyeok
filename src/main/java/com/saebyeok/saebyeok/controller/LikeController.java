@@ -32,7 +32,7 @@ public class LikeController {
         ArticleLike articleLike = likeService.likeArticle(member, articleId);
 
         return ResponseEntity
-                .created(URI.create("/likes/article/" + articleId + "/" + articleLike.getId()))
+                .created(URI.create("/likes/article/" + articleId + "/article_like/" + articleLike.getId()))
                 .build();
     }
 
@@ -58,7 +58,7 @@ public class LikeController {
         CommentLike commentLike = likeService.likeComment(member, commentId);
 
         return ResponseEntity
-                .created(URI.create("/likes/comment/" + commentId + "/" + commentLike.getId()))
+                .created(URI.create("/likes/comment/" + commentId + "/comment_like" + commentLike.getId()))
                 .build();
     }
 
