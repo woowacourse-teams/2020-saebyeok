@@ -6,7 +6,8 @@ import {
 import {
   FETCH_MEMBER_ARTICLE,
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES
+  PAGING_MEMBER_ARTICLES,
+  CLEAR_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import MemberArticleService from '@/api/modules/memberArticle';
 
@@ -55,6 +56,9 @@ const actions = {
       commit(ADD_MEMBER_ARTICLES, data);
       return data;
     });
+  },
+  [CLEAR_MEMBER_ARTICLES]({ commit }) {
+    commit(SET_MEMBER_ARTICLES, []);
   }
 };
 
