@@ -17,7 +17,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_ARTICLES, PAGING_ARTICLES } from '@/store/shared/actionTypes';
+import {
+  FETCH_ARTICLES,
+  PAGING_ARTICLES,
+  CLEAR_ARTICLES
+} from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import InfiniteLoading from 'vue-infinite-loading';
 
@@ -49,11 +53,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['articles'])
+    ...mapGetters(['articles']),
+    ...mapGetters(['filter'])
   },
   methods: {
     ...mapActions([FETCH_ARTICLES]),
     ...mapActions([PAGING_ARTICLES]),
+    ...mapActions([CLEAR_ARTICLES]),
     createParams() {
       if (this.isFiltered) {
         return {
@@ -68,6 +74,10 @@ export default {
       };
     },
     infiniteHandler($state) {
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        $state.complete();
+        return;
+      }
       setTimeout(() => {
         try {
           this.pagingArticles(this.createParams()).then(data => {
@@ -82,12 +92,18 @@ export default {
           console.error(error);
         }
       }, 500);
-    },
-    //todo : 이후 피드의 필터가 구현되면, 이 메서드와 연결해서 사용하면 된다.
-    filteringArticles(emotionIds, isSelectedAll) {
-      this.emotionIds = emotionIds.toString();
-      this.isFiltered = !isSelectedAll;
+    }
+  },
+  watch: {
+    filter: function() {
+      this.emotionIds = this.filter.emotionIds.toString();
+      this.isFiltered = this.filter.isFiltered;
       this.page = 0;
+
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        this.clearArticles();
+        return;
+      }
 
       try {
         this.fetchArticles(this.createParams()).then(() => {

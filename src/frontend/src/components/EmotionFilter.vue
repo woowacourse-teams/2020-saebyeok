@@ -30,7 +30,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { FETCH_EMOTIONS } from '@/store/shared/actionTypes';
+import { FETCH_EMOTIONS, SELECT_FILTER } from '@/store/shared/actionTypes';
 export default {
   name: 'EmotionFilter',
   data() {
@@ -46,6 +46,11 @@ export default {
       }
       this.allFilter = this.allFilter.sort();
       this.filter = this.allFilter.slice();
+
+      this.selectFilter({
+        emotionIds: this.filter.toString(),
+        isFiltered: !this.isSelectedAll()
+      });
     });
   },
   computed: {
@@ -53,18 +58,19 @@ export default {
   },
   methods: {
     ...mapActions([FETCH_EMOTIONS]),
+    ...mapActions([SELECT_FILTER]),
     toggleFeature(emotion) {
       if (this.isSelected(emotion)) {
         const idx = this.filter.indexOf(emotion.id);
         this.filter.splice(idx, 1);
-        if (this.filter.length === 0) {
-          this.filter = this.allFilter.slice();
-        }
       } else {
         this.filter.push(emotion.id);
         this.filter = this.filter.sort();
       }
-      this.$emit('select', this.filter, this.isSelectedAll());
+      this.selectFilter({
+        emotionIds: this.filter.toString(),
+        isFiltered: !this.isSelectedAll()
+      });
     },
     isSelected(emotion) {
       return this.filter.includes(emotion.id);
@@ -74,7 +80,10 @@ export default {
     },
     selectAll() {
       this.filter = this.allFilter.slice();
-      this.$emit('select', this.filter, this.isSelectedAll());
+      this.selectFilter({
+        emotionIds: this.filter.toString(),
+        isFiltered: !this.isSelectedAll()
+      });
     }
   }
 };

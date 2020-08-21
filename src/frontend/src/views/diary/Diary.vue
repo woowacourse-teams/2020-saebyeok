@@ -1,7 +1,7 @@
 <template>
   <div>
     <my-page-tabs></my-page-tabs>
-    <emotion-filter class="ma-3" v-on:select="filteringArticles" />
+    <emotion-filter class="ma-3" />
     <div>
       <cards :articles="memberArticles" />
     </div>
@@ -22,7 +22,8 @@ import MyPageTabs from '@/components/MyPageTabs.vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
   FETCH_MEMBER_ARTICLES,
-  PAGING_MEMBER_ARTICLES
+  PAGING_MEMBER_ARTICLES,
+  CLEAR_MEMBER_ARTICLES
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import EmotionFilter from '../../components/EmotionFilter.vue';
@@ -58,11 +59,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['memberArticles'])
+    ...mapGetters(['memberArticles']),
+    ...mapGetters(['filter'])
   },
   methods: {
     ...mapActions([FETCH_MEMBER_ARTICLES]),
     ...mapActions([PAGING_MEMBER_ARTICLES]),
+    ...mapActions([CLEAR_MEMBER_ARTICLES]),
     createParams() {
       if (this.isFiltered) {
         return {
@@ -77,6 +80,10 @@ export default {
       };
     },
     infiniteHandler($state) {
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        $state.complete();
+        return;
+      }
       setTimeout(() => {
         try {
           this.pagingMemberArticles(this.createParams()).then(data => {
@@ -91,11 +98,18 @@ export default {
           console.error(error);
         }
       }, 500);
-    },
-    filteringArticles(emotionIds, isSelectedAll) {
-      this.emotionIds = emotionIds.toString();
-      this.isFiltered = !isSelectedAll;
+    }
+  },
+  watch: {
+    filter: function() {
+      this.emotionIds = this.filter.emotionIds.toString();
+      this.isFiltered = this.filter.isFiltered;
       this.page = 0;
+
+      if (this.isFiltered && this.emotionIds.length === 0) {
+        this.clearMemberArticles();
+        return;
+      }
 
       try {
         this.fetchMemberArticles(this.createParams()).then(() => {
