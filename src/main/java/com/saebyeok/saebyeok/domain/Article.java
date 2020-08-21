@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,6 +34,9 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    @Formula("select count(*) from ARTICLE_LIKE AL where AL.ARTICLE_ID = ARTICLE_ID")
+    private Long likesCount;
 
     public Article(String content, Boolean isCommentAllowed) {
         this.content = content;

@@ -41,8 +41,8 @@ class CommentLikeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.member = new Member(1L, "a@a.com", 1991, Gender.FEMALE, LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList());
+        this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
+        this.article = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), 0L);
         this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false);
 
         memberRepository.save(member);
