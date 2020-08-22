@@ -21,10 +21,8 @@ public class NicknameGenerator {
         if (article.isWrittenBy(member)) {
             return WRITER_NICKNAME;
         }
-        if (article.isContainsCommentWrittenBy(member)) {
-            return article.getNicknameOf(member);
-        }
-        return createNewNickname(article);
+        return article.loadExistingNickname(member)
+                .orElse(createNewNickname(article));
     }
 
     private String createNewNickname(Article article) {

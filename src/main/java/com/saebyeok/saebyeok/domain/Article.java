@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -54,16 +55,11 @@ public class Article {
         return this.member == member;
     }
 
-    public boolean isContainsCommentWrittenBy(Member member) {
-        return comments.stream()
-                .anyMatch(comment -> comment.isWrittenBy(member));
-    }
-
-    public String getNicknameOf(Member member) {
+    public Optional<String> loadExistingNickname(Member member) {
         return comments.stream()
                 .filter(comment -> comment.isWrittenBy(member))
                 .findFirst()
-                .map(Comment::getNickname).orElse("뭔가 잘못됐어");
+                .map(Comment::getNickname);
     }
 
     public List<String> getAllNicknames() {
