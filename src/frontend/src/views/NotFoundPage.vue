@@ -10,15 +10,20 @@
               <big>404 Error 🤔</big>
             </v-card-title>
             <v-card-text>페이지를 찾을 수 없습니다.</v-card-text>
-            <v-btn
-              class="ma-2"
-              depressed
-              dark
-              color="rgba(164, 63, 176)"
-              width="384px"
-              @click="backToFeed"
-              >피드로 돌아가기</v-btn
-            >
+            <v-layout align-center justify-center>
+              <v-btn
+                class="ma-2"
+                align-center
+                justify-center
+                depressed
+                dark
+                color="rgba(164, 63, 176)"
+                width="95%"
+                style="padding:0px"
+                @click="backToFeed"
+                >피드로 돌아가기</v-btn
+              >
+            </v-layout>
           </v-card>
         </v-col>
       </v-row>

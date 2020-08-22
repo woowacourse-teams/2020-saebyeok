@@ -12,15 +12,20 @@
             <v-card-text
               >에러가 발생했습니다. 빠른 시간 내에 해결할게요.</v-card-text
             >
-            <v-btn
-              class="ma-2"
-              depressed
-              dark
-              color="rgba(164, 63, 176)"
-              width="384px"
-              @click="backToFeed"
-              >피드로 돌아가기</v-btn
-            >
+            <v-layout align-center justify-center>
+              <v-btn
+                class="ma-2"
+                align-center
+                justify-center
+                depressed
+                dark
+                color="rgba(164, 63, 176)"
+                width="95%"
+                style="padding:0px"
+                @click="backToFeed"
+                >피드로 돌아가기</v-btn
+              >
+            </v-layout>
           </v-card>
         </v-col>
       </v-row>
