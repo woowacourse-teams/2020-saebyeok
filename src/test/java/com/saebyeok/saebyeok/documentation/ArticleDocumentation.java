@@ -98,7 +98,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         given(articleService.readArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -131,6 +131,7 @@ public class ArticleDocumentation extends Documentation {
                                         " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
                                 fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의 ID"),
                                 fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
@@ -152,7 +153,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         given(articleService.readMemberArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -185,6 +186,7 @@ public class ArticleDocumentation extends Documentation {
                                         " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
                                 fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의 ID"),
                                 fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
@@ -206,7 +208,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -246,6 +248,7 @@ public class ArticleDocumentation extends Documentation {
                                         "여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
                                         " ID"),
@@ -268,7 +271,7 @@ public class ArticleDocumentation extends Documentation {
                 LocalDateTime.now(), true, 10L));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -308,6 +311,7 @@ public class ArticleDocumentation extends Documentation {
                                         "여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
                                         " ID"),

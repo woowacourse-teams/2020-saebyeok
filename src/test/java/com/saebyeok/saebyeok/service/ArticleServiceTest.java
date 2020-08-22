@@ -61,7 +61,7 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
-        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, TEST_LIKES_COUNT, Collections.emptyList());
+        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, TEST_LIKES_COUNT, new ArrayList<>());
         article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null, TEST_LIKES_COUNT, new ArrayList<>());
     }
 
@@ -77,6 +77,8 @@ class ArticleServiceTest {
         assertThat(articleResponses).hasSize(1);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
         assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
+        assertThat(articleResponses.get(0).getLikesCount()).isNotNull();
+        assertThat(articleResponses.get(0).getIsLikedByMe()).isNotNull();
     }
 
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
@@ -85,11 +87,13 @@ class ArticleServiceTest {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article1));
 
 
-        ArticleResponse articleResponse = articleService.readArticle(any(Member.class), eq(ARTICLE_ID_1));
+        ArticleResponse articleResponse = articleService.readArticle(member, ARTICLE_ID_1);
 
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT1);
         assertThat(articleResponse.getIsCommentAllowed()).isTrue();
+        assertThat(articleResponse.getLikesCount()).isNotNull();
+        assertThat(articleResponse.getIsLikedByMe()).isNotNull();
     }
 
     @DisplayName("예외 테스트: 요청에 해당하는 ID가 없으면 ArticleNotFoundException이 발생한다")
@@ -136,8 +140,12 @@ class ArticleServiceTest {
         assertThat(articleResponses).hasSize(2);
         assertThat(articleResponses.get(0).getContent()).isEqualTo(CONTENT1);
         assertThat(articleResponses.get(0).getIsCommentAllowed()).isTrue();
+        assertThat(articleResponses.get(0).getLikesCount()).isNotNull();
+        assertThat(articleResponses.get(0).getIsLikedByMe()).isNotNull();
         assertThat(articleResponses.get(1).getContent()).isEqualTo(CONTENT2);
         assertThat(articleResponses.get(1).getIsCommentAllowed()).isFalse();
+        assertThat(articleResponses.get(1).getLikesCount()).isNotNull();
+        assertThat(articleResponses.get(1).getIsLikedByMe()).isNotNull();
     }
 
     @DisplayName("ID로 내가 쓴 개별 글 조회를 요청하면 만료 시간과 상관없이 해당 글을 전달 받는다")
@@ -145,10 +153,12 @@ class ArticleServiceTest {
     void readMemberArticleTest() {
         when(articleRepository.findByIdAndMemberEquals(any(), any())).thenReturn(Optional.of(article2));
 
-        ArticleResponse articleResponse = articleService.readMemberArticle(eq(member), eq(ARTICLE_ID_2));
+        ArticleResponse articleResponse = articleService.readMemberArticle(member, ARTICLE_ID_2);
 
         assertThat(articleResponse).isNotNull();
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT2);
         assertThat(articleResponse.getIsCommentAllowed()).isFalse();
+        assertThat(articleResponse.getLikesCount()).isNotNull();
+        assertThat(articleResponse.getIsLikedByMe()).isNotNull();
     }
 }

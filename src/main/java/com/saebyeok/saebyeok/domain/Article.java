@@ -71,4 +71,9 @@ public class Article {
     public boolean isWrittenBy(Member member) {
         return this.member == member;
     }
+
+    public boolean isLikedBy(Member member) {
+        Objects.requireNonNull(member);
+        return this.likes.stream().anyMatch(it -> it.getMember() == member);
+    }
 }
