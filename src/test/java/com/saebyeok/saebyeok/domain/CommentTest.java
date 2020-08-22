@@ -90,4 +90,16 @@ public class CommentTest {
                 .isInstanceOf(DuplicateCommentLikeException.class)
                 .hasMessage("이미 공감한 댓글에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", commentId: " + comment1.getId());
     }
+
+    @DisplayName("특정 사용자가 해당 댓글을 공감했는지 여부를 확인할 수 있다")
+    @Test
+    void isLikedByTest() {
+        CommentLike like = new CommentLike(member, comment1);
+        comment1.addLike(like);
+
+        Member anotherMember = new Member(2L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
+
+        assertThat(comment1.isLikedBy(member)).isTrue();
+        assertThat(comment1.isLikedBy(anotherMember)).isFalse();
+    }
 }

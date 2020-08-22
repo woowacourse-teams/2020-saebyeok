@@ -68,6 +68,11 @@ public class Comment {
         return this.member == member;
     }
 
+    public boolean isLikedBy(Member member) {
+        Objects.requireNonNull(member);
+        return this.likes.stream().anyMatch(it -> it.getMember() == member);
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
