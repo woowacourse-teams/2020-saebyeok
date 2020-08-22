@@ -35,7 +35,7 @@ public class ArticleResponse {
         this.subEmotions = subEmotions;
         this.isCommentAllowed = article.getIsCommentAllowed();
         this.isMine = article.isWrittenBy(member);
-        this.likesCount = article.getLikesCount();
+        this.likesCount = article.countLikes();
         this.isLikedByMe = article.isLikedBy(member);
         this.comments = transformComments(article, member);
     }

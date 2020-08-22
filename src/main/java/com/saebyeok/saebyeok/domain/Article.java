@@ -4,7 +4,6 @@ import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -37,9 +36,6 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    @Formula("select count(*) from ARTICLE_LIKE as AL where AL.ARTICLE_ID = ARTICLE_ID")
-    private Long likesCount;
-
     @OneToMany(mappedBy = "article")
     private List<ArticleLike> likes;
 
@@ -61,6 +57,10 @@ public class Article {
     public boolean isLikedBy(Member member) {
         Objects.requireNonNull(member);
         return this.likes.stream().anyMatch(it -> it.getMember() == member);
+    }
+
+    public long countLikes() {
+        return this.likes.size();
     }
 
     public void addLike(ArticleLike like) {

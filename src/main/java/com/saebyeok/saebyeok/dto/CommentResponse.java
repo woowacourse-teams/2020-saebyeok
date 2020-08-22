@@ -28,7 +28,7 @@ public class CommentResponse {
         this.isDeleted = comment.getIsDeleted();
         this.createdDate = comment.getCreatedDate();
         this.isMine = comment.isWrittenBy(member);
-        this.likesCount = comment.getLikesCount();
+        this.likesCount = comment.countLikes();
         this.isLikedByMe = comment.isLikedBy(member);
     }
 }

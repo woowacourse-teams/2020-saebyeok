@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -42,9 +41,6 @@ public class Comment {
     private Article article;
     private Boolean isDeleted;
 
-    @Formula("select count(*) from COMMENT_LIKE as CL where CL.COMMENT_ID = ID")
-    private Long likesCount;
-
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
 
@@ -71,6 +67,10 @@ public class Comment {
     public boolean isLikedBy(Member member) {
         Objects.requireNonNull(member);
         return this.likes.stream().anyMatch(it -> it.getMember() == member);
+    }
+
+    public long countLikes() {
+        return this.likes.size();
     }
 
     public void setMember(Member member) {

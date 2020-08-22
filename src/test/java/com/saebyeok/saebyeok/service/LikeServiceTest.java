@@ -32,7 +32,6 @@ class LikeServiceTest {
     public static final long COMMENT_ID = 1L;
     public static final long INVALID_COMMENT_ID = 100L;
     public static final long ALREADY_LIKED_COMMENT_ID = 1L;
-    public static final long ARTICLE_LIKES_COUNT = 10L;
 
     private LikeService likeService;
 
@@ -56,8 +55,8 @@ class LikeServiceTest {
     void setUp() {
         this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), ARTICLE_LIKES_COUNT, new ArrayList<>());
-        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, 0L, new ArrayList<>());
+        this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
+        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, new ArrayList<>());
     }
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")

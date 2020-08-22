@@ -20,8 +20,8 @@ public class ArticleTest {
     @BeforeEach
     void setUp() {
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.article1 = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), 10L, new ArrayList<>());
-        this.article2 = new Article(2L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), 10L, new ArrayList<>());
+        this.article1 = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
+        this.article2 = new Article(2L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
     }
 
     @DisplayName("해당 게시물에 대한 ArticleLike가 아닌 ArticleLike를 추가하면 예외가 발생한다")

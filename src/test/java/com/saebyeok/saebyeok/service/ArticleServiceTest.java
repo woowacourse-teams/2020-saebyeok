@@ -38,7 +38,6 @@ class ArticleServiceTest {
     private static final boolean IS_COMMENT_ALLOWED_2 = false;
     private static final int PAGE_NUMBER = 0;
     private static final int PAGE_SIZE = 10;
-    private static final long TEST_LIKES_COUNT = 10L;
 
     private ArticleService articleService;
 
@@ -61,8 +60,8 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
-        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, TEST_LIKES_COUNT, new ArrayList<>());
-        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null, TEST_LIKES_COUNT, new ArrayList<>());
+        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, new ArrayList<>());
+        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null, new ArrayList<>());
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
