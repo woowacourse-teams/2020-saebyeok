@@ -1,9 +1,11 @@
 package com.saebyeok.saebyeok.domain;
 
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Comment {
@@ -35,6 +38,9 @@ public class Comment {
     @ManyToOne
     private Article article;
     private Boolean isDeleted;
+
+    @Formula("select count(*) from COMMENT_LIKE as CL where CL.COMMENT_ID = ID")
+    private Long likesCount;
 
     @Builder
     public Comment(String content, String nickname, Boolean isDeleted) {
