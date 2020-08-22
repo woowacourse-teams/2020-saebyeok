@@ -54,6 +54,15 @@ public class Article {
         member.addArticle(this);
     }
 
+    public boolean isWrittenBy(Member member) {
+        return this.member == member;
+    }
+
+    public boolean isLikedBy(Member member) {
+        Objects.requireNonNull(member);
+        return this.likes.stream().anyMatch(it -> it.getMember() == member);
+    }
+
     public void addLike(ArticleLike like) {
         Objects.requireNonNull(like);
 
@@ -66,14 +75,5 @@ public class Article {
             throw new DuplicateArticleLikeException(like.getMember().getId(), like.getArticle().getId());
         }
         this.likes.add(like);
-    }
-
-    public boolean isWrittenBy(Member member) {
-        return this.member == member;
-    }
-
-    public boolean isLikedBy(Member member) {
-        Objects.requireNonNull(member);
-        return this.likes.stream().anyMatch(it -> it.getMember() == member);
     }
 }
