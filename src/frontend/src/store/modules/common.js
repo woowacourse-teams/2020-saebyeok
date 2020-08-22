@@ -4,7 +4,6 @@ const getters = {};
 
 const mutations = {
   catchError(state, error) {
-    console.log('asdf');
     if (error.response.status === 401) {
       location.href = '/signin';
     }
