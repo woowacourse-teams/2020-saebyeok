@@ -17,7 +17,7 @@ public class ArticleTest {
     @Test
     void isWrittenByTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, null);
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, null, 0L);
         article.setMember(member);
 
         assertThat(article.isWrittenBy(member)).isTrue();
@@ -29,7 +29,7 @@ public class ArticleTest {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         Comment comment = new Comment("내용", "닉네임1", false);
         comment.setMember(member);
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment));
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment), 0L);
 
         assertThat(article.loadExistingNickname(member)).isEqualTo(Optional.of("닉네임1"));
     }
@@ -38,7 +38,7 @@ public class ArticleTest {
     @Test
     void loadExistingNicknameTest2() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Collections.emptyList());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Collections.emptyList(), 0L);
 
         assertThat(article.loadExistingNickname(member)).isEmpty();
     }
@@ -50,7 +50,7 @@ public class ArticleTest {
         Comment comment1 = new Comment("내용1", "닉네임1", false);
         Comment comment2 = new Comment("내용2", "닉네임2", false);
         Comment comment3 = new Comment("내용3", "닉네임3", false);
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment1, comment2, comment3));
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment1, comment2, comment3), 0L);
 
         assertThat(article.getAllNicknames()).
                 hasSize(3).
