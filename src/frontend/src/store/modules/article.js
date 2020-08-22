@@ -7,7 +7,8 @@ import {
   FETCH_ARTICLE,
   FETCH_ARTICLES,
   PAGING_ARTICLES,
-  CREATE_ARTICLE
+  CREATE_ARTICLE,
+  CLEAR_ARTICLES
 } from '@/store/shared/actionTypes';
 import ArticleService from '@/api/modules/article';
 
@@ -59,6 +60,9 @@ const actions = {
       commit(ADD_ARTICLES, data);
       return data;
     });
+  },
+  [CLEAR_ARTICLES]({ commit }) {
+    commit(SET_ARTICLES, []);
   }
 };
 
