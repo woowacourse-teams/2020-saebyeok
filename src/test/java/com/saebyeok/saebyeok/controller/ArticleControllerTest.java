@@ -56,6 +56,7 @@ class ArticleControllerTest {
     private static final Integer TEST_PAGE_NUMBER = 0;
     private static final Integer TEST_PAGE_SIZE = 10;
     private static final Long TEST_LIKES_COUNT = 10L;
+    private static final String INVALID_CONTENT = "이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다.";
 
     private MockMvc mockMvc;
     private List<ArticleResponse> articles;
@@ -99,6 +100,19 @@ class ArticleControllerTest {
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
+                andDo(print());
+    }
+
+    @DisplayName("예외 테스트: 제한 글자수를 넘었을때 예외가 발생한다")
+    @Test
+    void overLengthContentTest() throws Exception {
+        ArticleCreateRequest request = new ArticleCreateRequest(INVALID_CONTENT, TEST_EMOTION_1.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/articles").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
                 andDo(print());
     }
 
