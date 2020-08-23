@@ -14,9 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -30,7 +32,6 @@ class LikeServiceTest {
     public static final long COMMENT_ID = 1L;
     public static final long INVALID_COMMENT_ID = 100L;
     public static final long ALREADY_LIKED_COMMENT_ID = 1L;
-    public static final long ARTICLE_LIKES_COUNT = 10L;
 
     private LikeService likeService;
 
@@ -54,18 +55,20 @@ class LikeServiceTest {
     void setUp() {
         this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), ARTICLE_LIKES_COUNT);
-        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, 0L);
+        this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
+        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, new ArrayList<>());
     }
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
     void likeArticleTest() {
         when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(eq(ARTICLE_ID), any())).thenReturn(Optional.of(article));
+        when(articleLikeRepository.save(any())).thenReturn(new ArticleLike(member, article));
 
         likeService.likeArticle(new Member(), ARTICLE_ID);
 
         verify(articleLikeRepository).save(any());
+        assertThat(article.getLikes()).isNotEmpty();
     }
 
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 등록을 요청하면 예외가 발생한다")
@@ -121,6 +124,7 @@ class LikeServiceTest {
         likeService.likeComment(new Member(), COMMENT_ID);
 
         verify(commentLikeRepository).save(any());
+        assertThat(comment.getLikes()).isNotEmpty();
     }
 
     @DisplayName("예외 테스트: 잘못된 댓글에 공감 등록을 요청하면 예외가 발생한다")

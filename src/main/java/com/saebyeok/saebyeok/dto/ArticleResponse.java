@@ -24,6 +24,7 @@ public class ArticleResponse {
     private Boolean isCommentAllowed;
     private Boolean isMine;
     private Long likesCount;
+    private Boolean isLikedByMe;
     private List<CommentResponse> comments;
 
     public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions) {
@@ -34,7 +35,8 @@ public class ArticleResponse {
         this.subEmotions = subEmotions;
         this.isCommentAllowed = article.getIsCommentAllowed();
         this.isMine = article.isWrittenBy(member);
-        this.likesCount = article.getLikesCount();
+        this.likesCount = article.countLikes();
+        this.isLikedByMe = article.isLikedBy(member);
         this.comments = transformComments(article, member);
     }
 
