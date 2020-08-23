@@ -1,7 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
 import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
-import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,18 +45,9 @@ public class Comment {
 
     @Builder
     public Comment(String content, String nickname, Boolean isDeleted) {
-        validateLength(content);
-
         this.content = content;
         this.nickname = nickname;
         this.isDeleted = isDeleted;
-    }
-
-    private void validateLength(String content) {
-        int contentLength = content.trim().length();
-        if (contentLength < MIN_LENGTH || contentLength > MAX_LENGTH) {
-            throw new InvalidLengthCommentException(contentLength);
-        }
     }
 
     public boolean isWrittenBy(Member member) {

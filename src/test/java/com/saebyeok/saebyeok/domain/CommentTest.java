@@ -1,7 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
 import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
-import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,30 +43,6 @@ public class CommentTest {
         assertThat(comment.getContent()).isEqualTo(TEST_CONTENT);
         assertThat(comment.getNickname()).isEqualTo(TEST_NICKNAME);
         assertThat(comment.getIsDeleted()).isFalse();
-    }
-
-    @DisplayName("예외 테스트: Comment가 정해진 최소 길이보다 작을 때 예외가 발생해야 한다")
-    @Test
-    void underLengthCommentTest() {
-        assertThatThrownBy(() -> Comment.builder().
-            content(UNDER_LENGTH_CONTENT).
-            nickname(TEST_NICKNAME).
-            isDeleted(false).
-            build())
-            .isInstanceOf(InvalidLengthCommentException.class)
-            .hasMessageContaining("올바르지 않은 댓글입니다!");
-    }
-
-    @DisplayName("예외 테스트: Comment가 정해진 최대 길이보다 클 때 예외가 발생해야 한다")
-    @Test
-    void overLengthCommentTest() {
-        assertThatThrownBy(() -> Comment.builder().
-                content(OVER_LENGTH_CONTENT).
-                nickname(TEST_NICKNAME).
-                isDeleted(false).
-                build())
-                .isInstanceOf(InvalidLengthCommentException.class)
-                .hasMessageContaining("올바르지 않은 댓글입니다!");
     }
 
     @DisplayName("예외 테스트: 해당 댓글에 대한 CommentLike가 아닌 CommentLike를 추가하면 예외가 발생한다")
