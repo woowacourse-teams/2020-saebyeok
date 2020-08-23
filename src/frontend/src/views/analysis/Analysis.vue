@@ -26,8 +26,8 @@
       style="padding: 12px; margin: 12px"
     >
       <div id="comment-statistics">
-        남겨준 댓글 수 <b>{{ commentsAnalysis.totalCommentsCount }}</b> |
-        공감받은 댓글 수
+        남겨준 댓글 수
+        <b>{{ commentsAnalysis.totalCommentsCount }}</b> | 공감받은 댓글 수
         <b>{{ likedCommentsCount }}</b>
       </div>
     </v-card>
@@ -93,6 +93,10 @@ export default {
         scale: {
           pointLabels: {
             fontSize: 30
+          },
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
           }
         }
       };
