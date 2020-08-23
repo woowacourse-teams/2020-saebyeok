@@ -95,10 +95,10 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void readArticle() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L, false));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         given(articleService.readArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -130,6 +130,8 @@ public class ArticleDocumentation extends Documentation {
                                 fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" +
                                         " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
+                                fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의 ID"),
                                 fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
@@ -139,7 +141,9 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수"),
+                                fieldWithPath("comments[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글을 내가 공감한 상태인지 여부")
                         )
                 ));
     }
@@ -147,10 +151,10 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void readMemberArticle() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L, false));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         given(articleService.readMemberArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -182,6 +186,8 @@ public class ArticleDocumentation extends Documentation {
                                 fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" +
                                         " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
+                                fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의 ID"),
                                 fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("조회할 게시물의 " +
@@ -191,7 +197,9 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수"),
+                                fieldWithPath("comments[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글을 내가 공감한 상태인지 여부")
                         )
                 ));
     }
@@ -199,10 +207,10 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void getArticles() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L, false));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -241,6 +249,8 @@ public class ArticleDocumentation extends Documentation {
                                         " 허용 " +
                                         "여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
+                                fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
                                         " ID"),
@@ -251,7 +261,9 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("[].comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("[].comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("[].comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수"),
+                                fieldWithPath("[].comments[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글을 내가 공감한 상태인지 여부")
                         )
                 ));
     }
@@ -259,10 +271,10 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void getMemberArticles() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true));
+                LocalDateTime.now(), true, 10L, false));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, comments);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -301,6 +313,8 @@ public class ArticleDocumentation extends Documentation {
                                         " 허용 " +
                                         "여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
+                                fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
                                 fieldWithPath("[].comments[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 댓글 목록"),
                                 fieldWithPath("[].comments[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글의" +
                                         " ID"),
@@ -311,7 +325,9 @@ public class ArticleDocumentation extends Documentation {
                                         "닉네임"),
                                 fieldWithPath("[].comments[].isDeleted").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글의 삭제 여부"),
                                 fieldWithPath("[].comments[].createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 댓글의 작성 시간"),
-                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부")
+                                fieldWithPath("[].comments[].isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("[].comments[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시물의 댓글이 받은 공감의 수"),
+                                fieldWithPath("[].comments[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글을 내가 공감한 상태인지 여부")
                         )
                 ));
     }

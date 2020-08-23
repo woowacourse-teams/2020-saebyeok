@@ -40,22 +40,28 @@ const mutations = {
 const actions = {
   // eslint-disable-next-line no-unused-vars
   async [FETCH_MEMBER_ARTICLE]({ commit }, articleId) {
-    return MemberArticleService.get(articleId).then(({ data }) => {
-      commit(SET_MEMBER_ARTICLE, data);
-      return data;
-    });
+    return MemberArticleService.get(articleId)
+      .then(({ data }) => {
+        commit(SET_MEMBER_ARTICLE, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   async [FETCH_MEMBER_ARTICLES]({ commit }, params) {
-    return MemberArticleService.getAll(params).then(({ data }) => {
-      commit(SET_MEMBER_ARTICLES, data);
-      return data;
-    });
+    return MemberArticleService.getAll(params)
+      .then(({ data }) => {
+        commit(SET_MEMBER_ARTICLES, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   async [PAGING_MEMBER_ARTICLES]({ commit }, params) {
-    return MemberArticleService.getAll(params).then(({ data }) => {
-      commit(ADD_MEMBER_ARTICLES, data);
-      return data;
-    });
+    return MemberArticleService.getAll(params)
+      .then(({ data }) => {
+        commit(ADD_MEMBER_ARTICLES, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   [CLEAR_MEMBER_ARTICLES]({ commit }) {
     commit(SET_MEMBER_ARTICLES, []);

@@ -18,6 +18,8 @@ public class CommentResponse {
     private Boolean isDeleted;
     private LocalDateTime createdDate;
     private Boolean isMine;
+    private Long likesCount;
+    private Boolean isLikedByMe;
 
     public CommentResponse(Comment comment, Member member) {
         this.id = comment.getId();
@@ -26,5 +28,7 @@ public class CommentResponse {
         this.isDeleted = comment.getIsDeleted();
         this.createdDate = comment.getCreatedDate();
         this.isMine = comment.isWrittenBy(member);
+        this.likesCount = comment.countLikes();
+        this.isLikedByMe = comment.isLikedBy(member);
     }
 }

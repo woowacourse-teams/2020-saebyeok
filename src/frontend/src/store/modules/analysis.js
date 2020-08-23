@@ -33,14 +33,18 @@ const mutations = {
 
 const actions = {
   async [FETCH_ARTICLES_ANALYSIS]({ commit }) {
-    return AnalysisService.getArticlesAnalysis().then(({ data }) => {
-      commit(SET_ARTICLES_ANALYSIS, data);
-    });
+    return AnalysisService.getArticlesAnalysis()
+      .then(({ data }) => {
+        commit(SET_ARTICLES_ANALYSIS, data);
+      })
+      .catch(error => commit('catchError', error));
   },
   async [FETCH_COMMENTS_ANALYSIS]({ commit }) {
-    return AnalysisService.getCommentsAnalysis().then(({ data }) => {
-      commit(SET_COMMENTS_ANALYSIS, data);
-    });
+    return AnalysisService.getCommentsAnalysis()
+      .then(({ data }) => {
+        commit(SET_COMMENTS_ANALYSIS, data);
+      })
+      .catch(error => commit('catchError', error));
   }
 };
 
