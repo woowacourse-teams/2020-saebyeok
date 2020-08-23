@@ -3,6 +3,7 @@ package com.saebyeok.saebyeok.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.service.CommentService;
+import com.saebyeok.saebyeok.util.NicknameGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class CommentControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @MockBean
+    private NicknameGenerator nicknameGenerator;
+
     private MockMvc mockMvc;
 
     // TODO: 2020/07/20 controllerTest가 더 생기면 objectMapper 공통 사용 고려하기
@@ -53,13 +57,13 @@ class CommentControllerTest {
     void createCommentTest() throws Exception {
         Comment comment = Comment.builder().
                 content(TEST_CONTENT).
-                nickname(TEST_NICKNAME).
                 isDeleted(false).
                 build();
 
         String content = objectMapper.writeValueAsString(comment);
 
         given(commentService.createComment(any(), any())).willReturn(comment);
+        given(nicknameGenerator.generate(any(), any())).willReturn(TEST_NICKNAME);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
                 content(content).

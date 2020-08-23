@@ -81,6 +81,10 @@ public class Comment {
         this.article = article;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void addLike(CommentLike like) {
         Objects.requireNonNull(like);
 

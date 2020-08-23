@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Objects;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -52,6 +54,19 @@ public class Article {
 
     public boolean isWrittenBy(Member member) {
         return this.member == member;
+    }
+
+    public Optional<String> loadExistingNickname(Member member) {
+        return comments.stream()
+                .filter(comment -> comment.isWrittenBy(member))
+                .findFirst()
+                .map(Comment::getNickname);
+    }
+
+    public List<String> getAllNicknames() {
+        return comments.stream()
+                .map(Comment::getNickname)
+                .collect(Collectors.toList());
     }
 
     public boolean isLikedBy(Member member) {
