@@ -1,0 +1,22 @@
+{
+  "short_name": "새벽",
+  "name": "새벽: 당신의 마음을 들어줄게요",
+  "description": "익명 공유 감정 다이어리",
+  "icons": [
+    {
+      "src": "/img/icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/icons/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#e3d6f4",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#e3d6f4"
+}
