@@ -24,17 +24,16 @@ public class ArticleTest {
         this.article2 = new Article(2L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
     }
 
-    @DisplayName("해당 게시물에 대한 ArticleLike가 아닌 ArticleLike를 추가하면 예외가 발생한다")
+    @DisplayName("예외 테스트: 해당 게시물에 대한 ArticleLike가 아닌 ArticleLike를 추가하면 예외가 발생한다")
     @Test
     void addInvalidLikeExceptionTest() {
         ArticleLike invalidArticleLike = new ArticleLike(member, article2);
-
 
         assertThatThrownBy(() -> article1.addLike(invalidArticleLike))
                 .isInstanceOf(RuntimeException.class);
     }
 
-    @DisplayName("이미 존재하는 ArticleLike를 추가하면 예외가 발생한다")
+    @DisplayName("예외 테스트: 이미 존재하는 ArticleLike를 추가하면 예외가 발생한다")
     @Test
     void addLikeExceptionTest() {
         ArticleLike articleLike = new ArticleLike(member, article1);

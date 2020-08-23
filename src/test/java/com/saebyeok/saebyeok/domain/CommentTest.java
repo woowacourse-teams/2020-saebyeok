@@ -70,17 +70,16 @@ public class CommentTest {
                 .hasMessageContaining("올바르지 않은 댓글입니다!");
     }
 
-    @DisplayName("해당 댓글에 대한 CommentLike가 아닌 CommentLike를 추가하면 예외가 발생한다")
+    @DisplayName("예외 테스트: 해당 댓글에 대한 CommentLike가 아닌 CommentLike를 추가하면 예외가 발생한다")
     @Test
     void addInvalidLikeExceptionTest() {
         CommentLike invalidCommentLike = new CommentLike(member, comment2);
-
 
         assertThatThrownBy(() -> comment1.addLike(invalidCommentLike))
                 .isInstanceOf(RuntimeException.class);
     }
 
-    @DisplayName("이미 존재하는 CommentLike를 추가하면 예외가 발생한다")
+    @DisplayName("예외 테스트: 이미 존재하는 CommentLike를 추가하면 예외가 발생한다")
     @Test
     void addLikeExceptionTest() {
         CommentLike commentLike = new CommentLike(member, comment1);
