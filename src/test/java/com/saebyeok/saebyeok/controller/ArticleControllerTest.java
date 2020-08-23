@@ -57,6 +57,7 @@ class ArticleControllerTest {
     private static final Integer TEST_PAGE_SIZE = 10;
     private static final Long TEST_LIKES_COUNT = 10L;
     private static final String INVALID_CONTENT = "이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다.";
+    public static final boolean TEST_IS_LIKED_BY_ME = false;
 
     private MockMvc mockMvc;
     private List<ArticleResponse> articles;
@@ -71,8 +72,8 @@ class ArticleControllerTest {
                 .build();
         this.articles = new ArrayList<>();
         List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, null));
-        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, null));
+        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null));
+        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
@@ -84,7 +85,8 @@ class ArticleControllerTest {
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
-                andExpect(jsonPath("$[0].likesCount").value(TEST_LIKES_COUNT));
+                andExpect(jsonPath("$[0].likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$[0].isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
@@ -128,7 +130,8 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_1.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
-                andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT));
+                andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 
     @DisplayName("예외 테스트: 없는 ID의 글 조회를 요청하면 ArticleNotFoundException이 발생한다")
@@ -173,6 +176,7 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$", hasSize(2))).
                 andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$[0].likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$[0].isLikedByMe").value(TEST_IS_LIKED_BY_ME)).
                 andExpect(jsonPath("$[1].content").value(TEST_CONTENT_2));
     }
 
@@ -188,6 +192,7 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_2.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
-                andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT));
+                andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 }
