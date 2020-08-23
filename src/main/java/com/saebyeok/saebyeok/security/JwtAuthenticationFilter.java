@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String token = ((HttpServletRequest) request).getHeader(REQUEST_TOKEN_HEADER_NAME);
-        if (token != null) {
+        if (token != null && !token.equals("null")) {
             token = token.split(" ")[1];
         }
         if (isValidToken(token)) {

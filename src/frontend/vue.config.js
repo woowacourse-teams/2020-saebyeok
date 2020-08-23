@@ -9,7 +9,11 @@ module.exports = {
         target: 'http://localhost:9000',
         ws: true,
         changeOrigin: true
-        //pathRewrite: { '/api': '/' }
+      },
+      '/oauth2/authorization/': {
+        target: 'http://localhost:9000',
+        ws: true,
+        changeOrigin: true
       }
     }
   }

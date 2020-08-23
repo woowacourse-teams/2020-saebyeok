@@ -1,14 +1,14 @@
 import {
+  ADD_ARTICLES,
   SET_ARTICLE,
-  SET_ARTICLES,
-  ADD_ARTICLES
+  SET_ARTICLES
 } from '@/store/shared/mutationTypes';
 import {
+  CLEAR_ARTICLES,
+  CREATE_ARTICLE,
   FETCH_ARTICLE,
   FETCH_ARTICLES,
-  PAGING_ARTICLES,
-  CREATE_ARTICLE,
-  CLEAR_ARTICLES
+  PAGING_ARTICLES
 } from '@/store/shared/actionTypes';
 import ArticleService from '@/api/modules/article';
 
@@ -44,23 +44,30 @@ const actions = {
     return ArticleService.create(article);
   },
   async [FETCH_ARTICLE]({ commit }, articleId) {
-    return ArticleService.get(articleId).then(({ data }) => {
-      commit(SET_ARTICLE, data);
-      return data;
-    });
+    return ArticleService.get(articleId)
+      .then(({ data }) => {
+        commit(SET_ARTICLE, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   async [FETCH_ARTICLES]({ commit }, params) {
-    return ArticleService.getAll(params).then(({ data }) => {
-      commit(SET_ARTICLES, data);
-      return data;
-    });
+    return ArticleService.getAll(params)
+      .then(({ data }) => {
+        commit(SET_ARTICLES, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   async [PAGING_ARTICLES]({ commit }, params) {
-    return ArticleService.getAll(params).then(({ data }) => {
-      commit(ADD_ARTICLES, data);
-      return data;
-    });
+    return ArticleService.getAll(params)
+      .then(({ data }) => {
+        commit(ADD_ARTICLES, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
+
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);
   }

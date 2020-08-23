@@ -6,6 +6,7 @@ import Emotion from '@/store/modules/emotion';
 import MemberArticle from '@/store/modules/memberArticle';
 import Filter from '@/store/modules/filter';
 import Analysis from '@/store/modules/analysis';
+import Common from '@/store/modules/common';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     Emotion,
     MemberArticle,
     Filter,
-    Analysis
+    Analysis,
+    Common
   }
 });
