@@ -17,9 +17,7 @@
                   <created-date :createdDate="article.createdDate" />
                 </div>
                 <div>
-                  <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
+                  <detail-card-menu v-if="article.isMine" />
                 </div>
               </v-col>
             </v-row>
@@ -71,13 +69,15 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
 
 export default {
   name: 'DetailPageCard',
   components: {
     CreatedDate,
     EmotionImage,
-    SubEmotionChips
+    SubEmotionChips,
+    DetailCardMenu
   },
   data() {
     return {
