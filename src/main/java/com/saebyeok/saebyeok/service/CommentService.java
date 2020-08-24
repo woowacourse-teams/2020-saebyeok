@@ -45,4 +45,9 @@ public class CommentService {
         }
         commentRepository.deleteById(commentId);
     }
+
+    @Transactional
+    public void deleteCommentsByArticle(Article article) {
+        commentRepository.deleteAll(article.getComments());
+    }
 }

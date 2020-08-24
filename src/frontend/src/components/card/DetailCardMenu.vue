@@ -31,6 +31,9 @@
   </v-menu>
 </template>
 <script>
+import { mapActions } from 'vuex';
+import { DELETE_ARTICLE } from '@/store/shared/actionTypes';
+
 export default {
   name: 'DetailCardMenu',
   data() {
@@ -39,8 +42,16 @@ export default {
     };
   },
   methods: {
+    ...mapActions([DELETE_ARTICLE]),
     onDeleteArticle() {
-      console.log('delete it!');
+      this.deleteArticle(this.articleId);
+      location.href = '/feed';
+    }
+  },
+  props: {
+    articleId: {
+      type: Number,
+      required: true
     }
   }
 };

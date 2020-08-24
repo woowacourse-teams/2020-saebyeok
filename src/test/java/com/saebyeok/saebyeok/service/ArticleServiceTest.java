@@ -50,6 +50,9 @@ class ArticleServiceTest {
     @Mock
     private ArticleSubEmotionService articleSubEmotionService;
 
+    @Mock
+    private CommentService commentService;
+
     private Member member;
     private Article article1;
     private Article article2;
@@ -58,7 +61,7 @@ class ArticleServiceTest {
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
+        articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService, commentService);
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
         article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, new ArrayList<>());
         article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null, new ArrayList<>());
