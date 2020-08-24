@@ -11,6 +11,9 @@ const ArticleService = {
   },
   getAll(params) {
     return ApiService.getWithParams(`${BASE_URL}`, params);
+  },
+  delete(articleId) {
+    return ApiService.delete(`${BASE_URL}/${articleId}`);
   }
 };
 
