@@ -47,9 +47,10 @@ public class AnalysisController {
                 .orElseThrow(() -> new MemberNotFoundException(user.getId()));
 
         Long totalCommentsCount = analysisService.countTotalCommentsBy(member);
+        Long likedCommentsCount = analysisService.countLikedCommentsBy(member);
 
-        // TODO: 2020/08/17 차후 추천받은 댓글의 수와, 그에 따른 메세지도 같이 전달?
-        CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount);
+        CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount,
+                                                                                         likedCommentsCount);
 
         return ResponseEntity.ok(commentsAnalysisResponse);
     }
