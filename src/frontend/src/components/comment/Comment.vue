@@ -2,16 +2,16 @@
   <v-card class="mx-auto" color="#faf9f5" max-width="400">
     <v-card-title class="text-body-1">
       <v-row>
-        <v-col cols="6">
-          {{ comment.nickname }}
-        </v-col>
-        <v-col cols="6" justify-end>
+        <v-col cols="10" class="d-flex align-center">
+          <div class="mr-3">
+            {{ comment.nickname }}
+          </div>
           <div>
             <created-date :createdDate="comment.createdDate" />
           </div>
-          <div>
-            <comment-menu v-if="comment.isMine" :commentId="comment.id" />
-          </div>
+        </v-col>
+        <v-col cols="2" justify-end>
+          <comment-menu v-if="comment.isMine" :commentId="comment.id" />
         </v-col>
       </v-row>
     </v-card-title>

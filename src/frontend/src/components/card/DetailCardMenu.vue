@@ -45,7 +45,7 @@ export default {
     ...mapActions([DELETE_ARTICLE]),
     onDeleteArticle() {
       this.deleteArticle(this.articleId);
-      location.href = '/feed';
+      this.$router.go(-1);
     }
   },
   props: {
