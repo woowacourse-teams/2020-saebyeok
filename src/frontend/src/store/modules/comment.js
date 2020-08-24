@@ -13,8 +13,8 @@ const actions = {
     return CommentService.create(comment);
   },
   // eslint-disable-next-line no-unused-vars
-  async [DELETE_COMMENT]({ commit }, articleId, commentId) {
-    return CommentService.delete(articleId, commentId);
+  async [DELETE_COMMENT]({ commit }, params) {
+    return CommentService.delete(params);
   }
 };
 

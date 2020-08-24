@@ -44,7 +44,10 @@ export default {
   methods: {
     ...mapActions([DELETE_COMMENT]),
     onDeleteArticle() {
-      this.deleteComment(this.commentId);
+      this.deleteComment({
+        articleId: this.$route.params.articleId,
+        commentId: this.commentId
+      });
       this.$router.go();
     }
   },

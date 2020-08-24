@@ -6,7 +6,12 @@
           {{ comment.nickname }}
         </v-col>
         <v-col cols="6" justify-end>
-          <created-date :createdDate="comment.createdDate" />
+          <div>
+            <created-date :createdDate="comment.createdDate" />
+          </div>
+          <div>
+            <comment-menu v-if="comment.isMine" :commentId="comment.id" />
+          </div>
         </v-col>
       </v-row>
     </v-card-title>
@@ -44,12 +49,13 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+import CommentMenu from '@/components/comment/CommentMenu';
 
 export default {
-  //id, content, nickname, isDeleted, createdDate
   name: 'Comment',
   components: {
-    CreatedDate
+    CreatedDate,
+    CommentMenu
   },
   data() {
     return {
