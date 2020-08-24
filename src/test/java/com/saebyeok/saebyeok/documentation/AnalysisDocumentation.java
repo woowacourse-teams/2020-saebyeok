@@ -81,7 +81,9 @@ public class AnalysisDocumentation extends Documentation {
     @Test
     void getCommentsAnalysis() throws Exception {
         Long totalCommentsCount = 42L;
+        Long likedCommentsCount = 7L;
         given(analysisService.countTotalCommentsBy(any(Member.class))).willReturn(totalCommentsCount);
+        given(analysisService.countLikedCommentsBy(any(Member.class))).willReturn(likedCommentsCount);
 
         this.mockMvc.perform(get("/api/analysis/comments").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
@@ -96,7 +98,9 @@ public class AnalysisDocumentation extends Documentation {
                                ),
                                responseFields(
                                        fieldWithPath("totalCommentsCount").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 작성한 댓글의 총 개수")
+                                               .description("사용자가 작성한 댓글의 총 개수"),
+                                       fieldWithPath("likedCommentsCount").type(JsonFieldType.NUMBER)
+                                               .description("사용자가 공감받은 댓글의 총 개수")
                                )
                 ));
     }
