@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class AnalysisService {
     private static final int INQUIRY_DAYS = 30;
+    private static final long NO_COMMENT_LIKED = 0L;
 
     private final EmotionService emotionService;
     private final ArticleEmotionService articleEmotionService;
@@ -34,5 +35,11 @@ public class AnalysisService {
 
     public Long countTotalCommentsBy(Member member) {
         return commentService.countTotalCommentsBy(member);
+    }
+
+    public Long countLikedCommentsBy(Member member) {
+        return commentService.findAllCommentsBy(member).stream()
+                .filter(comment -> comment.countLikes() > NO_COMMENT_LIKED)
+                .count();
     }
 }
