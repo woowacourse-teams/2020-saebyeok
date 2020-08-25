@@ -11,7 +11,10 @@
           </div>
         </v-col>
         <v-col cols="2" justify-end>
-          <comment-menu v-if="comment.isMine" :commentId="comment.id" />
+          <comment-menu
+            v-if="comment.isMine && !comment.isDeleted"
+            :commentId="comment.id"
+          />
         </v-col>
       </v-row>
     </v-card-title>

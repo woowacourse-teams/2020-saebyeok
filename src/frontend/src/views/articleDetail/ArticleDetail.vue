@@ -4,21 +4,7 @@
       <detail-page-card :article="article" />
     </v-layout>
 
-    <v-layout>
-      <v-row v-if="article.isCommentAllowed" dense>
-        <v-col v-for="comment in article.comments" :key="comment.id" cols="12">
-          <comment :comment="comment"></comment>
-        </v-col>
-      </v-row>
-      <v-row v-else>
-        <v-col
-          class="d-flex justify-center"
-          style="font-size: 15px; font-color: #FFFFFF; line-height: 15px;"
-        >
-          {{ commentNotAllowedMessage }}
-        </v-col>
-      </v-row>
-    </v-layout>
+    <comments :article="article" />
 
     <v-layout v-if="article.isCommentAllowed">
       <comment-create-form :articleId="article.id" />
@@ -30,19 +16,14 @@
 import { mapActions, mapGetters } from 'vuex';
 import { FETCH_ARTICLE } from '@/store/shared/actionTypes';
 import DetailPageCard from '@/components/card/DetailPageCard';
-import Comment from '@/components/comment/Comment';
+import Comments from '@/components/comment/Comments';
 import CommentCreateForm from '@/components/comment/CommentCreateForm';
 
 export default {
   name: 'ArticleDetail',
-  data() {
-    return {
-      commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
-    };
-  },
   components: {
     DetailPageCard,
-    Comment,
+    Comments,
     CommentCreateForm
   },
   created() {
