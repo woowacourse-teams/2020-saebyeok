@@ -30,37 +30,37 @@
 </template>
 
 <script>
-  import {mapActions, mapMutations} from 'vuex';
-  import {SHOW_SNACKBAR} from '../store/shared/mutationTypes';
-  import {CREATE_COMMENT} from '@/store/shared/actionTypes';
+import { mapActions, mapMutations } from 'vuex';
+import { SHOW_SNACKBAR } from '../store/shared/mutationTypes';
+import { CREATE_COMMENT } from '@/store/shared/actionTypes';
 
-  export default {
-    name: 'CommentCreateForm',
-    data() {
-      return {
-        content: ''
+export default {
+  name: 'CommentCreateForm',
+  data() {
+    return {
+      content: ''
+    };
+  },
+  methods: {
+    ...mapActions([CREATE_COMMENT]),
+    ...mapMutations([SHOW_SNACKBAR]),
+    async submitComment() {
+      const commentCreateRequest = {
+        content: this.content,
+        articleId: this.articleId,
+        isDeleted: false
       };
-    },
-    methods: {
-      ...mapActions([CREATE_COMMENT]),
-      ...mapMutations([SHOW_SNACKBAR]),
-      async submitComment() {
-        const commentCreateRequest = {
-          content: this.content,
-          articleId: this.articleId,
-          isDeleted: false
-        };
-        this.createComment(commentCreateRequest)
-                .then(response => {
-                  if (response.status === 201) {
-                    this.showSnackbar('공감해줘서 고마워요.');
-                    this.$router.go();
-                  }
-                })
-                .catch(error => {
-                  this.showSnackbar(error.response.data.errorMessage);
-                });
-      }
+      this.createComment(commentCreateRequest)
+        .then(response => {
+          if (response.status === 201) {
+            this.showSnackbar('공감해줘서 고마워요.');
+            this.$router.go();
+          }
+        })
+        .catch(error => {
+          this.showSnackbar(error.response.data.errorMessage);
+        });
+    }
   },
   props: ['articleId']
 };

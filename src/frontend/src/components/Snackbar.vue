@@ -5,29 +5,29 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
-  export default {
-    name: 'Snackbar',
-    computed: {
-      ...mapGetters(['isShow', 'message'])
-    },
-    watch: {
-      isShow() {
-        this.showSnackbar(this.message);
-      }
-    },
-    methods: {
-      showSnackbar(msg) {
-        this.snackbarMsg = msg;
-        this.snackbar = true;
-      }
-    },
-    data() {
-      return {
-        snackbar: false,
-        snackbarMsg: ''
-      };
+export default {
+  name: 'Snackbar',
+  computed: {
+    ...mapGetters(['isShow', 'message'])
+  },
+  watch: {
+    isShow() {
+      this.showSnackbar(this.message);
     }
-  };
+  },
+  methods: {
+    showSnackbar(msg) {
+      this.snackbarMsg = msg;
+      this.snackbar = true;
+    }
+  },
+  data() {
+    return {
+      snackbar: false,
+      snackbarMsg: ''
+    };
+  }
+};
 </script>
