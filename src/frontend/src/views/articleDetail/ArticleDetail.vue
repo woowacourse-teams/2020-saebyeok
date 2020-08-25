@@ -6,9 +6,16 @@
 
     <comments :article="article" />
 
-    <v-layout v-if="article.isCommentAllowed">
+    <v-footer
+      app
+      shift
+      color="#e3d6f4"
+      pa-0
+      ma-0
+      v-if="article.isCommentAllowed"
+    >
       <comment-create-form :articleId="article.id" />
-    </v-layout>
+    </v-footer>
   </v-container>
 </template>
 

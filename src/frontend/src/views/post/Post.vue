@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-layout column>
+      <v-layout column pa-0 ma-0>
         <v-row no-gutters>
           <v-col
             cols="3"
@@ -24,11 +24,13 @@
               multiple
               max="3"
               align="right"
-              justify="end"
+              justify="space-between"
             >
               <v-chip
                 v-for="subEmotion in emotion.subEmotions"
                 :key="subEmotion.id"
+                class="ma-1"
+                style="font-size: 12px;"
                 v-on:click="onClickSubEmotionTag(subEmotion.id)"
                 ># {{ subEmotion.name }}</v-chip
               >

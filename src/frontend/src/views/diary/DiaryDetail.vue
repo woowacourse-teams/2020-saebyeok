@@ -4,9 +4,16 @@
       <detail-page-card :article="memberArticle" />
     </v-layout>
     <comments :article="memberArticle" />
-    <v-layout v-if="memberArticle.isCommentAllowed">
+    <v-footer
+      app
+      shift
+      color="#e3d6f4"
+      pa-0
+      ma-0
+      v-if="memberArticle.isCommentAllowed"
+    >
       <comment-create-form :articleId="memberArticle.id" />
-    </v-layout>
+    </v-footer>
   </v-container>
 </template>
 
