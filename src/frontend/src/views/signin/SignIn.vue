@@ -24,9 +24,9 @@ export default {};
 
 <style scoped>
 .background {
-  /* Todo: 우선 배경화면 이미지를 인터넷에서 가져옴. 추후 이미지 파일로 관리 필요 */
-  background-image: url('https://www.starobserver.org/image/1711/20171117dawnTezel.jpg');
+  background-image: url('/img/dawnTezel.jpg');
   background-position: center center;
+  background-size: cover;
 }
 p {
   font-size: 40px;
