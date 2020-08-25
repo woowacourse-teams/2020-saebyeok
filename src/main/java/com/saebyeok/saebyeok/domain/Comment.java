@@ -85,6 +85,10 @@ public class Comment {
         this.nickname = nickname;
     }
 
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     public void addLike(CommentLike like) {
         Objects.requireNonNull(like);
 
