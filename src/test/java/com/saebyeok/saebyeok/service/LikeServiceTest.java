@@ -68,7 +68,6 @@ class LikeServiceTest {
         likeService.likeArticle(new Member(), ARTICLE_ID);
 
         verify(articleLikeRepository).save(any());
-        assertThat(article.getLikes()).isNotEmpty();
     }
 
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 등록을 요청하면 예외가 발생한다")

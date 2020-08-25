@@ -31,9 +31,7 @@ public class LikeService {
         ArticleLike like = new ArticleLike(member, article);
 
         try {
-            articleLikeRepository.save(like);
-            article.addLike(like);
-            return like;
+            return articleLikeRepository.save(like);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateArticleLikeException(member.getId(), articleId);
         }

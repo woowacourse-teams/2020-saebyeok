@@ -69,6 +69,8 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import { mapActions } from 'vuex';
+import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Card',
@@ -78,6 +80,7 @@ export default {
     SubEmotionChips
   },
   methods: {
+    ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     onClickCard: function() {
       this.$router.push({
         path: this.$router.history.current.path + '/' + this.article.id
@@ -85,8 +88,15 @@ export default {
     },
     toggleLike() {
       event.stopPropagation();
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.article.isLikedByMe) {
+        this.unlikeArticle(this.article.id);
+        this.article.isLikedByMe = !this.article.isLikedByMe;
+        this.article.likesCount--;
+      } else {
+        this.likeArticle(this.article.id);
+        this.article.isLikedByMe = !this.article.isLikedByMe;
+        this.article.likesCount++;
+      }
     }
   },
   props: {

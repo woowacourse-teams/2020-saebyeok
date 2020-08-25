@@ -71,6 +71,8 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import { mapActions } from 'vuex';
+import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 
 export default {
   name: 'DetailPageCard',
@@ -86,9 +88,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     toggleLike() {
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.article.isLikedByMe) {
+        this.unlikeArticle(this.article.id);
+        this.article.isLikedByMe = !this.article.isLikedByMe;
+        this.article.likesCount--;
+      } else {
+        this.likeArticle(this.article.id);
+        this.article.isLikedByMe = !this.article.isLikedByMe;
+        this.article.likesCount++;
+      }
     }
   }
 };
