@@ -1,29 +1,22 @@
 <template>
   <v-container pa-0 class="d-flex justify-center" style="max-width: 400px">
     <v-layout column>
-      <v-flex class="d-flex justify-center">
+      <v-flex class="d-flex justify-end">
         <v-textarea
           solo
-          no-resize
+          auto-grow
           counter="140"
           maxlength="140"
-          rows="3"
+          rows="1"
           name="input-7-4"
           label="댓글을 달아주세요~"
           v-model="content"
-        ></v-textarea>
-      </v-flex>
-      <v-flex class="d-flex justify-center">
-        <v-btn
-          class="ma-2"
-          depressed
-          block
-          dark
-          width="100%"
-          color="rgba(164, 63, 176)"
-          @click="submitComment"
-          >남기기</v-btn
-        >
+        />
+        <div class="align-top">
+          <v-icon class="ma-2" @click="submitComment">
+            mdi-comment-arrow-right-outline
+          </v-icon>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
