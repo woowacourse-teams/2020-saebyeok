@@ -11,6 +11,12 @@ const ArticleService = {
   },
   getAll(params) {
     return ApiService.getWithParams(`${BASE_URL}`, params);
+  },
+  like(articleId) {
+    return ApiService.post(`/likes/article/${articleId}`);
+  },
+  unlike(articleId) {
+    return ApiService.delete(`/likes/article/${articleId}`);
   }
 };
 

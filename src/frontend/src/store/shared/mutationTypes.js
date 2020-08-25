@@ -9,3 +9,4 @@ export const SET_EMOTIONS = 'setEmotions';
 export const SET_FILTER = 'setFilter';
 export const SET_ARTICLES_ANALYSIS = 'setArticlesAnalysis';
 export const SET_COMMENTS_ANALYSIS = 'setCommentsAnalysis';
+export const UPDATE_ARTICLE_LIKES = 'updateArticleLikes';
