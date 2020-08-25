@@ -18,6 +18,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import { SHOW_SNACKBAR } from '../store/shared/mutationTypes';
+
 export default {
   data() {
     return {
@@ -25,9 +28,13 @@ export default {
     };
   },
   methods: {
+    ...mapMutations([SHOW_SNACKBAR]),
     logout() {
       localStorage.clear();
-      location.href = '/signin';
+      this.showSnackbar('성공적으로 로그아웃되었어요. 안녕히 가세요.');
+      this.$router.push({
+        path: 'signin'
+      });
     }
   }
 };
