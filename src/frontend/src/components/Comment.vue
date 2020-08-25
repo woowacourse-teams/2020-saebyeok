@@ -26,10 +26,10 @@
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
               <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
                   >mdi-hand-heart
                 </v-icon>
-                <span class="subheading mr-2">{{ likesCount }}</span>
+                <span class="subheading mr-2">{{ comment.likesCount }}</span>
               </div>
             </div>
           </v-col>
@@ -50,13 +50,6 @@ export default {
   name: 'Comment',
   components: {
     CreatedDate
-  },
-  data() {
-    return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false, // 추후 백엔드에서 받아올 정보
-      deletedCommentMessage: '삭제된 댓글입니다.'
-    };
   },
   props: {
     comment: {

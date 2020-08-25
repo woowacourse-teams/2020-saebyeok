@@ -46,10 +46,10 @@
             <v-col align="left" cols="10" justify="end">
               <div style="float:left;">
                 <div class="like-button" v-on:click="toggleLike">
-                  <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                  <v-icon class="mr-1" :class="{ liked: article.isLikedByMe }"
                     >mdi-hand-heart
                   </v-icon>
-                  <span class="subheading mr-2">{{ likesCount }}</span>
+                  <span class="subheading mr-2">{{ article.likesCount }}</span>
                 </div>
               </div>
               <div v-if="article.isCommentAllowed" style="float:left;">
@@ -78,12 +78,6 @@ export default {
     CreatedDate,
     EmotionImage,
     SubEmotionChips
-  },
-  data() {
-    return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false // 추후 백엔드에서 받아올 정보
-    };
   },
   props: {
     article: {
