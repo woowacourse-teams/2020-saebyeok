@@ -63,13 +63,15 @@ export default {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
-        this.unlikeComment(this.comment.id);
-        this.comment.isLikedByMe = !this.comment.isLikedByMe;
-        this.comment.likesCount--;
+        this.unlikeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount--;
+        });
       } else {
-        this.likeComment(this.comment.id);
-        this.comment.isLikedByMe = !this.comment.isLikedByMe;
-        this.comment.likesCount++;
+        this.likeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount++;
+        });
       }
     }
   }

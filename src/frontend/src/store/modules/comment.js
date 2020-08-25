@@ -13,7 +13,8 @@ const getters = {};
 const mutations = {
   [UPDATE_COMMENT_LIKES](state, value) {
     // pros와 vuex구조 및 comments분리 리팩토링 되고 나면 동작 확인하기
-    this.comment.value += value;
+    // this.comment.value += value;
+    console.log(state, value);
   }
 };
 

@@ -91,13 +91,15 @@ export default {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     toggleLike() {
       if (this.article.isLikedByMe) {
-        this.unlikeArticle(this.article.id);
-        this.article.isLikedByMe = !this.article.isLikedByMe;
-        this.article.likesCount--;
+        this.unlikeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount--;
+        });
       } else {
-        this.likeArticle(this.article.id);
-        this.article.isLikedByMe = !this.article.isLikedByMe;
-        this.article.likesCount++;
+        this.likeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount++;
+        });
       }
     }
   }
