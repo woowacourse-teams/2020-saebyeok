@@ -51,9 +51,7 @@ public class LikeService {
         CommentLike like = new CommentLike(member, comment);
 
         try {
-            commentLikeRepository.save(like);
-            comment.addLike(like);
-            return like;
+            return commentLikeRepository.save(like);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateCommentLikeException(member.getId(), commentId);
         }

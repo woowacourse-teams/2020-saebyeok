@@ -123,7 +123,6 @@ class LikeServiceTest {
         likeService.likeComment(new Member(), COMMENT_ID);
 
         verify(commentLikeRepository).save(any());
-        assertThat(comment.getLikes()).isNotEmpty();
     }
 
     @DisplayName("예외 테스트: 잘못된 댓글에 공감 등록을 요청하면 예외가 발생한다")

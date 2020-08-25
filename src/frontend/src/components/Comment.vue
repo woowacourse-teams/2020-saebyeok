@@ -44,6 +44,8 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+import { mapActions } from 'vuex';
+import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
   //id, content, nickname, isDeleted, createdDate
@@ -58,9 +60,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.comment.isLikedByMe) {
+        this.unlikeComment(this.comment.id);
+        this.comment.isLikedByMe = !this.comment.isLikedByMe;
+        this.comment.likesCount--;
+      } else {
+        this.likeComment(this.comment.id);
+        this.comment.isLikedByMe = !this.comment.isLikedByMe;
+        this.comment.likesCount++;
+      }
     }
   }
 };
