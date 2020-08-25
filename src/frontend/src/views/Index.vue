@@ -7,23 +7,26 @@
       </v-container>
     </v-main>
     <Footer />
+    <Snackbar/>
   </v-app>
 </template>
 
 <script>
-import Header from '../components/core/Header';
-import Main from '../components/core/Main';
-import Footer from '../components/core/Footer';
+  import Header from '../components/core/Header';
+  import Main from '../components/core/Main';
+  import Footer from '../components/core/Footer';
+  import Snackbar from '../components/Snackbar';
 
-export default {
-  name: 'Index',
+  export default {
+    name: 'Index',
 
-  components: {
-    Header,
-    Main,
-    Footer
-  }
-};
+    components: {
+      Header,
+      Main,
+      Footer,
+      Snackbar
+    }
+  };
 </script>
 
 <style>
