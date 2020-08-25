@@ -17,10 +17,7 @@
                   <created-date :createdDate="article.createdDate" />
                 </div>
                 <div>
-                  <detail-card-menu
-                    v-if="article.isMine"
-                    :articleId="article.id"
-                  />
+                  <detail-card-menu v-if="article.isMine" />
                 </div>
               </v-col>
             </v-row>

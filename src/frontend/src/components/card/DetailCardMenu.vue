@@ -44,14 +44,8 @@ export default {
   methods: {
     ...mapActions([DELETE_ARTICLE]),
     onDeleteArticle() {
-      this.deleteArticle(this.articleId);
+      this.deleteArticle(this.$route.params.articleId);
       this.$router.go(-1);
-    }
-  },
-  props: {
-    articleId: {
-      type: Number,
-      required: true
     }
   }
 };
