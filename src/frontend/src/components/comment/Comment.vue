@@ -6,15 +6,15 @@
     위의 세 줄은, 나중에 대댓글 쓸때 인덴트 넣어써 쓰면 됨
     -->
     <v-flex>
-      <v-card flat style="padding:0">
+      <v-card flat style="padding:8px">
         <v-card-title class="pa-1">
           <div class="mr-3">
             {{ comment.nickname }}
           </div>
+          <v-spacer />
           <div>
             <created-date :createdDate="comment.createdDate" />
           </div>
-          <v-spacer />
           <comment-menu
             v-if="comment.isMine && !comment.isDeleted"
             :commentId="comment.id"
