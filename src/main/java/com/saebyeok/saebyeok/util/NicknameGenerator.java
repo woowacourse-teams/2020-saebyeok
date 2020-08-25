@@ -26,9 +26,11 @@ public class NicknameGenerator {
     }
 
     private String createNewNickname(Article article) {
-        List<String> nicknames = article.getAllNicknames();
-        nicknames.remove(WRITER_NICKNAME);
-        List<Integer> numbers = nicknames.stream()
+        List<String> allNicknames = article.getAllNicknames();
+        List<String> filteredNicknames = allNicknames.stream()
+                .filter(s -> s.contains(NICKNAME_PREFIX))
+                .collect(Collectors.toList());
+        List<Integer> numbers = filteredNicknames.stream()
                 .map(nickname -> Integer.parseInt(nickname.replace(NICKNAME_PREFIX, "")))
                 .collect(Collectors.toList());
         List<Integer> filteredNumbers = TOTAL_NUMBERS.stream()
