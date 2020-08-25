@@ -124,7 +124,7 @@ class CommentRepositoryTest {
                 isInstanceOf(EmptyResultDataAccessException.class);
     }
 
-    @DisplayName("Member가 작성한 댓글의 개수를 정확히 반환한다.")
+    @DisplayName("Member가 작성한 댓글 중 삭제하지 않은 댓글의 개수를 정확히 반환한다.")
     @Test
     void countTotalCommentsByMemberTest() {
         Comment comment1 = createTestComment();
@@ -135,12 +135,12 @@ class CommentRepositoryTest {
         commentRepository.save(comment2);
         commentRepository.save(comment3);
 
-        Long totalCommentsCount = commentRepository.countCommentsByMember(member);
+        Long totalCommentsCount = commentRepository.countCommentsByMemberAndIsDeleted(member, false);
 
         assertThat(totalCommentsCount).isEqualTo(3L);
     }
 
-    @DisplayName("Member가 작성한 댓글을 모두 가져온다.")
+    @DisplayName("Member가 작성한 댓글 중 삭제하지 않은 댓글을 모두 가져온다.")
     @Test
     void findAllCommentsByMemberTest() {
         Comment comment1 = createTestComment();
@@ -151,7 +151,7 @@ class CommentRepositoryTest {
         commentRepository.save(comment2);
         commentRepository.save(comment3);
 
-        List<Comment> comments = commentRepository.findAllByMember(member);
+        List<Comment> comments = commentRepository.findAllByMemberAndIsDeleted(member, false);
 
         assertThat(comments).hasSize(3);
         assertThat(comments.get(0).getId()).isEqualTo(comment1.getId());

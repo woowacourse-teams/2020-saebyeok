@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    public Long countCommentsByMember(Member member);
+    public Long countCommentsByMemberAndIsDeleted(Member member, Boolean isDeleted);
 
-    public List<Comment> findAllByMember(Member member);
+    public List<Comment> findAllByMemberAndIsDeleted(Member member, Boolean isDeleted);
 }

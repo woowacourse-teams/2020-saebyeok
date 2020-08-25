@@ -35,11 +35,11 @@ public class CommentService {
     }
 
     public Long countTotalCommentsBy(Member member) {
-        return commentRepository.countCommentsByMember(member);
+        return commentRepository.countCommentsByMemberAndIsDeleted(member, false);
     }
 
     public List<Comment> findAllCommentsBy(Member member) {
-        return commentRepository.findAllByMember(member);
+        return commentRepository.findAllByMemberAndIsDeleted(member, false);
     }
 
     @Transactional
