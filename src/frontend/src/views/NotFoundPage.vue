@@ -53,6 +53,6 @@ export default {
 
 <style>
 #inspire {
-  background-color: rgba(227, 214, 244, 0.5);
+  background-color: rgb(245, 245, 245) !important;
 }
 </style>

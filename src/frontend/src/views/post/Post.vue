@@ -12,14 +12,14 @@
             <v-img
               :src="emotion.imageResource"
               :alt="emotion.name"
-              max-height="80"
-              max-width="80"
+              max-height="60"
+              max-width="60"
             >
             </v-img>
           </v-col>
           <v-col cols="9">
             <v-chip-group
-              active-class="black--text text--accent-4"
+              active-class="deep-purple--text text--accent-4"
               column
               multiple
               max="3"
@@ -30,7 +30,7 @@
                 v-for="subEmotion in emotion.subEmotions"
                 :key="subEmotion.id"
                 class="ma-1"
-                style="font-size: 12px;"
+                style="font-size: 12px; padding: 5px"
                 v-on:click="onClickSubEmotionTag(subEmotion.id)"
                 ># {{ subEmotion.name }}</v-chip
               >

@@ -1,13 +1,13 @@
 <template>
-  <v-container>
-    <v-layout>
+  <v-container pa-0>
+    <v-layout mb-5>
       <detail-page-card :article="memberArticle" />
     </v-layout>
     <comments :article="memberArticle" />
     <v-footer
       app
       shift
-      color="#e3d6f4"
+      color="rgb(245,245,245)"
       pa-0
       ma-0
       v-if="memberArticle.isCommentAllowed"

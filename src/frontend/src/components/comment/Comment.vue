@@ -30,7 +30,7 @@
 
     <v-card-actions class="pr-3 pl-0">
       <v-list-item class="grow pa-0">
-        <v-layout pa-1>
+        <v-layout pa-1 v-if="!comment.isDeleted">
           <div style="float:left;">
             <div class="like-button" v-on:click="toggleLike">
               <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
