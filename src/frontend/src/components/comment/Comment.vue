@@ -1,22 +1,25 @@
 <template>
-  <v-card class="mx-auto" color="#faf9f5" max-width="400">
-    <v-card-title class="text-body-1">
-      <v-row>
-        <v-col cols="10" class="d-flex align-center">
-          <div class="mr-3">
-            {{ comment.nickname }}
-          </div>
-          <div>
-            <created-date :createdDate="comment.createdDate" />
-          </div>
-        </v-col>
-        <v-col cols="2" justify-end>
-          <comment-menu v-if="comment.isMine" :commentId="comment.id" />
-        </v-col>
-      </v-row>
+  <!-- <v-flex v-if="c.recomments.length > 0">
+      <span class='depth' />
+    </v-flex> 
+    위의 세 줄은, 나중에 대댓글 쓸때 인덴트 넣어써 쓰면 됨
+    -->
+  <v-card style="padding:8px" flat max-width="400">
+    <v-card-title class="pa-1">
+      <div class="mr-3">
+        {{ comment.nickname }}
+      </div>
+      <v-spacer />
+      <div>
+        <created-date :createdDate="comment.createdDate" />
+      </div>
+      <comment-menu
+        v-if="comment.isMine && !comment.isDeleted"
+        :commentId="comment.id"
+      />
     </v-card-title>
 
-    <v-card-text class="text-body-1">
+    <v-card-text class="pt-0 pl-1 pb-0 overflow-hidden">
       <div v-if="comment.isDeleted">
         {{ deletedCommentMessage }}
       </div>
@@ -25,23 +28,18 @@
       </div>
     </v-card-text>
 
-    <v-card-actions>
-      <v-list-item class="grow">
-        <v-row>
-          <v-col align="left" cols="10" justify="end">
-            <div style="float:left;">
-              <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
-                  >mdi-hand-heart
-                </v-icon>
-                <span class="subheading mr-2">{{ comment.likesCount }}</span>
-              </div>
+    <v-card-actions class="pr-3 pl-0">
+      <v-list-item class="grow pa-0">
+        <v-layout pa-1 v-if="!comment.isDeleted">
+          <div style="float:left;">
+            <div class="like-button" v-on:click="toggleLike">
+              <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
+                >mdi-hand-heart
+              </v-icon>
+              <span class="subheading mr-2">{{ comment.likesCount }}</span>
             </div>
-          </v-col>
-          <v-col align="right" cols="2" justify="end">
-            <v-icon class="mr-1">mdi-alarm-light</v-icon>
-          </v-col>
-        </v-row>
+          </div>
+        </v-layout>
       </v-list-item>
     </v-card-actions>
   </v-card>
@@ -55,9 +53,9 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Comment',
-  data: function() {
+  data() {
     return {
-      deletedCommentMessage: '삭제된 댓글입니다 :)'
+      deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
   components: {

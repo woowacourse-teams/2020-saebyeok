@@ -1,6 +1,6 @@
 <template>
-  <v-container ma-0 pa-0 class="d-flex justify-end">
-    <div class="text-body-2">
+  <v-container ma-0 pa-0 justify-start>
+    <div class="text-body-2" style="font-size:12px; color:rgba(0,0,0,0.6)">
       {{ createdDateWithFormat }}
     </div>
   </v-container>

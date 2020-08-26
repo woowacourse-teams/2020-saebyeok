@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
-    <v-row class="justify-center">
+    <v-row class="justify-center align-center">
       <v-col
         class="col-3"
         style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
