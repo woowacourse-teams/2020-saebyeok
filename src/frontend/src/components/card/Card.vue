@@ -55,9 +55,6 @@
                 <span class="subheading">{{ article.comments.length }}</span>
               </div>
             </v-col>
-            <v-col align="right" cols="2" justify="end">
-              <v-icon class="mr-1">mdi-alarm-light</v-icon>
-            </v-col>
           </v-row>
         </v-list-item>
       </v-card-actions>
