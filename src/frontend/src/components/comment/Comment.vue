@@ -4,22 +4,19 @@
     </v-flex> 
     위의 세 줄은, 나중에 대댓글 쓸때 인덴트 넣어써 쓰면 됨
     -->
-  <v-card style="padding:8px" flat max-width="400">
-    <v-card-title class="pa-1">
-      <div class="mr-3" style="font-size:14px; color:black;">
+  <v-card flat max-width="400">
+    <v-card-title class="pa-2 pb-0">
+      <div class="ml-2" style="font-size:14px; color:black;">
         {{ comment.nickname }}
       </div>
       <v-spacer />
-      <div>
-        <created-date :createdDate="comment.createdDate" />
-      </div>
       <comment-menu
         v-if="comment.isMine && !comment.isDeleted"
         :commentId="comment.id"
       />
     </v-card-title>
 
-    <v-card-text class="pt-0 pl-1 pb-0 overflow-hidden">
+    <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
       <div v-if="comment.isDeleted" style="font-size:16px; color:black;">
         {{ deletedCommentMessage }}
       </div>
@@ -27,6 +24,9 @@
         {{ comment.content }}
       </div>
     </v-card-text>
+    <div class="pl-4">
+      <created-date :createdDate="comment.createdDate" />
+    </div>
 
     <v-card-actions class="pr-3 pl-0">
       <v-list-item class="grow pa-0">
