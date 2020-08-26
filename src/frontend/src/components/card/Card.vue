@@ -2,12 +2,10 @@
   <v-container ma-0 pa-0>
     <v-card class="mx-auto" max-width="400" v-on:click="onClickCard">
       <v-card-title class="pb-2">
-        <v-row dense>
-          <v-col cols="12">
-            <emotion-image :emotion="article.emotion" />
-            <sub-emotion-chips :subEmotions="article.subEmotions" />
-          </v-col>
-        </v-row>
+        <v-layout align-center="">
+          <emotion-image :emotion="article.emotion" />
+          <sub-emotion-chips :subEmotions="article.subEmotions" />
+        </v-layout>
       </v-card-title>
 
       <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
@@ -39,7 +37,10 @@
                   <span class="subheading mr-2">{{ likesCount }}</span>
                 </div>
               </div>
-              <div v-if="article.isCommentAllowed" style="float:left;">
+              <div
+                v-if="article.isCommentAllowed && article.comments.length > 0"
+                style="float:left;"
+              >
                 <v-icon style="font-size:20px;" class="mr-1"
                   >mdi-comment-outline</v-icon
                 >
