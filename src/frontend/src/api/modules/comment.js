@@ -13,6 +13,12 @@ const CommentService = {
     return ApiService.delete(
       `${BASE_URL}/${params.articleId}/comments/${params.commentId}`
     );
+  },
+  like(commentId) {
+    return ApiService.post(`/likes/comment/${commentId}`);
+  },
+  unlike(commentId) {
+    return ApiService.delete(`/likes/comment/${commentId}`);
   }
 };
 

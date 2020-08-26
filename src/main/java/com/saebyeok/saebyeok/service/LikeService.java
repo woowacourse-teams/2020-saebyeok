@@ -31,9 +31,7 @@ public class LikeService {
         ArticleLike like = new ArticleLike(member, article);
 
         try {
-            articleLikeRepository.save(like);
-            article.addLike(like);
-            return like;
+            return articleLikeRepository.save(like);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateArticleLikeException(member.getId(), articleId);
         }
@@ -53,9 +51,7 @@ public class LikeService {
         CommentLike like = new CommentLike(member, comment);
 
         try {
-            commentLikeRepository.save(like);
-            comment.addLike(like);
-            return like;
+            return commentLikeRepository.save(like);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateCommentLikeException(member.getId(), commentId);
         }
