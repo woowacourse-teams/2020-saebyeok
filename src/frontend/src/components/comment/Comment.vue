@@ -12,7 +12,7 @@
       <v-spacer />
       <v-card-actions class="pa-0">
         <v-layout v-if="!comment.isDeleted">
-          <div style="float:left;">
+          <div style="float:left;" class="mr-2">
             <div class="like-button" v-on:click="toggleLike">
               <v-icon
                 v-if="comment.isLikedByMe"
