@@ -6,7 +6,7 @@
     -->
   <v-card style="padding:8px" flat max-width="400">
     <v-card-title class="pa-1">
-      <div class="mr-3">
+      <div class="mr-3" style="font-size:14px; color:black;">
         {{ comment.nickname }}
       </div>
       <v-spacer />
@@ -20,10 +20,10 @@
     </v-card-title>
 
     <v-card-text class="pt-0 pl-1 pb-0 overflow-hidden">
-      <div v-if="comment.isDeleted">
+      <div v-if="comment.isDeleted" style="font-size:16px; color:black;">
         {{ deletedCommentMessage }}
       </div>
-      <div v-else>
+      <div v-else style="font-size:16px; color:black;">
         {{ comment.content }}
       </div>
     </v-card-text>
