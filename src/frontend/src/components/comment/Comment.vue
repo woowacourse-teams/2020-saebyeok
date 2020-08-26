@@ -31,10 +31,10 @@
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
               <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
                   >mdi-hand-heart
                 </v-icon>
-                <span class="subheading mr-2">{{ likesCount }}</span>
+                <span class="subheading mr-2">{{ comment.likesCount }}</span>
               </div>
             </div>
           </v-col>
@@ -50,19 +50,14 @@
 <script>
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
+import { mapActions } from 'vuex';
+import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Comment',
   components: {
     CreatedDate,
     CommentMenu
-  },
-  data() {
-    return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false, // 추후 백엔드에서 받아올 정보
-      deletedCommentMessage: '삭제된 댓글입니다.'
-    };
   },
   props: {
     comment: {
@@ -71,9 +66,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.comment.isLikedByMe) {
+        this.unlikeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount--;
+        });
+      } else {
+        this.likeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount++;
+        });
+      }
     }
   }
 };
