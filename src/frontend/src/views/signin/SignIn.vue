@@ -5,14 +5,12 @@
         <p>새벽</p>
       </v-flex>
       <v-flex>
-        <v-btn
-          color="success"
-          dark
-          large
-          class="ma-16 px-8"
-          href="/oauth2/authorization/naver"
-          >NAVER로 로그인</v-btn
-        >
+        <a href="/oauth2/authorization/naver">
+          <v-img
+            alt="네이버 아이디로 로그인"
+            width="200px"
+            src="/img/naverLogin.png"
+        /></a>
       </v-flex>
     </v-layout>
   </v-app>
