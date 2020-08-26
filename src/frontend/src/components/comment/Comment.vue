@@ -33,9 +33,13 @@
         <v-layout pa-1 v-if="!comment.isDeleted">
           <div style="float:left;">
             <div class="like-button" v-on:click="toggleLike">
-              <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }">
-                mdi-hand-heart-outline
+              <v-icon
+                v-if="comment.isLikedByMe"
+                style="color: #96589b;"
+                class="mr-1"
+                >mdi-hand-heart
               </v-icon>
+              <v-icon v-else class="mr-1">mdi-hand-heart-outline </v-icon>
               <span class="subheading mr-2">{{ comment.likesCount }}</span>
             </div>
           </div>
@@ -86,9 +90,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.liked {
-  color: #96589b;
-}
-</style>
