@@ -1,8 +1,5 @@
 <template>
   <v-flex>
-    <v-subheader class="pl-0">
-      댓글 ({{ article.comments.length }})
-    </v-subheader>
     <v-card class="mx-auto" color="#d1cbd1" max-width="400">
       <v-row v-if="article.isCommentAllowed" dense>
         <v-col

@@ -6,7 +6,7 @@
     위의 세 줄은, 나중에 대댓글 쓸때 인덴트 넣어써 쓰면 됨
     -->
     <v-flex>
-      <v-card flat style="padding:8px">
+      <v-card flat style="padding:8px" max-width="400">
         <v-card-title class="pa-1">
           <div class="mr-3">
             {{ comment.nickname }}

@@ -5,7 +5,7 @@
         v-for="subEmotion in subEmotions"
         :key="subEmotion.id"
         class="ma-1"
-        pa-2
+        style="font-size:12px; padding:5px; "
       >
         # {{ subEmotion.name }}
       </v-chip>

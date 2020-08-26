@@ -1,6 +1,6 @@
 <template>
   <v-container ma-0 pa-0>
-    <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
+    <v-card class="mx-auto" max-width="400">
       <v-card-title>
         <v-row no-gutters>
           <v-col cols="3">
