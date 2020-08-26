@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,11 @@ public class AnalysisService {
 
     public Long countTotalCommentsBy(Member member) {
         return commentService.countTotalCommentsBy(member);
+    }
+
+    public Long countTotalCommentLikesBy(Member member) {
+        return commentService.findAllCommentsBy(member).stream()
+                .mapToLong(Comment::countLikes)
+                .sum();
     }
 }
