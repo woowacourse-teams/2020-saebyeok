@@ -5,7 +5,7 @@
     위의 세 줄은, 나중에 대댓글 쓸때 인덴트 넣어써 쓰면 됨
     -->
   <v-card flat max-width="400">
-    <v-card-title class="pa-2 pb-0">
+    <v-card-title class="pa-1 pb-0">
       <div class="ml-2" style="font-size:14px; color:black;">
         {{ comment.nickname }}
       </div>
@@ -42,7 +42,7 @@
         {{ comment.content }}
       </div>
     </v-card-text>
-    <div class="pl-4">
+    <div class="pl-4 pb-2">
       <created-date :createdDate="comment.createdDate" />
     </div>
   </v-card>
