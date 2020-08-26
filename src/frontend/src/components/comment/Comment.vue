@@ -19,7 +19,7 @@
       />
     </v-card-title>
 
-    <v-card-text class="pt-0 pb-0 overflow-hidden">
+    <v-card-text class="pt-0 pl-1 pb-0 overflow-hidden">
       <div v-if="comment.isDeleted">
         {{ deletedCommentMessage }}
       </div>
@@ -28,23 +28,18 @@
       </div>
     </v-card-text>
 
-    <v-card-actions class="pr-3">
-      <v-list-item class="grow">
-        <v-row>
-          <v-col align="left" cols="10" justify="end">
-            <div style="float:left;">
-              <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
-                  >mdi-hand-heart
-                </v-icon>
-                <span class="subheading mr-2">{{ comment.likesCount }}</span>
-              </div>
+    <v-card-actions class="pr-3 pl-0">
+      <v-list-item class="grow pa-0">
+        <v-layout pa-1>
+          <div style="float:left;">
+            <div class="like-button" v-on:click="toggleLike">
+              <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
+                >mdi-hand-heart
+              </v-icon>
+              <span class="subheading mr-2">{{ comment.likesCount }}</span>
             </div>
-          </v-col>
-          <v-col align="right" cols="2" justify="end">
-            <v-icon class="mr-1">mdi-alarm-light</v-icon>
-          </v-col>
-        </v-row>
+          </div>
+        </v-layout>
       </v-list-item>
     </v-card-actions>
   </v-card>
