@@ -77,12 +77,12 @@ export default {
     toggleLike() {
       if (this.comment.isLikedByMe) {
         this.unlikeComment(this.comment.id).then(() => {
-          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.isLikedByMe = false;
           this.comment.likesCount--;
         });
       } else {
         this.likeComment(this.comment.id).then(() => {
-          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.isLikedByMe = true;
           this.comment.likesCount++;
         });
       }

@@ -82,12 +82,12 @@ export default {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
         this.unlikeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.isLikedByMe = false;
           this.article.likesCount--;
         });
       } else {
         this.likeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.isLikedByMe = true;
           this.article.likesCount++;
         });
       }
