@@ -35,11 +35,13 @@
             <div class="like-button" v-on:click="toggleLike">
               <v-icon
                 v-if="comment.isLikedByMe"
-                style="color: #96589b;"
+                style="font-size:20px; color: #96589b;"
                 class="mr-1"
                 >mdi-hand-heart
               </v-icon>
-              <v-icon v-else class="mr-1">mdi-hand-heart-outline </v-icon>
+              <v-icon v-else style="font-size:20px;" class="mr-1">
+                mdi-hand-heart-outline
+              </v-icon>
               <span class="subheading mr-2">{{ comment.likesCount }}</span>
             </div>
           </div>
