@@ -7,9 +7,23 @@
       </div>
       <v-flex>
         <v-row dense>
-          <v-col v-for="emotion in emotions" :key="emotion.id" cols="4">
-            <emotion-button :emotion="emotion" />
+          <v-col cols="4">
+            <emotion-button :emotion="emotions[0]" />
           </v-col>
+          <v-col cols="4">
+            <emotion-button :emotion="emotions[1]" />
+          </v-col>
+          <v-col cols="4">
+            <emotion-button :emotion="emotions[2]" />
+          </v-col>
+          <v-col cols="2" />
+          <v-col cols="4">
+            <emotion-button :emotion="emotions[3]" />
+          </v-col>
+          <v-col cols="4">
+            <emotion-button :emotion="emotions[4]" />
+          </v-col>
+          <v-col cols="2" />
         </v-row>
       </v-flex>
     </v-container>

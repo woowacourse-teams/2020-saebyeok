@@ -1,6 +1,6 @@
 <template>
   <v-container pa-0>
-    <v-layout>
+    <v-layout mb-5>
       <detail-page-card :article="article" />
     </v-layout>
 
