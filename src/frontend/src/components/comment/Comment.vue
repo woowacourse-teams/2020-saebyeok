@@ -10,6 +10,24 @@
         {{ comment.nickname }}
       </div>
       <v-spacer />
+      <v-card-actions class="pa-0">
+        <v-layout v-if="!comment.isDeleted">
+          <div style="float:left;">
+            <div class="like-button" v-on:click="toggleLike">
+              <v-icon
+                v-if="comment.isLikedByMe"
+                style="font-size:20px; color: #96589b;"
+                class="mr-1"
+                >mdi-hand-heart
+              </v-icon>
+              <v-icon v-else style="font-size:20px;" class="mr-1">
+                mdi-hand-heart-outline
+              </v-icon>
+              <span style="font-size:16px;">{{ comment.likesCount }}</span>
+            </div>
+          </div>
+        </v-layout>
+      </v-card-actions>
       <comment-menu
         v-if="comment.isMine && !comment.isDeleted"
         :commentId="comment.id"
@@ -27,27 +45,6 @@
     <div class="pl-4">
       <created-date :createdDate="comment.createdDate" />
     </div>
-
-    <v-card-actions class="pr-3 pl-0">
-      <v-list-item class="grow pa-0">
-        <v-layout pa-1 v-if="!comment.isDeleted">
-          <div style="float:left;">
-            <div class="like-button" v-on:click="toggleLike">
-              <v-icon
-                v-if="comment.isLikedByMe"
-                style="font-size:20px; color: #96589b;"
-                class="mr-1"
-                >mdi-hand-heart
-              </v-icon>
-              <v-icon v-else style="font-size:20px;" class="mr-1">
-                mdi-hand-heart-outline
-              </v-icon>
-              <span class="subheading mr-2">{{ comment.likesCount }}</span>
-            </div>
-          </div>
-        </v-layout>
-      </v-list-item>
-    </v-card-actions>
   </v-card>
 </template>
 
