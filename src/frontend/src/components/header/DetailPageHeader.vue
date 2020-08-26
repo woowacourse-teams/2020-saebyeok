@@ -9,11 +9,25 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
-      <v-icon large>mdi-logout</v-icon>
+      <logout-button />
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
 
 <script>
-export default {};
+import LogoutButton from '@/components/LogoutButton';
+
+export default {
+  name: 'DetailPageHeader',
+  components: {
+    LogoutButton
+  }
+};
 </script>
+
+<style scoped>
+.title {
+  text-decoration: none;
+  color: white;
+}
+</style>

@@ -32,9 +32,7 @@ export default {
     logout() {
       localStorage.clear();
       this.showSnackbar('성공적으로 로그아웃되었어요. 안녕히 가세요👋');
-      this.$router.push({
-        path: 'signin'
-      });
+      this.$router.replace({ name: 'SignIn' });
     }
   }
 };
