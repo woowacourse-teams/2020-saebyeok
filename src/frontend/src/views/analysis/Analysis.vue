@@ -27,8 +27,8 @@
     >
       <div id="comment-statistics">
         남겨준 댓글 수
-        <b>{{ commentsAnalysis.totalCommentsCount }}</b> | 공감받은 댓글 수
-        <b>{{ likedCommentsCount }}</b>
+        <b>{{ commentsAnalysis.totalCommentsCount }}</b> | 댓글이 받은 공감 수
+        <b>{{ commentsAnalysis.totalCommentLikesCount }}</b>
       </div>
     </v-card>
   </div>
