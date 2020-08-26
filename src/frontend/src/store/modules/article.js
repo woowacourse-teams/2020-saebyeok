@@ -10,6 +10,7 @@ import {
   FETCH_ARTICLE,
   FETCH_ARTICLES,
   PAGING_ARTICLES,
+  DELETE_ARTICLE,
   LIKE_ARTICLE,
   UNLIKE_ARTICLE
 } from '@/store/shared/actionTypes';
@@ -73,7 +74,10 @@ const actions = {
       })
       .catch(error => commit('catchError', error));
   },
-
+  // eslint-disable-next-line no-unused-vars
+  async [DELETE_ARTICLE]({ commit }, articleId) {
+    return ArticleService.delete(articleId);
+  },
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);
   },

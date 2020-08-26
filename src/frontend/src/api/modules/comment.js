@@ -9,6 +9,11 @@ const CommentService = {
       commentRequest
     );
   },
+  delete(params) {
+    return ApiService.delete(
+      `${BASE_URL}/${params.articleId}/comments/${params.commentId}`
+    );
+  },
   like(commentId) {
     return ApiService.post(`/likes/comment/${commentId}`);
   },

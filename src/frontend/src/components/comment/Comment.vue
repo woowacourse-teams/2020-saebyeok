@@ -2,11 +2,16 @@
   <v-card class="mx-auto" color="#faf9f5" max-width="400">
     <v-card-title class="text-body-1">
       <v-row>
-        <v-col cols="6">
-          {{ comment.nickname }}
+        <v-col cols="10" class="d-flex align-center">
+          <div class="mr-3">
+            {{ comment.nickname }}
+          </div>
+          <div>
+            <created-date :createdDate="comment.createdDate" />
+          </div>
         </v-col>
-        <v-col cols="6" justify-end>
-          <created-date :createdDate="comment.createdDate" />
+        <v-col cols="2" justify-end>
+          <comment-menu v-if="comment.isMine" :commentId="comment.id" />
         </v-col>
       </v-row>
     </v-card-title>
@@ -44,14 +49,20 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+import CommentMenu from '@/components/comment/CommentMenu';
 import { mapActions } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
-  //id, content, nickname, isDeleted, createdDate
   name: 'Comment',
+  data: function() {
+    return {
+      deletedCommentMessage: '삭제된 댓글입니다 :)'
+    };
+  },
   components: {
-    CreatedDate
+    CreatedDate,
+    CommentMenu
   },
   props: {
     comment: {

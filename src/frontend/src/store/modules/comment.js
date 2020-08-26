@@ -1,9 +1,11 @@
 import { UPDATE_COMMENT_LIKES } from '@/store/shared/mutationTypes';
 import {
   CREATE_COMMENT,
+  DELETE_COMMENT,
   LIKE_COMMENT,
   UNLIKE_COMMENT
 } from '@/store/shared/actionTypes';
+
 import CommentService from '@/api/modules/comment';
 
 const state = {};
@@ -22,6 +24,10 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_COMMENT]({ commit }, comment) {
     return CommentService.create(comment);
+  },
+  // eslint-disable-next-line no-unused-vars
+  async [DELETE_COMMENT]({ commit }, params) {
+    return CommentService.delete(params);
   },
   async [LIKE_COMMENT]({ commit }, commentId) {
     return CommentService.like(commentId)
