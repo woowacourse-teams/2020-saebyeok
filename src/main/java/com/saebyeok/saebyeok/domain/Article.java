@@ -19,12 +19,14 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity
 public class Article {
+    public static final int MAX_LENGTH = 300;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ARTICLE_ID")
     private Long id;
 
-    @Column(length = 300)
+    @Column(length = MAX_LENGTH)
     private String content;
 
     @ManyToOne

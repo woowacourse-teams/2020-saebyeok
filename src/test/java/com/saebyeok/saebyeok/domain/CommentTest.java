@@ -1,6 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
+import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,29 +45,24 @@ public class CommentTest {
         assertThat(comment.getIsDeleted()).isFalse();
     }
 
-    @DisplayName("예외 테스트: Comment가 정해진 최소 길이보다 작을 때 예외가 발생해야 한다")
+    @DisplayName("예외 테스트: 해당 댓글에 대한 CommentLike가 아닌 CommentLike를 추가하면 예외가 발생한다")
     @Test
-    void underLengthCommentTest() {
-        assertThatThrownBy(() -> Comment.builder().
-            content(UNDER_LENGTH_CONTENT).
-            nickname(TEST_NICKNAME).
-            isDeleted(false).
-            build())
-            .isInstanceOf(InvalidLengthCommentException.class)
-            .hasMessageContaining("올바르지 않은 댓글입니다!");
+    void addInvalidLikeExceptionTest() {
+        CommentLike invalidCommentLike = new CommentLike(member, comment2);
+
+        assertThatThrownBy(() -> comment1.addLike(invalidCommentLike))
+                .isInstanceOf(RuntimeException.class);
     }
 
-    @DisplayName("예외 테스트: Comment가 정해진 최대 길이보다 클 때 예외가 발생해야 한다")
+    @DisplayName("예외 테스트: 이미 존재하는 CommentLike를 추가하면 예외가 발생한다")
     @Test
-    void overLengthCommentTest() {
-        assertThatThrownBy(() -> Comment.builder().
-                content(OVER_LENGTH_CONTENT).
-                nickname(TEST_NICKNAME).
-                isDeleted(false).
-                build())
-                .isInstanceOf(InvalidLengthCommentException.class)
-                .hasMessageContaining("올바르지 않은 댓글입니다!");
-    }
+    void addLikeExceptionTest() {
+        CommentLike commentLike = new CommentLike(member, comment1);
+        comment1.addLike(commentLike);
+
+        assertThatThrownBy(() -> comment1.addLike(commentLike))
+                .isInstanceOf(DuplicateCommentLikeException.class)
+                .hasMessage("이미 공감한 댓글에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", commentId: " + comment1.getId()); }
 
     @DisplayName("특정 사용자가 해당 댓글을 공감했는지 여부를 확인할 수 있다")
     @Test

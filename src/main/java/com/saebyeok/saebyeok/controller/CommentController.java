@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RequestMapping("/api")
@@ -23,7 +24,7 @@ public class CommentController {
 
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Void> createComment(Authentication authentication, @PathVariable Long articleId,
-                                              @RequestBody CommentCreateRequest commentCreateRequest) {
+                                              @Valid @RequestBody CommentCreateRequest commentCreateRequest) {
         // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
         User user = (User) authentication.getPrincipal();
         Member member = memberRepository.findById(user.getId())
