@@ -14,6 +14,12 @@ const ArticleService = {
   },
   delete(articleId) {
     return ApiService.delete(`${BASE_URL}/${articleId}`);
+  },
+  like(articleId) {
+    return ApiService.post(`/likes/article/${articleId}`);
+  },
+  unlike(articleId) {
+    return ApiService.delete(`/likes/article/${articleId}`);
   }
 };
 

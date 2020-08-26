@@ -34,7 +34,7 @@
                     :class="{ liked: likedByMe }"
                     >mdi-hand-heart-outline
                   </v-icon>
-                  <span class="subheading mr-2">{{ likesCount }}</span>
+                  <span class="subheading mr-2">{{ article.likesCount }}</span>
                 </div>
               </div>
               <div
@@ -58,6 +58,8 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import { mapActions } from 'vuex';
+import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Card',
@@ -66,13 +68,8 @@ export default {
     EmotionImage,
     SubEmotionChips
   },
-  data() {
-    return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false // 추후 백엔드에서 받아올 정보
-    };
-  },
   methods: {
+    ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     onClickCard: function() {
       this.$router.push({
         path: this.$router.history.current.path + '/' + this.article.id
@@ -80,8 +77,17 @@ export default {
     },
     toggleLike() {
       event.stopPropagation();
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.article.isLikedByMe) {
+        this.unlikeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount--;
+        });
+      } else {
+        this.likeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount++;
+        });
+      }
     }
   },
   props: {

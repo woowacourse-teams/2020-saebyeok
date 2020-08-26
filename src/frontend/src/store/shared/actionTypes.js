@@ -15,3 +15,7 @@ export const FETCH_EMOTIONS = 'fetchEmotions';
 export const SELECT_FILTER = 'selectFilter';
 export const FETCH_ARTICLES_ANALYSIS = 'fetchArticlesAnalysis';
 export const FETCH_COMMENTS_ANALYSIS = 'fetchCommentsAnalysis';
+export const LIKE_ARTICLE = 'likeArticle';
+export const UNLIKE_ARTICLE = 'unlikeArticle';
+export const LIKE_COMMENT = 'likeComment';
+export const UNLIKE_COMMENT = 'unlikeComment';
