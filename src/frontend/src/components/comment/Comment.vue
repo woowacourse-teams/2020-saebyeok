@@ -55,6 +55,11 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Comment',
+  data: function() {
+    return {
+      deletedCommentMessage: '삭제된 댓글입니다 :)'
+    };
+  },
   components: {
     CreatedDate,
     CommentMenu
