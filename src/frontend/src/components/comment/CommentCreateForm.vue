@@ -12,7 +12,7 @@
           v-model="content"
         />
         <div class="align-top">
-          <v-icon class="ma-2" @click="submitComment">
+          <v-icon class="ma-2" @click="submitComment" :color="buttonColor">
             mdi-send
           </v-icon>
         </div>
@@ -31,13 +31,16 @@ export default {
   name: 'CommentCreateForm',
   data() {
     return {
-      content: ''
+      content: '',
+      buttonColor: '#666666'
     };
   },
   methods: {
     ...mapActions([CREATE_COMMENT]),
     ...mapMutations([SHOW_SNACKBAR]),
     async submitComment() {
+      this.buttonColor = '#96589b';
+
       const commentCreateRequest = {
         content: this.content,
         articleId: this.articleId,
@@ -51,6 +54,7 @@ export default {
         })
         .catch(error => {
           this.showSnackbar(error.response.data.errorMessage);
+          this.buttonColor = '#666666';
         });
     }
   },

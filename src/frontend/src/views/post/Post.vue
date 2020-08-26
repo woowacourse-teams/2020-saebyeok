@@ -52,7 +52,7 @@
             maxlength="300"
             rows="9"
             name="input-7-4"
-            label="당신의 마음을 들려주세요."
+            placeholder="당신의 마음을 들려주세요. 다른 사람에게는 이름 없이 일주일만 보일 거예요."
             v-model="content"
           ></v-textarea>
         </v-flex>

@@ -5,7 +5,7 @@
       <v-spacer />
       <v-row align="center" justify="center" style="height:100%">
         <v-col>
-          <v-card class="mx-auto rounded-lg" color="#faf9f5" max-width="400">
+          <v-card class="mx-auto rounded-lg" max-width="400">
             <v-card-title>
               <big>Error</big>
             </v-card-title>

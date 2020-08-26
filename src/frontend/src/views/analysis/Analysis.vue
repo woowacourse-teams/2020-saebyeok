@@ -3,7 +3,6 @@
     <my-page-tabs></my-page-tabs>
     <v-card
       class="mx-auto rounded-lg"
-      color="#faf9f5"
       max-width="400"
       style="padding: 12px; margin: 12px"
     >
@@ -13,7 +12,6 @@
     </v-card>
     <v-card
       class="mx-auto rounded-lg"
-      color="#faf9f5"
       max-width="400"
       style="padding: 12px; margin: 12px"
     >
@@ -21,7 +19,6 @@
     </v-card>
     <v-card
       class="mx-auto rounded-lg"
-      color="#faf9f5"
       max-width="400"
       style="padding: 12px; margin: 12px"
     >

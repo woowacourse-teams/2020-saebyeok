@@ -3,7 +3,7 @@
     <v-icon size="48px">mdi-blank</v-icon>
     <v-spacer></v-spacer>
     <v-toolbar-title>
-      <span class="title text-h4">새벽</span>
+      <router-link to="/feed" class="title text-h5">새벽</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
@@ -16,9 +16,16 @@
 import LogoutButton from '@/components/LogoutButton';
 
 export default {
-  name: 'Header',
+  name: 'DiaryHeader',
   components: {
     LogoutButton
   }
 };
 </script>
+
+<style scoped>
+.title {
+  text-decoration: none;
+  color: white;
+}
+</style>
