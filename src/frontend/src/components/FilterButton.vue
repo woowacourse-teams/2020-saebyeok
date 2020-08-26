@@ -7,7 +7,7 @@
       offset-y
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-icon large v-bind="attrs" v-on="on">mdi-filter</v-icon>
+        <v-icon v-bind="attrs" v-on="on">mdi-filter</v-icon>
       </template>
       <emotion-filter />
     </v-menu>

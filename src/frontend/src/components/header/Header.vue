@@ -3,7 +3,7 @@
     <filter-button />
     <v-spacer></v-spacer>
     <v-toolbar-title>
-      <span class="title text-h4">새벽</span>
+      <router-link to="/feed" class="title text-h5">새벽</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
@@ -21,6 +21,18 @@ export default {
   components: {
     FilterButton,
     LogoutButton
+  },
+  methods: {
+    clickTitle() {
+      this.$router.replace({ name: 'Feed' });
+    }
   }
 };
 </script>
+
+<style scoped>
+.title {
+  text-decoration: none;
+  color: white;
+}
+</style>
