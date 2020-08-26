@@ -1,14 +1,18 @@
 import {
   ADD_ARTICLES,
   SET_ARTICLE,
-  SET_ARTICLES
+  SET_ARTICLES,
+  UPDATE_ARTICLE_LIKES
 } from '@/store/shared/mutationTypes';
 import {
   CLEAR_ARTICLES,
   CREATE_ARTICLE,
   FETCH_ARTICLE,
   FETCH_ARTICLES,
-  PAGING_ARTICLES
+  PAGING_ARTICLES,
+  DELETE_ARTICLE,
+  LIKE_ARTICLE,
+  UNLIKE_ARTICLE
 } from '@/store/shared/actionTypes';
 import ArticleService from '@/api/modules/article';
 
@@ -35,6 +39,9 @@ const mutations = {
   },
   [ADD_ARTICLES](state, articles) {
     state.articles = state.articles.concat(articles);
+  },
+  [UPDATE_ARTICLE_LIKES](state, value) {
+    state.articles.likesCount += value;
   }
 };
 
@@ -67,9 +74,22 @@ const actions = {
       })
       .catch(error => commit('catchError', error));
   },
-
+  // eslint-disable-next-line no-unused-vars
+  async [DELETE_ARTICLE]({ commit }, articleId) {
+    return ArticleService.delete(articleId);
+  },
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);
+  },
+  async [LIKE_ARTICLE]({ commit }, articleId) {
+    return ArticleService.like(articleId)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, 1))
+      .catch(error => commit('catchError', error));
+  },
+  async [UNLIKE_ARTICLE]({ commit }, articleId) {
+    return ArticleService.unlike(articleId)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, -1))
+      .catch(error => commit('catchError', error));
   }
 };
 

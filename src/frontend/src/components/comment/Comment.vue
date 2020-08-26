@@ -2,11 +2,16 @@
   <v-card class="mx-auto" color="#faf9f5" max-width="400">
     <v-card-title class="text-body-1">
       <v-row>
-        <v-col cols="6">
-          {{ comment.nickname }}
+        <v-col cols="10" class="d-flex align-center">
+          <div class="mr-3">
+            {{ comment.nickname }}
+          </div>
+          <div>
+            <created-date :createdDate="comment.createdDate" />
+          </div>
         </v-col>
-        <v-col cols="6" justify-end>
-          <created-date :createdDate="comment.createdDate" />
+        <v-col cols="2" justify-end>
+          <comment-menu v-if="comment.isMine" :commentId="comment.id" />
         </v-col>
       </v-row>
     </v-card-title>
@@ -26,10 +31,10 @@
           <v-col align="left" cols="10" justify="end">
             <div style="float:left;">
               <div class="like-button" v-on:click="toggleLike">
-                <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                <v-icon class="mr-1" :class="{ liked: comment.isLikedByMe }"
                   >mdi-hand-heart
                 </v-icon>
-                <span class="subheading mr-2">{{ likesCount }}</span>
+                <span class="subheading mr-2">{{ comment.likesCount }}</span>
               </div>
             </div>
           </v-col>
@@ -44,19 +49,20 @@
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
+import CommentMenu from '@/components/comment/CommentMenu';
+import { mapActions } from 'vuex';
+import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
-  //id, content, nickname, isDeleted, createdDate
   name: 'Comment',
-  components: {
-    CreatedDate
-  },
-  data() {
+  data: function() {
     return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false, // 추후 백엔드에서 받아올 정보
-      deletedCommentMessage: '삭제된 댓글입니다.'
+      deletedCommentMessage: '삭제된 댓글입니다 :)'
     };
+  },
+  components: {
+    CreatedDate,
+    CommentMenu
   },
   props: {
     comment: {
@@ -65,9 +71,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.comment.isLikedByMe) {
+        this.unlikeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount--;
+        });
+      } else {
+        this.likeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = !this.comment.isLikedByMe;
+          this.comment.likesCount++;
+        });
+      }
     }
   }
 };

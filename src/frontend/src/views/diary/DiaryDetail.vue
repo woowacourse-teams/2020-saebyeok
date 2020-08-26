@@ -34,8 +34,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import { FETCH_MEMBER_ARTICLE } from '@/store/shared/actionTypes';
 import DetailPageCard from '@/components/card/DetailPageCard';
-import Comment from '@/components/Comment';
-import CommentCreateForm from '@/components/CommentCreateForm';
+import Comment from '@/components/comment/Comment';
+import CommentCreateForm from '@/components/comment/CommentCreateForm';
 
 export default {
   name: 'DiaryDetail',

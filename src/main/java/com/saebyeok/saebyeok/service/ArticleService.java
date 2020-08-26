@@ -30,6 +30,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleEmotionService articleEmotionService;
     private final ArticleSubEmotionService articleSubEmotionService;
+    private final CommentService commentService;
 
     public List<ArticleResponse> getArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
@@ -79,6 +80,7 @@ public class ArticleService {
         }
         articleEmotionService.deleteArticleEmotion(article);
         articleSubEmotionService.deleteArticleSubEmotion(article);
+        commentService.deleteCommentsByArticle(article);
         articleRepository.deleteById(articleId);
     }
 
