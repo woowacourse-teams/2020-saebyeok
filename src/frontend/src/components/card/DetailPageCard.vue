@@ -1,6 +1,6 @@
 <template>
   <v-container ma-0 pa-0>
-    <v-card class="mx-auto" max-width="400" v-on:click="onClickCard">
+    <v-card class="mx-auto" max-width="400">
       <v-card-title class="pa-2">
         <v-layout align-center="">
           <emotion-image :emotion="article.emotion" />
