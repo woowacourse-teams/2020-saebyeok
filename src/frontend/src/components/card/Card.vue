@@ -29,9 +29,12 @@
               <div style="float:left;">
                 <div class="like-button" v-on:click="toggleLike">
                   <v-icon
-                    style="font-size:20px;"
+                    v-if="article.isLikedByMe"
+                    style="font-size:20px; color: #96589b;"
                     class="mr-1"
-                    :class="{ liked: likedByMe }"
+                    >mdi-hand-heart
+                  </v-icon>
+                  <v-icon v-else style="font-size:20px;" class="mr-1"
                     >mdi-hand-heart-outline
                   </v-icon>
                   <span class="subheading mr-2">{{ article.likesCount }}</span>
@@ -79,12 +82,12 @@ export default {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
         this.unlikeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.isLikedByMe = false;
           this.article.likesCount--;
         });
       } else {
         this.likeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.isLikedByMe = true;
           this.article.likesCount++;
         });
       }
@@ -98,9 +101,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.liked {
-  color: #96589b;
-}
-</style>
