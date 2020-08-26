@@ -44,8 +44,6 @@ export default {
     async submitComment() {
       const commentCreateRequest = {
         content: this.content,
-        memberId: 1,
-        nickname: 'TEST_NICKNAME',
         articleId: this.articleId,
         isDeleted: false
       };

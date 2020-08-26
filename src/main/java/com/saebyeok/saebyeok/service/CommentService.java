@@ -43,6 +43,12 @@ public class CommentService {
         if (!comment.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_COMMENT_MESSAGE);
         }
-        commentRepository.deleteById(commentId);
+        comment.setIsDeleted(true);
+        commentRepository.save(comment);
+    }
+
+    @Transactional
+    public void deleteCommentsByArticle(Article article) {
+        commentRepository.deleteAll(article.getComments());
     }
 }

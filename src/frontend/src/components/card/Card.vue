@@ -44,19 +44,16 @@
             <v-col align="left" cols="10" justify="end">
               <div style="float:left;">
                 <div class="like-button" v-on:click="toggleLike">
-                  <v-icon class="mr-1" :class="{ liked: likedByMe }"
+                  <v-icon class="mr-1" :class="{ liked: article.isLikedByMe }"
                     >mdi-hand-heart
                   </v-icon>
-                  <span class="subheading mr-2">{{ likesCount }}</span>
+                  <span class="subheading mr-2">{{ article.likesCount }}</span>
                 </div>
               </div>
               <div v-if="article.isCommentAllowed" style="float:left;">
                 <v-icon class="mr-1">mdi-comment</v-icon>
                 <span class="subheading">{{ article.comments.length }}</span>
               </div>
-            </v-col>
-            <v-col align="right" cols="2" justify="end">
-              <v-icon class="mr-1">mdi-alarm-light</v-icon>
             </v-col>
           </v-row>
         </v-list-item>
@@ -69,6 +66,8 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import { mapActions } from 'vuex';
+import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 
 export default {
   name: 'Card',
@@ -77,13 +76,8 @@ export default {
     EmotionImage,
     SubEmotionChips
   },
-  data() {
-    return {
-      likesCount: 42, // 추후 백엔드에서 받아올 정보
-      likedByMe: false // 추후 백엔드에서 받아올 정보
-    };
-  },
   methods: {
+    ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     onClickCard: function() {
       this.$router.push({
         path: this.$router.history.current.path + '/' + this.article.id
@@ -91,8 +85,17 @@ export default {
     },
     toggleLike() {
       event.stopPropagation();
-      this.likedByMe = !this.likedByMe;
-      this.likedByMe ? this.likesCount++ : this.likesCount--;
+      if (this.article.isLikedByMe) {
+        this.unlikeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount--;
+        });
+      } else {
+        this.likeArticle(this.article.id).then(() => {
+          this.article.isLikedByMe = !this.article.isLikedByMe;
+          this.article.likesCount++;
+        });
+      }
     }
   },
   props: {
