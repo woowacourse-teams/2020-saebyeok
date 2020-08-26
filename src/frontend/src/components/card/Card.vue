@@ -31,7 +31,7 @@
                   <v-icon
                     style="font-size:20px;"
                     class="mr-1"
-                    :class="{ liked: likedByMe }"
+                    :class="{ liked: article.isLikedByMe }"
                     >mdi-hand-heart-outline
                   </v-icon>
                   <span class="subheading mr-2">{{ article.likesCount }}</span>
