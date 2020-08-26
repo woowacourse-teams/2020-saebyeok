@@ -24,16 +24,16 @@ export default {
   },
   computed: {
     createdDateWithFormat: function() {
-      const date = new Date(this.createdDate);
+      const date = this.$moment(this.createdDate);
       const now = this.$moment().tz('Asia/Seoul');
-      const gap = (now.valueOf() - date.getTime()) / 1000;
+      const gap = (now.valueOf() - date.valueOf()) / 1000;
       if (gap > 86400) {
         return (
-          date.getFullYear() +
+          date.format('YYYY') +
           '년 ' +
-          (date.getMonth() + 1) +
+          date.format('MM') +
           '월 ' +
-          date.getDate() +
+          date.format('DD') +
           '일'
         );
       } else if (gap > 3600) {
