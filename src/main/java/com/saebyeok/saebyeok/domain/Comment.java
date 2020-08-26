@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -83,19 +82,5 @@ public class Comment {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public void addLike(CommentLike like) {
-        Objects.requireNonNull(like);
-
-        if (like.getComment() != this) {
-            // TODO: 2020/08/22 : 커스텀 Exception 생성해서 사용하기
-            throw new RuntimeException();
-        }
-
-        if (this.likes.contains(like)) {
-            throw new DuplicateCommentLikeException(like.getMember().getId(), like.getComment().getId());
-        }
-        this.likes.add(like);
     }
 }
