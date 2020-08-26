@@ -10,7 +10,12 @@
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
     >
-      <div slot="no-more">모든 글을 다 읽으셨네요 :)</div>
+      <div slot="no-more" class="mt-4">
+        지난 7일 간 올라온 모든 이야기를 다 읽으셨네요 :)
+      </div>
+      <div slot="no-more" class="mb-4">
+        7일이 지난 이야기는 이야기의 주인공만 볼 수 있답니다!
+      </div>
     </infinite-loading>
   </div>
 </template>
