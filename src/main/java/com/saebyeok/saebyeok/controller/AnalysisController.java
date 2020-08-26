@@ -47,10 +47,10 @@ public class AnalysisController {
                 .orElseThrow(() -> new MemberNotFoundException(user.getId()));
 
         Long totalCommentsCount = analysisService.countTotalCommentsBy(member);
-        Long likedCommentsCount = analysisService.countLikedCommentsBy(member);
+        Long totalCommentLikesCount = analysisService.countTotalCommentLikesBy(member);
 
         CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount,
-                                                                                         likedCommentsCount);
+                                                                                         totalCommentLikesCount);
 
         return ResponseEntity.ok(commentsAnalysisResponse);
     }

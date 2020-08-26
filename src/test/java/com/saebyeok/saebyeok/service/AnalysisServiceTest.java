@@ -93,10 +93,10 @@ public class AnalysisServiceTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @DisplayName("Member가 작성한 Comment 중 CommentLike가 존재하는 Comment의 개수를 받아온다")
+    @DisplayName("Member가 작성한 Comment들의 CommentLike 총 개수를 받아온다")
     @Test
     void countLikedCommentsByTest() {
-        Long expected = 2L;
+        Long expected = 4L;
 
         List<CommentLike> likes = new ArrayList<>(Arrays.asList(new CommentLike(), new CommentLike()));
         List<Comment> comments = new ArrayList<>();
@@ -107,7 +107,7 @@ public class AnalysisServiceTest {
 
         when(commentService.findAllCommentsBy(any(Member.class))).thenReturn(comments);
 
-        Long result = analysisService.countLikedCommentsBy(member);
+        Long result = analysisService.countTotalCommentLikesBy(member);
 
         assertThat(result).isEqualTo(expected);
     }

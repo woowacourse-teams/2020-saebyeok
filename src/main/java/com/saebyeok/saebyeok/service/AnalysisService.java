@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 @Service
 public class AnalysisService {
     private static final int INQUIRY_DAYS = 30;
-    private static final long NO_COMMENT_LIKED = 0L;
 
     private final EmotionService emotionService;
     private final ArticleEmotionService articleEmotionService;
@@ -37,9 +37,9 @@ public class AnalysisService {
         return commentService.countTotalCommentsBy(member);
     }
 
-    public Long countLikedCommentsBy(Member member) {
+    public Long countTotalCommentLikesBy(Member member) {
         return commentService.findAllCommentsBy(member).stream()
-                .filter(comment -> comment.countLikes() > NO_COMMENT_LIKED)
-                .count();
+                .mapToLong(Comment::countLikes)
+                .sum();
     }
 }
