@@ -33,7 +33,7 @@
 import { mapActions, mapMutations } from 'vuex';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 import { CREATE_COMMENT } from '@/store/shared/actionTypes';
-import { STATUS } from '../utils/Status';
+import { STATUS } from '../../utils/Status';
 
 export default {
   name: 'CommentCreateForm',
