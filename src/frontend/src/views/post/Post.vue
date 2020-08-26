@@ -19,7 +19,7 @@
           </v-col>
           <v-col cols="9">
             <v-chip-group
-              active-class="black--text text--accent-4"
+              active-class="deep-purple--text text--accent-4"
               column
               multiple
               max="3"
