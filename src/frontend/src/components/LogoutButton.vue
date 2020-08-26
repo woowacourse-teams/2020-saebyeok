@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-icon large @click.stop="dialog = true">mdi-logout</v-icon>
+    <v-icon @click.stop="dialog = true">mdi-logout</v-icon>
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="text-h6">정말 로그아웃 하시겠어요?</v-card-title>
