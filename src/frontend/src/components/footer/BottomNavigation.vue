@@ -39,8 +39,11 @@ export default {
     checkUserAgent() {
       const userAgent = window.navigator.userAgent;
       if (
-        userAgent.search('iPhone') > 0 &&
-        (screen.width === 375 || screen.width === 414)
+        (userAgent.search('iPhone') > 0 || userAgent.search('Macintosh') > 0) &&
+        (screen.height === 812 ||
+          screen.height === 896 ||
+          screen.height === 1194 ||
+          screen.height === 1366)
       ) {
         this.isiPhoneX = true;
       }

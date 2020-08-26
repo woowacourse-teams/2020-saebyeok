@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.DuplicateArticleLikeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -78,19 +77,5 @@ public class Article {
 
     public long countLikes() {
         return this.likes.size();
-    }
-
-    public void addLike(ArticleLike like) {
-        Objects.requireNonNull(like);
-
-        if (like.getArticle() != this) {
-            // TODO: 2020/08/22 : 커스텀 Exception 생성해서 사용하기
-            throw new RuntimeException();
-        }
-
-        if (this.likes.contains(like)) {
-            throw new DuplicateArticleLikeException(like.getMember().getId(), like.getArticle().getId());
-        }
-        this.likes.add(like);
     }
 }

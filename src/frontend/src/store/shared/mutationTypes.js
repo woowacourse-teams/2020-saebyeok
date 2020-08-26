@@ -11,3 +11,5 @@ export const SET_ARTICLES_ANALYSIS = 'setArticlesAnalysis';
 export const SET_COMMENTS_ANALYSIS = 'setCommentsAnalysis';
 export const SHOW_SNACKBAR = 'showSnackbar';
 export const HIDE_SNACKBAR = 'hideSnackbar';
+export const UPDATE_ARTICLE_LIKES = 'updateArticleLikes';
+export const UPDATE_COMMENT_LIKES = 'updateCommentLikes';

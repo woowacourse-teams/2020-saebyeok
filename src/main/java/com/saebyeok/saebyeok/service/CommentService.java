@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -33,7 +35,11 @@ public class CommentService {
     }
 
     public Long countTotalCommentsBy(Member member) {
-        return commentRepository.countCommentsByMember(member);
+        return commentRepository.countCommentsByMemberAndIsDeleted(member, false);
+    }
+
+    public List<Comment> findAllCommentsBy(Member member) {
+        return commentRepository.findAllByMemberAndIsDeleted(member, false);
     }
 
     @Transactional
@@ -43,6 +49,12 @@ public class CommentService {
         if (!comment.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_COMMENT_MESSAGE);
         }
-        commentRepository.deleteById(commentId);
+        comment.setIsDeleted(true);
+        commentRepository.save(comment);
+    }
+
+    @Transactional
+    public void deleteCommentsByArticle(Article article) {
+        commentRepository.deleteAll(article.getComments());
     }
 }

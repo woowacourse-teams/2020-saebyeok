@@ -63,6 +63,6 @@ class CommentServiceTest {
 
         commentService.deleteComment(any(Member.class), savedCommentId);
 
-        verify(commentRepository).deleteById(any());
+        verify(commentRepository).save(any());
     }
 }
