@@ -79,7 +79,10 @@
 
 <script>
 import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
-import { mapActions, mapGetters } from 'vuex';
+import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+import { STATUS } from '../../utils/Status';
+
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Post',
@@ -97,6 +100,7 @@ export default {
   methods: {
     ...mapActions([CREATE_ARTICLE]),
     ...mapActions([FETCH_EMOTION]),
+    ...mapMutations([SHOW_SNACKBAR]),
     async submit() {
       const articleCreateRequest = {
         content: this.content,
@@ -104,11 +108,15 @@ export default {
         subEmotionIds: this.chooseSubEmotions,
         isCommentAllowed: this.isCommentAllowed
       };
-      this.createArticle(articleCreateRequest).then(response => {
-        if (response.status === 201) {
-          this.$router.replace({ name: 'Feed' });
-        }
-      });
+      this.createArticle(articleCreateRequest)
+        .then(response => {
+          if (response.status === STATUS.CREATED) {
+            this.$router.replace({ name: 'Feed' });
+          }
+        })
+        .catch(error => {
+          this.showSnackbar(error.response.data.errorMessage);
+        });
     },
     onClickSubEmotionTag(subEmotionId) {
       if (this.chooseSubEmotions.includes(subEmotionId)) {

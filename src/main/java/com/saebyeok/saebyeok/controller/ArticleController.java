@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public ResponseEntity<Void> createArticle(Authentication authentication, @RequestBody ArticleCreateRequest request) {
+    public ResponseEntity<Void> createArticle(Authentication authentication, @Valid @RequestBody ArticleCreateRequest request) {
         // TODO: 20. 8. 11. 커스텀 어노테이션으로 리팩토링
         User user = (User) authentication.getPrincipal();
         Member member = memberRepository.findById(user.getId())

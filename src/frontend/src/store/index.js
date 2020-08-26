@@ -7,6 +7,7 @@ import MemberArticle from '@/store/modules/memberArticle';
 import Filter from '@/store/modules/filter';
 import Analysis from '@/store/modules/analysis';
 import Common from '@/store/modules/common';
+import Snackbar from '@/store/modules/snackbar';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     MemberArticle,
     Filter,
     Analysis,
-    Common
+    Common,
+    Snackbar
   }
 });

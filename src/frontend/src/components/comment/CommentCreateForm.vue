@@ -30,8 +30,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
+import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 import { CREATE_COMMENT } from '@/store/shared/actionTypes';
+import { STATUS } from '../../utils/Status';
+
 export default {
   name: 'CommentCreateForm',
   data() {
@@ -41,18 +44,22 @@ export default {
   },
   methods: {
     ...mapActions([CREATE_COMMENT]),
+    ...mapMutations([SHOW_SNACKBAR]),
     async submitComment() {
       const commentCreateRequest = {
         content: this.content,
         articleId: this.articleId,
         isDeleted: false
       };
-      this.createComment(commentCreateRequest).then(response => {
-        if (response.status === 201) {
-          console.log(response.status);
-          this.$router.go();
-        }
-      });
+      this.createComment(commentCreateRequest)
+        .then(response => {
+          if (response.status === STATUS.CREATED) {
+            this.$router.go();
+          }
+        })
+        .catch(error => {
+          this.showSnackbar(error.response.data.errorMessage);
+        });
     }
   },
   props: ['articleId']
