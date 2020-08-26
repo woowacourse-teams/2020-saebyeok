@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.domain;
 
+import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import com.saebyeok.saebyeok.exception.InvalidLengthCommentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
