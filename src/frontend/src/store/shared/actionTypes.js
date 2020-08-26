@@ -19,3 +19,4 @@ export const LIKE_ARTICLE = 'likeArticle';
 export const UNLIKE_ARTICLE = 'unlikeArticle';
 export const LIKE_COMMENT = 'likeComment';
 export const UNLIKE_COMMENT = 'unlikeComment';
+export const CHECK_NAVBAR_SPACE_NEEDED = 'checkNavbarSpaceNeeded';
