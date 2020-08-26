@@ -16,11 +16,11 @@ const getters = {
 
 const mutations = {
   [SHOW_SNACKBAR](state, message) {
-    state.isShow = !state.isShow;
+    state.isShow = true;
     state.message = message;
   },
   [HIDE_SNACKBAR](state) {
-    state.isShow = !state.isShow;
+    state.isShow = false;
   }
 };
 

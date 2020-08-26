@@ -31,8 +31,9 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import { SHOW_SNACKBAR } from '../store/shared/mutationTypes';
+import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 import { CREATE_COMMENT } from '@/store/shared/actionTypes';
+import { STATUS } from '../utils/Status';
 
 export default {
   name: 'CommentCreateForm',
@@ -52,8 +53,7 @@ export default {
       };
       this.createComment(commentCreateRequest)
         .then(response => {
-          if (response.status === 201) {
-            this.showSnackbar('공감해줘서 고마워요.');
+          if (response.status === STATUS.CREATED) {
             this.$router.go();
           }
         })

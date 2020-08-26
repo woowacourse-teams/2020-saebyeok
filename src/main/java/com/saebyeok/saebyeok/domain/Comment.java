@@ -19,6 +19,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 public class Comment {
+    public static final int MIN_LENGTH = 1;
+    public static final int MAX_LENGTH = 140;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

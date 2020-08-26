@@ -80,6 +80,7 @@
 <script>
 import { CREATE_ARTICLE, FETCH_EMOTION } from '@/store/shared/actionTypes';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+import { STATUS } from '../../utils/Status';
 
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
@@ -109,7 +110,7 @@ export default {
       };
       this.createArticle(articleCreateRequest)
         .then(response => {
-          if (response.status === 201) {
+          if (response.status === STATUS.CREATED) {
             this.$router.replace({ name: 'Feed' });
           }
         })
