@@ -7,6 +7,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
+
+Vue.use(VueMoment, {
+  moment
+});
+
 export default {
   name: 'CreatedDate',
   props: {
@@ -17,8 +25,8 @@ export default {
   computed: {
     createdDateWithFormat: function() {
       const date = new Date(this.createdDate);
-      const now = new Date();
-      const gap = (now.getTime() - date.getTime()) / 1000;
+      const now = this.$moment().tz('Asia/Seoul');
+      const gap = (now.valueOf() - date.getTime()) / 1000;
       if (gap > 86400) {
         return (
           date.getFullYear() +
