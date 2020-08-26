@@ -9,7 +9,7 @@
     <v-list>
       <v-list-item @click.stop="dialog = true">
         <v-list-item-title>삭제하기</v-list-item-title>
-        <v-dialog v-model="dialog" max-width="290">
+        <v-dialog v-model="dialog" max-width="320">
           <v-card>
             <v-card-title class="text-h6"
               >정말 게시물을 삭제하시겠어요?</v-card-title
