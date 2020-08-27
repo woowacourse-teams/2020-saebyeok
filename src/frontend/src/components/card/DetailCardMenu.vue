@@ -44,8 +44,9 @@ export default {
   methods: {
     ...mapActions([DELETE_ARTICLE]),
     onDeleteArticle() {
-      this.deleteArticle(this.$route.params.articleId);
-      this.$router.go(-1);
+      this.deleteArticle(this.$route.params.articleId).then(() => {
+        this.$router.go(-1);
+      });
     }
   }
 };
