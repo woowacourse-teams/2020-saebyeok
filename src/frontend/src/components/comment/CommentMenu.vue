@@ -20,7 +20,7 @@
 
               <v-btn color="#B2A4D4" text @click="dialog = false">아니요</v-btn>
 
-              <v-btn color="#B2A4D4" text @click="onDeleteArticle"
+              <v-btn color="#B2A4D4" text @click="onDeleteComment"
                 >네, 할게요</v-btn
               >
             </v-card-actions>
@@ -43,12 +43,13 @@ export default {
   },
   methods: {
     ...mapActions([DELETE_COMMENT]),
-    onDeleteArticle() {
+    onDeleteComment() {
       this.deleteComment({
         articleId: this.$route.params.articleId,
         commentId: this.commentId
+      }).then(() => {
+        this.$router.go();
       });
-      this.$router.go();
     }
   },
   props: {
