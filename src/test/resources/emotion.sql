@@ -1,0 +1,6 @@
+insert into emotion values (1, '리소스', '기뻐요')
+insert into emotion values (2, '리소스', '슬퍼요')
+insert into emotion values (3, '리소스', '화나요')
+insert into sub_emotion values (1, '행복해요', 1)
+insert into sub_emotion values (2, '설레요', 1)
+insert into sub_emotion values (3, '우울해요', 2)

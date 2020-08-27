@@ -1,0 +1,31 @@
+<template>
+  <v-container>
+    <v-layout v-on:click="onClickEmotionButton" justify-center align-center>
+      <v-img
+        :src="emotion.imageResource"
+        :alt="emotion.name"
+        max-height="100"
+        max-width="100"
+      />
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+export default {
+  name: 'EmotionButton',
+  props: {
+    emotion: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    onClickEmotionButton: function() {
+      this.$router.push({
+        path: 'post/' + this.emotion.id
+      });
+    }
+  }
+};
+</script>
