@@ -1,16 +1,17 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Arrays;
@@ -33,8 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * when: 글을 삭제한다.
  * then: 이제 글이 하나도 없다.
  */
-@Disabled
-@ActiveProfiles("test")
+@WithUserDetails("123456789")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ArticleAcceptanceTest {
@@ -45,6 +45,10 @@ class ArticleAcceptanceTest {
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 10;
     private static final Long ARTICLE_ID = 1L;
+    private static String token = null;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @LocalServerPort
     int port;
@@ -56,6 +60,7 @@ class ArticleAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        token = jwtTokenProvider.createToken("123456789");
     }
 
     @Test
@@ -91,10 +96,11 @@ class ArticleAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        auth().oauth2(token).
                         pathParam("page", PAGE_NUMBER).
                         pathParam("size", PAGE_SIZE).
                 when().
-                        get(API + "/articles/?page={page}&size={size}").
+                        get(API + "/articles?page={page}&size={size}").
                 then().
                         log().all().
                         extract().
@@ -112,6 +118,7 @@ class ArticleAcceptanceTest {
 
         //@formatter:off
         given().
+                auth().oauth2(token).
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -127,6 +134,7 @@ class ArticleAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        auth().oauth2(token).
                         accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                         get(API + "/articles/" + id).
@@ -140,6 +148,7 @@ class ArticleAcceptanceTest {
     private void deleteArticle(Long id) {
         //@formatter:off
         given().
+                auth().oauth2(token).
         when().
                 delete(API + "/articles/" + id).
         then().
@@ -148,3 +157,6 @@ class ArticleAcceptanceTest {
         //@formatter:on
     }
 }
+
+
+
