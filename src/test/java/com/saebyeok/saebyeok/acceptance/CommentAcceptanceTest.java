@@ -1,16 +1,19 @@
 package com.saebyeok.saebyeok.acceptance;
 
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
+import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,7 +26,7 @@ import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
+@WithUserDetails("123456789")
 @ActiveProfiles("test")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,6 +38,10 @@ class CommentAcceptanceTest {
     private static final Long MEMBER_ID = 1L;
     // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
     private static final Long NOT_EXIST_COMMENT_ID = 10L;
+    private static String token = null;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @LocalServerPort
     int port;
@@ -44,6 +51,7 @@ class CommentAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        token = jwtTokenProvider.createToken("123456789");
 
         createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
 
@@ -144,6 +152,7 @@ class CommentAcceptanceTest {
         params.put("content", "새벽 좋아요");
 
         given().
+                auth().oauth2(token).
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -162,6 +171,7 @@ class CommentAcceptanceTest {
 
         return
             given().
+                    auth().oauth2(token).
                     body(params).
                     contentType(MediaType.APPLICATION_JSON_VALUE).
                     accept(MediaType.APPLICATION_JSON_VALUE).
@@ -177,6 +187,7 @@ class CommentAcceptanceTest {
     private void deleteComment(Long deletedId) {
         //@formatter:off
         given().
+                auth().oauth2(token).
         when().
                 delete(API + "/articles/" + ARTICLE_ID + "/comments/" + deletedId).
         then().
@@ -189,6 +200,7 @@ class CommentAcceptanceTest {
         //@formatter:off
         return
             given().
+                    auth().oauth2(token).
             when().
                     delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
             then().
@@ -208,6 +220,7 @@ class CommentAcceptanceTest {
 
         //@formatter:off
         given().
+                auth().oauth2(token).
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -223,6 +236,7 @@ class CommentAcceptanceTest {
         //@formatter:off
         return
             given().
+                    auth().oauth2(token).
                     accept(MediaType.APPLICATION_JSON_VALUE).
             when().
                     get(API + "/articles/" + id).
