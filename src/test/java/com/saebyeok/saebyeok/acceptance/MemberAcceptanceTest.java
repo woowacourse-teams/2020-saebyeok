@@ -51,18 +51,18 @@ public class MemberAcceptanceTest {
     @DisplayName("유효한 소셜 로그인 토큰으로 회원 가입, 로그인을 할 수 있다.")
     @Test
     void manageMember() throws JsonProcessingException {
-        //given, when: 유효한 소셜 로그인 토큰으로 로그인 요청을 한다.
+        //given, when 유효한 소셜 로그인 토큰으로 로그인 요청을 한다.
         TokenResponse saebyeokToken = loginNewMember(SNS_TOKEN);
 
-        //then: 회원 가입을 하고 새벽 전용 토큰을 받는다.
+        //then 회원 가입을 하고 새벽 전용 토큰을 받는다.
         assertThat(saebyeokToken).isNotNull();
         assertThat(saebyeokToken.getTokenType()).isEqualTo("Bearer");
         assertThat(saebyeokToken.getAccessToken()).isNotBlank();
 
-        //given, when: 유효하지 않은 소셜 로그인 토큰으로 로그인 요청을 한다.
+        //given, when 유효하지 않은 소셜 로그인 토큰으로 로그인 요청을 한다.
         ExceptionResponse error = loginWithInvalidToken(INVALID_SNS_TOKEN);
 
-        //then: 에러 메시지를 받는다.
+        //then 에러 메시지를 받는다.
         assertThat(error.getErrorMessage()).contains("유효하지 않은 토큰입니다: " + INVALID_SNS_TOKEN);
     }
 

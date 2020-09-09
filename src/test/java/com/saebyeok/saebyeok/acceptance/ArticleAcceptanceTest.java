@@ -71,24 +71,24 @@ class ArticleAcceptanceTest {
         // Todo: 초기 개발을 위해 Article과 연관관계가 있는 Member를 data.sql에서 수동 생성함.
         //  Member 관련 인수테스트가 생기면 삭제하고 아래에 코드 추가하기
 
-        //given: 글이 하나도 없다.
+        //given 글이 하나도 없다.
         List<ArticleResponse> articles = getArticles();
         assertThat(articles).isEmpty();
 
-        //when: 글을 하나 추가한다.
+        //when 글을 하나 추가한다.
         createArticle(CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
 
-        //then: 글이 하나 있다.
+        //then 글이 하나 있다.
         articles = getArticles();
         assertThat(articles).hasSize(1);
 
-        //when: 글을 조회한다.
+        //when 글을 조회한다.
         ArticleResponse articleResponse = readArticle(ARTICLE_ID);
 
-        //then: 글의 내용이 방금 쓴 것과 일치한다.
+        //then 글의 내용이 방금 쓴 것과 일치한다.
         assertThat(articleResponse.getContent()).isEqualTo(CONTENT);
 
-        //when: 글을 삭제한다.
+        //when 글을 삭제한다.
         deleteArticle(ARTICLE_ID);
         articles = getArticles();
         assertThat(articles).isEmpty();
