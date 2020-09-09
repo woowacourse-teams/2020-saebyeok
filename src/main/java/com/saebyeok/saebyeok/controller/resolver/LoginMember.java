@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.domain;
+package com.saebyeok.saebyeok.controller.resolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

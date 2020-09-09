@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.controller.resolver;
 
-import com.saebyeok.saebyeok.domain.LoginMember;
 import com.saebyeok.saebyeok.domain.MemberRepository;
 import com.saebyeok.saebyeok.exception.MemberNotFoundException;
 import com.saebyeok.saebyeok.security.User;
