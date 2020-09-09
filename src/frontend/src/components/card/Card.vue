@@ -6,7 +6,10 @@
           <emotion-image :emotion="article.emotion" />
           <sub-emotion-chips :subEmotions="article.subEmotions" />
           <v-flex justify-end>
-            <detail-card-menu v-if="article.isMine && !this.isDetailPage()" />
+            <detail-card-menu
+              :articleId="this.article.id"
+              v-if="article.isMine"
+            />
           </v-flex>
         </v-layout>
       </v-card-title>
@@ -91,12 +94,6 @@ export default {
           this.article.likesCount++;
         });
       }
-    },
-    isDetailPage() {
-      return (
-        this.$route.params.articleId === undefined ||
-        this.$route.params.articleId === null
-      );
     }
   },
   props: {
