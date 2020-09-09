@@ -3,11 +3,12 @@ package com.saebyeok.saebyeok.acceptance;
 import com.saebyeok.saebyeok.dto.EmotionDetailResponse;
 import com.saebyeok.saebyeok.dto.EmotionResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
+import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,16 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 @ActiveProfiles("test")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmotionAcceptanceTest {
     private static final String API = "/api";
     private static final Long NOT_EXIST_EMOTION_ID = 10000L;
+    private static String token = null;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @LocalServerPort
     int port;
@@ -34,6 +38,7 @@ public class EmotionAcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        token = jwtTokenProvider.createToken("123456789");
     }
 
     /**
@@ -84,6 +89,7 @@ public class EmotionAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        auth().oauth2(token).
                 when().
                         get(API + "/emotions").
                 then().
@@ -98,6 +104,7 @@ public class EmotionAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        auth().oauth2(token).
                         accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                         get(API + "/emotions/" + id).
@@ -112,6 +119,7 @@ public class EmotionAcceptanceTest {
         //@formatter:off
         return
                 given().
+                        auth().oauth2(token).
                 when().
                         get(API + "/emotions/" + NOT_EXIST_EMOTION_ID).
                 then().
