@@ -36,11 +36,11 @@ public class ArticleService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
         if (!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
-            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS));
+            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(LIMIT_DAYS), false);
             return filterArticles(member, articles, emotionIds, pageable);
         }
 
-        return articleRepository.findAllByCreatedDateGreaterThanEqual(LocalDateTime.now().minusDays(LIMIT_DAYS), pageable).
+        return articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(LIMIT_DAYS), false, pageable).
                 stream().
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
@@ -62,8 +62,8 @@ public class ArticleService {
     }
 
     public ArticleResponse readArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId,
-                                                                                   LocalDateTime.now().minusDays(LIMIT_DAYS))
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId,
+                                                                                   LocalDateTime.now().minusDays(LIMIT_DAYS), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
@@ -78,10 +78,7 @@ public class ArticleService {
         if (!article.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_ARTICLE_MESSAGE);
         }
-        articleEmotionService.deleteArticleEmotion(article);
-        articleSubEmotionService.deleteArticleSubEmotion(article);
-        commentService.deleteCommentsByArticle(article);
-        articleRepository.deleteById(articleId);
+        article.delete();
     }
 
     public List<ArticleResponse> getMemberArticles(Member member, int page, int size, List<Long> emotionIds) {
@@ -91,7 +88,7 @@ public class ArticleService {
             return filterArticles(member, member.getArticles(), emotionIds, pageable);
         }
 
-        return articleRepository.findAllByMember(member, pageable).
+        return articleRepository.findAllByMemberAndIsDeleted(member, false, pageable).
                 stream().
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
@@ -102,7 +99,7 @@ public class ArticleService {
     }
 
     public ArticleResponse readMemberArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndMemberEquals(articleId, member)
+        Article article = articleRepository.findByIdAndMemberEqualsAndIsDeleted(articleId, member, false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);

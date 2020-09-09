@@ -35,6 +35,7 @@ public class Article {
     @CreatedDate
     private LocalDateTime createdDate;
     private Boolean isCommentAllowed;
+    private Boolean isDeleted;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
@@ -45,12 +46,17 @@ public class Article {
     public Article(String content, Boolean isCommentAllowed) {
         this.content = content;
         this.isCommentAllowed = isCommentAllowed;
+        this.isDeleted = false;
     }
 
     public void setMember(Member member) {
         // Todo: 편의 메소드 리팩토링(기존에 member가 있는 경우, add를 중복으로 하는 경우 등)
         this.member = member;
         member.addArticle(this);
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 
     public boolean isWrittenBy(Member member) {

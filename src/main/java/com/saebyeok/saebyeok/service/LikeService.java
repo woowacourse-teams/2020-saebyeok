@@ -25,7 +25,7 @@ public class LikeService {
     private final CommentRepository commentRepository;
 
     public ArticleLike likeArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
 
         ArticleLike like = new ArticleLike(member, article);
@@ -38,7 +38,7 @@ public class LikeService {
     }
 
     public void unlikeArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqual(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS))
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(LIMIT_DAYS), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
 
         articleLikeRepository.deleteByMemberAndArticle(member, article);

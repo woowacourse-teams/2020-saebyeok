@@ -42,13 +42,4 @@ public class ArticleSubEmotionService {
                 map(SubEmotionResponse::new).
                 collect(Collectors.toList());
     }
-
-    public void deleteArticleSubEmotion(Article article) {
-        try {
-            articleSubEmotionRepository.deleteAllByArticleId(article.getId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new ArticleSubEmotionNotFoundException(article.getId());
-        }
-    }
-
 }
