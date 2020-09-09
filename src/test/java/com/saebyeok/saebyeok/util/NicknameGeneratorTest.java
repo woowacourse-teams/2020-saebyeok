@@ -28,8 +28,8 @@ public class NicknameGeneratorTest {
         nicknameGenerator = new NicknameGenerator();
         me = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         other = new Member(2L, "987654321", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        myArticle = new Article(1L, "내용", me, LocalDateTime.now(), true, new ArrayList<>(), new ArrayList<>());
-        othersArticle = new Article(2L, "내용", other, LocalDateTime.now(), true, new ArrayList<>(), new ArrayList<>());
+        myArticle = new Article(1L, "내용", me, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
+        othersArticle = new Article(2L, "내용", other, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
     }
 
     @DisplayName("본인의 글에 댓글 단 경우, 작성자임을 나타내는 지정된 닉네임이 부여돼야 한다.")
@@ -48,7 +48,7 @@ public class NicknameGeneratorTest {
         comment.setArticle(othersArticle);
         comment.setMember(me);
         String myNickname2 = nicknameGenerator.generate(
-                me, new Article(2L, "게시물내용", other, LocalDateTime.now(), true, Arrays.asList(comment), new ArrayList<>()));
+                me, new Article(2L, "게시물내용", other, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>()));
 
         assertThat(myNickname1).isEqualTo(myNickname2);
     }

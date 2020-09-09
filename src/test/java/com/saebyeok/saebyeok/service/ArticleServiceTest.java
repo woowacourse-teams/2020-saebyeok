@@ -114,7 +114,7 @@ class ArticleServiceTest {
         when(articleRepository.findById(any())).thenReturn(Optional.of(article1));
         articleService.deleteArticle(member, ARTICLE_ID_1);
 
-        verify(articleRepository).deleteById(any());
+        assertThat(article1.getIsDeleted()).isTrue();
     }
 
     @DisplayName("예외 테스트: 잘못된 ID의 글 삭제를 요청하면 오류를 발생시킨다")
