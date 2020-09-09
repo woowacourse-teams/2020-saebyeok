@@ -21,19 +21,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * given: 글이 하나도 없다.
- * when: 글을 하나 추가한다.
- * then: 글이 1개 있다.
- * <p>
- * given: 아까 쓴 글이 있다.
- * when: 글을 조회한다.
- * then: 글의 내용이 방금 쓴 것과 일치한다.
- * <p>
- * given: 글이 하나 있다.
- * when: 글을 삭제한다.
- * then: 이제 글이 하나도 없다.
- */
 @WithUserDetails("123456789")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -62,6 +49,22 @@ class ArticleAcceptanceTest {
         RestAssured.port = port;
         token = jwtTokenProvider.createToken("123456789");
     }
+
+    /**
+     * Scenario: 게시글을 조회, 삭제할 수 있다
+     * <p>
+     * given 글이 하나도 없다.
+     * when 글을 하나 추가한다.
+     * then 글이 1개 있다.
+     * <p>
+     * given 아까 쓴 글이 있다.
+     * when 글을 조회한다.
+     * then 글의 내용이 방금 쓴 것과 일치한다.
+     * <p>
+     * given 글이 하나 있다.
+     * when 글을 삭제한다.
+     * then 이제 글이 하나도 없다.
+     */
 
     @Test
     void manageArticle() {
