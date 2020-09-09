@@ -1,8 +1,7 @@
 package com.saebyeok.saebyeok.controller.resolver;
 
-import com.saebyeok.saebyeok.domain.MemberRepository;
-import com.saebyeok.saebyeok.exception.MemberNotFoundException;
 import com.saebyeok.saebyeok.security.User;
+import com.saebyeok.saebyeok.service.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,10 +12,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public LoginMemberArgumentResolver(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public LoginMemberArgumentResolver(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @Override
@@ -30,7 +29,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = (User) principal;
 
-        return memberRepository.findById(user.getId())
-                .orElseThrow(() -> new MemberNotFoundException(user.getId()));
+        return memberService.findById(user.getId());
     }
 }
