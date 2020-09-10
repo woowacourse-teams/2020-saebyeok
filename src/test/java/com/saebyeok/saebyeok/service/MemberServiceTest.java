@@ -39,13 +39,13 @@ class MemberServiceTest {
         verify(memberRepository).findById(validId);
     }
 
-    @DisplayName("예외 테스트: 유효하지 않은 아이디로 Member를 요청하면 예외가 발생한")
+    @DisplayName("예외 테스트: 유효하지 않은 아이디로 Member를 요청하면 예외가 발생한다")
     @Test
     void findByIdExceptionTest() {
         Long invalidId = 100L;
         when(memberRepository.findById(invalidId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> memberService.findById(100L))
+        assertThatThrownBy(() -> memberService.findById(invalidId))
                 .isInstanceOf(MemberNotFoundException.class)
                 .hasMessage(invalidId + "에 해당하는 회원을 찾을 수 없습니다.");
     }
