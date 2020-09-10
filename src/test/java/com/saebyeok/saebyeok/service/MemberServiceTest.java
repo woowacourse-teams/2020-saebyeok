@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
@@ -59,7 +58,7 @@ class MemberServiceTest {
         when(memberRepository.findByOauthId(invalidOauthId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberService.findByOauthId(invalidOauthId))
-                .isInstanceOf(UsernameNotFoundException.class)
-                .hasMessage(invalidOauthId + "에 해당하는 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(MemberNotFoundException.class)
+                .hasMessage("OauthId " + invalidOauthId + "에 해당하는 회원을 찾을 수 없습니다.");
     }
 }
