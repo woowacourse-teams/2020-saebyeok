@@ -1,18 +1,9 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.ArticleResponse;
-import com.saebyeok.saebyeok.infra.JwtTokenProvider;
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,34 +12,13 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WithUserDetails("123456789")
-@Sql({"/truncate.sql", "/emotion.sql"})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ArticleAcceptanceTest {
-    private static final String API = "/api";
+class ArticleAcceptanceTest extends AcceptanceTest {
     private static final String CONTENT = "내용입니다";
     private static final Long EMOTION_ID = 1L;
     private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 10;
     private static final Long ARTICLE_ID = 1L;
-    private static String token = null;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @LocalServerPort
-    int port;
-
-    public static RequestSpecification given() {
-        return RestAssured.given().log().all();
-    }
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-        token = jwtTokenProvider.createToken("123456789");
-    }
 
     /**
      * Scenario: 게시글을 조회, 삭제할 수 있다

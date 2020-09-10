@@ -3,43 +3,17 @@ package com.saebyeok.saebyeok.acceptance;
 import com.saebyeok.saebyeok.dto.EmotionDetailResponse;
 import com.saebyeok.saebyeok.dto.EmotionResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
-import com.saebyeok.saebyeok.infra.JwtTokenProvider;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
-@Sql({"/truncate.sql", "/emotion.sql"})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EmotionAcceptanceTest {
-    private static final String API = "/api";
+public class EmotionAcceptanceTest extends AcceptanceTest {
     private static final Long NOT_EXIST_EMOTION_ID = 10000L;
-    private static String token = null;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @LocalServerPort
-    int port;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-        token = jwtTokenProvider.createToken("123456789");
-    }
 
     /**
      * Scenario: Emotion 및 SubEmotion을 조회할 수 있다.
