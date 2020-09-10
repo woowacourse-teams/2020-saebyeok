@@ -61,4 +61,27 @@ class MemberServiceTest {
                 .isInstanceOf(MemberNotFoundException.class)
                 .hasMessage("OauthId " + invalidOauthId + "에 해당하는 회원을 찾을 수 없습니다.");
     }
+
+    @DisplayName("회원 가입한 사용자가 로그인 요청을 하면 로그인이 되고 Member를 리턴한다")
+    @Test
+    void loginTest() {
+        Member existMember = new Member();
+        Member DbMember = new Member();
+        when(memberRepository.findByOauthId(existMember.getOauthId())).thenReturn(Optional.of(DbMember));
+
+        memberService.signIn(existMember);
+
+        verify(memberRepository).save(DbMember);
+    }
+
+    @DisplayName("새로운 사용자가 로그인 요청을 하면 회원 가입이 되고 Member를 리턴한다")
+    @Test
+    void loginWithNewMemberTest() {
+        Member newMember = new Member();
+        when(memberRepository.findByOauthId(newMember.getOauthId())).thenReturn(Optional.empty());
+
+        memberService.signIn(newMember);
+
+        verify(memberRepository).save(newMember);
+    }
 }
