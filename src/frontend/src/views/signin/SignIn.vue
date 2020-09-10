@@ -3,7 +3,7 @@
     <v-layout column align-center fill-height class="background">
       <v-flex class="ma-16 pt-16">
         <p id="title">새벽</p>
-        <p id="description">감정 공유 비밀 다이어리</p>
+        <p id="description">함께 쓰는 감정 비밀 다이어리</p>
       </v-flex>
       <v-flex>
         <a href="/oauth2/authorization/naver">
