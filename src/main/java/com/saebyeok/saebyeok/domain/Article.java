@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,7 +36,7 @@ public class Article {
     @CreatedDate
     private LocalDateTime createdDate;
     private Boolean isCommentAllowed;
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
@@ -46,7 +47,6 @@ public class Article {
     public Article(String content, Boolean isCommentAllowed) {
         this.content = content;
         this.isCommentAllowed = isCommentAllowed;
-        this.isDeleted = false;
     }
 
     public void setMember(Member member) {

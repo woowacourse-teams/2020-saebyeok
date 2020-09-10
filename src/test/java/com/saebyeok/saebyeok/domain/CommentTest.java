@@ -37,7 +37,6 @@ public class CommentTest {
         Comment comment = Comment.builder().
                 content(TEST_CONTENT).
                 nickname(TEST_NICKNAME).
-                isDeleted(false).
                 build();
 
         assertThat(comment.getContent()).isEqualTo(TEST_CONTENT);

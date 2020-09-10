@@ -38,16 +38,15 @@ public class Comment {
 
     @ManyToOne
     private Article article;
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
 
     @Builder
-    public Comment(String content, String nickname, Boolean isDeleted) {
+    public Comment(String content, String nickname) {
         this.content = content;
         this.nickname = nickname;
-        this.isDeleted = isDeleted;
     }
 
     public boolean isWrittenBy(Member member) {

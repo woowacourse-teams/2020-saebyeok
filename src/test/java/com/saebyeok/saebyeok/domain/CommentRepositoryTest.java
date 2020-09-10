@@ -50,7 +50,6 @@ class CommentRepositoryTest {
         Comment comment = Comment.builder().
                 content(TEST_CONTENT).
                 nickname(TEST_NICKNAME).
-                isDeleted(false).
                 build();
 
         comment.setMember(member);
