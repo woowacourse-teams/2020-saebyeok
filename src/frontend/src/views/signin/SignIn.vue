@@ -2,7 +2,8 @@
   <v-app>
     <v-layout column align-center fill-height class="background">
       <v-flex class="ma-16 pt-16">
-        <p>새벽</p>
+        <p id="title">새벽</p>
+        <p id="description">감정 공유 비밀 다이어리</p>
       </v-flex>
       <v-flex>
         <a href="/oauth2/authorization/naver">
@@ -26,8 +27,12 @@ export default {};
   background-position: center center;
   background-size: cover;
 }
-p {
+#title {
   font-size: 40px;
   color: white;
+  text-align: center;
+}
+#description {
+  text-align: center;
 }
 </style>
