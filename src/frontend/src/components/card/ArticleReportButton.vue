@@ -45,7 +45,7 @@
                 hide-details
                 rows="1"
                 name="input-7-4"
-                label="상세한 내용을 적어주시면 확인하겠습니다"
+                label="상세한 내용을 적어주세요"
                 v-model="textContent"
               />
             </v-col>
