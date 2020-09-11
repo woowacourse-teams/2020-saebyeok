@@ -25,4 +25,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.navbarSpace {
+  margin-bottom: -10px;
+}
+</style>

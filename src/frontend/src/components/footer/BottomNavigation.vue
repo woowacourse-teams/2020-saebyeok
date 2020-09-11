@@ -4,7 +4,7 @@
       app
       color="#B2A4D4"
       shift
-      :class="{ iphoneX: isiPhoneX }"
+      :class="{ navbarSpace: navbarSpaceNeeded }"
     >
       <v-btn to="/feed" height="100%">
         <span>피드</span>
@@ -25,35 +25,26 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import { CHECK_NAVBAR_SPACE_NEEDED } from '@/store/shared/actionTypes';
 export default {
   name: 'bottom-navigation',
-  data() {
-    return {
-      isiPhoneX: false
-    };
-  },
   mounted() {
-    this.checkUserAgent();
+    this.checkNavbarSpaceNeeded();
+  },
+  computed: {
+    navbarSpaceNeeded() {
+      return this.$store.getters.spaceNeeded;
+    }
   },
   methods: {
-    checkUserAgent() {
-      const userAgent = window.navigator.userAgent;
-      if (
-        (userAgent.search('iPhone') > 0 || userAgent.search('Macintosh') > 0) &&
-        (screen.height === 812 ||
-          screen.height === 896 ||
-          screen.height === 1194 ||
-          screen.height === 1366)
-      ) {
-        this.isiPhoneX = true;
-      }
-    }
+    ...mapActions([CHECK_NAVBAR_SPACE_NEEDED])
   }
 };
 </script>
 
 <style>
-.iphoneX {
+.navbarSpace {
   height: 76px !important;
   padding-bottom: 20px;
 }
