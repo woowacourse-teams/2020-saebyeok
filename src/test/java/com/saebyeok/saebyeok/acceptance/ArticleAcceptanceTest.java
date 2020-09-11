@@ -87,6 +87,3 @@ class ArticleAcceptanceTest extends AcceptanceTest {
         //@formatter:on
     }
 }
-
-
-
