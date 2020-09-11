@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-icon @click.stop="dialog = true">mdi-alarm-light</v-icon>
+    <v-icon @click.stop="onClickAlarmButton()">mdi-alarm-light</v-icon>
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h7">
@@ -15,24 +15,28 @@
                 column
                 align="center"
                 justify="end"
+                v-model="choiceCategory"
               >
                 <v-chip
                   class="ma-1"
                   style="font-size: 12px; padding: 5px"
                   v-for="reportCategory in this.reportCategories"
-                  v-on:click="onClickReportCategory(reportCategory.id)"
+                  @click="invalidCategoryChoice = false"
                   :key="reportCategory.id"
                 >
                   {{ reportCategory.name }}
                 </v-chip>
               </v-chip-group>
 
-              <h5
-                v-if="this.invalidCategoryChoice"
-                style="color: red; font-weight: lighter"
-              >
-                신고하시는 이유를 선택해 주세요
-              </h5>
+              <div style="padding-left: 10px;">
+                <h5
+                  v-if="this.invalidCategoryChoice"
+                  style="color: red; font-weight: lighter"
+                  align="left"
+                >
+                  신고하시는 이유를 선택해 주세요
+                </h5>
+              </div>
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -42,16 +46,12 @@
                 rows="1"
                 name="input-7-4"
                 label="상세한 내용을 적어주시면 확인하겠습니다"
-                v-model="content"
+                v-model="textContent"
               />
             </v-col>
             <v-col cols="12" align="right" justify="end">
               <v-btn color="#B2A4D4" text @click="dialog = false">아니요</v-btn>
-              <v-btn
-                color="#B2A4D4"
-                text
-                @click="onReportArticle"
-                :disabled="this.choiceCaregoryId === 0"
+              <v-btn color="#B2A4D4" text @click="onReportArticle"
                 >네, 할게요</v-btn
               >
             </v-col>
@@ -62,6 +62,9 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex';
+import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+
 export default {
   name: 'ArticleReportButton',
   data() {
@@ -72,25 +75,27 @@ export default {
         { id: 2, name: '모욕적인 표현' },
         { id: 3, name: '불쾌한 표현' }
       ],
-      choiceCategoryId: 0,
-      invalidCategoryChoice: false
+      choiceCategory: undefined,
+      invalidCategoryChoice: false,
+      textContent: ''
     };
   },
   methods: {
+    ...mapMutations([SHOW_SNACKBAR]),
     onReportArticle() {
-      if (this.choiceCategoryId === 0) {
+      if (this.choiceCategory === undefined) {
         this.invalidCategoryChoice = true;
         return;
       }
-      console.log('report complete');
+      //todo : 여기에 신고 연산이 들어간다
+      this.dialog = false;
+      this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
     },
-    onClickReportCategory(reportCategoryId) {
+    onClickAlarmButton() {
       this.invalidCategoryChoice = false;
-      if (this.choiceCategoryId === reportCategoryId) {
-        this.choiceCategoryId = 0;
-        return;
-      }
-      this.choiceCategoryId = reportCategoryId;
+      this.choiceCategory = undefined;
+      this.textContent = '';
+      this.dialog = true;
     }
   }
 };
