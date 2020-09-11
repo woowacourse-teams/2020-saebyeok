@@ -3,12 +3,9 @@ package com.saebyeok.saebyeok.acceptance;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +15,6 @@ class ArticleAcceptanceTest extends AcceptanceTest {
     private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 10;
-    private static final Long ARTICLE_ID = 1L;
 
     /**
      * Scenario: 게시글을 조회, 삭제할 수 있다
@@ -38,9 +34,6 @@ class ArticleAcceptanceTest extends AcceptanceTest {
 
     @Test
     void manageArticle() {
-        // Todo: 초기 개발을 위해 Article과 연관관계가 있는 Member를 data.sql에서 수동 생성함.
-        //  Member 관련 인수테스트가 생기면 삭제하고 아래에 코드 추가하기
-
         //given 글이 하나도 없다.
         List<ArticleResponse> articles = getArticles();
         assertThat(articles).isEmpty();
@@ -69,7 +62,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return
                 given().
-                        auth().oauth2(token).
+                        auth().oauth2(TOKEN).
                         pathParam("page", PAGE_NUMBER).
                         pathParam("size", PAGE_SIZE).
                 when().
@@ -82,46 +75,10 @@ class ArticleAcceptanceTest extends AcceptanceTest {
         //@formatter:on
     }
 
-    private void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("content", content);
-        params.put("emotionId", emotionId);
-        params.put("subEmotionIds", subEmotionIds);
-        params.put("isCommentAllowed", isCommentAllowed.toString());
-
-        //@formatter:off
-        given().
-                auth().oauth2(token).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value());
-        //@formatter:on
-    }
-
-    private ArticleResponse readArticle(Long id) {
-        //@formatter:off
-        return
-                given().
-                        auth().oauth2(token).
-                        accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                        get(API + "/articles/" + id).
-                then().
-                        log().all().
-                        extract().
-                        as(ArticleResponse.class);
-        //@formatter:on
-    }
-
     private void deleteArticle(Long id) {
         //@formatter:off
         given().
-                auth().oauth2(token).
+                auth().oauth2(TOKEN).
         when().
                 delete(API + "/articles/" + id).
         then().

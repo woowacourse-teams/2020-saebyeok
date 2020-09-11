@@ -63,7 +63,7 @@ public class EmotionAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return
                 given().
-                        auth().oauth2(token).
+                        auth().oauth2(TOKEN).
                 when().
                         get(API + "/emotions").
                 then().
@@ -78,7 +78,7 @@ public class EmotionAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return
                 given().
-                        auth().oauth2(token).
+                        auth().oauth2(TOKEN).
                         accept(MediaType.APPLICATION_JSON_VALUE).
                 when().
                         get(API + "/emotions/" + id).
@@ -93,7 +93,7 @@ public class EmotionAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return
                 given().
-                        auth().oauth2(token).
+                        auth().oauth2(TOKEN).
                 when().
                         get(API + "/emotions/" + NOT_EXIST_EMOTION_ID).
                 then().

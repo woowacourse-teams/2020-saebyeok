@@ -18,11 +18,8 @@ import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CommentAcceptanceTest extends AcceptanceTest {
-    private static final Long ARTICLE_ID = 1L;
     private static final Long EMOTION_ID = 1L;
     private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
-    private static final Long MEMBER_ID = 1L;
-    // TODO: 2020/07/20 MEMBER_ID는 data.sql에 있는 맴버를 가리킨다. 이후 맴버가 구현되면 고쳐야됨.
     private static final Long NOT_EXIST_COMMENT_ID = 10L;
 
     private Map<String, Object> params;
@@ -130,7 +127,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         params.put("content", "새벽 좋아요");
 
         given().
-                auth().oauth2(token).
+                auth().oauth2(TOKEN).
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -149,7 +146,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
 
         return
             given().
-                    auth().oauth2(token).
+                    auth().oauth2(TOKEN).
                     body(params).
                     contentType(MediaType.APPLICATION_JSON_VALUE).
                     accept(MediaType.APPLICATION_JSON_VALUE).
@@ -165,7 +162,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     private void deleteComment(Long deletedId) {
         //@formatter:off
         given().
-                auth().oauth2(token).
+                auth().oauth2(TOKEN).
         when().
                 delete(API + "/articles/" + ARTICLE_ID + "/comments/" + deletedId).
         then().
@@ -178,50 +175,13 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return
             given().
-                    auth().oauth2(token).
+                    auth().oauth2(TOKEN).
             when().
                     delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
             then().
                     log().all().
                     statusCode(HttpStatus.BAD_REQUEST.value()).
                     extract().as(ExceptionResponse.class);
-        //@formatter:on
-    }
-
-    // TODO: 2020/07/20 나중에 코드 통합시 중복 제거해야됨. Article 인수테스트 코드 그대로 사용..
-    private void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("content", content);
-        params.put("emotionId", emotionId);
-        params.put("subEmotionIds", subEmotionIds);
-        params.put("isCommentAllowed", isCommentAllowed.toString());
-
-        //@formatter:off
-        given().
-                auth().oauth2(token).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value());
-        //@formatter:on
-    }
-
-    private ArticleResponse readArticle(Long id) {
-        //@formatter:off
-        return
-            given().
-                    auth().oauth2(token).
-                    accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-                    get(API + "/articles/" + id).
-            then().
-                    log().all().
-                    extract().
-                    as(ArticleResponse.class);
         //@formatter:on
     }
 }
