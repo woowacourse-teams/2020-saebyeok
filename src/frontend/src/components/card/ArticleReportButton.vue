@@ -3,7 +3,7 @@
     <v-icon @click.stop="onClickAlarmButton()">mdi-alarm-light</v-icon>
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
-        <v-card-title class="text-h7">
+        <v-card-title class="text-h7 pl-3">
           이 게시물을 신고하시겠어요?
         </v-card-title>
 

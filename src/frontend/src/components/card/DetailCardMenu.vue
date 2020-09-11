@@ -44,9 +44,19 @@ export default {
   methods: {
     ...mapActions([DELETE_ARTICLE]),
     onDeleteArticle() {
-      this.deleteArticle(this.$route.params.articleId).then(() => {
-        this.$router.go(-1);
+      this.deleteArticle(this.articleId).then(() => {
+        if (this.$route.params.articleId === undefined) {
+          this.$router.go();
+        } else {
+          this.$router.go(-1);
+        }
       });
+    }
+  },
+  props: {
+    articleId: {
+      type: Number,
+      required: true
     }
   }
 };
