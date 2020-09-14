@@ -20,8 +20,8 @@ public class ArticleTest {
     @BeforeEach
     void setUp() {
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.article1 = new Article(1L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
-        this.article2 = new Article(2L, "내용", member, LocalDateTime.now(), false, Collections.emptyList(), new ArrayList<>());
+        this.article1 = new Article(1L, "내용", member, LocalDateTime.now(), false, false, Collections.emptyList(), new ArrayList<>());
+        this.article2 = new Article(2L, "내용", member, LocalDateTime.now(), false, false, Collections.emptyList(), new ArrayList<>());
     }
 
     @DisplayName("특정 사용자가 해당 게시물을 공감했는지 여부를 확인할 수 있다")
@@ -40,7 +40,7 @@ public class ArticleTest {
     @Test
     void isWrittenByTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, null, new ArrayList<>());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, null, new ArrayList<>());
         article.setMember(member);
 
         assertThat(article.isWrittenBy(member)).isTrue();
@@ -50,9 +50,9 @@ public class ArticleTest {
     @Test
     void loadExistingNicknameTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Comment comment = new Comment("내용", "닉네임1", false);
+        Comment comment = new Comment("내용", "닉네임1");
         comment.setMember(member);
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment), new ArrayList<>());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>());
 
         assertThat(article.loadExistingNickname(member)).isEqualTo(Optional.of("닉네임1"));
     }
@@ -61,7 +61,7 @@ public class ArticleTest {
     @Test
     void loadExistingNicknameTest2() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Collections.emptyList(), new ArrayList<>());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Collections.emptyList(), new ArrayList<>());
 
         assertThat(article.loadExistingNickname(member)).isEmpty();
     }
@@ -70,10 +70,10 @@ public class ArticleTest {
     @Test
     void getAllNicknamesTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Comment comment1 = new Comment("내용1", "닉네임1", false);
-        Comment comment2 = new Comment("내용2", "닉네임2", false);
-        Comment comment3 = new Comment("내용3", "닉네임3", false);
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, Arrays.asList(comment1, comment2, comment3), new ArrayList<>());
+        Comment comment1 = new Comment("내용1", "닉네임1");
+        Comment comment2 = new Comment("내용2", "닉네임2");
+        Comment comment3 = new Comment("내용3", "닉네임3");
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Arrays.asList(comment1, comment2, comment3), new ArrayList<>());
 
         assertThat(article.getAllNicknames()).
                 hasSize(3).

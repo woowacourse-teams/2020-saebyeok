@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    public Optional<Article> findByIdAndCreatedDateGreaterThanEqual(Long id, LocalDateTime date);
 
-    public List<Article> findAllByCreatedDateGreaterThanEqual(LocalDateTime date, Pageable pageable);
+    public Optional<Article> findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(Long id, LocalDateTime date, Boolean isDeleted);
 
-    public List<Article> findAllByCreatedDateGreaterThanEqual(LocalDateTime date);
+    public List<Article> findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime date, Boolean isDeleted, Pageable pageable);
 
-    public List<Article> findAllByMember(Member member, Pageable pageable);
+    public List<Article> findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime date, Boolean isDeleted);
 
-    public Optional<Article> findByIdAndMemberEquals(Long id, Member member);
+    public List<Article> findAllByMemberAndIsDeleted(Member member, Boolean isDeleted, Pageable pageable);
+
+    public Optional<Article> findByIdAndMemberEqualsAndIsDeleted(Long id, Member member, Boolean isDeleted);
 }

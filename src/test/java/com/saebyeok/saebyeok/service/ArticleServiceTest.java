@@ -63,8 +63,8 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService, commentService);
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
-        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, null, new ArrayList<>());
-        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, null, new ArrayList<>());
+        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, null, new ArrayList<>());
+        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, false, null, new ArrayList<>());
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
@@ -72,7 +72,7 @@ class ArticleServiceTest {
     void getArticlesTest() {
         List<Article> articles = new ArrayList<>();
         articles.add(article1);
-        when(articleRepository.findAllByCreatedDateGreaterThanEqual(any(), any())).thenReturn(articles);
+        when(articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(any(), any(), any())).thenReturn(articles);
 
         List<ArticleResponse> articleResponses = articleService.getArticles(member, PAGE_NUMBER, PAGE_SIZE, Collections.emptyList());
 
@@ -86,7 +86,7 @@ class ArticleServiceTest {
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.of(article1));
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(any(), any(), any())).thenReturn(Optional.of(article1));
 
 
         ArticleResponse articleResponse = articleService.readArticle(member, ARTICLE_ID_1);
@@ -101,7 +101,7 @@ class ArticleServiceTest {
     @DisplayName("예외 테스트: 요청에 해당하는 ID가 없으면 ArticleNotFoundException이 발생한다")
     @Test
     void readArticleExceptionTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqual(any(), any())).thenReturn(Optional.empty());
+        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(any(), any(), any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> articleService.readArticle(member, INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
@@ -114,7 +114,7 @@ class ArticleServiceTest {
         when(articleRepository.findById(any())).thenReturn(Optional.of(article1));
         articleService.deleteArticle(member, ARTICLE_ID_1);
 
-        verify(articleRepository).deleteById(any());
+        assertThat(article1.getIsDeleted()).isTrue();
     }
 
     @DisplayName("예외 테스트: 잘못된 ID의 글 삭제를 요청하면 오류를 발생시킨다")
@@ -134,7 +134,7 @@ class ArticleServiceTest {
         List<Article> articles = new ArrayList<>();
         articles.add(article1);
         articles.add(article2);
-        when(articleRepository.findAllByMember(eq(member), any())).thenReturn(articles);
+        when(articleRepository.findAllByMemberAndIsDeleted(eq(member), any(), any())).thenReturn(articles);
 
 
         List<ArticleResponse> articleResponses = articleService.getMemberArticles(member, PAGE_NUMBER, PAGE_SIZE, Collections.emptyList());
@@ -153,7 +153,7 @@ class ArticleServiceTest {
     @DisplayName("ID로 내가 쓴 개별 글 조회를 요청하면 만료 시간과 상관없이 해당 글을 전달 받는다")
     @Test
     void readMemberArticleTest() {
-        when(articleRepository.findByIdAndMemberEquals(any(), any())).thenReturn(Optional.of(article2));
+        when(articleRepository.findByIdAndMemberEqualsAndIsDeleted(any(), any(), any())).thenReturn(Optional.of(article2));
 
         ArticleResponse articleResponse = articleService.readMemberArticle(member, ARTICLE_ID_2);
 
