@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-icon @click.stop="onClickAlarmButton()">mdi-alarm-light</v-icon>
+    <v-icon @click.stop="onClickAlarmButton()" color="red darken-4"
+      >mdi-alarm-light</v-icon
+    >
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h7 pl-3">
