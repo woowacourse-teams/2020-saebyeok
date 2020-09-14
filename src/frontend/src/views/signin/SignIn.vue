@@ -8,9 +8,17 @@
       <v-flex>
         <a href="/oauth2/authorization/naver">
           <v-img
+            class="naver-button"
             alt="네이버 아이디로 로그인"
-            width="200px"
+            width="194px"
             src="/img/naverLogin.png"
+        /></a>
+        <a href="/oauth2/authorization/google">
+          <v-img
+            class="google-button"
+            alt="Google로 로그인"
+            width="198px"
+            src="/img/googleLogin.png"
         /></a>
       </v-flex>
     </v-layout>
@@ -34,5 +42,11 @@ export default {};
 }
 #description {
   text-align: center;
+}
+.naver-button {
+  margin: 3px;
+}
+.google-button {
+  margin: 1px;
 }
 </style>

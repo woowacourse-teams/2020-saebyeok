@@ -27,12 +27,15 @@ public class OAuthAttributes {
         if ("naver".equals(registrationId)) {
             return ofNaver("id", attributes);
         }
-        return ofGoogle(userNameAttributeName, attributes);
+        if ("google".equals(registrationId)) {
+            return ofGoogle(userNameAttributeName, attributes);
+        }
+        throw new IllegalArgumentException();
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .id((String) attributes.get("id"))
+                .id((String) attributes.get(userNameAttributeName))
                 .loginMethod("google")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -42,7 +45,7 @@ public class OAuthAttributes {
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
-                .id((String) response.get("id"))
+                .id((String) response.get(userNameAttributeName))
                 .loginMethod("naver")
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
