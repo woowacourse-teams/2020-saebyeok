@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.saebyeok.saebyeok.acceptance.MemberAcceptanceTest.OBJECT_MAPPER;
 import static com.saebyeok.saebyeok.domain.CommentTest.TEST_CONTENT;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -59,7 +58,7 @@ class CommentControllerTest {
     @Test
     void createUnderLengthCommentTest() throws Exception {
         CommentCreateRequest request = new CommentCreateRequest("", ARTICLE_ID);
-        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+        String requestAsString = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
                 content(requestAsString).
@@ -76,7 +75,7 @@ class CommentControllerTest {
                 "1만4000원.\n";
 
         CommentCreateRequest request = new CommentCreateRequest(content, ARTICLE_ID);
-        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+        String requestAsString = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
                 content(requestAsString).
