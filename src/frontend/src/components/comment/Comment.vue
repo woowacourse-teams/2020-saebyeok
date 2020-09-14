@@ -48,7 +48,7 @@
       </div>
       <v-spacer />
       <div class="pb-2 pr-2">
-        <report-button :reportType="'Comment'" :reportedId="comment.id" />
+        <report-button :reportType="getReportType()" :reportedId="comment.id" />
       </div>
     </v-flex>
   </v-card>
@@ -58,6 +58,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { mapActions } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
@@ -93,6 +94,9 @@ export default {
           this.comment.likesCount++;
         });
       }
+    },
+    getReportType() {
+      return REPORT_TYPE.COMMENT;
     }
   }
 };

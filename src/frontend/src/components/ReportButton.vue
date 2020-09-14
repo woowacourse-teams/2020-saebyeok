@@ -4,8 +4,7 @@
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h7 pl-3">
-          이 {{ reportType === 'Article' ? '게시물' : '댓글' }}을
-          신고하시겠어요?
+          이 {{ getReportTypeText() }}을 신고하시겠어요?
         </v-card-title>
 
         <v-card-actions>
@@ -61,6 +60,7 @@
   </div>
 </template>
 <script>
+import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { mapMutations } from 'vuex';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 
@@ -88,9 +88,9 @@ export default {
       }
       //todo : 여기에 신고 연산이 들어간다
 
-      if (this.reportType === 'Article') {
+      if (this.reportType === REPORT_TYPE.ARTICLE) {
         console.log('report this article : ', this.reportedId);
-      } else if (this.reportType === 'Comment') {
+      } else if (this.reportType === REPORT_TYPE.COMMENT) {
         console.log('report this comment : ', this.reportedId);
       }
       this.dialog = false;
@@ -101,6 +101,12 @@ export default {
       this.choiceCategory = undefined;
       this.textContent = '';
       this.dialog = true;
+    },
+    getReportTypeText() {
+      if (this.reportType === REPORT_TYPE.ARTICLE) {
+        return '게시물';
+      }
+      return '댓글';
     }
   },
   props: {
