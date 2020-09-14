@@ -4,7 +4,8 @@
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h7 pl-3">
-          이 댓글을 신고하시겠어요?
+          이 {{ reportType === 'Article' ? '게시물' : '댓글' }}을
+          신고하시겠어요?
         </v-card-title>
 
         <v-card-actions>
@@ -51,9 +52,7 @@
             </v-col>
             <v-col cols="12" align="right" justify="end">
               <v-btn color="#B2A4D4" text @click="dialog = false">아니요</v-btn>
-              <v-btn color="#B2A4D4" text @click="onReportComment"
-                >네, 할게요</v-btn
-              >
+              <v-btn color="#B2A4D4" text @click="onReport">네, 할게요</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -66,7 +65,7 @@ import { mapMutations } from 'vuex';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 
 export default {
-  name: 'CommentReportButton',
+  name: 'ReportButton',
   data() {
     return {
       dialog: false,
@@ -82,12 +81,18 @@ export default {
   },
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
-    onReportComment() {
+    onReport() {
       if (this.choiceCategory === undefined) {
         this.invalidCategoryChoice = true;
         return;
       }
       //todo : 여기에 신고 연산이 들어간다
+
+      if (this.reportType === 'Article') {
+        console.log('report this article : ', this.reportedId);
+      } else if (this.reportType === 'Comment') {
+        console.log('report this comment : ', this.reportedId);
+      }
       this.dialog = false;
       this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
     },
@@ -96,6 +101,18 @@ export default {
       this.choiceCategory = undefined;
       this.textContent = '';
       this.dialog = true;
+    }
+  },
+  props: {
+    reportType: {
+      type: String,
+      required: true,
+      default: ''
+    },
+    reportedId: {
+      type: Number,
+      required: true,
+      default: 0
     }
   }
 };

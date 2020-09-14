@@ -58,7 +58,7 @@
               <v-spacer />
             </v-col>
             <v-col align="right" justify="end" style="padding:0px" cols="2">
-              <article-report-button />
+              <report-button :reportType="'Article'" :reportedId="article.id" />
             </v-col>
           </v-row>
         </v-list-item>
@@ -71,7 +71,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
-import ArticleReportButton from '@/components/card/ArticleReportButton';
+import ReportButton from '@/components/ReportButton';
 import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
@@ -82,7 +82,7 @@ export default {
     CreatedDate,
     EmotionImage,
     SubEmotionChips,
-    ArticleReportButton,
+    ReportButton,
     DetailCardMenu
   },
   methods: {
