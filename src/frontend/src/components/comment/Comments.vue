@@ -11,7 +11,7 @@
           v-for="comment in article.comments"
           :key="comment.id"
           cols="12"
-          class="justify-center pt-0 pb-1"
+          class="justify-center pt-0 pb-0"
         >
           <comment :comment="comment"></comment>
         </v-col>
