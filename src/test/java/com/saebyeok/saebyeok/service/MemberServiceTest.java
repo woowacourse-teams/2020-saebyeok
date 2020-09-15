@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,12 +67,12 @@ class MemberServiceTest {
     @Test
     void loginTest() {
         Member existMember = new Member();
-        Member DbMember = new Member();
-        when(memberRepository.findByOauthId(existMember.getOauthId())).thenReturn(Optional.of(DbMember));
+        Member dbMember = new Member();
+        when(memberRepository.findByOauthId(existMember.getOauthId())).thenReturn(Optional.of(dbMember));
 
-        memberService.signIn(existMember);
+        Member member = memberService.signIn(existMember);
 
-        verify(memberRepository).save(DbMember);
+        assertThat(member).isEqualTo(dbMember);
     }
 
     @DisplayName("새로운 사용자가 로그인 요청을 하면 회원 가입이 되고 Member를 리턴한다")
