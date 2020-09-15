@@ -2,14 +2,15 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="400">
       <v-card>
-        <v-carousel hide-delimiters height="auto">
+        <v-carousel :continuous="false" hide-delimiters height="auto">
           <v-carousel-item
             v-for="(item, i) in items"
             :key="i"
-            :src="item.src"
             reverse-transition="fade-transition"
             transition="fade-transition"
-          ></v-carousel-item>
+            eager
+            ><v-img :src="item.src" height="100%" eager />
+          </v-carousel-item>
         </v-carousel>
         <v-card-actions>
           <v-spacer></v-spacer>
