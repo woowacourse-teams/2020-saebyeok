@@ -1,7 +1,7 @@
 <template>
   <v-container pa-0>
     <v-layout mb-5>
-      <detail-page-card :article="article" />
+      <card :article="article" />
     </v-layout>
 
     <comments :article="article" />
@@ -26,14 +26,14 @@ import {
   FETCH_ARTICLE,
   CHECK_NAVBAR_SPACE_NEEDED
 } from '@/store/shared/actionTypes';
-import DetailPageCard from '@/components/card/DetailPageCard';
+import Card from '@/components/card/Card';
 import Comments from '@/components/comment/Comments';
 import CommentCreateForm from '@/components/comment/CommentCreateForm';
 
 export default {
   name: 'ArticleDetail',
   components: {
-    DetailPageCard,
+    Card,
     Comments,
     CommentCreateForm
   },

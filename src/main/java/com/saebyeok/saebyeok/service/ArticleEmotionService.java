@@ -45,14 +45,6 @@ public class ArticleEmotionService {
                 collect(Collectors.toList());
     }
 
-    public void deleteArticleEmotion(Article article) {
-        try {
-            articleEmotionRepository.deleteByArticleId(article.getId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new ArticleEmotionNotFoundException(article.getId());
-        }
-    }
-
     public List<Integer> findArticleEmotionsCount(List<Article> memberArticles, List<Long> allEmotionsIds) {
         List<ArticleEmotion> memberArticleEmotions = articleEmotionRepository.findAllByArticleIn(memberArticles);
 

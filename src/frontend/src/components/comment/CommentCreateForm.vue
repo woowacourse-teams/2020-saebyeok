@@ -43,8 +43,7 @@ export default {
 
       const commentCreateRequest = {
         content: this.content,
-        articleId: this.articleId,
-        isDeleted: false
+        articleId: this.articleId
       };
       this.createComment(commentCreateRequest)
         .then(response => {

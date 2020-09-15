@@ -1,10 +1,16 @@
 <template>
   <v-container ma-0 pa-0>
-    <v-card class="mx-auto" max-width="400" v-on:click="onClickCard">
+    <v-card class="mx-auto" max-width="400">
       <v-card-title class="pa-2">
         <v-layout align-center="">
           <emotion-image :emotion="article.emotion" />
           <sub-emotion-chips :subEmotions="article.subEmotions" />
+          <v-flex justify-end>
+            <detail-card-menu
+              :articleId="this.article.id"
+              v-if="article.isMine"
+            />
+          </v-flex>
         </v-layout>
       </v-card-title>
 
@@ -61,6 +67,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 
@@ -69,15 +76,11 @@ export default {
   components: {
     CreatedDate,
     EmotionImage,
-    SubEmotionChips
+    SubEmotionChips,
+    DetailCardMenu
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
-    onClickCard: function() {
-      this.$router.push({
-        path: this.$router.history.current.path + '/' + this.article.id
-      });
-    },
     toggleLike() {
       event.stopPropagation();
       if (this.article.isLikedByMe) {

@@ -43,7 +43,7 @@ class CommentControllerTest {
     @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록 후 정상적으로 응답한다")
     @Test
     void createCommentTest() throws Exception {
-        CommentCreateRequest request = new CommentCreateRequest(TEST_CONTENT, ARTICLE_ID, false);
+        CommentCreateRequest request = new CommentCreateRequest(TEST_CONTENT, ARTICLE_ID);
         String content = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
@@ -57,7 +57,7 @@ class CommentControllerTest {
     @DisplayName("예외 테스트: 최소 길이보다 짧은 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
     @Test
     void createUnderLengthCommentTest() throws Exception {
-        CommentCreateRequest request = new CommentCreateRequest("", ARTICLE_ID, false);
+        CommentCreateRequest request = new CommentCreateRequest("", ARTICLE_ID);
         String requestAsString = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
@@ -74,7 +74,7 @@ class CommentControllerTest {
                 "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
                 "1만4000원.\n";
 
-        CommentCreateRequest request = new CommentCreateRequest(content, ARTICLE_ID, false);
+        CommentCreateRequest request = new CommentCreateRequest(content, ARTICLE_ID);
         String requestAsString = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").

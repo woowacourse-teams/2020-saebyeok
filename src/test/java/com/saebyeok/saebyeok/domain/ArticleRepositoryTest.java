@@ -58,7 +58,7 @@ class ArticleRepositoryTest {
     @DisplayName("게시글 전체 조회를 한다")
     @Test
     void findAllByCreatedDateTest() {
-        List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqual(LIMIT_DATE, PAGE_REQUEST);
+        List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LIMIT_DATE, false, PAGE_REQUEST);
 
         assertThat(articles).
                 hasSize(3).
@@ -84,7 +84,7 @@ class ArticleRepositoryTest {
     @DisplayName("ID로 게시글을 조회하면 해당 게시글이 반환된다")
     @Test
     void findByIdAndCreatedDateTest() {
-        Article savedArticle = articleRepository.findByIdAndCreatedDateGreaterThanEqual(article1.getId(), LIMIT_DATE)
+        Article savedArticle = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(article1.getId(), LIMIT_DATE, false)
                 .orElseThrow(() -> new ArticleNotFoundException(article1.getId()));
 
         assertThat(savedArticle).isEqualTo(article1);
@@ -104,7 +104,7 @@ class ArticleRepositoryTest {
     @DisplayName("로그인한 사용자의 게시글 전체 조회를 한다")
     @Test
     void findAllByMemberTest() {
-        List<Article> articles = articleRepository.findAllByMember(member, PAGE_REQUEST);
+        List<Article> articles = articleRepository.findAllByMemberAndIsDeleted(member, false, PAGE_REQUEST);
 
         assertThat(articles).
                 hasSize(1).
@@ -118,7 +118,7 @@ class ArticleRepositoryTest {
     @DisplayName("ID와 Member 객체로 해당 사용자의 게시글을 조회하면 해당 게시글이 반환된다")
     @Test
     void findByIdAndMemberTest() {
-        Article savedArticle = articleRepository.findByIdAndMemberEquals(article2.getId(), member)
+        Article savedArticle = articleRepository.findByIdAndMemberEqualsAndIsDeleted(article2.getId(), member, false)
                 .orElseThrow(() -> new ArticleNotFoundException(article2.getId()));
 
         assertThat(savedArticle).isEqualTo(article2);
@@ -127,6 +127,6 @@ class ArticleRepositoryTest {
     @DisplayName("다른 사용자의 게시글을 조회할 수 없다")
     @Test
     void findByIdAndWrongMemberTest() {
-        assertThat(articleRepository.findByIdAndMemberEquals(article1.getId(), member)).isEmpty();
+        assertThat(articleRepository.findByIdAndMemberEqualsAndIsDeleted(article1.getId(), member, false)).isEmpty();
     }
 }
