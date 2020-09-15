@@ -25,7 +25,7 @@ public class MemberService {
 
     public Member signIn(Member unconfirmedMember) {
         return memberRepository.findByOauthId(unconfirmedMember.getOauthId())
-                .orElse(signUp(unconfirmedMember));
+                .orElseGet(() -> signUp(unconfirmedMember));
     }
 
     private Member signUp(Member newMember) {
