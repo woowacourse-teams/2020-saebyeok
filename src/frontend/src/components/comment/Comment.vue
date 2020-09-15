@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-card flat max-width="400">
+    <hr noshade color="#ddd" />
+    <v-card flat max-width="400" color="rgb(245,245,245)">
       <v-card-title class="pa-1 pb-0">
         <div class="ml-2" style="font-size:14px; color:black;">
           {{ comment.nickname }}

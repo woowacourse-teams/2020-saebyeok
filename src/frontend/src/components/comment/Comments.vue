@@ -3,8 +3,9 @@
     <v-card
       v-if="article.isCommentAllowed"
       class="mx-auto"
-      color="#d1cbd1"
       max-width="400"
+      flat
+      color="rgb(245,245,245)"
     >
       <v-row dense>
         <v-col
@@ -21,9 +22,8 @@
       <v-col
         class="d-flex justify-center"
         style="font-size: 15px; font-color: #FFFFFF; line-height: 15px;"
+        >{{ commentNotAllowedMessage }}</v-col
       >
-        {{ commentNotAllowedMessage }}
-      </v-col>
     </v-row>
   </v-container>
 </template>
