@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.domain;
+package com.saebyeok.saebyeok.domain.report;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

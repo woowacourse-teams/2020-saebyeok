@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.domain;
+package com.saebyeok.saebyeok.domain.report;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
