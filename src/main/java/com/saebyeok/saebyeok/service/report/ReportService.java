@@ -1,21 +1,23 @@
 package com.saebyeok.saebyeok.service.report;
 
+import com.saebyeok.saebyeok.domain.report.ReportCategoryRepository;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ReportService {
 
+    private final ReportCategoryRepository reportCategoryRepository;
+
     public List<ReportCategoryResponse> getReportCategories() {
-        return Arrays.asList(
-                new ReportCategoryResponse(1L, "이름1", "내용1"),
-                new ReportCategoryResponse(2L, "이름1", "내용1"),
-                new ReportCategoryResponse(3L, "이름1", "내용1")
-        );
+        return reportCategoryRepository.findAll().
+                stream().
+                map(ReportCategoryResponse::new).
+                collect(Collectors.toList());
     }
 }
