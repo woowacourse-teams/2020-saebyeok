@@ -4,7 +4,7 @@
       @click.stop="onClickAlarmButton()"
       color="red darken-4"
       style="font-size:20px;"
-      >mdi-alarm-light</v-icon
+      >mdi-alarm-light-outline</v-icon
     >
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
