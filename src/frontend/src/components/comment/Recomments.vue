@@ -1,6 +1,6 @@
 <template>
-  <v-container mt-1 pa-0 class="depth">
-    <v-card class="mx-auto ml-2" max-width="400" flat>
+  <v-container pa-0>
+    <v-card class="mx-auto" max-width="400" flat>
       <v-row dense>
         <v-col
           v-for="recomment in recomments"
@@ -32,9 +32,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.depth {
-  background: #ddd;
-}
-</style>

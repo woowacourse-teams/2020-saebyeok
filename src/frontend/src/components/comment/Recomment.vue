@@ -1,48 +1,65 @@
 <template>
   <div>
-    <hr noshade color="#ddd" />
-    <v-card flat max-width="400" color="rgb(245,245,245)">
-      <v-card-title class="pa-1 pb-0">
-        <div class="ml-2" style="font-size:14px; color:black;">
-          {{ recomment.nickname }}
-        </div>
-        <v-spacer />
-        <v-card-actions class="pa-0">
-          <v-layout v-if="!recomment.isDeleted">
-            <div style="float:left;" class="mr-2">
-              <div class="like-button" v-on:click="toggleLike">
-                <v-icon
-                  v-if="recomment.isLikedByMe"
-                  style="font-size:20px; color: #96589b;"
-                  class="mr-1"
-                  >mdi-hand-heart</v-icon
-                >
-                <v-icon v-else style="font-size:20px;" class="mr-1"
-                  >mdi-hand-heart-outline</v-icon
-                >
-                <span style="font-size:16px;">{{ recomment.likesCount }}</span>
-              </div>
+    <v-row class="flex-nowrap">
+      <v-col cols="1" style="background-color: rgb(245,245,245);">
+        <v-icon style="font-size:20px; color: #aaa;">
+          mdi-subdirectory-arrow-right
+        </v-icon>
+      </v-col>
+      <v-col cols="11" class="pa-0">
+        <v-card flat max-width="400" color="rgb(245,245,245)">
+          <v-card-title class="pa-1 pb-0">
+            <div class="ml-2" style="font-size:14px; color:black;">
+              {{ recomment.nickname }}
             </div>
-          </v-layout>
-        </v-card-actions>
-        <comment-menu
-          v-if="recomment.isMine && !recomment.isDeleted"
-          :commentId="recomment.id"
-        />
-      </v-card-title>
+            <v-spacer />
+            <v-card-actions class="pa-0">
+              <v-layout v-if="!recomment.isDeleted">
+                <div style="float:left;" class="mr-2">
+                  <div class="like-button" v-on:click="toggleLike">
+                    <v-icon
+                      v-if="recomment.isLikedByMe"
+                      style="font-size:20px; color: #96589b;"
+                      class="mr-1"
+                      >mdi-hand-heart</v-icon
+                    >
+                    <v-icon v-else style="font-size:20px;" class="mr-1"
+                      >mdi-hand-heart-outline</v-icon
+                    >
+                    <span style="font-size:16px;">{{
+                      recomment.likesCount
+                    }}</span>
+                  </div>
+                </div>
+              </v-layout>
+            </v-card-actions>
+            <comment-menu
+              v-if="recomment.isMine && !recomment.isDeleted"
+              :commentId="recomment.id"
+            />
+          </v-card-title>
 
-      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
-        <div v-if="recomment.isDeleted" style="font-size:16px; color:black;">
-          {{ deletedCommentMessage }}
-        </div>
-        <div v-else style="font-size:16px; color:black;">
-          {{ recomment.content }}
-        </div>
-      </v-card-text>
-      <div class="pl-4 pb-2">
-        <created-date :createdDate="recomment.createdDate" />
-      </div>
-    </v-card>
+          <v-card-text
+            class="headline text-body-1 pb-0"
+            style="color:rgb(0,0,0)"
+          >
+            <div
+              v-if="recomment.isDeleted"
+              style="font-size:16px; color:black;"
+            >
+              {{ deletedCommentMessage }}
+            </div>
+            <div v-else style="font-size:16px; color:black;">
+              {{ recomment.content }}
+            </div>
+          </v-card-text>
+          <div class="pl-4 pb-2">
+            <created-date :createdDate="recomment.createdDate" />
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+    <hr noshade color="#ddd" />
   </div>
 </template>
 
