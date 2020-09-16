@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-icon @click.stop="onClickAlarmButton()" color="red darken-4"
+    <v-icon
+      @click.stop="onClickAlarmButton()"
+      color="red darken-4"
+      style="font-size:20px;"
       >mdi-alarm-light</v-icon
     >
     <v-dialog v-model="dialog" max-width="400">
@@ -90,11 +93,6 @@ export default {
       }
       //todo : 여기에 신고 연산이 들어간다
 
-      if (this.reportType === REPORT_TYPE.ARTICLE) {
-        console.log('report this article : ', this.reportedId);
-      } else if (this.reportType === REPORT_TYPE.COMMENT) {
-        console.log('report this comment : ', this.reportedId);
-      }
       this.dialog = false;
       this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
     },
@@ -105,10 +103,14 @@ export default {
       this.dialog = true;
     },
     getReportTypeText() {
-      if (this.reportType === REPORT_TYPE.ARTICLE) {
-        return '게시물';
+      switch (this.reportType) {
+        case REPORT_TYPE.ARTICLE:
+          return '게시물';
+        case REPORT_TYPE.COMMENT:
+          return '댓글';
+        default:
+          return '게시물';
       }
-      return '댓글';
     }
   },
   props: {
