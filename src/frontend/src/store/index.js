@@ -9,6 +9,7 @@ import Analysis from '@/store/modules/analysis';
 import Common from '@/store/modules/common';
 import Snackbar from '@/store/modules/snackbar';
 import NavbarSpacer from '@/store/modules/navbarSpacer';
+import Report from '@/store/modules/report';
 
 Vue.use(Vuex);
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     Analysis,
     Common,
     Snackbar,
-    NavbarSpacer
+    NavbarSpacer,
+    Report
   }
 });
