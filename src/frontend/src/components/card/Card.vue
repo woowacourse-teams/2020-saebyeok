@@ -54,6 +54,13 @@
                 >
                 <span class="subheading">{{ article.comments.length }}</span>
               </div>
+              <v-spacer />
+            </v-col>
+            <v-col align="right" justify="end" style="padding:0px" cols="2">
+              <report-button
+                :reportType="getReportType()"
+                :reportedId="article.id"
+              />
             </v-col>
           </v-row>
         </v-list-item>
@@ -66,7 +73,10 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
-import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
+import ReportButton from '@/components/ReportButton';
+import DetailCardMenu from '@/components/card/DetailCardMenu';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
+
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
 import VueAutolinkComponent from 'vue-autolink-component';
@@ -78,6 +88,7 @@ export default {
     CreatedDate,
     EmotionImage,
     SubEmotionChips,
+    ReportButton,
     DetailCardMenu,
     VueAutolinkComponent
   },
@@ -96,6 +107,9 @@ export default {
           this.article.likesCount++;
         });
       }
+    },
+    getReportType() {
+      return REPORT_TYPE.ARTICLE;
     }
   },
   props: {
