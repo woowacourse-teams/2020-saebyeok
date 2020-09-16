@@ -6,6 +6,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
+import { HIDE_SNACKBAR } from '@/store/shared/mutationTypes';
 
 export default {
   name: 'Snackbar',
@@ -14,10 +16,18 @@ export default {
   },
   watch: {
     isShow() {
-      this.showSnackbar(this.message);
+      if (this.isShow === true) {
+        this.showSnackbar(this.message);
+      }
+    },
+    snackbar() {
+      if (this.snackbar === false) {
+        this.hideSnackbar();
+      }
     }
   },
   methods: {
+    ...mapMutations([HIDE_SNACKBAR]),
     showSnackbar(msg) {
       this.snackbarMsg = msg;
       this.snackbar = true;
