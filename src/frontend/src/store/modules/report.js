@@ -21,8 +21,6 @@ const mutations = {
 const actions = {
   async [FETCH_REPORT_CATEGORIES]({ commit }) {
     return ReportService.getCategories().then(({ data }) => {
-      console.log('123???');
-      console.log(data);
       commit(SET_REPORT_CATEGORIES, data);
     });
   }

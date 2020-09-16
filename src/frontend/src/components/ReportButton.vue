@@ -89,11 +89,7 @@ export default {
     };
   },
   created() {
-    this.fetchReportCategories().then(data => {
-      console.log(data);
-      console.log(this.reportCategories);
-      console.log('hey!!');
-    });
+    this.fetchReportCategories();
   },
   computed: {
     ...mapGetters(['reportCategories'])
