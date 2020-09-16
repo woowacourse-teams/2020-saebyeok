@@ -16,6 +16,8 @@
     "register-service-worker": "^1.7.1",
     "request": "^2.88.2",
     "vue": "^2.6.11",
+    "vue-autolink": "0.0.11",
+    "vue-autolink-component": "^1.7.1",
     "vue-axios": "^2.1.5",
     "vue-chartjs": "^3.5.0",
     "vue-infinite-loading": "^2.4.5",

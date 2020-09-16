@@ -13,12 +13,8 @@
           </v-flex>
         </v-layout>
       </v-card-title>
-
-      <v-card-text
-        class="headline text-body-1 pb-0"
-        style="color:rgb(0,0,0)"
-        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
-      >
+      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
+        <VueAutolinkComponent :message="this.article.content" />
       </v-card-text>
 
       <v-card-actions>
@@ -73,6 +69,8 @@ import SubEmotionChips from '@/components/card/SubEmotionChips';
 import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import VueAutolinkComponent from 'vue-autolink-component';
+import 'vue-autolink-component/dist/vue-autolink-component.css';
 
 export default {
   name: 'Card',
@@ -80,7 +78,8 @@ export default {
     CreatedDate,
     EmotionImage,
     SubEmotionChips,
-    DetailCardMenu
+    DetailCardMenu,
+    VueAutolinkComponent
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
