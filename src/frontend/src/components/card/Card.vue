@@ -13,8 +13,12 @@
           </v-flex>
         </v-layout>
       </v-card-title>
-      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
-        <VueAutolinkComponent :message="this.article.content" />
+      <v-card-text
+        class="headline text-body-1 pb-0"
+        style="color:rgb(0,0,0)"
+        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+        v-linkified
+      >
       </v-card-text>
 
       <v-card-actions>
@@ -79,8 +83,7 @@ import { REPORT_TYPE } from '@/utils/ReportType.js';
 
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
-import VueAutolinkComponent from 'vue-autolink-component';
-import 'vue-autolink-component/dist/vue-autolink-component.css';
+import linkify from 'vue-linkify';
 
 export default {
   name: 'Card',
@@ -89,8 +92,10 @@ export default {
     EmotionImage,
     SubEmotionChips,
     ReportButton,
-    DetailCardMenu,
-    VueAutolinkComponent
+    DetailCardMenu
+  },
+  directives: {
+    linkified: linkify
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
