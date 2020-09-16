@@ -1,14 +1,14 @@
 <template>
   <div>
-    <v-row class="flex-nowrap">
-      <v-col cols="1" style="background-color: rgb(245,245,245);">
-        <v-icon style="font-size:20px; color: #aaa;">
-          mdi-subdirectory-arrow-right
-        </v-icon>
-      </v-col>
-      <v-col cols="11" class="pa-0">
-        <v-card flat max-width="400" color="rgb(245,245,245)">
-          <v-card-title class="pa-1 pb-0">
+    <v-card flat max-width="400" color="rgb(245,245,245)">
+      <v-row class="flex-nowrap">
+        <v-col cols="1" style="background-color: rgb(245,245,245);">
+          <v-icon style="font-size:20px; color: #aaa;">
+            mdi-subdirectory-arrow-right
+          </v-icon>
+        </v-col>
+        <v-col cols="11" class="pa-0">
+          <v-card-title class="pa-1 pb-0 pr-3">
             <div class="ml-2" style="font-size:14px; color:black;">
               {{ recomment.nickname }}
             </div>
@@ -56,9 +56,9 @@
           <div class="pl-4 pb-2">
             <created-date :createdDate="recomment.createdDate" />
           </div>
-        </v-card>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
     <hr noshade color="#ddd" />
   </div>
 </template>

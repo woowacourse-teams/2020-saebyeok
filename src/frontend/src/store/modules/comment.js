@@ -1,4 +1,8 @@
-import { UPDATE_COMMENT_LIKES } from '@/store/shared/mutationTypes';
+import {
+  UPDATE_COMMENT_LIKES,
+  ACTIVATE_RECOMMENT,
+  DEACTIVATE_RECOMMENT
+} from '@/store/shared/mutationTypes';
 import {
   CREATE_COMMENT,
   DELETE_COMMENT,
@@ -8,15 +12,33 @@ import {
 
 import CommentService from '@/api/modules/comment';
 
-const state = {};
+const state = {
+  isActiveRecomment: false,
+  targetNickname: ''
+};
 
-const getters = {};
+const getters = {
+  isActiveRecomment(state) {
+    return state.isActiveRecomment;
+  },
+  targetNickname() {
+    return state.targetNickname;
+  }
+};
 
 const mutations = {
   [UPDATE_COMMENT_LIKES](state, value) {
     // pros와 vuex구조 및 comments분리 리팩토링 되고 나면 동작 확인하기
     // this.comment.value += value;
     console.log(state, value);
+  },
+  [ACTIVATE_RECOMMENT](state, nickname) {
+    state.targetNickname = nickname;
+    state.isActiveRecomment = true;
+  },
+  [DEACTIVATE_RECOMMENT](state) {
+    state.targetNickname = '';
+    state.isActiveRecomment = false;
   }
 };
 

@@ -10,6 +10,16 @@
         <v-card-actions class="pa-0">
           <v-layout v-if="!comment.isDeleted">
             <div style="float:left;" class="mr-2">
+              <div
+                class="recomment-button"
+                v-on:click="specifyMemberToRecomment"
+              >
+                <v-icon style="font-size:20px;" class="mr-1"
+                  >mdi-comment-processing-outline</v-icon
+                >
+              </div>
+            </div>
+            <div style="float:left;" class="mr-2">
               <div class="like-button" v-on:click="toggleLike">
                 <v-icon
                   v-if="comment.isLikedByMe"
@@ -43,6 +53,7 @@
         <created-date :createdDate="comment.createdDate" />
       </div>
     </v-card>
+    <hr noshade color="#ddd" />
     <!-- 추후에 아래의 recomments를 comment.recomments로 수정해야 함 -->
     <recomments :recomments="recomments" />
   </div>
@@ -52,8 +63,9 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import Recomments from '@/components/comment/Recomments';
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
+import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 
 export default {
   name: 'Comment',
@@ -106,6 +118,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([ACTIVATE_RECOMMENT]),
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
@@ -119,6 +132,9 @@ export default {
           this.comment.likesCount++;
         });
       }
+    },
+    specifyMemberToRecomment() {
+      this.activateRecomment(this.comment.nickname);
     }
   }
 };

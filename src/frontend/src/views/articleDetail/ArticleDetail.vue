@@ -10,8 +10,7 @@
       app
       shift
       color="rgb(245,245,245)"
-      pa-0
-      ma-0
+      class="pt-0"
       v-if="article.isCommentAllowed"
       :class="{ navbarSpace: navbarSpaceNeeded }"
     >
@@ -21,11 +20,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import {
   FETCH_ARTICLE,
   CHECK_NAVBAR_SPACE_NEEDED
 } from '@/store/shared/actionTypes';
+import { DEACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 import Card from '@/components/card/Card';
 import Comments from '@/components/comment/Comments';
 import CommentCreateForm from '@/components/comment/CommentCreateForm';
@@ -40,6 +40,7 @@ export default {
   created() {
     this.fetchArticle(this.$route.params.articleId);
     this.checkNavbarSpaceNeeded();
+    this.deactivateRecomment();
   },
   computed: {
     ...mapGetters(['article']),
@@ -48,6 +49,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([DEACTIVATE_RECOMMENT]),
     ...mapActions([FETCH_ARTICLE, CHECK_NAVBAR_SPACE_NEEDED])
   }
 };
