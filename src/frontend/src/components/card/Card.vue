@@ -14,8 +14,11 @@
         </v-layout>
       </v-card-title>
 
-      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
-        {{ article.content }}
+      <v-card-text
+        class="headline text-body-1 pb-0"
+        style="color:rgb(0,0,0)"
+        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+      >
       </v-card-text>
 
       <v-card-actions>
