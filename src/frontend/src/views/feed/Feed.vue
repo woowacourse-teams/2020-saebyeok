@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Tutorial :dialog="this.tutorialDialog"></Tutorial>
     <div class="mt-4 overflow-y-auto">
       <cards :articles="articles" />
     </div>
@@ -29,6 +30,7 @@ import {
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import InfiniteLoading from 'vue-infinite-loading';
+import Tutorial from '@/components/Tutorial.vue';
 
 export default {
   name: 'Feed',
@@ -38,14 +40,21 @@ export default {
       size: 5,
       emotionIds: '',
       infiniteId: +new Date(),
-      isFiltered: false
+      isFiltered: false,
+      tutorialDialog: true
     };
   },
   components: {
     Cards,
-    InfiniteLoading
+    InfiniteLoading,
+    Tutorial
   },
   created() {
+    const tutorialCheckValue = localStorage.getItem('tutorial_check');
+    if (tutorialCheckValue === 'yes') {
+      this.tutorialDialog = false;
+    }
+
     try {
       this.fetchArticles({
         page: this.page,
