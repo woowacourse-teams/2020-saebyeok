@@ -19,9 +19,7 @@ public class ReportController {
     @GetMapping("/report/categories")
     public ResponseEntity<List<ReportCategoryResponse>> getReportCategories() {
         List<ReportCategoryResponse> reportCategoryResponses = reportService.getReportCategories();
-
-        System.out.println("TWICE IS GREAT");
-        System.out.println(reportCategoryResponses);
+        
         return ResponseEntity.ok(reportCategoryResponses);
     }
 }
