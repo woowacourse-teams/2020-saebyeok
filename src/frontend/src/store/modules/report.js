@@ -20,9 +20,11 @@ const mutations = {
 
 const actions = {
   async [FETCH_REPORT_CATEGORIES]({ commit }) {
-    return ReportService.getCategories().then(({ data }) => {
-      commit(SET_REPORT_CATEGORIES, data);
-    });
+    return ReportService.getCategories()
+      .then(({ data }) => {
+        commit(SET_REPORT_CATEGORIES, data);
+      })
+      .catch(error => commit('catchError', error));
   }
 };
 
