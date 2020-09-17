@@ -28,7 +28,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     public void setUp() {
         super.setUp();
 
-        createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
+        createArticle(ARTICLE_CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
 
         params = new HashMap<>();
         params.put("memberId", MEMBER_ID);
@@ -72,7 +72,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         assertThat(articleResponse.getComments()).
                 hasSize(1).
                 extracting("content").
-                contains(TEST_CONTENT);
+                contains(COMMENT_CONTENT);
 
         //when 정해진 댓글의 최소 길이보다 짧은 댓글을 등록하려고 한다.
         ExceptionResponse exceptionResponse = createInvalidComment(UNDER_LENGTH_CONTENT);
@@ -91,8 +91,8 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(String.format("댓글은 %d자 이상 %d자 이하로 작성할 수 있어요.", Comment.MIN_LENGTH, Comment.MAX_LENGTH));
 
         //given 댓글을 여러 개 등록한다.
-        createComment(2L);
-        createComment(3L);
+        createComment(1L);
+        createComment(1L);
 
         //when 게시글에 달린 댓글을 모두 조회한다.
         articleResponse = readArticle(ARTICLE_ID);
@@ -120,24 +120,6 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //then 댓글 삭제에 실패한다.
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
                 .contains("에 해당하는 댓글을 찾을 수 없습니다!");
-    }
-
-    private void createComment(Long createdId) {
-        //@formatter:off
-        params.put("content", "새벽 좋아요");
-
-        given().
-                auth().oauth2(TOKEN).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles/" + ARTICLE_ID + "/comments").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value()).
-                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
-        //@formatter:on
     }
 
     private ExceptionResponse createInvalidComment(String content) {
