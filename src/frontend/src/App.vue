@@ -2,18 +2,18 @@
   <div>
     <router-view />
     <Snackbar />
-    <Login />
+    <RequestLoginModal />
   </div>
 </template>
 
 <script>
 import Snackbar from './components/Snackbar';
-import Login from '@/components/Login.vue';
+import RequestLoginModal from '@/components/RequestLoginModal.vue';
 export default {
   name: 'App',
   components: {
     Snackbar,
-    Login
+    RequestLoginModal
   }
 };
 </script>
