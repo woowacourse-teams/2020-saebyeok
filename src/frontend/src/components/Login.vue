@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog max-width="290" persistent v-model="dialog">
+    <v-dialog max-width="290" persistent v-model="isShowRequestLoginModal">
       <v-card>
         <v-card-title class="headline">
           반가워요👋
@@ -11,10 +11,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="dialog = false" color="grey darken-1" text>
+          <v-btn @click="goToFeed" color="grey darken-1" text>
             돌아가기
           </v-btn>
-          <v-btn @click="dialog = false" color="deep-purple darken-1" text>
+          <v-btn @click="goToSignIn" color="deep-purple darken-1" text>
             로그인
           </v-btn>
         </v-card-actions>
@@ -24,8 +24,24 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+import { HIDE_REQUEST_LOGIN_MODAL } from '@/store/shared/mutationTypes';
 export default {
-  props: ['dialog']
+  name: 'Login',
+  computed: {
+    ...mapGetters(['isShowRequestLoginModal'])
+  },
+  methods: {
+    ...mapMutations([HIDE_REQUEST_LOGIN_MODAL]),
+    goToFeed() {
+      this.hideRequestLoginModal();
+      this.$router.push('/feed');
+    },
+    goToSignIn() {
+      this.hideRequestLoginModal();
+      this.$router.push('/signin');
+    }
+  }
 };
 </script>
 
