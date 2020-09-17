@@ -14,3 +14,5 @@ export const HIDE_SNACKBAR = 'hideSnackbar';
 export const UPDATE_ARTICLE_LIKES = 'updateArticleLikes';
 export const UPDATE_COMMENT_LIKES = 'updateCommentLikes';
 export const SET_NAVBAR_SPACE_NEEDED = 'setNavbarSpaceNeeded';
+export const SHOW_REQUEST_LOGIN_MODAL = 'showRequestLoginModal';
+export const HIDE_REQUEST_LOGIN_MODAL = 'hideRequestLoginModal';
