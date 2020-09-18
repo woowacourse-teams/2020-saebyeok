@@ -42,15 +42,23 @@
         {{ comment.content }}
       </div>
     </v-card-text>
-    <div class="pl-4 pb-2">
-      <created-date :createdDate="comment.createdDate" />
-    </div>
+    <v-flex row ma-0 pa-0>
+      <div class="pl-4 pb-2 pt-2">
+        <created-date :createdDate="comment.createdDate" />
+      </div>
+      <v-spacer />
+      <div class="pb-2 pr-2">
+        <report-button :reportType="getReportType()" :reportedId="comment.id" />
+      </div>
+    </v-flex>
   </v-card>
 </template>
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
+import ReportButton from '@/components/ReportButton';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { mapActions } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
@@ -63,7 +71,8 @@ export default {
   },
   components: {
     CreatedDate,
-    CommentMenu
+    CommentMenu,
+    ReportButton
   },
   props: {
     comment: {
@@ -85,6 +94,9 @@ export default {
           this.comment.likesCount++;
         });
       }
+    },
+    getReportType() {
+      return REPORT_TYPE.COMMENT;
     }
   }
 };

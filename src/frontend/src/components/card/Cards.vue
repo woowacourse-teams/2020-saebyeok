@@ -1,7 +1,12 @@
 <template>
   <v-container pa-0>
     <v-row dense>
-      <v-col v-for="article in articles" :key="article.id" cols="12">
+      <v-col
+        v-for="article in articles"
+        :key="article.id"
+        cols="12"
+        v-on:click="onClickCard(article)"
+      >
         <card :article="article"></card>
       </v-col>
     </v-row>
@@ -13,6 +18,13 @@ import Card from '@/components/card/Card.vue';
 
 export default {
   name: 'Cards',
+  methods: {
+    onClickCard: function(article) {
+      this.$router.push({
+        path: this.$router.history.current.path + '/' + article.id
+      });
+    }
+  },
   components: {
     Card
   },

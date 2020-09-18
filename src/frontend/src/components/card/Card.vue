@@ -1,15 +1,24 @@
 <template>
   <v-container ma-0 pa-0>
-    <v-card class="mx-auto" max-width="400" v-on:click="onClickCard">
+    <v-card class="mx-auto" max-width="400">
       <v-card-title class="pa-2">
         <v-layout align-center="">
           <emotion-image :emotion="article.emotion" />
           <sub-emotion-chips :subEmotions="article.subEmotions" />
+          <v-flex justify-end>
+            <detail-card-menu
+              :articleId="this.article.id"
+              v-if="article.isMine"
+            />
+          </v-flex>
         </v-layout>
       </v-card-title>
-
-      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
-        {{ article.content }}
+      <v-card-text
+        class="headline text-body-1 pb-0"
+        style="color:rgb(0,0,0)"
+        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+        v-linkified
+      >
       </v-card-text>
 
       <v-card-actions>
@@ -49,6 +58,13 @@
                 >
                 <span class="subheading">{{ article.comments.length }}</span>
               </div>
+              <v-spacer />
+            </v-col>
+            <v-col align="right" justify="end" style="padding:0px" cols="2">
+              <report-button
+                :reportType="getReportType()"
+                :reportedId="article.id"
+              />
             </v-col>
           </v-row>
         </v-list-item>
@@ -61,23 +77,28 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
+import ReportButton from '@/components/ReportButton';
+import DetailCardMenu from '@/components/card/DetailCardMenu';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
+
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import linkify from 'vue-linkify';
 
 export default {
   name: 'Card',
   components: {
     CreatedDate,
     EmotionImage,
-    SubEmotionChips
+    SubEmotionChips,
+    ReportButton,
+    DetailCardMenu
+  },
+  directives: {
+    linkified: linkify
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
-    onClickCard: function() {
-      this.$router.push({
-        path: this.$router.history.current.path + '/' + this.article.id
-      });
-    },
     toggleLike() {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
@@ -91,6 +112,9 @@ export default {
           this.article.likesCount++;
         });
       }
+    },
+    getReportType() {
+      return REPORT_TYPE.ARTICLE;
     }
   },
   props: {
