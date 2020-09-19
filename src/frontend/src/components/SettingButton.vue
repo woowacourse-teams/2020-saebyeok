@@ -50,8 +50,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-import { SHOW_SNACKBAR } from '../store/shared/mutationTypes';
+import { mapActions, mapMutations } from 'vuex';
+import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+import { DELETE_MEMBER } from '@/store/shared/actionTypes';
 
 export default {
   data() {
@@ -61,6 +62,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions([DELETE_MEMBER]),
     ...mapMutations([SHOW_SNACKBAR]),
     logout() {
       localStorage.clear();
@@ -68,10 +70,15 @@ export default {
       this.$router.replace({ name: 'SignIn' });
     },
     unregister() {
-      localStorage.clear();
-
-      this.showSnackbar('성공적으로 탈퇴되었어요. 안녕히 가세요👋');
-      this.$router.replace({ name: 'SignIn' });
+      this.deleteMember()
+        .then(() => {
+          localStorage.clear();
+          this.showSnackbar('성공적으로 탈퇴되었어요. 안녕히 가세요👋');
+          this.$router.replace({ name: 'SignIn' });
+        })
+        .catch(e => {
+          this.showSnackbar(e);
+        });
     }
   }
 };
