@@ -1,6 +1,6 @@
 package com.saebyeok.saebyeok.domain.report;
 
-import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ArticleReport {
+public class CommentReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +33,9 @@ public class ArticleReport {
     private Member member;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "ARTICLE_ID", nullable = false)
+    @JoinColumn(name = "COMMENT_ID", nullable = false)
     @ManyToOne
-    private Article article;
+    private Comment comment;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "REPORT_CATEGORY_ID", nullable = false)
