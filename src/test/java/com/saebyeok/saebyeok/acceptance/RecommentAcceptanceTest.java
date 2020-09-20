@@ -1,20 +1,29 @@
 package com.saebyeok.saebyeok.acceptance;
 
+import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import com.saebyeok.saebyeok.dto.RecommentResponse;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecommentAcceptanceTest extends AcceptanceTest {
     private static final Long COMMENT_ID = 1L;
+    private static final String RECOMMENT_CONTENT = "대댓글 내용입니다.";
 
     @BeforeEach
     public void setUp() {
+        super.setUp();
         createArticle(ARTICLE_CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
         createCommentOf(ARTICLE_ID);
         createCommentOf(ARTICLE_ID);
@@ -81,7 +90,23 @@ public class RecommentAcceptanceTest extends AcceptanceTest {
     }
 
     private List<RecommentResponse> readRecommentOf(Long commentId) {
-        return null;
+        //@formatter:off
+        ArticleResponse articleResponse =
+                given().
+                        auth().oauth2(TOKEN).
+                when().
+                        get(API + "/articles/" + ARTICLE_ID).
+                then().
+                        log().all().
+                        extract().
+                        as(ArticleResponse.class);
+        //@formatter:on
+
+        CommentResponse commentResponse = articleResponse.getComments().stream()
+                .filter(response -> response.getId().equals(commentId))
+                .findFirst().orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        return commentResponse.getRecomments();
     }
 
     private ExceptionResponse deleteNotFoundRecomment() {

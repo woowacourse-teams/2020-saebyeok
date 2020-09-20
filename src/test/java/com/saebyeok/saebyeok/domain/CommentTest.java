@@ -27,8 +27,8 @@ public class CommentTest {
     @BeforeEach
     void setUp() {
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
-        this.comment1 = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), new Article(), false, new ArrayList<>());
-        this.comment2 = new Comment(2L, "내용", member, "익명2", LocalDateTime.now(), new Article(), false, new ArrayList<>());
+        this.comment1 = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), new Article(), false, new ArrayList<>(), new ArrayList<>());
+        this.comment2 = new Comment(2L, "내용", member, "익명2", LocalDateTime.now(), new Article(), false, new ArrayList<>(), new ArrayList<>());
     }
 
     @DisplayName("Comment를 생성할 때 값들이 정상적으로 생성되야 한다")

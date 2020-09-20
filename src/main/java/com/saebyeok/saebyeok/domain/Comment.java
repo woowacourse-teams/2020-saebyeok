@@ -43,6 +43,9 @@ public class Comment {
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
 
+    @OneToMany(mappedBy = "comment")
+    private List<Recomment> recomments;
+
     @Builder
     public Comment(String content, String nickname) {
         this.content = content;

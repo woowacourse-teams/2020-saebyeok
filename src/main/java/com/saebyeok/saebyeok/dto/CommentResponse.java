@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class CommentResponse {
     private Boolean isMine;
     private Long likesCount;
     private Boolean isLikedByMe;
+    private List<RecommentResponse> recomments;
 
     public CommentResponse(Comment comment, Member member) {
         this.id = comment.getId();
