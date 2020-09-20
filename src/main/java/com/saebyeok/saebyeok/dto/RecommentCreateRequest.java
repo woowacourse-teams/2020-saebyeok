@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import static com.saebyeok.saebyeok.domain.Recomment.MAX_LENGTH;
@@ -18,7 +17,4 @@ public class RecommentCreateRequest {
             max = MAX_LENGTH,
             message = "대댓글은 {min}자 이상 {max}자 이하로 작성할 수 있어요.")
     private String content;
-
-    @NotNull(message = "해당하는 댓글이 없어요.")
-    private Long commentId;
 }

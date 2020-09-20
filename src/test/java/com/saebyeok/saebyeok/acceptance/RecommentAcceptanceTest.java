@@ -62,7 +62,22 @@ public class RecommentAcceptanceTest extends AcceptanceTest {
     }
 
     private Long createRecommentOf(Long commentId) {
-        return null;
+        Map<String, String> params = new HashMap<>();
+        params.put("content", RECOMMENT_CONTENT);
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                        body(params).
+                        contentType(MediaType.APPLICATION_JSON_VALUE).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                        post(API + "/articles/" + ARTICLE_ID + "/comments/" + commentId + "/recomments").
+                then().
+                        log().all().
+                        statusCode(HttpStatus.CREATED.value()).
+                        extract().as(Long.class);
+        //@formatter:on
     }
 
     private List<RecommentResponse> readRecommentOf(Long commentId) {
