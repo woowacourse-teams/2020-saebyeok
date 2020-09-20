@@ -65,7 +65,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void manageComment() {
         //when 로그인한 회원이 저장된 글에 댓글을 쓰려고 한다.
-        createComment(1L);
+        createCommentOf(ARTICLE_ID);
 
         //then 댓글이 등록에 성공한다.
         ArticleResponse articleResponse = readArticle(ARTICLE_ID);
@@ -91,8 +91,8 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(String.format("댓글은 %d자 이상 %d자 이하로 작성할 수 있어요.", Comment.MIN_LENGTH, Comment.MAX_LENGTH));
 
         //given 댓글을 여러 개 등록한다.
-        createComment(1L);
-        createComment(1L);
+        createCommentOf(ARTICLE_ID);
+        createCommentOf(ARTICLE_ID);
 
         //when 게시글에 달린 댓글을 모두 조회한다.
         articleResponse = readArticle(ARTICLE_ID);

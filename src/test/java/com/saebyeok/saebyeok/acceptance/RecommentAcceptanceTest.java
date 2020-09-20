@@ -5,12 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class RecommentAcceptanceTest extends AcceptanceTest {
+    private static final Long COMMENT_ID = 1L;
 
     @BeforeEach
     public void setUp() {
         createArticle(ARTICLE_CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
-        createComment(1L);
-        createComment(1L);
+        createCommentOf(ARTICLE_ID);
+        createCommentOf(ARTICLE_ID);
     }
 
     /**

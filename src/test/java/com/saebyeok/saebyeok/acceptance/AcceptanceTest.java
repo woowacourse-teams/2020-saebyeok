@@ -83,7 +83,7 @@ public class AcceptanceTest {
         //@formatter:on
     }
 
-    public void createComment(Long targetArticleId) {
+    public void createCommentOf(Long targetArticleId) {
         //@formatter:off
         Map<String, Object> params = new HashMap<>();
         params.put("content", COMMENT_CONTENT);
