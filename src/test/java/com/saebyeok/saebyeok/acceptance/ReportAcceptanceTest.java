@@ -1,10 +1,12 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +14,21 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReportAcceptanceTest extends AcceptanceTest {
+    private static final Long EMOTION_ID = 1L;
+    private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Long REPORT_ID = 1L;
     private static final Long REPORT_CATEGORY_ID = 1L;
     private static final Long REPORT_ARTICLE_ID = 1L;
     private static final Long REPORT_COMMENT_ID = 1L;
     private static final String REPORT_CONTENT = "이 게시물을 신고합니다.";
     private static final Boolean isFinished = false;
+
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
+
+        createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
+    }
 
 
     /**
@@ -52,7 +63,7 @@ public class ReportAcceptanceTest extends AcceptanceTest {
     void manageArticleReport() {
         //given 신고가 하나도 없다.
         List<ArticleReportResponse> reports = getArticleReports();
-        //assertThat(reports).isEmpty();
+        assertThat(reports).isEmpty();
 
         //when 신고를 하나 추가한다.
         createArticleReport();
@@ -69,9 +80,10 @@ public class ReportAcceptanceTest extends AcceptanceTest {
 
         //when 신고를 완료 처리한다.
         deleteArticleReport(REPORT_ID);
+
         //then 해당 신고를 조회하면 완료된 것으로 값이 설정되어 있다.
         reportResponse = readArticleReport(REPORT_ID);
-        //assertThat(reportResponse.getIsFinished()).isTrue();
+        assertThat(reportResponse.getIsFinished()).isTrue();
     }
 
     private void createArticleReport() {
