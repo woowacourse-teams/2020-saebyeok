@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 public class ArticleReportResponse {
     private Long id;
     private String content;
-    private String articleContent;
+    private Long articleId;
     private ReportCategoryResponse reportCategory;
     private Boolean isFinished;
 
     public ArticleReportResponse(ArticleReport articleReport) {
         this.id = articleReport.getId();
         this.content = articleReport.getContent();
-        this.articleContent = articleReport.getArticle().getContent();
+        this.articleId = articleReport.getArticle().getId();
         this.reportCategory = new ReportCategoryResponse(articleReport.getReportCategory());
         this.isFinished = articleReport.getIsFinished();
     }

@@ -47,6 +47,13 @@ public class ArticleReport {
 
     private Boolean isFinished = Boolean.FALSE;
 
+    public ArticleReport(String content, Member member, Article article, ReportCategory reportCategory) {
+        this.content = content;
+        this.member = member;
+        this.article = article;
+        this.reportCategory = reportCategory;
+    }
+
     public void finish() {
         this.isFinished = true;
     }
