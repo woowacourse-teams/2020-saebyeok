@@ -36,7 +36,7 @@ public class ReportCategoryAcceptanceTest extends AcceptanceTest {
                 given().
                         auth().oauth2(TOKEN).
                 when().
-                        get(API + "/report/categories").
+                        get(API + "/reports/categories").
                 then().
                         log().all().
                         extract().

@@ -4,7 +4,7 @@ const BASE_URL = '/reports';
 
 const ReportService = {
   getCategories() {
-    return ApiService.get(`/report/categories`);
+    return ApiService.get(`/reports/categories`);
   },
   create(report) {
     return ApiService.post(`${BASE_URL}`, report);

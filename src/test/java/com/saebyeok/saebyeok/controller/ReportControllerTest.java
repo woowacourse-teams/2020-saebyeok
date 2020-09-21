@@ -44,12 +44,12 @@ public class ReportControllerTest {
         this.reportCategoryResponse = new ReportCategoryResponse(TEST_CATEGORY_ID, TEST_CATEGORY_NAME, TEST_CATEGORY_CONTENT);
     }
 
-    @DisplayName("'/report/categories'로 get 요청을 보내면 ReportCategory 리스트를 받는다.")
+    @DisplayName("'/reports/categories'로 get 요청을 보내면 ReportCategory 리스트를 받는다.")
     @Test
     void getReportCategoriesTest() throws Exception {
         when(reportService.getReportCategories()).thenReturn(Arrays.asList(this.reportCategoryResponse));
 
-        this.mockMvc.perform(get(API + "/report/categories").
+        this.mockMvc.perform(get(API + "/reports/categories").
                 accept(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(jsonPath("$", hasSize(1))).
                 andExpect(jsonPath("$[0].name").value(TEST_CATEGORY_NAME));

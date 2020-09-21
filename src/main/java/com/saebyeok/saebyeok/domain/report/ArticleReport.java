@@ -45,7 +45,7 @@ public class ArticleReport {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    private boolean isFinished = Boolean.FALSE;
+    private Boolean isFinished = Boolean.FALSE;
 
     public void finish() {
         this.isFinished = true;
