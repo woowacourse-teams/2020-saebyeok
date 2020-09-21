@@ -37,6 +37,7 @@ public class ReportController {
 
     @GetMapping("/reports/article")
     public ResponseEntity<List<ArticleReportResponse>> getArticleReports(@LoginMember Member member) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         List<ArticleReportResponse> reportResponses = reportService.getArticleReports(member);
 
         return ResponseEntity.ok(reportResponses);
@@ -44,6 +45,7 @@ public class ReportController {
 
     @GetMapping("/reports/article/{reportId}")
     public ResponseEntity<ArticleReportResponse> readArticleReport(@LoginMember Member member, @PathVariable Long reportId) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         ArticleReportResponse articleReportResponse = reportService.readArticleReport(member, reportId);
 
         return ResponseEntity.ok(articleReportResponse);
@@ -51,6 +53,7 @@ public class ReportController {
 
     @DeleteMapping("/reports/article/{reportId}")
     public ResponseEntity<Void> deleteArticleReport(@LoginMember Member member, @PathVariable Long reportId) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         reportService.deleteArticleReport(member, reportId);
 
         return ResponseEntity.noContent().build();
@@ -67,6 +70,7 @@ public class ReportController {
 
     @GetMapping("/reports/comment")
     public ResponseEntity<List<CommentReportResponse>> getCommentReports(@LoginMember Member member) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         List<CommentReportResponse> reportResponses = reportService.getCommentReports(member);
 
         return ResponseEntity.ok(reportResponses);
@@ -74,6 +78,7 @@ public class ReportController {
 
     @GetMapping("/reports/comment/{reportId}")
     public ResponseEntity<CommentReportResponse> readCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         CommentReportResponse commentReportResponse = reportService.readCommentReport(member, reportId);
 
         return ResponseEntity.ok(commentReportResponse);
@@ -81,6 +86,7 @@ public class ReportController {
 
     @DeleteMapping("/reports/comment/{reportId}")
     public ResponseEntity<Void> deleteCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
+        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
         reportService.deleteCommentReport(member, reportId);
 
         return ResponseEntity.noContent().build();

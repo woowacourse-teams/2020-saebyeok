@@ -56,15 +56,15 @@ public class ArticleReportRepositoryTest {
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 
-        articleReport1 = new ArticleReport(1L, "신고 내용1", member, article, reportCategory, LocalDateTime.now(), false);
-        articleReport2 = new ArticleReport(2L, "신고 내용2", member, article, reportCategory, LocalDateTime.now(), false);
-        articleReport3 = new ArticleReport(3L, "신고 내용3", member, article, reportCategory, LocalDateTime.now(), false);
+        articleReport1 = new ArticleReport("신고 내용1", member, article, reportCategory);
+        articleReport2 = new ArticleReport("신고 내용2", member, article, reportCategory);
+        articleReport3 = new ArticleReport("신고 내용3", member, article, reportCategory);
         articleReportRepository.save(articleReport1);
         articleReportRepository.save(articleReport2);
         articleReportRepository.save(articleReport3);
     }
 
-    @DisplayName("게시글을 저장한다")
+    @DisplayName("게시글 신고를 저장한다")
     @Test
     void saveTest() {
         ArticleReport newArticleReport = new ArticleReport("신교 내용4", member, article, reportCategory);
@@ -87,12 +87,15 @@ public class ArticleReportRepositoryTest {
     }
 
     @DisplayName("ID로 개별 ArticleReport를 조회한다")
+    @Test
     void findByIdTest() {
-        ArticleReport articleReport = articleReportRepository.findById(1L).
-                orElseThrow(() -> new ReportNotFoundException(1L));
+        Long id = articleReport1.getId();
+        ArticleReport articleReport = articleReportRepository.findById(id).
+                orElseThrow(() -> new ReportNotFoundException(id));
 
         assertThat(articleReport).isNotNull();
-        assertThat(articleReport.getId()).isEqualTo(1L);
-        assertThat(articleReport.getContent()).isEqualTo("신고 내용1");
+        assertThat(articleReport.getId()).isEqualTo(id);
+        assertThat(articleReport.getContent()).isEqualTo(articleReport1.getContent());
+        assertThat(articleReport.getIsFinished()).isEqualTo(articleReport1.getIsFinished());
     }
 }
