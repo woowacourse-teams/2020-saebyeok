@@ -45,7 +45,14 @@ public class CommentReport {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    private boolean isFinished = Boolean.FALSE;
+    private Boolean isFinished = Boolean.FALSE;
+
+    public CommentReport(String content, Member member, Comment comment, ReportCategory reportCategory) {
+        this.content = content;
+        this.member = member;
+        this.comment = comment;
+        this.reportCategory = reportCategory;
+    }
 
     public void finish() {
         this.isFinished = true;

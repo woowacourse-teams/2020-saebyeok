@@ -1,18 +1,18 @@
 package com.saebyeok.saebyeok.service.report;
 
 import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
 import com.saebyeok.saebyeok.domain.report.ArticleReportRepository;
 import com.saebyeok.saebyeok.domain.report.ReportCategory;
 import com.saebyeok.saebyeok.domain.report.ReportCategoryRepository;
+import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
-import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
 import com.saebyeok.saebyeok.exception.ReportNotFoundException;
+import com.saebyeok.saebyeok.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class ReportService {
 
-    private final ArticleRepository articleRepository;
+    private final ArticleService articleService;
     private final ReportCategoryRepository reportCategoryRepository;
     private final ArticleReportRepository articleReportRepository;
 
@@ -39,8 +39,7 @@ public class ReportService {
     public ArticleReport createArticleReport(Member member, ArticleReportCreateRequest request) {
         ReportCategory reportCategory = reportCategoryRepository.findById(request.getReportCategoryId()).
                 orElseThrow(() -> new ReportCategoryNotFoundException(request.getReportCategoryId()));
-        Article article = articleRepository.findById(request.getArticleId()).
-                orElseThrow(() -> new ArticleNotFoundException(request.getArticleId()));
+        Article article = articleService.findArticleById(request.getArticleId());
 
         ArticleReport articleReport = request.toArticleReport(member, article, reportCategory);
 
@@ -50,14 +49,21 @@ public class ReportService {
     public List<ArticleReportResponse> getArticleReports(Member member) {
         return articleReportRepository.findAll().
                 stream().
-                map(ArticleReportResponse::new).
+                map(articleReport -> {
+                    Long articleId = articleReport.getArticle().getId();
+                    ArticleResponse articleResponse = articleService.readMemberArticle(member, articleId);
+                    return new ArticleReportResponse(articleReport, articleResponse);
+                }).
                 collect(Collectors.toList());
     }
 
     public ArticleReportResponse readArticleReport(Member member, Long reportId) {
         ArticleReport articleReport = articleReportRepository.findById(reportId).
                 orElseThrow(() -> new ReportNotFoundException(reportId));
-        return new ArticleReportResponse(articleReport);
+        Long articleId = articleReport.getArticle().getId();
+        ArticleResponse articleResponse = articleService.readMemberArticle(member, articleId);
+
+        return new ArticleReportResponse(articleReport, articleResponse);
     }
 
     @Transactional

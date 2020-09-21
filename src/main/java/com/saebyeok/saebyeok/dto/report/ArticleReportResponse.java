@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.dto.report;
 
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
+import com.saebyeok.saebyeok.dto.ArticleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,19 +12,15 @@ import lombok.NoArgsConstructor;
 public class ArticleReportResponse {
     private Long id;
     private String content;
-    private Long articleId;
+    private ArticleResponse article;
     private ReportCategoryResponse reportCategory;
     private Boolean isFinished;
 
-    public ArticleReportResponse(ArticleReport articleReport) {
+    public ArticleReportResponse(ArticleReport articleReport, ArticleResponse articleResponse) {
         this.id = articleReport.getId();
         this.content = articleReport.getContent();
-        this.articleId = articleReport.getArticle().getId();
+        this.article = articleResponse;
         this.reportCategory = new ReportCategoryResponse(articleReport.getReportCategory());
         this.isFinished = articleReport.getIsFinished();
-    }
-
-    public boolean getIsFinished() {
-        return isFinished;
     }
 }
