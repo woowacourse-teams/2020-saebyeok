@@ -10,6 +10,7 @@ import Common from '@/store/modules/common';
 import Snackbar from '@/store/modules/snackbar';
 import NavbarSpacer from '@/store/modules/navbarSpacer';
 import Report from '@/store/modules/report';
+import RequestLoginModal from '@/store/modules/requestLoginModal';
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     Common,
     Snackbar,
     NavbarSpacer,
-    Report
+    Report,
+    RequestLoginModal
   }
 });
