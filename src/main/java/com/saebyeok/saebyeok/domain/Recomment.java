@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -42,4 +43,13 @@ public class Recomment {
 
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
+
+    @Builder
+    public Recomment(String content, Member member, String nickname, Article article, Comment comment) {
+        this.content = content;
+        this.member = member;
+        this.nickname = nickname;
+        this.article = article;
+        this.comment = comment;
+    }
 }

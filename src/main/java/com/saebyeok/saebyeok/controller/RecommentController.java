@@ -2,11 +2,15 @@ package com.saebyeok.saebyeok.controller;
 
 import com.saebyeok.saebyeok.controller.resolver.LoginMember;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Recomment;
 import com.saebyeok.saebyeok.dto.RecommentCreateRequest;
 import com.saebyeok.saebyeok.service.RecommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -17,13 +21,12 @@ import java.net.URI;
 public class RecommentController {
     private final RecommentService recommentService;
 
-    @PostMapping("/articles/{articleId}/comments/{commentId}/recomments")
+    @PostMapping("/recomments")
     ResponseEntity<Long> createRecomment(@LoginMember Member member,
-                                         @PathVariable Long articleId, @PathVariable Long commentId,
                                          @Valid @RequestBody RecommentCreateRequest recommentCreateRequest) {
-        Long recommentId = recommentService.createRecomment(member, recommentCreateRequest);
+        Recomment recomment = recommentService.createRecomment(member, recommentCreateRequest);
         return ResponseEntity
-                .created(URI.create("/articles/" + articleId + "/comments/" + commentId + "/recomments" + recommentId))
-                .body(recommentId);
+                .created(URI.create("/recomments" + recomment.getId()))
+                .body(recomment.getId());
     }
 }

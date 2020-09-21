@@ -15,6 +15,8 @@ import static com.saebyeok.saebyeok.domain.Recomment.MIN_LENGTH;
 public class RecommentCreateRequest {
     @Size(min = MIN_LENGTH,
             max = MAX_LENGTH,
-            message = "대댓글은 {min}자 이상 {max}자 이하로 작성할 수 있어요.")
+            message = "답글은 {min}자 이상 {max}자 이하로 작성할 수 있어요.")
     private String content;
+    private Long articleId;
+    private Long commentId;
 }

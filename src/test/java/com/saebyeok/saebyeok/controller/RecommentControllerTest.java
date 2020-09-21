@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Recomment;
 import com.saebyeok.saebyeok.dto.RecommentCreateRequest;
 import com.saebyeok.saebyeok.service.RecommentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +53,12 @@ class RecommentControllerTest {
     @DisplayName("대댓글 생성 요청시, 생성된 대댓글 id를 반환한다.")
     @Test
     void createRecommentTest() throws Exception {
-        RecommentCreateRequest request = new RecommentCreateRequest(RECOMMENT_CONTENT);
+        RecommentCreateRequest request = new RecommentCreateRequest(RECOMMENT_CONTENT, ARTICLE_ID, COMMENT_ID);
         String requestAsString = objectMapper.writeValueAsString(request);
 
-        when(recommentService.createRecomment(any(Member.class), any())).thenReturn(RECOMMENT_ID);
+        when(recommentService.createRecomment(any(Member.class), any())).thenReturn(new Recomment(RECOMMENT_ID, null, null, null, null, null, null, null, null));
 
-        MvcResult mvcResult = this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID + "/recomments")
+        MvcResult mvcResult = this.mockMvc.perform(post(API + "/recomments")
                 .content(requestAsString)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
