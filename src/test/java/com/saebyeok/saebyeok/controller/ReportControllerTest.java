@@ -1,8 +1,13 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saebyeok.saebyeok.domain.Emotion;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.SubEmotion;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
+import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.EmotionResponse;
+import com.saebyeok.saebyeok.dto.SubEmotionResponse;
 import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
@@ -19,9 +24,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,6 +54,15 @@ public class ReportControllerTest {
     public static final Long TEST_ARTICLE_REPORT_ID_1 = 1L;
     public static final Long TEST_ARTICLE_REPORT_ID_2 = 2L;
     public static final Long TEST_INVALID_REPORT_ID = 10000L;
+    public static final boolean TEST_IS_LIKED_BY_ME = false;
+    private static final Emotion TEST_EMOTION = new Emotion(1L, "기뻐요", "이미지 리소스");
+    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
+    private static final Boolean TEST_IS_MINE = true;
+    private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
+    private static final Long TEST_ID = 1L;
+    private static final String TEST_CONTENT = "내용1";
+    private static final Long TEST_LIKES_COUNT = 10L;
+
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @MockBean
@@ -64,9 +80,12 @@ public class ReportControllerTest {
 
         this.reportCategoryResponse = new ReportCategoryResponse(TEST_CATEGORY_ID, TEST_CATEGORY_NAME, TEST_CATEGORY_CONTENT);
 
+        List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
+        ArticleResponse articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null);
+
         articleReportResponses = new ArrayList<>();
-        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_1, TEST_ARTICLE_REPORT_CONTENT, TEST_ARTICLE_ID, reportCategoryResponse, false));
-        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_2, TEST_ARTICLE_REPORT_CONTENT, TEST_ARTICLE_ID, reportCategoryResponse, false));
+        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_1, TEST_ARTICLE_REPORT_CONTENT, articleResponse, reportCategoryResponse, false));
+        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_2, TEST_ARTICLE_REPORT_CONTENT, articleResponse, reportCategoryResponse, false));
     }
 
     @DisplayName("'/reports/categories'로 get 요청을 보내면 ReportCategory 리스트를 받는다.")
@@ -106,10 +125,8 @@ public class ReportControllerTest {
                 andExpect(jsonPath("$", hasSize(2))).
                 andExpect(jsonPath("$[0].id").value(TEST_ARTICLE_REPORT_ID_1)).
                 andExpect(jsonPath("$[0].content").value(TEST_ARTICLE_REPORT_CONTENT)).
-                andExpect(jsonPath("$[0].articleId").value(TEST_ARTICLE_ID)).
                 andExpect(jsonPath("$[1].id").value(TEST_ARTICLE_REPORT_ID_2)).
-                andExpect(jsonPath("$[1].content").value(TEST_ARTICLE_REPORT_CONTENT)).
-                andExpect(jsonPath("$[1].articleId").value(TEST_ARTICLE_ID));
+                andExpect(jsonPath("$[1].content").value(TEST_ARTICLE_REPORT_CONTENT));
     }
 
     @DisplayName("ID로 개별 신고 조회를 요청하면 해당 신고를 반환한다.")
@@ -122,7 +139,6 @@ public class ReportControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id").value(TEST_ARTICLE_REPORT_ID_1)).
                 andExpect(jsonPath("$.content").value(TEST_ARTICLE_REPORT_CONTENT)).
-                andExpect(jsonPath("$.articleId").value(TEST_ARTICLE_ID)).
                 andExpect(jsonPath("$.isFinished").value(false));
     }
 

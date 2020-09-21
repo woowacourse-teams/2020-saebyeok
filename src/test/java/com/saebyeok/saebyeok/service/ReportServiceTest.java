@@ -1,13 +1,9 @@
 package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.ArticleRepository;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.Role;
-import com.saebyeok.saebyeok.domain.report.ArticleReport;
-import com.saebyeok.saebyeok.domain.report.ArticleReportRepository;
-import com.saebyeok.saebyeok.domain.report.ReportCategory;
-import com.saebyeok.saebyeok.domain.report.ReportCategoryRepository;
+import com.saebyeok.saebyeok.domain.report.*;
 import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import com.saebyeok.saebyeok.exception.ReportNotFoundException;
@@ -49,11 +45,15 @@ public class ReportServiceTest {
 
     private ReportService reportService;
     @Mock
-    private ArticleRepository articleRepository;
+    private ArticleService articleService;
+    @Mock
+    private CommentService commentService;
     @Mock
     private ReportCategoryRepository reportCategoryRepository;
     @Mock
     private ArticleReportRepository articleReportRepository;
+    @Mock
+    private CommentReportRepository commentReportRepository;
 
     private ReportCategory reportCategory;
     private Member member;
@@ -64,7 +64,7 @@ public class ReportServiceTest {
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
         Article article = new Article(ARTICLE_ID, "게시물", member, LocalDateTime.now(), false, false, null, new ArrayList<>());
 
-        reportService = new ReportService(articleRepository, reportCategoryRepository, articleReportRepository);
+        reportService = new ReportService(articleService, commentService, reportCategoryRepository, articleReportRepository, commentReportRepository);
         reportCategory = new ReportCategory(CATEGORY_ID, CATEGORY_NAME, CATEGORY_CONTENT);
 
         articleReport = new ArticleReport(ARTICLE_ID, ARTICLE_REPORT_CONTENT, member, article, reportCategory, LocalDateTime.now(), false);
@@ -95,7 +95,6 @@ public class ReportServiceTest {
 
         assertThat(articleReportResponses).hasSize(1);
         assertThat(articleReportResponses.get(0).getContent()).isEqualTo(ARTICLE_REPORT_CONTENT);
-        assertThat(articleReportResponses.get(0).getArticleId()).isEqualTo(ARTICLE_ID);
         assertThat(articleReportResponses.get(0).getIsFinished()).isEqualTo(false);
     }
 
@@ -108,7 +107,6 @@ public class ReportServiceTest {
 
         assertThat(articleReportResponse).isNotNull();
         assertThat(articleReportResponse.getContent()).isEqualTo(ARTICLE_REPORT_CONTENT);
-        assertThat(articleReportResponse.getArticleId()).isEqualTo(ARTICLE_ID);
         assertThat(articleReportResponse.getIsFinished()).isEqualTo(false);
     }
 

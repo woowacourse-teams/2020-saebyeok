@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.saebyeok.saebyeok.domain.CommentTest.TEST_NICKNAME;
+
 @WithUserDetails("123456789")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -75,6 +77,30 @@ public class AcceptanceTest {
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
+        //@formatter:on
+    }
+
+
+    public void createComment(Long createdId) {
+        //@formatter:off
+        Map<String, Object> params = new HashMap<>();
+        params.put("memberId", MEMBER_ID);
+        params.put("nickname", TEST_NICKNAME);
+        params.put("articleId", ARTICLE_ID);
+        params.put("isDeleted", false);
+        params.put("content", "새벽 좋아요");
+
+        given().
+                auth().oauth2(TOKEN).
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post(API + "/articles/" + ARTICLE_ID + "/comments").
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
         //@formatter:on
     }
 }

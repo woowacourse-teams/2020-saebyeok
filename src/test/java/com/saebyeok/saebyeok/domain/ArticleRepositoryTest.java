@@ -40,7 +40,6 @@ class ArticleRepositoryTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        // TODO: 2020/08/12  emotion,sql 실행시킨 다음에, null 대신 진짜 값 넣어주면 어떨까? 고민
         article1 = new Article("내용1", true);
         article2 = new Article("내용2", false);
         article3 = new Article("내용3", true);

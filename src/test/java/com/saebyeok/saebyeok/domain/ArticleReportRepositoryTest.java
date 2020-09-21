@@ -8,9 +8,10 @@ import com.saebyeok.saebyeok.exception.ReportNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -19,6 +20,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
+@Sql("/truncate.sql")
+@Transactional
+@SpringBootTest
 public class ArticleReportRepositoryTest {
 
     @Autowired
@@ -44,16 +49,16 @@ public class ArticleReportRepositoryTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        reportCategory = new ReportCategory(3L, "분류3", "설명3");
+        reportCategory = new ReportCategory(1L, "분류1", "설명1");
         reportCategoryRepository.save(reportCategory);
         article = new Article("내용1", true);
         articleRepository.save(article);
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 
-        articleReport1 = new ArticleReport("신고 내용1", member, article, reportCategory);
-        articleReport2 = new ArticleReport("신고 내용2", member, article, reportCategory);
-        articleReport3 = new ArticleReport("신고 내용3", member, article, reportCategory);
+        articleReport1 = new ArticleReport(1L, "신고 내용1", member, article, reportCategory, LocalDateTime.now(), false);
+        articleReport2 = new ArticleReport(2L, "신고 내용2", member, article, reportCategory, LocalDateTime.now(), false);
+        articleReport3 = new ArticleReport(3L, "신고 내용3", member, article, reportCategory, LocalDateTime.now(), false);
         articleReportRepository.save(articleReport1);
         articleReportRepository.save(articleReport2);
         articleReportRepository.save(articleReport3);
@@ -62,7 +67,7 @@ public class ArticleReportRepositoryTest {
     @DisplayName("게시글을 저장한다")
     @Test
     void saveTest() {
-        ArticleReport newArticleReport = new ArticleReport("신교 내용 4", member, article, reportCategory);
+        ArticleReport newArticleReport = new ArticleReport("신교 내용4", member, article, reportCategory);
         int articleReportSize = articleReportRepository.findAll().size();
 
         articleReportRepository.save(newArticleReport);
@@ -82,13 +87,12 @@ public class ArticleReportRepositoryTest {
     }
 
     @DisplayName("ID로 개별 ArticleReport를 조회한다")
-    @ValueSource(longs = {1L, 2L, 3L})
-    @ParameterizedTest
-    void findByIdTest(Long id) {
-        ArticleReport articleReport = articleReportRepository.findById(id).
-                orElseThrow(() -> new ReportNotFoundException(id));
+    void findByIdTest() {
+        ArticleReport articleReport = articleReportRepository.findById(1L).
+                orElseThrow(() -> new ReportNotFoundException(1L));
 
         assertThat(articleReport).isNotNull();
-        assertThat(articleReport.getId()).isEqualTo(id);
+        assertThat(articleReport.getId()).isEqualTo(1L);
+        assertThat(articleReport.getContent()).isEqualTo("신고 내용1");
     }
 }

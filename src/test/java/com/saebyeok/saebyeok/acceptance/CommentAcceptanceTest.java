@@ -31,10 +31,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
 
         params = new HashMap<>();
-        params.put("memberId", MEMBER_ID);
-        params.put("nickname", TEST_NICKNAME);
-        params.put("articleId", ARTICLE_ID);
-        params.put("isDeleted", false);
+
     }
 
     /**
@@ -122,26 +119,12 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 .contains("에 해당하는 댓글을 찾을 수 없습니다!");
     }
 
-    private void createComment(Long createdId) {
-        //@formatter:off
-        params.put("content", "새벽 좋아요");
-
-        given().
-                auth().oauth2(TOKEN).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles/" + ARTICLE_ID + "/comments").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value()).
-                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
-        //@formatter:on
-    }
-
     private ExceptionResponse createInvalidComment(String content) {
         //@formatter:off
+        params.put("memberId", MEMBER_ID);
+        params.put("nickname", TEST_NICKNAME);
+        params.put("articleId", ARTICLE_ID);
+        params.put("isDeleted", false);
         params.put("content", content);
 
         return

@@ -3,9 +3,8 @@ package com.saebyeok.saebyeok.controller;
 import com.saebyeok.saebyeok.controller.resolver.LoginMember;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
-import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.domain.report.CommentReport;
+import com.saebyeok.saebyeok.dto.report.*;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class ReportController {
         ArticleReport articleReport = reportService.createArticleReport(member, request);
 
         return ResponseEntity.
-                created(URI.create("/reports/" + articleReport.getId())).
+                created(URI.create("/reports/article" + articleReport.getId())).
                 build();
     }
 
@@ -53,6 +52,36 @@ public class ReportController {
     @DeleteMapping("/reports/article/{reportId}")
     public ResponseEntity<Void> deleteArticleReport(@LoginMember Member member, @PathVariable Long reportId) {
         reportService.deleteArticleReport(member, reportId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reports/comment")
+    public ResponseEntity<Void> createCommentReport(@LoginMember Member member, @RequestBody CommentReportCreateRequest request) {
+        CommentReport commentReport = reportService.createCommentReport(member, request);
+
+        return ResponseEntity.
+                created(URI.create("/reports/comment" + commentReport.getId())).
+                build();
+    }
+
+    @GetMapping("/reports/comment")
+    public ResponseEntity<List<CommentReportResponse>> getCommentReports(@LoginMember Member member) {
+        List<CommentReportResponse> reportResponses = reportService.getCommentReports(member);
+
+        return ResponseEntity.ok(reportResponses);
+    }
+
+    @GetMapping("/reports/comment/{reportId}")
+    public ResponseEntity<CommentReportResponse> readCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
+        CommentReportResponse commentReportResponse = reportService.readCommentReport(member, reportId);
+
+        return ResponseEntity.ok(commentReportResponse);
+    }
+
+    @DeleteMapping("/reports/comment/{reportId}")
+    public ResponseEntity<Void> deleteCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
+        reportService.deleteCommentReport(member, reportId);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
+import com.saebyeok.saebyeok.dto.report.CommentReportResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,13 @@ public class ReportAcceptanceTest extends AcceptanceTest {
     private static final Long REPORT_ARTICLE_ID = 1L;
     private static final Long REPORT_COMMENT_ID = 1L;
     private static final String REPORT_CONTENT = "이 게시물을 신고합니다.";
-    private static final Boolean isFinished = false;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
 
         createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
+        createComment(REPORT_COMMENT_ID);
     }
 
 
@@ -83,6 +84,33 @@ public class ReportAcceptanceTest extends AcceptanceTest {
 
         //then 해당 신고를 조회하면 완료된 것으로 값이 설정되어 있다.
         reportResponse = readArticleReport(REPORT_ID);
+        assertThat(reportResponse.getIsFinished()).isTrue();
+    }
+
+    @Test
+    void manageCommentReport() {
+        //given 신고가 하나도 없다.
+        List<CommentReportResponse> reports = getCommentReports();
+        assertThat(reports).isEmpty();
+
+        //when 신고를 하나 추가한다.
+        createCommentReport();
+
+        //then 신고가 1개 생긴다.
+        reports = getCommentReports();
+        assertThat(reports).hasSize(1);
+
+        //when 신고를 조회한다.
+        CommentReportResponse reportResponse = readCommentReport(REPORT_ID);
+
+        //then 조회된 신고 값이 존재하는 신고 값과 일치한다.
+        assertThat(reportResponse.getContent()).isEqualTo(REPORT_CONTENT);
+
+        //when 신고를 완료 처리한다.
+        deleteCommentReport(REPORT_ID);
+
+        //then 해당 신고를 조회하면 완료된 것으로 값이 설정되어 있다.
+        reportResponse = readCommentReport(REPORT_ID);
         assertThat(reportResponse.getIsFinished()).isTrue();
     }
 
@@ -142,6 +170,68 @@ public class ReportAcceptanceTest extends AcceptanceTest {
                 auth().oauth2(TOKEN).
         when().
                 delete(API + "/reports/article/" + id).
+        then().
+                log().all().
+                statusCode(HttpStatus.NO_CONTENT.value());
+        //@formatter:on
+    }
+
+    private void createCommentReport() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("content", REPORT_CONTENT);
+        params.put("commentId", REPORT_COMMENT_ID);
+        params.put("reportCategoryId", REPORT_CATEGORY_ID);
+
+        //@formatter:off
+        given().
+                auth().oauth2(TOKEN).
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post(API + "/reports/comment").
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value());
+        //@formatter:on
+    }
+
+    private List<CommentReportResponse> getCommentReports() {
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                when().
+                        get(API + "/reports/comment").
+                then().
+                        log().all().
+                        extract().
+                        jsonPath().
+                        getList(".", CommentReportResponse.class);
+        //@formatter:on
+    }
+
+    private CommentReportResponse readCommentReport(Long id) {
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                        get(API + "/reports/comment/" + id).
+                then().
+                        log().all().
+                        extract().
+                        as(CommentReportResponse.class);
+        //@formatter:on
+    }
+
+    private void deleteCommentReport(Long id) {
+        //@formatter:off
+        given().
+                auth().oauth2(TOKEN).
+        when().
+                delete(API + "/reports/comment/" + id).
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());

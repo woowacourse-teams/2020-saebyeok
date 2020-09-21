@@ -29,6 +29,7 @@ public class ReportCategoryRepositoryTest {
     private ReportCategory reportCategory3;
 
     @BeforeEach
+    @Transactional
     void setUp() {
         reportCategory1 = new ReportCategory(1L, "분류1", "설명1");
         reportCategory2 = new ReportCategory(2L, "분류2", "설명2");
