@@ -41,7 +41,7 @@ public class ReportCategoryRepositoryTest {
     @DisplayName("전체 ReportCategory를 조회한다")
     @Test
     void findAllTest() {
-        List<ReportCategory> reportCategories = this.reportCategoryRepository.findAll();
+        List<ReportCategory> reportCategories = reportCategoryRepository.findAll();
         assertThat(reportCategories).
                 hasSize(3).
                 extracting("name").

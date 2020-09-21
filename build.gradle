@@ -83,17 +83,17 @@ bootJar {
     }
 }
 
-task setUp(type: NpmTask) {
-    description = "Install Node.js packages"
-    args = ['install']
-    inputs.files file('package.json')
-    outputs.files file('node_modules')
-}
-
-task buildFrontEnd(type: NpmTask, dependsOn: setUp) {
-    description = "Build vue.js"
-    args = ['run', 'build']
-}
-
-
-processResources.dependsOn 'buildFrontEnd'
+//task setUp(type: NpmTask) {
+//    description = "Install Node.js packages"
+//    args = ['install']
+//    inputs.files file('package.json')
+//    outputs.files file('node_modules')
+//}
+//
+//task buildFrontEnd(type: NpmTask, dependsOn: setUp) {
+//    description = "Build vue.js"
+//    args = ['run', 'build']
+//}
+//
+//
+//processResources.dependsOn 'buildFrontEnd'
