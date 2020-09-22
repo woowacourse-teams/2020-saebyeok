@@ -25,10 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 public class CommentReportRepositoryTest {
-    // TODO: 2020/09/21 Documentation 작성 완료하기
-    // TODO: 2020/09/21 CommentRepo TEst, ARticleRepo TEst 
-    // TODO: 2020/09/21 admin/ check를 통한 get의 권한 관리, deelete!
-
     @Autowired
     private CommentReportRepository commentReportRepository;
 

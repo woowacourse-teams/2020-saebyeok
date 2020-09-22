@@ -92,3 +92,23 @@ operation::analysis/comments[snippets='http-request,http-response,request-header
 === 신고 분류 전체 조회
 
 operation::reports/categories[snippets='http-request,http-response,request-headers,response-fields']
+
+[[resources-reports-article-create]]
+=== 게시물 신고 생성
+
+operation::reports/article/create[snippets='http-request,http-response,request-headers,request-fields,response-headers']
+
+[[resources-reports-article-get]]
+=== 게시물 신고 전체 조회
+
+operation::reports/article/get[snippets='http-request,http-response,request-headers,response-fields']
+
+[[resources-reports-article-read]]
+=== 게시물 신고 조회
+
+operation::reports/article/read[snippets='http-request,http-response,request-headers,path-parameters,response-fields']
+
+[[resources-reports-article-delete]]
+=== 게시물 신고 삭제
+
+operation::reports/article/delete[snippets='http-request,http-response,path-parameters,request-headers']
