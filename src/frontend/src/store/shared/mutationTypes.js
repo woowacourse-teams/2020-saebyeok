@@ -14,3 +14,4 @@ export const HIDE_SNACKBAR = 'hideSnackbar';
 export const UPDATE_ARTICLE_LIKES = 'updateArticleLikes';
 export const UPDATE_COMMENT_LIKES = 'updateCommentLikes';
 export const SET_NAVBAR_SPACE_NEEDED = 'setNavbarSpaceNeeded';
+export const SET_REPORT_CATEGORIES = 'setReportCategories';
