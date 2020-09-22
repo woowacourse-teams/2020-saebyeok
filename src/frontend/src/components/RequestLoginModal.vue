@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-container justify="center">
     <v-dialog max-width="290" persistent v-model="isShowRequestLoginModal">
       <v-card>
         <v-card-title class="headline">
@@ -20,7 +20,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-container>
 </template>
 
 <script>

@@ -33,7 +33,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         String methodName = parameter.getMethod().getName();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
         if (authentication instanceof AnonymousAuthenticationToken &&
                 ("getArticles".equals(methodName) || "readArticle".equals(methodName))) {  // 비회원이 피드 혹은 글 디테일 요청
             return new Member();

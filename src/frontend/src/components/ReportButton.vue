@@ -36,14 +36,14 @@
               <div style="padding-left: 10px;">
                 <h5
                   v-if="this.invalidCategoryChoice"
-                  style="color: red; font-weight: lighter"
+                  class="alertCaption"
                   align="left"
                 >
                   신고 분류를 선택해 주세요
                 </h5>
                 <h5
                   v-if="this.choiceCategory !== undefined"
-                  style="font-weight: lighter"
+                  class="caption"
                   align="left"
                 >
                   {{ reportCategories[this.choiceCategory].content }}
@@ -181,3 +181,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+.alertCaption {
+  color: red;
+  font-weight: lighter;
+}
+.caption {
+  font-weight: lighter;
+}
+</style>
