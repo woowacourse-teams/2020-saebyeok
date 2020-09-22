@@ -13,14 +13,14 @@ public class CommentReportResponse {
     private Long id;
     private String content;
     private CommentResponse comment;
-    private ReportCategoryResponse reportCategoryResponse;
+    private ReportCategoryResponse reportCategory;
     private Boolean isFinished;
 
     public CommentReportResponse(CommentReport commentReport, CommentResponse commentResponse) {
         this.id = commentReport.getId();
         this.content = commentReport.getContent();
         this.comment = commentResponse;
-        this.reportCategoryResponse = new ReportCategoryResponse(commentReport.getReportCategory());
+        this.reportCategory = new ReportCategoryResponse(commentReport.getReportCategory());
         this.isFinished = commentReport.getIsFinished();
     }
 }

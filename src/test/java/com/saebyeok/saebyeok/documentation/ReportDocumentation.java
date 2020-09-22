@@ -2,13 +2,13 @@ package com.saebyeok.saebyeok.documentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.documentation.common.Documentation;
+import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
+import com.saebyeok.saebyeok.domain.report.CommentReport;
 import com.saebyeok.saebyeok.domain.report.ReportCategory;
 import com.saebyeok.saebyeok.dto.*;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
-import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.dto.report.*;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -233,6 +234,145 @@ public class ReportDocumentation extends Documentation {
                                 headerWithName("Authorization").description("Bearer auth credentials")),
                         pathParameters(
                                 parameterWithName("reportId").description("삭제할 게시물 신고의 게시물 ID")
+                        ))
+                );
+    }
+
+
+    @Test
+    void createCommentReport() throws Exception {
+        CommentReportCreateRequest commentReportCreateRequest = new CommentReportCreateRequest("댓글 신고 내용", 1L, 1L);
+        CommentReport commentReport = new CommentReport(1L, "댓글 신고 내용", null, null, null, LocalDateTime.now(), false);
+
+        given(reportService.createCommentReport(any(Member.class), any())).willReturn(commentReport);
+
+        String content = objectMapper.writeValueAsString(commentReportCreateRequest);
+
+        this.mockMvc.perform(post("/api/reports/comment").
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON).
+                content(content).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isCreated()).
+                andDo(print()).
+                andDo(document("reports/comment/create",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 신고 내용"),
+                                fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("신고할 댓글의 ID"),
+                                fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 분류 ID")),
+                        responseHeaders(
+                                headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
+                        )
+                ));
+    }
+
+    @Test
+    void getCommentReports() throws Exception {
+        CommentReport commentReport = new CommentReport(1L, "댓글 신고 내용", null, null, new ReportCategory(1L, "신고 분류 이름", "신고 분류 상세 내용"), LocalDateTime.now(), false);
+        Comment comment = new Comment(1L, "댓글 내용", new Member(), "댓글 닉네임", LocalDateTime.now(), null, false, new ArrayList<>());
+        CommentResponse commentResponse = new CommentResponse(comment, new Member());
+
+        List<CommentReportResponse> commentReportResponses = Arrays.asList(new CommentReportResponse(commentReport, commentResponse));
+
+        given(reportService.getCommentReports(any(Member.class))).willReturn(commentReportResponses);
+
+        this.mockMvc.perform(get("/api/reports/comment").
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andDo(print()).
+                andDo(document("reports/comment/get",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 댓글 신고의 목록"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("댓글 신고의 ID"),
+                                fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 신고의 내용"),
+                                fieldWithPath("[].comment").type(JsonFieldType.OBJECT).description("신고된 댓글"),
+                                fieldWithPath("[].reportCategory").type(JsonFieldType.OBJECT).description("신고의 분류"),
+                                fieldWithPath("[].isFinished").type(JsonFieldType.BOOLEAN).description("신고의 완료 여부"),
+                                fieldWithPath("[].comment.id").type(JsonFieldType.NUMBER).description("신고된 댓글의 ID"),
+                                fieldWithPath("[].comment.content").type(JsonFieldType.STRING).description("신고된 댓글의 내용"),
+                                fieldWithPath("[].comment.nickname").type(JsonFieldType.STRING).description("신고된 댓글의 닉네임"),
+                                fieldWithPath("[].comment.isDeleted").type(JsonFieldType.BOOLEAN).description("신고된 댓글의 삭제 여부"),
+                                fieldWithPath("[].comment.createdDate").type(JsonFieldType.STRING).description("신고된 댓글의 작성 시간"),
+                                fieldWithPath("[].comment.isMine").type(JsonFieldType.BOOLEAN).description("신고된 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("[].comment.likesCount").type(JsonFieldType.NUMBER).description("신고된 댓글이 받은 공감의 수"),
+                                fieldWithPath("[].comment.isLikedByMe").type(JsonFieldType.BOOLEAN).description("신고된 댓글을 내가 공감한 상태인지 여부"),
+                                fieldWithPath("[].reportCategory.id").type(JsonFieldType.NUMBER).description("신고 분류의 ID"),
+                                fieldWithPath("[].reportCategory.name").type(JsonFieldType.STRING).description("신고 분류의 이름"),
+                                fieldWithPath("[].reportCategory.content").type(JsonFieldType.STRING).description("신고 분류의 상세 설명")
+                        )
+                ));
+    }
+
+    @Test
+    void readCommentReports() throws Exception {
+        CommentReport commentReport = new CommentReport(1L, "댓글 신고 내용", null, null, new ReportCategory(1L, "신고 분류 이름", "신고 분류 상세 내용"), LocalDateTime.now(), false);
+        Comment comment = new Comment(1L, "댓글 내용", new Member(), "댓글 닉네임", LocalDateTime.now(), null, false, new ArrayList<>());
+        CommentResponse commentResponse = new CommentResponse(comment, new Member());
+
+        CommentReportResponse commentReportResponse = new CommentReportResponse(commentReport, commentResponse);
+
+        given(reportService.readCommentReport(any(Member.class), any())).willReturn(commentReportResponse);
+
+        this.mockMvc.perform(get("/api/reports/comment/{reportId}", 1L).
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andDo(print()).
+                andDo(document("reports/comment/read",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        pathParameters(
+                                parameterWithName("reportId").description("삭제할 댓글 신고의 댓글 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("댓글 신고의 ID"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 신고의 내용"),
+                                fieldWithPath("comment").type(JsonFieldType.OBJECT).description("신고된 댓글"),
+                                fieldWithPath("reportCategory").type(JsonFieldType.OBJECT).description("신고의 분류"),
+                                fieldWithPath("isFinished").type(JsonFieldType.BOOLEAN).description("신고의 완료 여부"),
+                                fieldWithPath("comment.id").type(JsonFieldType.NUMBER).description("신고된 댓글의 ID"),
+                                fieldWithPath("comment.content").type(JsonFieldType.STRING).description("신고된 댓글의 내용"),
+                                fieldWithPath("comment.nickname").type(JsonFieldType.STRING).description("신고된 댓글의 닉네임"),
+                                fieldWithPath("comment.isDeleted").type(JsonFieldType.BOOLEAN).description("신고된 댓글의 삭제 여부"),
+                                fieldWithPath("comment.createdDate").type(JsonFieldType.STRING).description("신고된 댓글의 작성 시간"),
+                                fieldWithPath("comment.isMine").type(JsonFieldType.BOOLEAN).description("신고된 댓글이 내가 쓴 댓글인지 여부"),
+                                fieldWithPath("comment.likesCount").type(JsonFieldType.NUMBER).description("신고된 댓글이 받은 공감의 수"),
+                                fieldWithPath("comment.isLikedByMe").type(JsonFieldType.BOOLEAN).description("신고된 댓글을 내가 공감한 상태인지 여부"),
+                                fieldWithPath("reportCategory.id").type(JsonFieldType.NUMBER).description("신고 분류의 ID"),
+                                fieldWithPath("reportCategory.name").type(JsonFieldType.STRING).description("신고 분류의 이름"),
+                                fieldWithPath("reportCategory.content").type(JsonFieldType.STRING).description("신고 분류의 상세 설명")
+                        )
+                ));
+    }
+
+    @Test
+    void deleteCommentReport() throws Exception {
+        this.mockMvc.perform(delete("/api/reports/comment/{reportId}", 1L).
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON)).
+                andExpect(status().isNoContent()).
+                andDo(print()).
+                andDo(document("reports/comment/delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")),
+                        pathParameters(
+                                parameterWithName("reportId").description("삭제할 댓글 신고의 댓글 ID")
                         ))
                 );
     }
