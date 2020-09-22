@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -136,5 +137,15 @@ class LikeControllerTest {
 
         this.mockMvc.perform(delete("/api/likes/comment/" + INVALID_COMMENT_ID)).
                 andExpect(status().isBadRequest());
+    }
+
+    @WithAnonymousUser
+    @DisplayName("예외 테스트: 비회원이 공감 요청을 보내면 401 에러가 발생한다")
+    @Test
+    void likeExceptionWithGuestUserTest() throws Exception {
+        when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
+
+        this.mockMvc.perform(post("/api/likes/article/" + ARTICLE_ID)).
+                andExpect(status().isUnauthorized());
     }
 }

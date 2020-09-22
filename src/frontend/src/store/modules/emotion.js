@@ -27,15 +27,19 @@ const mutations = {
 
 const actions = {
   async [FETCH_EMOTION]({ commit }, emotionId) {
-    return EmotionService.get(emotionId).then(({ data }) => {
-      commit(SET_EMOTION, data);
-      return data;
-    });
+    return EmotionService.get(emotionId)
+      .then(({ data }) => {
+        commit(SET_EMOTION, data);
+        return data;
+      })
+      .catch(error => commit('catchError', error));
   },
   async [FETCH_EMOTIONS]({ commit }) {
-    return EmotionService.getAll().then(({ data }) => {
-      commit(SET_EMOTIONS, data);
-    });
+    return EmotionService.getAll()
+      .then(({ data }) => {
+        commit(SET_EMOTIONS, data);
+      })
+      .catch(error => commit('catchError', error));
   }
 };
 
