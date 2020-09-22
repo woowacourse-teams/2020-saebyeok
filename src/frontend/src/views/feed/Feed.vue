@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Tutorial :dialog="this.tutorialDialog"></Tutorial>
+    <Tutorial
+      :dialog="this.tutorialDialog"
+      @closeTutorial="closeTutorial"
+    ></Tutorial>
     <div class="mt-4 overflow-y-auto">
       <cards :articles="articles" />
     </div>
@@ -106,6 +109,9 @@ export default {
           console.error(error);
         }
       }, 500);
+    },
+    closeTutorial() {
+      this.tutorialDialog = false;
     }
   },
   watch: {
