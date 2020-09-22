@@ -60,7 +60,7 @@ public class CommentDocumentation extends Documentation {
 
     @Test
     void createComment() throws Exception {
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("내용", 1L);
+        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("내용", 1L, null);
         Comment comment = commentCreateRequest.toComment();
 
         given(commentService.createComment(any(), any())).willReturn(comment);

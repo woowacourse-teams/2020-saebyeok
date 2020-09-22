@@ -101,9 +101,9 @@ public class AnalysisServiceTest {
         List<CommentLike> likes = new ArrayList<>(Arrays.asList(new CommentLike(), new CommentLike()));
         List<Comment> comments = new ArrayList<>();
         comments.add(new Comment(1L, "content1", new Member(), "nickname1", LocalDateTime.now(), new Article(), false,
-                likes, new ArrayList<>()));
+                null, likes));
         comments.add(new Comment(2L, "content2", new Member(), "nickname2", LocalDateTime.now(), new Article(), false,
-                likes, new ArrayList<>()));
+                null, likes));
 
         when(commentService.findAllCommentsBy(any(Member.class))).thenReturn(comments);
 

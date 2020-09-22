@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,7 +95,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void readArticle() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true, 10L, false, new ArrayList<>()));
+                LocalDateTime.now(), true, 10L, false, null));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
@@ -152,7 +151,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void readMemberArticle() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true, 10L, false, new ArrayList<>()));
+                LocalDateTime.now(), true, 10L, false, null));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
@@ -208,7 +207,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void getArticles() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true, 10L, false, new ArrayList<>()));
+                LocalDateTime.now(), true, 10L, false, null));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
@@ -272,7 +271,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void getMemberArticles() throws Exception {
         List<CommentResponse> comments = Arrays.asList(new CommentResponse(1L, "댓글1", "닉네임1", false,
-                LocalDateTime.now(), true, 10L, false, new ArrayList<>()));
+                LocalDateTime.now(), true, 10L, false, null));
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, comments);
