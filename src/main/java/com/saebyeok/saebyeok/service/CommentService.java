@@ -22,16 +22,29 @@ public class CommentService {
 
     @Transactional
     public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
+        Comment comment = toComment(member, commentCreateRequest);
+        return commentRepository.save(comment);
+    }
+
+    private Comment toComment(Member member, CommentCreateRequest commentCreateRequest) {
         Long articleId = commentCreateRequest.getArticleId();
         Article article = articleRepository.findById(articleId).
                 orElseThrow(() -> new ArticleNotFoundException(articleId));
+        Long parentId = commentCreateRequest.getParent();
+        Comment parent;
+        if (parentId != null) {
+            parent = commentRepository.findById(parentId).
+                    orElseThrow(() -> new CommentNotFoundException(parentId));
+        } else {
+            parent = null;
+        }
 
         Comment comment = commentCreateRequest.toComment();
         comment.setArticle(article);
         comment.setMember(member);
         comment.setNickname(nicknameGenerator.generate(member, article));
-
-        return commentRepository.save(comment);
+        comment.setParent(parent);
+        return comment;
     }
 
     public Long countTotalCommentsBy(Member member) {

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +20,7 @@ public class CommentResponse {
     private Boolean isMine;
     private Long likesCount;
     private Boolean isLikedByMe;
-    private List<RecommentResponse> recomments;
+    private Long parent;
 
     public CommentResponse(Comment comment, Member member) {
         this.id = comment.getId();
@@ -32,5 +31,8 @@ public class CommentResponse {
         this.isMine = comment.isWrittenBy(member);
         this.likesCount = comment.countLikes();
         this.isLikedByMe = comment.isLikedBy(member);
+        if (comment.getParent() != null) {
+            this.parent = comment.getParent().getId();
+        }
     }
 }
