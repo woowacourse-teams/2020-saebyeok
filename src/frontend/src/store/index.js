@@ -25,7 +25,7 @@ export default new Vuex.Store({
     Common,
     Snackbar,
     NavbarSpacer,
-    Report,
-    RequestLoginModal
+    RequestLoginModal,
+    Report
   }
 });
