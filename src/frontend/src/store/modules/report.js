@@ -1,5 +1,9 @@
 import { SET_REPORT_CATEGORIES } from '@/store/shared/mutationTypes';
-import { FETCH_REPORT_CATEGORIES } from '@/store/shared/actionTypes';
+import {
+  FETCH_REPORT_CATEGORIES,
+  CREATE_ARTICLE_REPORT,
+  CREATE_COMMENT_REPORT
+} from '@/store/shared/actionTypes';
 import ReportService from '@/api/modules/report';
 
 const state = {
@@ -25,6 +29,16 @@ const actions = {
         commit(SET_REPORT_CATEGORIES, data);
       })
       .catch(error => commit('catchError', error));
+  },
+  async [CREATE_ARTICLE_REPORT]({ commit }, report) {
+    return ReportService.createArticleReport(report).catch(error =>
+      commit('catchError', error)
+    );
+  },
+  async [CREATE_COMMENT_REPORT]({ commit }, report) {
+    return ReportService.createCommentReport(report).catch(error =>
+      commit('catchError', error)
+    );
   }
 };
 

@@ -4,19 +4,31 @@ const BASE_URL = '/reports';
 
 const ReportService = {
   getCategories() {
-    return ApiService.get(`/reports/categories`);
+    return ApiService.get(`${BASE_URL}/categories`);
   },
-  create(report) {
-    return ApiService.post(`${BASE_URL}`, report);
+  createArticleReport(report) {
+    return ApiService.post(`${BASE_URL}/article`, report);
   },
-  get(reportId) {
-    return ApiService.get(`${BASE_URL}/${reportId}`);
+  getArticleReport(reportId) {
+    return ApiService.get(`${BASE_URL}/artcile/${reportId}`);
   },
-  getAll(params) {
-    return ApiService.getWithParams(`${BASE_URL}`, params);
+  getArticleReports() {
+    return ApiService.get(`${BASE_URL}/article`);
   },
-  delete(reportId) {
-    return ApiService.delete(`${BASE_URL}/${reportId}`);
+  deleteArticleReport(reportId) {
+    return ApiService.delete(`${BASE_URL}/article/${reportId}`);
+  },
+  createCommentReport(report) {
+    return ApiService.post(`${BASE_URL}/comment`, report);
+  },
+  getCommentReport(reportId) {
+    return ApiService.get(`${BASE_URL}/comment/${reportId}`);
+  },
+  getCommentReports() {
+    return ApiService.get(`${BASE_URL}/comment`);
+  },
+  deleteCommentReport(reportId) {
+    return ApiService.delete(`${BASE_URL}/comment/${reportId}`);
   }
 };
 
