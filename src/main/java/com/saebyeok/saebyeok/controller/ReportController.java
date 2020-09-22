@@ -16,7 +16,7 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
 
-    @GetMapping("/report/categories")
+    @GetMapping("/reports/categories")
     public ResponseEntity<List<ReportCategoryResponse>> getReportCategories() {
         List<ReportCategoryResponse> reportCategoryResponses = reportService.getReportCategories();
         
