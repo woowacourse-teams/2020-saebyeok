@@ -3,7 +3,11 @@
     <my-page-tabs></my-page-tabs>
     <emotion-filter class="ma-3" />
     <div>
-      <cards :articles="memberArticles" />
+      <cards
+        :articles="memberArticles"
+        :noArticlesMessage="this.noArticlesMessage"
+        :isFiltered="this.isFiltered"
+      />
     </div>
     <infinite-loading
       v-if="memberArticles.length"
@@ -37,7 +41,8 @@ export default {
       size: 5,
       emotionIds: '',
       infiniteId: +new Date(),
-      isFiltered: false
+      isFiltered: false,
+      noArticlesMessage: '아직 작성한 글이 없네요~'
     };
   },
   components: {

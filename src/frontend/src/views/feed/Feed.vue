@@ -5,7 +5,11 @@
       @closeTutorial="closeTutorial"
     ></Tutorial>
     <div class="mt-4 overflow-y-auto">
-      <cards :articles="articles" />
+      <cards
+        :articles="articles"
+        :noArticlesMessage="this.noArticlesMessage"
+        :isFiltered="this.isFiltered"
+      />
     </div>
     <infinite-loading
       v-if="articles.length"
@@ -44,7 +48,8 @@ export default {
       emotionIds: '',
       infiniteId: +new Date(),
       isFiltered: false,
-      tutorialDialog: true
+      tutorialDialog: true,
+      noArticlesMessage: '지난 일주일 동안 올라온 이야기가 없네요 😭'
     };
   },
   components: {
