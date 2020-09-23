@@ -16,6 +16,7 @@
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
     >
+      <div slot="no-results"></div>
       <div slot="no-more">모든 글을 다 읽으셨네요 :)</div>
     </infinite-loading>
   </div>

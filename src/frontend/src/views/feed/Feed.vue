@@ -18,6 +18,7 @@
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
     >
+      <div slot="no-results"></div>
       <div slot="no-more" class="mt-4">
         지난 일주일 동안 올라온 모든 이야기를 다 읽으셨네요 :)
       </div>
