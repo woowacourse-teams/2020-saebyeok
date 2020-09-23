@@ -6,8 +6,12 @@
     -->
   <v-card flat max-width="400">
     <v-card-title class="pa-1 pb-0">
-      <div class="ml-2" style="font-size:14px; color:black;">
-        {{ comment.nickname }}
+      <div class="ml-2" style="font-size:14px">
+        {{
+          comment.nickname === '작성자'
+            ? '✒️ ' + comment.nickname
+            : comment.nickname
+        }}
       </div>
       <v-spacer />
       <v-card-actions class="pa-0">
