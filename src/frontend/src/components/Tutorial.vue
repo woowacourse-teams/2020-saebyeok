@@ -56,8 +56,8 @@ export default {
   },
   methods: {
     closeTutorial() {
+      this.$emit('closeTutorial');
       localStorage.setItem('tutorial_check', 'yes');
-      this.dialog = false;
     }
   }
 };

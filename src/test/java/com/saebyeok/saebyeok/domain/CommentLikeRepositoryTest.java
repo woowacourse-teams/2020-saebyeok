@@ -98,8 +98,6 @@ class CommentLikeRepositoryTest {
     @DisplayName("댓글 공감을 취소할 수 있다")
     @Test
     void deleteCommentLikeTest() {
-        System.out.println(commentRepository.findAll().size());
-
         CommentLike like = new CommentLike(member, comment);
         commentLikeRepository.save(like);
         List<CommentLike> beforeDelete = commentLikeRepository.findAll();
