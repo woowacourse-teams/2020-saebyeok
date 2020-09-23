@@ -12,13 +12,13 @@
         <v-dialog v-model="logoutDialog" max-width="290">
           <v-card>
             <v-card-title class="text-h6"
-              >정말 로그아웃 하시겠어요?</v-card-title
-            >
+              >정말 로그아웃 하시겠어요?
+            </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="#B2A4D4" text @click="logoutDialog = false"
-                >아니요</v-btn
-              >
+                >아니요
+              </v-btn>
               <v-btn color="#B2A4D4" text @click="logout">네, 할게요</v-btn>
             </v-card-actions>
           </v-card>
@@ -39,8 +39,8 @@
               <v-spacer></v-spacer>
               <v-btn color="#B2A4D4" text @click="dialog = false">아니요</v-btn>
               <v-btn color="red darken-4" text @click="unregister"
-                >탈퇴하기</v-btn
-              >
+                >탈퇴하기
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -76,8 +76,8 @@ export default {
           this.showSnackbar('성공적으로 탈퇴되었어요. 안녕히 가세요👋');
           this.$router.replace({ name: 'SignIn' });
         })
-        .catch(e => {
-          this.showSnackbar(e);
+        .catch(() => {
+          location.href = '/error';
         });
     }
   }
