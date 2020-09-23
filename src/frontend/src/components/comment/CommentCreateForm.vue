@@ -10,6 +10,7 @@
           name="input-7-4"
           label="댓글을 달아주세요~ (최대 140자)"
           v-model="content"
+          maxlength="140"
         />
         <div class="align-top">
           <v-icon class="ma-2" @click="submitComment" :color="buttonColor">
