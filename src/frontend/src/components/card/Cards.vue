@@ -1,13 +1,11 @@
 <template>
   <v-container pa-0>
     <v-row dense>
-      <v-col
-        v-for="article in articles"
-        :key="article.id"
-        cols="12"
-        v-on:click="onClickCard(article)"
-      >
-        <card :article="article"></card>
+      <v-col v-for="article in articles" :key="article.id" cols="12">
+        <card
+          :article="article"
+          @clickCardContent="onClickCard(article)"
+        ></card>
       </v-col>
     </v-row>
   </v-container>

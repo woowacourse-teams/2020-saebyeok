@@ -18,6 +18,7 @@
         style="color:rgb(0,0,0)"
         v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
         v-linkified
+        @click="clickCardContent()"
       >
       </v-card-text>
 
@@ -116,6 +117,9 @@ export default {
     },
     getReportType() {
       return REPORT_TYPE.ARTICLE;
+    },
+    clickCardContent() {
+      this.$emit('clickCardContent');
     }
   },
   props: {
