@@ -62,6 +62,7 @@
             </v-col>
             <v-col align="right" justify="end" style="padding:0px" cols="2">
               <report-button
+                v-if="!article.isMine"
                 :reportType="getReportType()"
                 :reportedId="article.id"
               />

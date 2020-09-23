@@ -48,7 +48,11 @@
       </div>
       <v-spacer />
       <div class="pb-2 pr-2">
-        <report-button :reportType="getReportType()" :reportedId="comment.id" />
+        <report-button
+          v-if="!comment.isMine"
+          :reportType="getReportType()"
+          :reportedId="comment.id"
+        />
       </div>
     </v-flex>
   </v-card>
