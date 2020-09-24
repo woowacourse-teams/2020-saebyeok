@@ -30,9 +30,9 @@ export default {
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
     logout() {
-      localStorage.clear();
+      localStorage.removeItem('token');
       this.showSnackbar('성공적으로 로그아웃되었어요. 안녕히 가세요👋');
-      this.$router.replace({ name: 'SignIn' });
+      this.$router.replace({ name: 'Feed' });
     }
   }
 };
