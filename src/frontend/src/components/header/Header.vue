@@ -6,8 +6,9 @@
       <router-link to="/feed" class="title text-h5">새벽</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-app-bar-nav-icon v-if="this.token">
-      <logout-button />
+    <v-app-bar-nav-icon>
+      <logout-button v-if="this.token" />
+      <v-icon size="48px" v-else>mdi-blank</v-icon>
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
