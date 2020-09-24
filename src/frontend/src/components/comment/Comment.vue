@@ -7,11 +7,7 @@
   <v-card flat max-width="400">
     <v-card-title class="pa-1 pb-0">
       <div class="ml-2" style="font-size:14px">
-        {{
-          comment.nickname === '작성자'
-            ? '✒️ ' + comment.nickname
-            : comment.nickname
-        }}
+        {{ getCommentNickname() }}
       </div>
       <v-spacer />
       <v-card-actions class="pa-0">
@@ -105,6 +101,11 @@ export default {
     },
     getReportType() {
       return REPORT_TYPE.COMMENT;
+    },
+    getCommentNickname() {
+      return this.comment.nickname === '작성자'
+        ? '✒️ ' + this.comment.nickname
+        : this.comment.nickname;
     }
   }
 };
