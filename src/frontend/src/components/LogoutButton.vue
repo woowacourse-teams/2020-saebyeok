@@ -30,9 +30,13 @@ export default {
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
     logout() {
+      if (this.$router.currentRoute.name === 'Feed') {
+        this.$router.go();
+      } else {
+        this.$router.push('/feed').catch(() => {});
+      }
       localStorage.removeItem('token');
       this.showSnackbar('성공적으로 로그아웃되었어요. 안녕히 가세요👋');
-      this.$router.replace({ name: 'Feed' });
     }
   }
 };
