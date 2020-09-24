@@ -8,7 +8,7 @@
       <router-link to="/feed" class="title text-h5">새벽</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-app-bar-nav-icon>
+    <v-app-bar-nav-icon v-if="this.token">
       <logout-button />
     </v-app-bar-nav-icon>
   </v-app-bar>
@@ -19,6 +19,9 @@ import LogoutButton from '@/components/LogoutButton';
 
 export default {
   name: 'DetailPageHeader',
+  data() {
+    return { token: localStorage.getItem('token') };
+  },
   components: {
     LogoutButton
   }
