@@ -1,8 +1,11 @@
 package com.saebyeok.saebyeok.controller.resolver;
 
+import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.security.User;
 import com.saebyeok.saebyeok.service.MemberService;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -26,9 +29,16 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = (User) principal;
 
-        return memberService.findById(user.getId());
+        String methodName = parameter.getMethod().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof AnonymousAuthenticationToken &&
+                ("getArticles".equals(methodName) || "readArticle".equals(methodName))) {  // 비회원이 피드 혹은 글 디테일 요청
+            return new Member();
+        } else {
+            User user = (User) authentication.getPrincipal();
+            return memberService.findById(user.getId());
+        }
     }
 }

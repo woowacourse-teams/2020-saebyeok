@@ -78,6 +78,7 @@ public class EmotionServiceTest {
                 .hasMessage(INVALID_EMOTION_ID + "에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
 
+    @DisplayName("모든 Emotion의 Id 조회를 요청하면 전체 Id의 목록을 전달받는다.")
     @Test
     void getAllEmotionsIdsTest() {
         List<Emotion> emotions = new ArrayList<>();

@@ -36,10 +36,17 @@
               <div style="padding-left: 10px;">
                 <h5
                   v-if="this.invalidCategoryChoice"
-                  style="color: red; font-weight: lighter"
+                  class="alertCaption"
                   align="left"
                 >
-                  신고하시는 이유를 선택해 주세요
+                  신고 분류를 선택해 주세요
+                </h5>
+                <h5
+                  v-if="this.choiceCategory !== undefined"
+                  class="caption"
+                  align="left"
+                >
+                  {{ reportCategories[this.choiceCategory].content }}
                 </h5>
               </div>
             </v-col>
@@ -66,26 +73,30 @@
 </template>
 <script>
 import { REPORT_TYPE } from '@/utils/ReportType.js';
-import { mapMutations } from 'vuex';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+import { FETCH_REPORT_CATEGORIES } from '@/store/shared/actionTypes';
+
+import { mapMutations, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'ReportButton',
   data() {
     return {
       dialog: false,
-      reportCategories: [
-        { id: 1, name: '광고 목적 게시' },
-        { id: 2, name: '모욕적인 표현' },
-        { id: 3, name: '불쾌한 표현' }
-      ],
       choiceCategory: undefined,
       invalidCategoryChoice: false,
       textContent: ''
     };
   },
+  created() {
+    this.fetchReportCategories();
+  },
+  computed: {
+    ...mapGetters(['reportCategories'])
+  },
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
+    ...mapActions([FETCH_REPORT_CATEGORIES]),
     onReport() {
       if (this.choiceCategory === undefined) {
         this.invalidCategoryChoice = true;
@@ -127,3 +138,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+.alertCaption {
+  color: red;
+  font-weight: lighter;
+}
+.caption {
+  font-weight: lighter;
+}
+</style>
