@@ -5,7 +5,7 @@
         <p id="title">새벽</p>
         <p id="description">함께 쓰는 감정 비밀 다이어리</p>
       </v-flex>
-      <v-flex>
+      <v-flex style="text-align:center">
         <a href="/oauth2/authorization/naver">
           <v-img
             class="naver-button"
@@ -20,6 +20,9 @@
             width="198px"
             src="/img/googleLogin.png"
         /></a>
+        <a class="mt-4 linkToFeed" href="/feed">
+          로그인 없이 둘러보기
+        </a>
       </v-flex>
     </v-layout>
   </v-app>
@@ -48,5 +51,9 @@ export default {};
 }
 .google-button {
   margin: 1px;
+}
+.linkToFeed {
+  color: grey;
+  display: block;
 }
 </style>

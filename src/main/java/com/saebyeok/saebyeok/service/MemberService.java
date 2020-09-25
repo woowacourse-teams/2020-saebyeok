@@ -28,6 +28,10 @@ public class MemberService {
                 .orElseGet(() -> signUp(unconfirmedMember));
     }
 
+    public void deactivate(Member member) {
+        member.deactivate();
+    }
+
     private Member signUp(Member newMember) {
         return memberRepository.save(newMember);
     }

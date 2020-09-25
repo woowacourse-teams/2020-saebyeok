@@ -84,3 +84,34 @@ operation::analysis/articles[snippets='http-request,http-response,request-header
 === 댓글 분석 조회
 
 operation::analysis/comments[snippets='http-request,http-response,request-headers,response-fields']
+
+[[resources-likes]]
+== Likes
+
+[[resources-likes-article]]
+=== 게시글 공감
+
+operation::likes/article[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
+
+[[resources-unlikes-article]]
+=== 게시글 공감 취소
+
+operation::unlikes/article[snippets='http-request,http-response,path-parameters,request-headers']
+
+[[resources-likes-comment]]
+=== 댓글 공감
+
+operation::likes/comment[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
+
+[[resources-unlikes-comment]]
+=== 댓글 공감 취소
+
+operation::unlikes/comment[snippets='http-request,http-response,path-parameters,request-headers']
+
+[[resources-reports]]
+== Reports
+
+[[resources-reports-categories]]
+=== 신고 분류 전체 조회
+
+operation::reports/categories[snippets='http-request,http-response,request-headers,response-fields']

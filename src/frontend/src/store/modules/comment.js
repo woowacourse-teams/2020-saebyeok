@@ -23,11 +23,15 @@ const mutations = {
 const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_COMMENT]({ commit }, comment) {
-    return CommentService.create(comment);
+    return CommentService.create(comment).catch(error =>
+      commit('catchError', error)
+    );
   },
   // eslint-disable-next-line no-unused-vars
   async [DELETE_COMMENT]({ commit }, params) {
-    return CommentService.delete(params);
+    return CommentService.delete(params).catch(error =>
+      commit('catchError', error)
+    );
   },
   async [LIKE_COMMENT]({ commit }, commentId) {
     return CommentService.like(commentId)

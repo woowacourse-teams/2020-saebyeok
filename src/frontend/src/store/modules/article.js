@@ -48,7 +48,9 @@ const mutations = {
 const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_ARTICLE]({ commit }, article) {
-    return ArticleService.create(article);
+    return ArticleService.create(article).catch(error =>
+      commit('catchError', error)
+    );
   },
   async [FETCH_ARTICLE]({ commit }, articleId) {
     return ArticleService.get(articleId)
@@ -76,7 +78,9 @@ const actions = {
   },
   // eslint-disable-next-line no-unused-vars
   async [DELETE_ARTICLE]({ commit }, articleId) {
-    return ArticleService.delete(articleId);
+    return ArticleService.delete(articleId).catch(error =>
+      commit('catchError', error)
+    );
   },
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);

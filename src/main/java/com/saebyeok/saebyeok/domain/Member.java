@@ -47,4 +47,10 @@ public class Member {
         // Todo: 편의 메소드 리팩토링(add를 중복으로 하는 경우 등)
         this.articles.add(article);
     }
+
+    public void deactivate() {
+        this.isDeleted = Boolean.TRUE;
+        this.oauthId = "DEACTIVATED";
+        this.loginMethod = "DEACTIVATED";
+    }
 }

@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
 public class EmotionControllerTest {
     private static final String API = "/api";
@@ -72,6 +71,7 @@ public class EmotionControllerTest {
                 andExpect(jsonPath("$[0].name").value(TEST_NAME));
     }
 
+    @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
     @DisplayName("ID로 개별 Emotion 조회를 요청하면 해당 Emotion을 전달 받는다")
     @Test
     void readEmotionTest() throws Exception {
@@ -89,6 +89,7 @@ public class EmotionControllerTest {
                 andExpect(jsonPath("$.subEmotions[1].name").value(TEST_SUBEMOTION_NAME));
     }
 
+    @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
     @DisplayName("예외 테스트: 없는 ID의 Emotion 조회를 요청하면 EmotionNotFoundException이 발생한다")
     @Test
     void readNotExistEmotionExceptionTest() throws Exception {
