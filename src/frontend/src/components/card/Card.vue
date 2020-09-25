@@ -14,11 +14,11 @@
         </v-layout>
       </v-card-title>
       <v-card-text
-        class="headline text-body-1 pb-0"
-        style="color:rgb(0,0,0)"
-        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
-        v-linkified
-        @click="clickCardContent()"
+              class="headline text-body-1 pb-0"
+              style="color:rgb(0,0,0); min-height:10px"
+              v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+              v-linkified
+              @click="clickCardContent()"
       >
       </v-card-text>
 
@@ -76,28 +76,28 @@
 </template>
 
 <script>
-import CreatedDate from '@/components/CreatedDate';
-import EmotionImage from '@/components/card/EmotionImage';
-import SubEmotionChips from '@/components/card/SubEmotionChips';
-import ReportButton from '@/components/ReportButton';
-import DetailCardMenu from '@/components/card/DetailCardMenu';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+  import CreatedDate from '@/components/CreatedDate';
+  import EmotionImage from '@/components/card/EmotionImage';
+  import SubEmotionChips from '@/components/card/SubEmotionChips';
+  import ReportButton from '@/components/ReportButton';
+  import DetailCardMenu from '@/components/card/DetailCardMenu';
+  import {REPORT_TYPE} from '@/utils/ReportType.js';
 
-import { mapActions } from 'vuex';
-import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
-import linkify from 'vue-linkify';
+  import {mapActions} from 'vuex';
+  import {LIKE_ARTICLE, UNLIKE_ARTICLE} from '@/store/shared/actionTypes';
+  import linkify from 'vue-linkify';
 
-export default {
-  name: 'Card',
-  components: {
-    CreatedDate,
-    EmotionImage,
-    SubEmotionChips,
-    ReportButton,
-    DetailCardMenu
-  },
-  directives: {
-    linkified: linkify
+  export default {
+    name: 'Card',
+    components: {
+      CreatedDate,
+      EmotionImage,
+      SubEmotionChips,
+      ReportButton,
+      DetailCardMenu
+    },
+    directives: {
+      linkified: linkify
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
