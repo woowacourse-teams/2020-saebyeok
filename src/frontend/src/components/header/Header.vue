@@ -7,7 +7,8 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
-      <logout-button />
+      <logout-button v-if="this.token" />
+      <v-icon size="48px" v-else>mdi-blank</v-icon>
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
@@ -18,6 +19,9 @@ import LogoutButton from '@/components/LogoutButton';
 
 export default {
   name: 'Header',
+  data() {
+    return { token: localStorage.getItem('token') };
+  },
   components: {
     FilterButton,
     LogoutButton
