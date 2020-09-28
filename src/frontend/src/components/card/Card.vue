@@ -15,9 +15,10 @@
       </v-card-title>
       <v-card-text
         class="headline text-body-1 pb-0"
-        style="color:rgb(0,0,0)"
+        style="color:rgb(0,0,0); min-height:10px"
         v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
         v-linkified
+        @click="clickCardContent()"
       >
       </v-card-text>
 
@@ -62,6 +63,7 @@
             </v-col>
             <v-col align="right" justify="end" style="padding:0px" cols="2">
               <report-button
+                v-if="!article.isMine"
                 :reportType="getReportType()"
                 :reportedId="article.id"
               />
@@ -115,6 +117,9 @@ export default {
     },
     getReportType() {
       return REPORT_TYPE.ARTICLE;
+    },
+    clickCardContent() {
+      this.$emit('clickCardContent');
     }
   },
   props: {

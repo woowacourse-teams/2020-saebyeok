@@ -10,6 +10,7 @@
           name="input-7-4"
           label="댓글을 달아주세요~ (최대 140자)"
           v-model="content"
+          maxlength="140"
         />
         <div class="align-top">
           <v-icon class="ma-2" @click="submitComment" :color="buttonColor">
@@ -41,20 +42,23 @@ export default {
     async submitComment() {
       this.buttonColor = '#96589b';
 
+      this.content = this.content.trim();
+      if (this.content.length === 0) {
+        this.showSnackbar('댓글은 최소 1글자 이상 작성해주셔야 해요');
+        this.buttonColor = '#666666';
+        return;
+      }
+
       const commentCreateRequest = {
         content: this.content,
         articleId: this.articleId
       };
-      this.createComment(commentCreateRequest)
-        .then(response => {
-          if (response.status === STATUS.CREATED) {
-            this.$router.go();
-          }
-        })
-        .catch(error => {
-          this.showSnackbar(error.response.data.errorMessage);
-          this.buttonColor = '#666666';
-        });
+
+      this.createComment(commentCreateRequest).then(response => {
+        if (response.status === STATUS.CREATED) {
+          this.$router.go();
+        }
+      });
     }
   },
   props: ['articleId']

@@ -6,8 +6,8 @@
     -->
   <v-card flat max-width="400">
     <v-card-title class="pa-1 pb-0">
-      <div class="ml-2" style="font-size:14px; color:black;">
-        {{ comment.nickname }}
+      <div class="ml-2" style="font-size:14px">
+        {{ getCommentNickname() }}
       </div>
       <v-spacer />
       <v-card-actions class="pa-0">
@@ -48,7 +48,11 @@
       </div>
       <v-spacer />
       <div class="pb-2 pr-2">
-        <report-button :reportType="getReportType()" :reportedId="comment.id" />
+        <report-button
+          v-if="!comment.isMine"
+          :reportType="getReportType()"
+          :reportedId="comment.id"
+        />
       </div>
     </v-flex>
   </v-card>
@@ -97,6 +101,11 @@ export default {
     },
     getReportType() {
       return REPORT_TYPE.COMMENT;
+    },
+    getCommentNickname() {
+      return this.comment.nickname === '작성자'
+        ? '✒️ ' + this.comment.nickname
+        : this.comment.nickname;
     }
   }
 };
