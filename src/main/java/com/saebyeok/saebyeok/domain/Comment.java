@@ -46,10 +46,18 @@ public class Comment implements Comparable<Comment> {
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
 
-    @Builder
     public Comment(String content, String nickname, Comment parent) {
         this.content = content;
         this.nickname = nickname;
+        this.parent = parent;
+    }
+
+    @Builder
+    public Comment(String content, Member member, String nickname, Article article, Comment parent) {
+        this.content = content;
+        this.member = member;
+        this.nickname = nickname;
+        this.article = article;
         this.parent = parent;
     }
 
@@ -64,6 +72,10 @@ public class Comment implements Comparable<Comment> {
 
     public long countLikes() {
         return this.likes.size();
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setMember(Member member) {

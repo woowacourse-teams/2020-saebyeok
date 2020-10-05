@@ -39,12 +39,13 @@ public class CommentService {
             parent = null;
         }
 
-        Comment comment = commentCreateRequest.toComment();
-        comment.setArticle(article);
-        comment.setMember(member);
-        comment.setNickname(nicknameGenerator.generate(member, article));
-        comment.setParent(parent);
-        return comment;
+        return Comment.builder()
+                .content(commentCreateRequest.getContent())
+                .member(member)
+                .nickname(nicknameGenerator.generate(member, article))
+                .article(article)
+                .parent(parent)
+                .build();
     }
 
     public Long countTotalCommentsBy(Member member) {

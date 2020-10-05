@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,7 @@ class CommentControllerTest {
     private static final String API = "/api";
     private static final Long COMMENT_ID = 1L;
     private static final Long ARTICLE_ID = 1L;
+    private static final Long INVALID_ARTICLE_ID = 100L;
 
     private MockMvc mockMvc;
 
@@ -97,6 +99,21 @@ class CommentControllerTest {
         String requestAsString = objectMapper.writeValueAsString(request);
 
         this.mockMvc.perform(post(API + "/articles/" + ARTICLE_ID + "/comments").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
+                andDo(print());
+    }
+
+    @DisplayName("예외 테스트: 함께 전달된 articleId가 존재하지 않을 경우, 예외가 발생한다")
+    @Test
+    void notExistArticleIdTest() throws Exception {
+        when(commentService.createComment(any(), any())).thenThrow(ArticleNotFoundException.class);
+
+        CommentCreateRequest request = new CommentCreateRequest(TEST_CONTENT, INVALID_ARTICLE_ID, null);
+        String requestAsString = objectMapper.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/articles/" + INVALID_ARTICLE_ID + "/comments").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest()).
