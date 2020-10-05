@@ -56,10 +56,7 @@
         <v-spacer />
         <div class="pb-2 pr-2">
           <report-button
-<<<<<<< HEAD
-=======
             v-if="!comment.isMine"
->>>>>>> develop
             :reportType="getReportType()"
             :reportedId="comment.id"
           />
@@ -67,10 +64,6 @@
       </v-flex>
     </v-card>
     <hr noshade color="#ddd" />
-<<<<<<< HEAD
-    <recomments :recomments="recomments" />
-=======
->>>>>>> develop
   </div>
 </template>
 
@@ -78,14 +71,10 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-<<<<<<< HEAD
-import Recomments from '@/components/comment/Recomments';
-=======
->>>>>>> develop
-import { REPORT_TYPE } from '@/utils/ReportType.js';
-import { mapActions, mapMutations } from 'vuex';
-import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
-import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
+import {REPORT_TYPE} from '@/utils/ReportType.js';
+import {mapActions, mapMutations} from 'vuex';
+import {LIKE_COMMENT, UNLIKE_COMMENT} from '@/store/shared/actionTypes';
+import {ACTIVATE_RECOMMENT} from '@/store/shared/mutationTypes';
 
 export default {
   name: 'Comment',
@@ -129,12 +118,7 @@ export default {
   components: {
     CreatedDate,
     CommentMenu,
-<<<<<<< HEAD
-    ReportButton,
-    Recomments
-=======
     ReportButton
->>>>>>> develop
   },
   props: {
     comment: {
@@ -158,13 +142,6 @@ export default {
         });
       }
     },
-<<<<<<< HEAD
-    getReportType() {
-      return REPORT_TYPE.COMMENT;
-    },
-    specifyMemberToRecomment() {
-      this.activateRecomment(this.comment.nickname);
-=======
     specifyMemberToRecomment() {
       this.activateRecomment(this.comment.nickname);
     },
@@ -175,7 +152,6 @@ export default {
       return this.comment.nickname === '작성자'
         ? '✒️ ' + this.comment.nickname
         : this.comment.nickname;
->>>>>>> develop
     }
   }
 };
