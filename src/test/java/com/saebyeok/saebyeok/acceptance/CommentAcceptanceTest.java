@@ -116,7 +116,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Long commentEId = createRecommentOf(ARTICLE_ID, commentBId);
 
         //then 선택한 댓글 아래에 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
-        List<CommentResponse> commentResponses = readRecommentOf(commentBId);
+        List<CommentResponse> commentResponses = readRecomments();
         assertThat(commentResponses).hasSize(2);
 
         //when 댓글 전체를 조회한다.
@@ -215,7 +215,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:on
     }
 
-    private List<CommentResponse> readRecommentOf(Long commentId) {
+    private List<CommentResponse> readRecomments() {
         //@formatter:off
         ArticleResponse articleResponse =
                 given().
@@ -229,7 +229,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:on
 
         return articleResponse.getComments().stream()
-                .filter(response -> commentId.equals(response.getParent()))
+                .filter(comment -> !comment.getHasNoParent())
                 .collect(Collectors.toList());
     }
 }

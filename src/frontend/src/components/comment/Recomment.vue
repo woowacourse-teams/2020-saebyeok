@@ -10,15 +10,15 @@
         <v-col cols="11" class="pa-0">
           <v-card-title class="pa-1 pb-0 pr-3">
             <div class="ml-2" style="font-size:14px; color:black;">
-              {{ recomment.nickname }}
+              {{ comment.nickname }}
             </div>
             <v-spacer />
             <v-card-actions class="pa-0">
-              <v-layout v-if="!recomment.isDeleted">
+              <v-layout v-if="!comment.isDeleted">
                 <div style="float:left;" class="mr-2">
                   <div class="like-button" v-on:click="toggleLike">
                     <v-icon
-                      v-if="recomment.isLikedByMe"
+                      v-if="comment.isLikedByMe"
                       style="font-size:20px; color: #96589b;"
                       class="mr-1"
                       >mdi-hand-heart</v-icon
@@ -27,15 +27,15 @@
                       >mdi-hand-heart-outline</v-icon
                     >
                     <span style="font-size:16px;">{{
-                      recomment.likesCount
+                      comment.likesCount
                     }}</span>
                   </div>
                 </div>
               </v-layout>
             </v-card-actions>
             <comment-menu
-              v-if="recomment.isMine && !recomment.isDeleted"
-              :commentId="recomment.id"
+              v-if="comment.isMine && !comment.isDeleted"
+              :commentId="comment.id"
             />
           </v-card-title>
 
@@ -43,25 +43,22 @@
             class="headline text-body-1 pb-0"
             style="color:rgb(0,0,0)"
           >
-            <div
-              v-if="recomment.isDeleted"
-              style="font-size:16px; color:black;"
-            >
+            <div v-if="comment.isDeleted" style="font-size:16px; color:black;">
               {{ deletedCommentMessage }}
             </div>
             <div v-else style="font-size:16px; color:black;">
-              {{ recomment.content }}
+              {{ comment.content }}
             </div>
           </v-card-text>
           <v-flex row ma-0 pa-0 pr-3>
             <div class="pl-4 pb-2 pt-2">
-              <created-date :createdDate="recomment.createdDate" />
+              <created-date :createdDate="comment.createdDate" />
             </div>
             <v-spacer />
             <div class="pb-2 pr-2">
               <report-button
                 :reportType="getReportType()"
-                :reportedId="recomment.id"
+                :reportedId="comment.id"
               />
             </div>
           </v-flex>
@@ -93,7 +90,7 @@ export default {
     ReportButton
   },
   props: {
-    recomment: {
+    comment: {
       type: Object,
       required: true
     }
@@ -101,20 +98,20 @@ export default {
   methods: {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
-      if (this.recomment.isLikedByMe) {
-        this.unlikeComment(this.recomment.id).then(() => {
-          this.recomment.isLikedByMe = false;
-          this.recomment.likesCount--;
+      if (this.comment.isLikedByMe) {
+        this.unlikeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = false;
+          this.comment.likesCount--;
         });
       } else {
-        this.likeComment(this.recomment.id).then(() => {
-          this.recomment.isLikedByMe = true;
-          this.recomment.likesCount++;
+        this.likeComment(this.comment.id).then(() => {
+          this.comment.isLikedByMe = true;
+          this.comment.likesCount++;
         });
       }
     },
     getReportType() {
-      return REPORT_TYPE.RECOMMENT;
+      return REPORT_TYPE.COMMENT;
     }
   }
 };

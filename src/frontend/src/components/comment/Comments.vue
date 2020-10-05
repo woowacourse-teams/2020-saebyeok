@@ -14,7 +14,12 @@
           cols="12"
           class="justify-center pt-0 pb-0"
         >
-          <comment :comment="comment"></comment>
+          <div v-if="comment.hasNoParent">
+            <comment :comment="comment" />
+          </div>
+          <div v-else>
+            <recomment :comment="comment" />
+          </div>
         </v-col>
       </v-row>
     </v-card>
