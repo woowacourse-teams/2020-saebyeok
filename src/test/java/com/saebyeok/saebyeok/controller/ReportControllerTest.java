@@ -1,17 +1,12 @@
 package com.saebyeok.saebyeok.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saebyeok.saebyeok.domain.Emotion;
 import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.SubEmotion;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
-import com.saebyeok.saebyeok.dto.ArticleResponse;
-import com.saebyeok.saebyeok.dto.EmotionResponse;
-import com.saebyeok.saebyeok.dto.SubEmotionResponse;
+import com.saebyeok.saebyeok.domain.report.CommentReport;
 import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.ArticleReportResponse;
+import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
-import com.saebyeok.saebyeok.exception.ReportNotFoundException;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,19 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,21 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReportControllerTest {
     private static final String API = "/api";
     public static final String TEST_ARTICLE_REPORT_CONTENT = "게시물에 대한 신고 본문입니다.";
+    public static final String TEST_COMMENT_REPORT_CONTENT = "댓글에 대한 신고 본문입니다.";
     private static final Long TEST_CATEGORY_ID = 1L;
     private static final String TEST_CATEGORY_NAME = "광고 게시물";
     private static final String TEST_CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";
     public static final Long TEST_ARTICLE_ID = 1L;
-    public static final Long TEST_ARTICLE_REPORT_ID_1 = 1L;
-    public static final Long TEST_ARTICLE_REPORT_ID_2 = 2L;
-    public static final Long TEST_INVALID_REPORT_ID = 10000L;
-    public static final boolean TEST_IS_LIKED_BY_ME = false;
-    private static final Emotion TEST_EMOTION = new Emotion(1L, "기뻐요", "이미지 리소스");
-    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
-    private static final Boolean TEST_IS_MINE = true;
-    private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
-    private static final Long TEST_ID = 1L;
-    private static final String TEST_CONTENT = "내용1";
-    private static final Long TEST_LIKES_COUNT = 10L;
+    public static final Long TEST_COMMENT_ID = 1L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -70,7 +50,6 @@ public class ReportControllerTest {
 
     private MockMvc mockMvc;
     private ReportCategoryResponse reportCategoryResponse;
-    private List<ArticleReportResponse> articleReportResponses;
 
     @BeforeEach
     void setUp(WebApplicationContext context) {
@@ -79,13 +58,6 @@ public class ReportControllerTest {
                 build();
 
         this.reportCategoryResponse = new ReportCategoryResponse(TEST_CATEGORY_ID, TEST_CATEGORY_NAME, TEST_CATEGORY_CONTENT);
-
-        List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        ArticleResponse articleResponse = new ArticleResponse(TEST_ID, TEST_CONTENT, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null);
-
-        articleReportResponses = new ArrayList<>();
-        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_1, TEST_ARTICLE_REPORT_CONTENT, articleResponse, reportCategoryResponse, false));
-        articleReportResponses.add(new ArticleReportResponse(TEST_ARTICLE_REPORT_ID_2, TEST_ARTICLE_REPORT_CONTENT, articleResponse, reportCategoryResponse, false));
     }
 
     @DisplayName("'/reports/categories'로 get 요청을 보내면 ReportCategory 리스트를 받는다.")
@@ -115,61 +87,19 @@ public class ReportControllerTest {
                 andDo(print());
     }
 
-    @DisplayName("'/reports/article'로 get 요청을 보내면 신고 목록을 반환한다.")
+    @DisplayName("'/reports/comment'로 post 요청을 보내면 글을 생성한다")
     @Test
-    void getArticleReportsTest() throws Exception {
-        when(reportService.getArticleReports(any(Member.class))).thenReturn(articleReportResponses);
+    void createCommentReportTest() throws Exception {
+        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, TEST_COMMENT_ID, TEST_CATEGORY_ID);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+        CommentReport commentReport = new CommentReport(TEST_COMMENT_REPORT_CONTENT, null, null, null);
 
-        this.mockMvc.perform(get(API + "/reports/article").
-                accept(MediaType.APPLICATION_JSON_VALUE)).
-                andExpect(jsonPath("$", hasSize(2))).
-                andExpect(jsonPath("$[0].id").value(TEST_ARTICLE_REPORT_ID_1)).
-                andExpect(jsonPath("$[0].content").value(TEST_ARTICLE_REPORT_CONTENT)).
-                andExpect(jsonPath("$[1].id").value(TEST_ARTICLE_REPORT_ID_2)).
-                andExpect(jsonPath("$[1].content").value(TEST_ARTICLE_REPORT_CONTENT));
-    }
+        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenReturn(commentReport);
 
-    @DisplayName("ID로 개별 신고 조회를 요청하면 해당 신고를 반환한다.")
-    @Test
-    void readArticleReportTest() throws Exception {
-        when(reportService.readArticleReport(any(Member.class), eq(TEST_ARTICLE_REPORT_ID_1))).thenReturn(articleReportResponses.get(0));
-
-        this.mockMvc.perform(get(API + "/reports/article/" + TEST_ARTICLE_REPORT_ID_1).
+        this.mockMvc.perform(post(API + "/reports/comment").
+                content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isOk()).
-                andExpect(jsonPath("$.id").value(TEST_ARTICLE_REPORT_ID_1)).
-                andExpect(jsonPath("$.content").value(TEST_ARTICLE_REPORT_CONTENT)).
-                andExpect(jsonPath("$.isFinished").value(false));
-    }
-
-    @DisplayName("에외 테스트 : 없는 ID로 신고 조회를 요청하면, ReportNotFoundException이 발생한다.")
-    @Test
-    void readArticleReportExceptionTest() throws Exception {
-        when(reportService.readArticleReport(any(Member.class), eq(TEST_INVALID_REPORT_ID))).
-                thenThrow(ReportNotFoundException.class);
-
-        this.mockMvc.perform(get(API + "/reports/article/" + TEST_INVALID_REPORT_ID).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isBadRequest());
-    }
-
-    @DisplayName("ID로 신고 삭제를 요청하면 해당 신고의 flag를 조정해 soft delete 처리한다.")
-    @Test
-    void deleteArticleReportTest() throws Exception {
-        doNothing().when(reportService).deleteArticleReport(any(Member.class), eq(TEST_ARTICLE_REPORT_ID_1));
-
-        this.mockMvc.perform(delete(API + "/reports/article/" + TEST_ARTICLE_REPORT_ID_1)).
-                andExpect(status().isNoContent());
-    }
-
-    @DisplayName("예외 테스트 : 없는 ID로 신고 삭제를 요청하면 ReportNotFoundException이 발생한다.")
-    @Test
-    void deleteArticleReportExceptionTest() throws Exception {
-        doThrow(new ReportNotFoundException(TEST_INVALID_REPORT_ID)).
-                when(reportService).deleteArticleReport(any(Member.class), eq(TEST_INVALID_REPORT_ID));
-
-        this.mockMvc.perform(delete(API + "/reports/article/" + TEST_INVALID_REPORT_ID).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isBadRequest());
+                andExpect(status().isCreated()).
+                andDo(print());
     }
 }

@@ -4,7 +4,9 @@ import com.saebyeok.saebyeok.controller.resolver.LoginMember;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.report.ArticleReport;
 import com.saebyeok.saebyeok.domain.report.CommentReport;
-import com.saebyeok.saebyeok.dto.report.*;
+import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
+import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
+import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class ReportController {
+    // TODO: 2020/10/05 현재 조회 로직 없이 생성 로직만 있어서, 부득이하게 인수테스트를 만들지 않았음. 추후 작성핟것.
     private final ReportService reportService;
 
     @GetMapping("/reports/categories")
@@ -35,30 +38,6 @@ public class ReportController {
                 build();
     }
 
-    @GetMapping("/reports/article")
-    public ResponseEntity<List<ArticleReportResponse>> getArticleReports(@LoginMember Member member) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        List<ArticleReportResponse> reportResponses = reportService.getArticleReports(member);
-
-        return ResponseEntity.ok(reportResponses);
-    }
-
-    @GetMapping("/reports/article/{reportId}")
-    public ResponseEntity<ArticleReportResponse> readArticleReport(@LoginMember Member member, @PathVariable Long reportId) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        ArticleReportResponse articleReportResponse = reportService.readArticleReport(member, reportId);
-
-        return ResponseEntity.ok(articleReportResponse);
-    }
-
-    @DeleteMapping("/reports/article/{reportId}")
-    public ResponseEntity<Void> deleteArticleReport(@LoginMember Member member, @PathVariable Long reportId) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        reportService.deleteArticleReport(member, reportId);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping("/reports/comment")
     public ResponseEntity<Void> createCommentReport(@LoginMember Member member, @RequestBody CommentReportCreateRequest request) {
         CommentReport commentReport = reportService.createCommentReport(member, request);
@@ -66,29 +45,5 @@ public class ReportController {
         return ResponseEntity.
                 created(URI.create("/reports/comment" + commentReport.getId())).
                 build();
-    }
-
-    @GetMapping("/reports/comment")
-    public ResponseEntity<List<CommentReportResponse>> getCommentReports(@LoginMember Member member) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        List<CommentReportResponse> reportResponses = reportService.getCommentReports(member);
-
-        return ResponseEntity.ok(reportResponses);
-    }
-
-    @GetMapping("/reports/comment/{reportId}")
-    public ResponseEntity<CommentReportResponse> readCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        CommentReportResponse commentReportResponse = reportService.readCommentReport(member, reportId);
-
-        return ResponseEntity.ok(commentReportResponse);
-    }
-
-    @DeleteMapping("/reports/comment/{reportId}")
-    public ResponseEntity<Void> deleteCommentReport(@LoginMember Member member, @PathVariable Long reportId) {
-        // TODO: 2020/09/21 admin 권한이 없다면 접근할 수 없도록 설정해야 함
-        reportService.deleteCommentReport(member, reportId);
-
-        return ResponseEntity.noContent().build();
     }
 }
