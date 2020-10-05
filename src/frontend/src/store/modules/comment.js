@@ -1,24 +1,15 @@
-import {
-  UPDATE_COMMENT_LIKES,
-  ACTIVATE_RECOMMENT,
-  DEACTIVATE_RECOMMENT
-} from '@/store/shared/mutationTypes';
-import {
-  CREATE_COMMENT,
-  DELETE_COMMENT,
-  LIKE_COMMENT,
-  UNLIKE_COMMENT
-} from '@/store/shared/actionTypes';
+import {ACTIVATE_RECOMMENT, DEACTIVATE_RECOMMENT, UPDATE_COMMENT_LIKES} from '@/store/shared/mutationTypes';
+import {CREATE_COMMENT, DELETE_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT} from '@/store/shared/actionTypes';
 
 import CommentService from '@/api/modules/comment';
 
 const state = {
-  isActiveRecomment: false,
-  targetNickname: ''
+    isActiveRecomment: false,
+    targetNickname: ''
 };
 
 const getters = {
-  isActiveRecomment(state) {
+    isActiveRecomment(state) {
     return state.isActiveRecomment;
   },
   targetNickname() {
@@ -45,26 +36,26 @@ const mutations = {
 const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_COMMENT]({ commit }, comment) {
-    return CommentService.create(comment).catch(error =>
-      commit('catchError', error)
-    );
+      return CommentService.create(comment).catch(error =>
+          commit('catchError', error)
+      );
   },
-  // eslint-disable-next-line no-unused-vars
-  async [DELETE_COMMENT]({ commit }, params) {
-    return CommentService.delete(params).catch(error =>
-      commit('catchError', error)
-    );
-  },
-  async [LIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.like(commentId)
-      .then(() => commit(UPDATE_COMMENT_LIKES, 1))
-      .catch(error => commit('catchError', error));
-  },
-  async [UNLIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.unlike(commentId)
-      .then(() => commit(UPDATE_COMMENT_LIKES, commentId, -1))
-      .catch(error => commit('catchError', error));
-  }
+    // eslint-disable-next-line no-unused-vars
+    async [DELETE_COMMENT]({commit}, params) {
+        return CommentService.delete(params).catch(error =>
+            commit('catchError', error)
+        );
+    },
+    async [LIKE_COMMENT]({commit}, params) {
+        return CommentService.like(params)
+            .then(() => commit(UPDATE_COMMENT_LIKES, 1))
+            .catch(error => commit('catchError', error));
+    },
+    async [UNLIKE_COMMENT]({commit}, params) {
+        return CommentService.unlike(params)
+            .then(() => commit(UPDATE_COMMENT_LIKES, -1))
+            .catch(error => commit('catchError', error));
+    }
 };
 
 export default {
