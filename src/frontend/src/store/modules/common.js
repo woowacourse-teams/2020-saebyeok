@@ -7,7 +7,7 @@ const getters = {};
 const mutations = {
   catchError(state, error) {
     if (error.response.status === STATUS.UNAUTHORIZED) {
-      location.href = '/signin';
+      this.commit('showRequestLoginModal');
     }
     if (error.response.status === STATUS.INTERNAL_SERVER_ERROR) {
       location.href = '/error';

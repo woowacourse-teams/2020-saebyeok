@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -89,6 +90,20 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$[0].isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 
+    @WithAnonymousUser
+    @DisplayName("비회원이 '/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
+    @Test
+    void getArticlesWithGuestUserTest() throws Exception {
+        when(articleService.getArticles(any(Member.class), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(Arrays.asList(articles.get(0)));
+
+        this.mockMvc.perform(get(API + "/articles?page=" + TEST_PAGE_NUMBER + "&size=" + TEST_PAGE_SIZE).
+                accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(jsonPath("$", hasSize(1))).
+                andExpect(jsonPath("$[0].content").value(TEST_CONTENT_1)).
+                andExpect(jsonPath("$[0].likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$[0].isLikedByMe").value(TEST_IS_LIKED_BY_ME));
+    }
+
     @DisplayName("'/articles'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createArticleTest() throws Exception {
@@ -121,6 +136,23 @@ class ArticleControllerTest {
     @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
     @Test
     void readArticleTest() throws Exception {
+        when(articleService.readArticle(any(Member.class), eq(TEST_ID_1))).thenReturn(articles.get(0));
+
+        this.mockMvc.perform(get(API + "/articles/" + TEST_ID_1).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.id").value(TEST_ID_1)).
+                andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
+                andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_1.getName())).
+                andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
+                andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
+                andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));
+    }
+
+    @WithAnonymousUser
+    @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
+    @Test
+    void readArticleWithGuestUserTest() throws Exception {
         when(articleService.readArticle(any(Member.class), eq(TEST_ID_1))).thenReturn(articles.get(0));
 
         this.mockMvc.perform(get(API + "/articles/" + TEST_ID_1).

@@ -4,7 +4,7 @@
     <v-card flat max-width="400" color="rgb(245,245,245)">
       <v-card-title class="pa-1 pb-0">
         <div class="ml-2" style="font-size:14px; color:black;">
-          {{ comment.nickname }}
+          {{ getCommentNickname() }}
         </div>
         <v-spacer />
         <v-card-actions class="pa-0">
@@ -56,6 +56,10 @@
         <v-spacer />
         <div class="pb-2 pr-2">
           <report-button
+<<<<<<< HEAD
+=======
+            v-if="!comment.isMine"
+>>>>>>> develop
             :reportType="getReportType()"
             :reportedId="comment.id"
           />
@@ -63,7 +67,10 @@
       </v-flex>
     </v-card>
     <hr noshade color="#ddd" />
+<<<<<<< HEAD
     <recomments :recomments="recomments" />
+=======
+>>>>>>> develop
   </div>
 </template>
 
@@ -71,7 +78,10 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
+<<<<<<< HEAD
 import Recomments from '@/components/comment/Recomments';
+=======
+>>>>>>> develop
 import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { mapActions, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
@@ -119,8 +129,12 @@ export default {
   components: {
     CreatedDate,
     CommentMenu,
+<<<<<<< HEAD
     ReportButton,
     Recomments
+=======
+    ReportButton
+>>>>>>> develop
   },
   props: {
     comment: {
@@ -144,11 +158,24 @@ export default {
         });
       }
     },
+<<<<<<< HEAD
     getReportType() {
       return REPORT_TYPE.COMMENT;
     },
     specifyMemberToRecomment() {
       this.activateRecomment(this.comment.nickname);
+=======
+    specifyMemberToRecomment() {
+      this.activateRecomment(this.comment.nickname);
+    },
+    getReportType() {
+      return REPORT_TYPE.COMMENT;
+    },
+    getCommentNickname() {
+      return this.comment.nickname === '작성자'
+        ? '✒️ ' + this.comment.nickname
+        : this.comment.nickname;
+>>>>>>> develop
     }
   }
 };

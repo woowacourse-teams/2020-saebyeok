@@ -7,18 +7,18 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
-      <logout-button />
+      <setting-button />
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
 
 <script>
-import LogoutButton from '@/components/LogoutButton';
+import SettingButton from '@/components/SettingButton';
 
 export default {
   name: 'DiaryHeader',
   components: {
-    LogoutButton
+    SettingButton
   }
 };
 </script>
