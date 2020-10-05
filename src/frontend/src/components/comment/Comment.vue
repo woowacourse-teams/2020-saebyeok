@@ -71,10 +71,10 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-import {REPORT_TYPE} from '@/utils/ReportType.js';
-import {mapActions, mapMutations} from 'vuex';
-import {LIKE_COMMENT, UNLIKE_COMMENT} from '@/store/shared/actionTypes';
-import {ACTIVATE_RECOMMENT} from '@/store/shared/mutationTypes';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { mapActions, mapMutations } from 'vuex';
+import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
+import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 
 export default {
   name: 'Comment',
