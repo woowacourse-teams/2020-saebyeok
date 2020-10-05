@@ -111,7 +111,10 @@ export default {
       }
     },
     specifyMemberToRecomment() {
-      this.activateRecomment(this.comment.nickname);
+      this.activateRecomment({
+        targetNickname: this.comment.nickname,
+        targetCommentId: this.comment.id
+      });
     },
     getReportType() {
       return REPORT_TYPE.COMMENT;

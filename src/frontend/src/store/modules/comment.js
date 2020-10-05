@@ -14,7 +14,8 @@ import CommentService from '@/api/modules/comment';
 
 const state = {
   isActiveRecomment: false,
-  targetNickname: ''
+  targetNickname: '',
+  targetCommentId: null
 };
 
 const getters = {
@@ -23,6 +24,9 @@ const getters = {
   },
   targetNickname() {
     return state.targetNickname;
+  },
+  targetCommentId() {
+    return state.targetCommentId;
   }
 };
 
@@ -32,12 +36,14 @@ const mutations = {
     // this.comment.value += value;
     console.log(state, value);
   },
-  [ACTIVATE_RECOMMENT](state, nickname) {
-    state.targetNickname = nickname;
+  [ACTIVATE_RECOMMENT](state, payload) {
+    state.targetNickname = payload.targetNickname;
+    state.targetCommentId = payload.targetCommentId;
     state.isActiveRecomment = true;
   },
   [DEACTIVATE_RECOMMENT](state) {
     state.targetNickname = '';
+    state.targetCommentId = null;
     state.isActiveRecomment = false;
   }
 };

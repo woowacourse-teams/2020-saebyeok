@@ -34,10 +34,12 @@
 </template>
 <script>
 import Comment from '@/components/comment/Comment';
+import Recomment from '@/components/comment/Recomment';
 export default {
   name: 'Comments',
   components: {
-    Comment
+    Comment,
+    Recomment
   },
   data() {
     return {

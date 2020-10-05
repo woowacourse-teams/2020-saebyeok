@@ -59,7 +59,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
      * then 댓글 목록의 조회에 성공한다. (A, B, C 순으로 조회된다.)
      * <p>
      * when 대댓글을 달고자 하는 댓글(B)을 선택하여 2개(D, E) 게시한다.
-     * then 선택한 댓글 아래에 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
+     * then 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
      * <p>
      * when 댓글 전체를 조회한다.
      * then 댓글 목록의 조회에 성공한다. (A -> B -> D -> E -> C 순으로 조회된다.)
@@ -115,7 +115,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Long commentDId = createRecommentOf(ARTICLE_ID, commentBId);
         Long commentEId = createRecommentOf(ARTICLE_ID, commentBId);
 
-        //then 선택한 댓글 아래에 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
+        //then 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
         List<CommentResponse> commentResponses = readRecomments();
         assertThat(commentResponses).hasSize(2);
 

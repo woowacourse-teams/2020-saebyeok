@@ -51,7 +51,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isActiveRecomment', 'targetNickname'])
+    ...mapGetters(['isActiveRecomment', 'targetNickname', 'targetCommentId'])
   },
   methods: {
     ...mapActions([CREATE_COMMENT]),
@@ -68,7 +68,8 @@ export default {
 
       const commentCreateRequest = {
         content: this.content,
-        articleId: this.articleId
+        articleId: this.articleId,
+        parent: this.targetCommentId
       };
 
       this.createComment(commentCreateRequest).then(response => {
