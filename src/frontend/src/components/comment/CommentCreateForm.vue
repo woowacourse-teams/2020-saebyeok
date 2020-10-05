@@ -1,7 +1,18 @@
 <template>
   <v-container pa-0 class="d-flex justify-center" style="max-width: 400px">
     <v-layout column>
-      <v-flex class="d-flex justify-end align-center">
+      <div v-if="isActiveRecomment">
+        <hr noshade color="#ddd" />
+        <v-flex class="d-flex" style="background-color: #e4e4e4">
+          <v-col class="py-1">{{ targetNickname }}에게 답글</v-col>
+          <div class="py-1 pr-2">
+            <v-icon @click="deactivateRecomment">
+              mdi-close-circle-outline
+            </v-icon>
+          </div>
+        </v-flex>
+      </div>
+      <v-flex class="d-flex">
         <v-textarea
           solo
           auto-grow
@@ -12,7 +23,7 @@
           v-model="content"
           maxlength="140"
         />
-        <div class="align-top">
+        <div>
           <v-icon class="ma-2" @click="submitComment" :color="buttonColor">
             mdi-send
           </v-icon>
@@ -23,8 +34,11 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex';
-import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import {
+  SHOW_SNACKBAR,
+  DEACTIVATE_RECOMMENT
+} from '@/store/shared/mutationTypes';
 import { CREATE_COMMENT } from '@/store/shared/actionTypes';
 import { STATUS } from '../../utils/Status';
 
@@ -36,9 +50,12 @@ export default {
       buttonColor: '#666666'
     };
   },
+  computed: {
+    ...mapGetters(['isActiveRecomment', 'targetNickname'])
+  },
   methods: {
     ...mapActions([CREATE_COMMENT]),
-    ...mapMutations([SHOW_SNACKBAR]),
+    ...mapMutations([SHOW_SNACKBAR, DEACTIVATE_RECOMMENT]),
     async submitComment() {
       this.buttonColor = '#96589b';
 
