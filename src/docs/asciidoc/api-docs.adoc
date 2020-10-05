@@ -88,25 +88,25 @@ operation::analysis/comments[snippets='http-request,http-response,request-header
 [[resources-likes]]
 == Likes
 
-[[resources-likes-article]]
+[[resources-article-likes-create]]
 === 게시글 공감
 
-operation::likes/article[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
+operation::likes/article-likes/create[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
 
-[[resources-unlikes-article]]
+[[resources-article-likes-delete]]
 === 게시글 공감 취소
 
-operation::unlikes/article[snippets='http-request,http-response,path-parameters,request-headers']
+operation::likes/article-likes/delete[snippets='http-request,http-response,path-parameters,request-headers']
 
-[[resources-likes-comment]]
+[[resources-comment-likes-create]]
 === 댓글 공감
 
-operation::likes/comment[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
+operation::likes/comment-likes/create[snippets='http-request,http-response,path-parameters,request-headers,response-headers']
 
-[[resources-unlikes-comment]]
+[[resources-comment-likes-delete]]
 === 댓글 공감 취소
 
-operation::unlikes/comment[snippets='http-request,http-response,path-parameters,request-headers']
+operation::likes/comment-likes/delete[snippets='http-request,http-response,path-parameters,request-headers']
 
 [[resources-reports]]
 == Reports
