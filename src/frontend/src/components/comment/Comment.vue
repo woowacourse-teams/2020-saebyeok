@@ -4,7 +4,7 @@
     <v-card flat max-width="400" color="rgb(245,245,245)">
       <v-card-title class="pa-1 pb-0">
         <div class="ml-2" style="font-size:14px; color:black;">
-          {{ comment.nickname }}
+          {{ getCommentNickname() }}
         </div>
         <v-spacer />
         <v-card-actions class="pa-0">
@@ -49,20 +49,29 @@
           {{ comment.content }}
         </div>
       </v-card-text>
-      <div class="pl-4 pb-2">
-        <created-date :createdDate="comment.createdDate" />
-      </div>
+      <v-flex row ma-0 pa-0>
+        <div class="pl-4 pb-2 pt-2">
+          <created-date :createdDate="comment.createdDate" />
+        </div>
+        <v-spacer />
+        <div class="pb-2 pr-2">
+          <report-button
+            v-if="!comment.isMine"
+            :reportType="getReportType()"
+            :reportedId="comment.id"
+          />
+        </div>
+      </v-flex>
     </v-card>
     <hr noshade color="#ddd" />
-    <!-- 추후에 아래의 recomments를 comment.recomments로 수정해야 함 -->
-    <recomments :recomments="recomments" />
   </div>
 </template>
 
 <script>
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
-import Recomments from '@/components/comment/Recomments';
+import ReportButton from '@/components/ReportButton';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { mapActions, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
@@ -109,7 +118,7 @@ export default {
   components: {
     CreatedDate,
     CommentMenu,
-    Recomments
+    ReportButton
   },
   props: {
     comment: {
@@ -135,6 +144,14 @@ export default {
     },
     specifyMemberToRecomment() {
       this.activateRecomment(this.comment.nickname);
+    },
+    getReportType() {
+      return REPORT_TYPE.COMMENT;
+    },
+    getCommentNickname() {
+      return this.comment.nickname === '작성자'
+        ? '✒️ ' + this.comment.nickname
+        : this.comment.nickname;
     }
   }
 };

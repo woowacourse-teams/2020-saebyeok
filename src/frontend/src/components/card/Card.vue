@@ -13,9 +13,13 @@
           </v-flex>
         </v-layout>
       </v-card-title>
-
-      <v-card-text class="headline text-body-1 pb-0" style="color:rgb(0,0,0)">
-        {{ article.content }}
+      <v-card-text
+        class="headline text-body-1 pb-0"
+        style="color:rgb(0,0,0); min-height:10px"
+        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+        v-linkified
+        @click="clickCardContent()"
+      >
       </v-card-text>
 
       <v-card-actions>
@@ -55,6 +59,14 @@
                 >
                 <span class="subheading">{{ article.comments.length }}</span>
               </div>
+              <v-spacer />
+            </v-col>
+            <v-col align="right" justify="end" style="padding:0px" cols="2">
+              <report-button
+                v-if="!article.isMine"
+                :reportType="getReportType()"
+                :reportedId="article.id"
+              />
             </v-col>
           </v-row>
         </v-list-item>
@@ -67,9 +79,13 @@
 import CreatedDate from '@/components/CreatedDate';
 import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
-import DetailCardMenu from '@/components/card/DetailCardMenu.vue';
+import ReportButton from '@/components/ReportButton';
+import DetailCardMenu from '@/components/card/DetailCardMenu';
+import { REPORT_TYPE } from '@/utils/ReportType.js';
+
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import linkify from 'vue-linkify';
 
 export default {
   name: 'Card',
@@ -77,7 +93,11 @@ export default {
     CreatedDate,
     EmotionImage,
     SubEmotionChips,
+    ReportButton,
     DetailCardMenu
+  },
+  directives: {
+    linkified: linkify
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
@@ -94,6 +114,12 @@ export default {
           this.article.likesCount++;
         });
       }
+    },
+    getReportType() {
+      return REPORT_TYPE.ARTICLE;
+    },
+    clickCardContent() {
+      this.$emit('clickCardContent');
     }
   },
   props: {

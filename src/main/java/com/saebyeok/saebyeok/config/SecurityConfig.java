@@ -7,12 +7,15 @@ import com.saebyeok.saebyeok.security.SuccessHandler;
 import com.saebyeok.saebyeok.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -34,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/feed", "/api/articles/**", "/api/emotions", "/api/reports/categories").permitAll()
                     .antMatchers("/api/**").authenticated()
                 .and()
                     .logout()

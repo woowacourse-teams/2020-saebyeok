@@ -1,7 +1,15 @@
 <template>
   <div>
+    <Tutorial
+      :dialog="this.tutorialDialog"
+      @closeTutorial="closeTutorial"
+    ></Tutorial>
     <div class="mt-4 overflow-y-auto">
-      <cards :articles="articles" />
+      <cards
+        :articles="articles"
+        :noArticlesMessage="this.noArticlesMessage"
+        :isFiltered="this.isFiltered"
+      />
     </div>
     <infinite-loading
       v-if="articles.length"
@@ -10,6 +18,7 @@
       force-use-infinite-wrapper="cards"
       spinner="waveDots"
     >
+      <div slot="no-results"></div>
       <div slot="no-more" class="mt-4">
         지난 일주일 동안 올라온 모든 이야기를 다 읽으셨네요 :)
       </div>
@@ -29,6 +38,7 @@ import {
 } from '@/store/shared/actionTypes';
 import Cards from '@/components/card/Cards.vue';
 import InfiniteLoading from 'vue-infinite-loading';
+import Tutorial from '@/components/Tutorial.vue';
 
 export default {
   name: 'Feed',
@@ -38,14 +48,22 @@ export default {
       size: 5,
       emotionIds: '',
       infiniteId: +new Date(),
-      isFiltered: false
+      isFiltered: false,
+      tutorialDialog: true,
+      noArticlesMessage: '지난 일주일 동안 올라온 이야기가 없네요 😭'
     };
   },
   components: {
     Cards,
-    InfiniteLoading
+    InfiniteLoading,
+    Tutorial
   },
   created() {
+    const tutorialCheckValue = localStorage.getItem('tutorial_check');
+    if (tutorialCheckValue === 'yes') {
+      this.tutorialDialog = false;
+    }
+
     try {
       this.fetchArticles({
         page: this.page,
@@ -97,6 +115,9 @@ export default {
           console.error(error);
         }
       }, 500);
+    },
+    closeTutorial() {
+      this.tutorialDialog = false;
     }
   },
   watch: {
