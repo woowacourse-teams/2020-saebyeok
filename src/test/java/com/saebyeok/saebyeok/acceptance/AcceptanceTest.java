@@ -70,9 +70,9 @@ public class AcceptanceTest {
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
+        when().
                 post(API + "/articles").
-                then().
+        then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
         //@formatter:on

@@ -131,9 +131,9 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
+        when().
                 post(API + "/articles/" + ARTICLE_ID + "/comments").
-                then().
+        then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
                 header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
@@ -145,17 +145,17 @@ class CommentAcceptanceTest extends AcceptanceTest {
         params.put("content", content);
 
         return
-                given().
-                        auth().oauth2(TOKEN).
-                        body(params).
-                        contentType(MediaType.APPLICATION_JSON_VALUE).
-                        accept(MediaType.APPLICATION_JSON_VALUE).
-                        when().
-                        post(API + "/articles/" + ARTICLE_ID + "/comments").
-                        then().
-                        log().all().
-                        statusCode(HttpStatus.BAD_REQUEST.value()).
-                        extract().as(ExceptionResponse.class);
+            given().
+                    auth().oauth2(TOKEN).
+                    body(params).
+                    contentType(MediaType.APPLICATION_JSON_VALUE).
+                    accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+                    post(API + "/articles/" + ARTICLE_ID + "/comments").
+            then().
+                    log().all().
+                    statusCode(HttpStatus.BAD_REQUEST.value()).
+                    extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 
@@ -163,9 +163,9 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         given().
                 auth().oauth2(TOKEN).
-                when().
+        when().
                 delete(API + "/articles/" + ARTICLE_ID + "/comments/" + deletedId).
-                then().
+        then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
         //@formatter:on
@@ -174,14 +174,14 @@ class CommentAcceptanceTest extends AcceptanceTest {
     private ExceptionResponse deleteNotFoundComment() {
         //@formatter:off
         return
-                given().
-                        auth().oauth2(TOKEN).
-                        when().
-                        delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
-                        then().
-                        log().all().
-                        statusCode(HttpStatus.BAD_REQUEST.value()).
-                        extract().as(ExceptionResponse.class);
+            given().
+                    auth().oauth2(TOKEN).
+            when().
+                    delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
+            then().
+                    log().all().
+                    statusCode(HttpStatus.BAD_REQUEST.value()).
+                    extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 }
