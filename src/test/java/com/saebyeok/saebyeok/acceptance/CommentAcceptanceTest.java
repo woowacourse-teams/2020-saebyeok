@@ -31,7 +31,10 @@ class CommentAcceptanceTest extends AcceptanceTest {
         createArticle("content", EMOTION_ID, SUB_EMOTION_IDS, true);
 
         params = new HashMap<>();
-
+        params.put("memberId", MEMBER_ID);
+        params.put("nickname", TEST_NICKNAME);
+        params.put("articleId", ARTICLE_ID);
+        params.put("isDeleted", false);
     }
 
     /**
@@ -116,29 +119,43 @@ class CommentAcceptanceTest extends AcceptanceTest {
 
         //then 댓글 삭제에 실패한다.
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
-                .contains("에 해당하는 댓글을 찾을 수 없습니다.");
+                .contains("에 해당하는 댓글을 찾을 수 없습니다");
+    }
+
+    private void createComment(Long createdId) {
+        //@formatter:off
+        params.put("content", "새벽 좋아요");
+
+        given().
+                auth().oauth2(TOKEN).
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                post(API + "/articles/" + ARTICLE_ID + "/comments").
+                then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
+        //@formatter:on
     }
 
     private ExceptionResponse createInvalidComment(String content) {
         //@formatter:off
-        params.put("memberId", MEMBER_ID);
-        params.put("nickname", TEST_NICKNAME);
-        params.put("articleId", ARTICLE_ID);
-        params.put("isDeleted", false);
         params.put("content", content);
 
         return
-            given().
-                    auth().oauth2(TOKEN).
-                    body(params).
-                    contentType(MediaType.APPLICATION_JSON_VALUE).
-                    accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-                    post(API + "/articles/" + ARTICLE_ID + "/comments").
-            then().
-                    log().all().
-                    statusCode(HttpStatus.BAD_REQUEST.value()).
-                    extract().as(ExceptionResponse.class);
+                given().
+                        auth().oauth2(TOKEN).
+                        body(params).
+                        contentType(MediaType.APPLICATION_JSON_VALUE).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                        when().
+                        post(API + "/articles/" + ARTICLE_ID + "/comments").
+                        then().
+                        log().all().
+                        statusCode(HttpStatus.BAD_REQUEST.value()).
+                        extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 
@@ -146,9 +163,9 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         given().
                 auth().oauth2(TOKEN).
-        when().
+                when().
                 delete(API + "/articles/" + ARTICLE_ID + "/comments/" + deletedId).
-        then().
+                then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value());
         //@formatter:on
@@ -157,14 +174,14 @@ class CommentAcceptanceTest extends AcceptanceTest {
     private ExceptionResponse deleteNotFoundComment() {
         //@formatter:off
         return
-            given().
-                    auth().oauth2(TOKEN).
-            when().
-                    delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.BAD_REQUEST.value()).
-                    extract().as(ExceptionResponse.class);
+                given().
+                        auth().oauth2(TOKEN).
+                        when().
+                        delete(API + "/articles/" + ARTICLE_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
+                        then().
+                        log().all().
+                        statusCode(HttpStatus.BAD_REQUEST.value()).
+                        extract().as(ExceptionResponse.class);
         //@formatter:on
     }
 }
