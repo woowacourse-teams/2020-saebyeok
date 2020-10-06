@@ -40,8 +40,8 @@ const mutations = {
   [ADD_ARTICLES](state, articles) {
     state.articles = state.articles.concat(articles);
   },
-  [UPDATE_ARTICLE_LIKES](state, value) {
-    state.articles.likesCount += value;
+  [UPDATE_ARTICLE_LIKES](state, article) {
+    state.article = article;
   }
 };
 
@@ -86,14 +86,20 @@ const actions = {
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);
   },
-  async [LIKE_ARTICLE]({ commit }, articleId) {
-    return ArticleService.like(articleId)
-      .then(() => commit(UPDATE_ARTICLE_LIKES, 1))
+  async [LIKE_ARTICLE]({ commit }, article) {
+    article.likesCount += 1;
+    article.isLikedByMe = true;
+
+    return ArticleService.like(article.id)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, article))
       .catch(error => commit('catchError', error));
   },
-  async [UNLIKE_ARTICLE]({ commit }, articleId) {
-    return ArticleService.unlike(articleId)
-      .then(() => commit(UPDATE_ARTICLE_LIKES, -1))
+  async [UNLIKE_ARTICLE]({ commit }, article) {
+    article.likesCount -= 1;
+    article.isLikedByMe = false;
+
+    return ArticleService.unlike(article.id)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, article))
       .catch(error => commit('catchError', error));
   }
 };
