@@ -65,7 +65,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void manageComment() {
         //when 로그인한 회원이 저장된 글에 댓글을 쓰려고 한다.
-        createComment(1L);
+        createComment(ARTICLE_ID, COMMENT_CONTENT);
 
         //then 댓글이 등록에 성공한다.
         ArticleResponse articleResponse = readArticle(ARTICLE_ID);
@@ -91,8 +91,8 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(String.format("댓글은 %d자 이상 %d자 이하로 작성할 수 있어요.", Comment.MIN_LENGTH, Comment.MAX_LENGTH));
 
         //given 댓글을 여러 개 등록한다.
-        createComment(2L);
-        createComment(3L);
+        createComment(ARTICLE_ID, COMMENT_CONTENT);
+        createComment(ARTICLE_ID, COMMENT_CONTENT);
 
         //when 게시글에 달린 댓글을 모두 조회한다.
         articleResponse = readArticle(ARTICLE_ID);
@@ -120,24 +120,6 @@ class CommentAcceptanceTest extends AcceptanceTest {
         //then 댓글 삭제에 실패한다.
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
                 .contains("에 해당하는 댓글을 찾을 수 없습니다!");
-    }
-
-    private void createComment(Long createdId) {
-        //@formatter:off
-        params.put("content", "새벽 좋아요");
-
-        given().
-                auth().oauth2(TOKEN).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles/" + ARTICLE_ID + "/comments").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value()).
-                header("Location","/articles/" + ARTICLE_ID + "/comments/" + createdId);
-        //@formatter:on
     }
 
     private ExceptionResponse createInvalidComment(String content) {
