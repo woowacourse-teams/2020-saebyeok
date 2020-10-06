@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class ReportController {
-    // TODO: 2020/10/05 현재 조회 로직 없이 생성 로직만 있어서, 부득이하게 인수테스트를 만들지 않았음. 추후 작성핟것.
     private final ReportService reportService;
 
     @GetMapping("/reports/categories")

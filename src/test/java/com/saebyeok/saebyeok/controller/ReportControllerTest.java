@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
 public class ReportControllerTest {
+    // TODO: 2020/10/05 ReportController에 조회 로직 없이 생성 로직만 있어서, 부득이하게 인수테스트를 만들지 않았음. 추후 기능추가시 작성해보자.
     private static final String API = "/api";
     public static final String TEST_ARTICLE_REPORT_CONTENT = "게시물에 대한 신고 본문입니다.";
     public static final String TEST_COMMENT_REPORT_CONTENT = "댓글에 대한 신고 본문입니다.";
