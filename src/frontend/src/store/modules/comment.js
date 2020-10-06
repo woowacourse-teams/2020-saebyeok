@@ -42,6 +42,10 @@ const mutations = {
   },
   [SET_COMMENTS](state, comments) {
     state.comments = comments;
+  },
+  [UPDATE_COMMENT_LIKES](state, comment) {
+    const index = state.comments.findIndex(it => it.id === comment.id);
+    state.comments.splice(index, 1, comment);
   }
 };
 
@@ -58,14 +62,28 @@ const actions = {
       commit('catchError', error)
     );
   },
-  async [LIKE_COMMENT]({ commit }, params) {
-    return CommentService.like(params)
-      .then(() => commit(UPDATE_COMMENT_LIKES, 1))
+  async [LIKE_COMMENT]({ commit, rootGetters }, comment) {
+    const currentArticle = rootGetters.article;
+    comment.likesCount += 1;
+    comment.isLikedByMe = true;
+
+    return CommentService.like({
+      articleId: currentArticle.id,
+      commentId: comment.id
+    })
+      .then(() => commit(UPDATE_COMMENT_LIKES, comment))
       .catch(error => commit('catchError', error));
   },
-  async [UNLIKE_COMMENT]({ commit }, params) {
-    return CommentService.unlike(params)
-      .then(() => commit(UPDATE_COMMENT_LIKES, -1))
+  async [UNLIKE_COMMENT]({ commit, rootGetters }, comment) {
+    const currentArticle = rootGetters.article;
+    comment.likesCount -= 1;
+    comment.isLikedByMe = false;
+
+    return CommentService.unlike({
+      articleId: currentArticle.id,
+      commentId: comment.id
+    })
+      .then(() => commit(UPDATE_COMMENT_LIKES, comment))
       .catch(error => commit('catchError', error));
   }
 };
