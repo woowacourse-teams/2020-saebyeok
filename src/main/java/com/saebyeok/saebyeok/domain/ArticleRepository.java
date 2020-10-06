@@ -17,5 +17,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     public List<Article> findAllByMemberAndIsDeleted(Member member, Boolean isDeleted, Pageable pageable);
 
+    public List<Article> findAllByMemberAndCreatedDateGreaterThanEqualAndIsDeleted(Member member, LocalDateTime date, boolean isDeleted);
+
     public Optional<Article> findByIdAndMemberEqualsAndIsDeleted(Long id, Member member, Boolean isDeleted);
 }

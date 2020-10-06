@@ -14,12 +14,13 @@ import java.util.stream.Collectors;
 public class AnalysisService {
     private static final int INQUIRY_DAYS = 30;
 
+    private final ArticleService articleService;
     private final EmotionService emotionService;
     private final ArticleEmotionService articleEmotionService;
     private final CommentService commentService;
 
     public List<Integer> findArticleEmotionsCount(Member member) {
-        List<Article> memberArticles = member.getArticles();
+        List<Article> memberArticles = articleService.getLast1MonthArticles(member);
         List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
         return articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds);
