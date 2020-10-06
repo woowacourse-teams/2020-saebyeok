@@ -36,8 +36,7 @@ public class ReportService {
 
     @Transactional
     public ArticleReport createArticleReport(Member member, ArticleReportCreateRequest request) {
-        ReportCategory reportCategory = reportCategoryRepository.findById(request.getReportCategoryId()).
-                orElseThrow(() -> new ReportCategoryNotFoundException(request.getReportCategoryId()));
+        ReportCategory reportCategory = readReportCategory(request.getReportCategoryId());
         Article article = articleService.findArticleById(request.getArticleId());
 
         ArticleReport articleReport = request.toArticleReport(member, article, reportCategory);
@@ -47,12 +46,16 @@ public class ReportService {
 
     @Transactional
     public CommentReport createCommentReport(Member member, CommentReportCreateRequest request) {
-        ReportCategory reportCategory = reportCategoryRepository.findById(request.getReportCategoryId()).
-                orElseThrow(() -> new ReportCategoryNotFoundException(request.getReportCategoryId()));
+        ReportCategory reportCategory = readReportCategory(request.getReportCategoryId());
         Comment comment = commentService.findCommentById(request.getCommentId());
 
         CommentReport commentReport = request.toCommentReport(member, comment, reportCategory);
 
         return commentReportRepository.save(commentReport);
+    }
+
+    private ReportCategory readReportCategory(Long reportCategoryId) {
+        return reportCategoryRepository.findById(reportCategoryId).
+                orElseThrow(() -> new ReportCategoryNotFoundException(reportCategoryId));
     }
 }
