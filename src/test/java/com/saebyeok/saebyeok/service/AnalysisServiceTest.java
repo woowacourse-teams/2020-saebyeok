@@ -26,6 +26,9 @@ public class AnalysisServiceTest {
     private AnalysisService analysisService;
 
     @Mock
+    private ArticleService articleService;
+
+    @Mock
     private EmotionService emotionService;
 
     @Mock
@@ -36,7 +39,7 @@ public class AnalysisServiceTest {
 
     @BeforeEach
     void setUp() {
-        analysisService = new AnalysisService(emotionService, articleEmotionService, commentService);
+        analysisService = new AnalysisService(articleService, emotionService, articleEmotionService, commentService);
 
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(),
                                  false, Role.USER, new ArrayList<>());

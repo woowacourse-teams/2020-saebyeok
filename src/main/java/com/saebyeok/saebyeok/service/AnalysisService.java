@@ -27,7 +27,7 @@ public class AnalysisService {
     }
 
     public Long findMostEmotionId(Member member) {
-        List<Article> articlesByMemberAndInquiryDays = member.getArticles().stream()
+        List<Article> articlesByMemberAndInquiryDays = articleService.getLast1MonthArticles(member).stream()
                 .filter(article -> article.getCreatedDate().isAfter(article.getCreatedDate().minusDays(INQUIRY_DAYS)))
                 .collect(Collectors.toList());
 
