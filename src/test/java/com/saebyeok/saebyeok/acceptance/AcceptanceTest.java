@@ -48,9 +48,9 @@ public class AcceptanceTest {
                 given().
                         auth().oauth2(TOKEN).
                         accept(MediaType.APPLICATION_JSON_VALUE).
-                        when().
+                when().
                         get(API + "/articles/" + id).
-                        then().
+                then().
                         log().all().
                         extract().
                         as(ArticleResponse.class);

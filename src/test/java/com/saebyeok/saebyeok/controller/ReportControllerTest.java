@@ -7,6 +7,9 @@ import com.saebyeok.saebyeok.domain.report.CommentReport;
 import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
+import com.saebyeok.saebyeok.exception.CommentNotFoundException;
+import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -88,6 +91,36 @@ public class ReportControllerTest {
                 andDo(print());
     }
 
+    @DisplayName("예외 테스트 : 게시글 신고 생성 요청에 함께 전달된 articleId가 존재하지 않을 경우, 예외가 발생한다")
+    @Test
+    void noExistArticleIdTest() throws Exception {
+        when(reportService.createArticleReport(any(Member.class), any(ArticleReportCreateRequest.class))).thenThrow(ArticleNotFoundException.class);
+
+        ArticleReportCreateRequest request = new ArticleReportCreateRequest(TEST_ARTICLE_REPORT_CONTENT, null, TEST_CATEGORY_ID);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/reports/article").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
+                andDo(print());
+    }
+
+    @DisplayName("예외 테스트 : 게시글 신고 생성 요청에 함께 전달된 reportCategoryId가 존재하지 않을 경우, 예외가 발생한다")
+    @Test
+    void noExistCategoryIdInArticleReportTest() throws Exception {
+        when(reportService.createArticleReport(any(Member.class), any(ArticleReportCreateRequest.class))).thenThrow(ReportCategoryNotFoundException.class);
+
+        ArticleReportCreateRequest request = new ArticleReportCreateRequest(TEST_ARTICLE_REPORT_CONTENT, TEST_ARTICLE_ID, null);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/reports/article").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
+                andDo(print());
+    }
+
     @DisplayName("'/reports/comment'로 post 요청을 보내면 글을 생성한다")
     @Test
     void createCommentReportTest() throws Exception {
@@ -101,6 +134,36 @@ public class ReportControllerTest {
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
+                andDo(print());
+    }
+
+    @DisplayName("예외 테스트 : 댓글 신고 생성 요청에 함께 전달된 commentId가 존재하지 않을 경우, 예외가 발생한다")
+    @Test
+    void noExistCommentIdTest() throws Exception {
+        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenThrow(CommentNotFoundException.class);
+
+        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, null, TEST_CATEGORY_ID);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/reports/comment").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
+                andDo(print());
+    }
+
+    @DisplayName("예외 테스트 : 댓글 신고 생성 요청에 함께 전달된 reportCategoryId가 존재하지 않을 경우, 예외가 발생한다")
+    @Test
+    void noExistCategoryIdInCommentReportTest() throws Exception {
+        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenThrow(ReportCategoryNotFoundException.class);
+
+        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, TEST_COMMENT_ID, null);
+        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
+
+        this.mockMvc.perform(post(API + "/reports/comment").
+                content(requestAsString).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isBadRequest()).
                 andDo(print());
     }
 }
