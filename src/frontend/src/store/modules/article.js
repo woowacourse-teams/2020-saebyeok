@@ -56,6 +56,7 @@ const actions = {
     return ArticleService.get(articleId)
       .then(({ data }) => {
         commit(SET_ARTICLE, data);
+        commit('setComments', data.comments);
         return data;
       })
       .catch(error => commit('catchError', error));
