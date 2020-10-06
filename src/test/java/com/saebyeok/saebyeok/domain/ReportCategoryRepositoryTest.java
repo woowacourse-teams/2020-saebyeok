@@ -31,6 +31,7 @@ public class ReportCategoryRepositoryTest {
     @BeforeEach
     @Transactional
     void setUp() {
+        reportCategoryRepository.deleteAll();
         reportCategory1 = new ReportCategory(1L, "분류1", "설명1");
         reportCategory2 = new ReportCategory(2L, "분류2", "설명2");
         reportCategory3 = new ReportCategory(3L, "분류3", "설명3");

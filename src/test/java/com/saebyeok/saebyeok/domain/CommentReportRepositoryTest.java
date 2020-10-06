@@ -4,7 +4,6 @@ import com.saebyeok.saebyeok.domain.report.CommentReport;
 import com.saebyeok.saebyeok.domain.report.CommentReportRepository;
 import com.saebyeok.saebyeok.domain.report.ReportCategory;
 import com.saebyeok.saebyeok.domain.report.ReportCategoryRepository;
-import com.saebyeok.saebyeok.exception.ReportNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,10 +40,6 @@ public class CommentReportRepositoryTest {
     private Member member;
     private ReportCategory reportCategory;
 
-    private CommentReport commentReport1;
-    private CommentReport commentReport2;
-    private CommentReport commentReport3;
-
     @BeforeEach
     @Transactional
     void setUp() {
@@ -54,13 +49,6 @@ public class CommentReportRepositoryTest {
         commentRepository.save(comment);
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
-
-        commentReport1 = new CommentReport("신고 내용1", member, comment, reportCategory);
-        commentReport2 = new CommentReport("신고 내용2", member, comment, reportCategory);
-        commentReport3 = new CommentReport("신고 내용3", member, comment, reportCategory);
-        commentReportRepository.save(commentReport1);
-        commentReportRepository.save(commentReport2);
-        commentReportRepository.save(commentReport3);
     }
 
     @DisplayName("댓글 신고를 저장한다")
@@ -73,28 +61,5 @@ public class CommentReportRepositoryTest {
 
         List<CommentReport> commentReports = commentReportRepository.findAll();
         assertThat(commentReports).hasSize(commentReportSize + 1).contains(newCommentReport);
-    }
-
-    @DisplayName("전체 CommentReport를 조회한다.")
-    @Test
-    void findAllTest() {
-        List<CommentReport> commentReports = commentReportRepository.findAll();
-        assertThat(commentReports).
-                hasSize(3).
-                extracting("content").
-                containsOnly(commentReport1.getContent(), commentReport2.getContent(), commentReport3.getContent());
-    }
-
-    @DisplayName("ID로 개별 CommentReport를 조회한다")
-    @Test
-    void findByIdTest() {
-        Long id = commentReport1.getId();
-        CommentReport commentReport = commentReportRepository.findById(id).
-                orElseThrow(() -> new ReportNotFoundException(id));
-
-        assertThat(commentReport).isNotNull();
-        assertThat(commentReport.getId()).isEqualTo(id);
-        assertThat(commentReport.getContent()).isEqualTo(commentReport1.getContent());
-        assertThat(commentReport.getIsFinished()).isEqualTo(commentReport1.getIsFinished());
     }
 }
