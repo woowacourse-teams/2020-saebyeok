@@ -18,6 +18,7 @@
 import EmotionFilter from '../components/EmotionFilter';
 
 export default {
+  name: 'FilterButton',
   components: { EmotionFilter },
   data: () => ({
     menu: false
