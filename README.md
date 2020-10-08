@@ -4,10 +4,12 @@
 
 ## 서비스 소개
 
-<img src="./image/phone1.png" width="30%" height="30%"/>
+<p>
+<img align="left" src="./image/phone1.png" width="30%" height="30%"/>
 <img src="./image/phone2.png" width="30%" height="30%"/>
+</p>
 
-### 감정 태그를 활용해서 당신의 이야기를 들려주세요.
+### 감정 태그를 활용해서 당신의 이야기를 들려주세요.
 
 글을 작성할 때 다섯 가지의 큰 감정을 나타내는 이모지와
 
@@ -24,7 +26,7 @@
 
 이후로는 게시글 작성자만 다이어리 페이지에서 확인할 수 있어요.
 
-<img src="./image/phone4.png" width="30%" height="5300%">
+<img src="./image/phone4.png" width="30%" height="30%">
 
 ### 어떤 이야기도 괜찮아요.
 
@@ -76,4 +78,4 @@
 |                                                          🏅베스트 리뷰어                                                          |                                                           👨‍👩‍👧‍👦팀문화 메이커                                                            |                                                         📖문서화 마스터                                                          |                                                         🔪커밋 슬라이서                                                          |                                                            👨‍💻인프라 마스터                                                            |
 | [📌GitHub](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Fhwanghe159&sa=D&sntz=1&usg=AFQjCNHqzJ2XIlC8roUL8deG_RBknKdAQw) | 📌[GitHub](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2FSujinEmilyCho&sa=D&sntz=1&usg=AFQjCNEyAXhA6N5XpKT0CRstfXh_epEG5w) | 📌[GitHub](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Finclude42&sa=D&sntz=1&usg=AFQjCNGnYpHtUUXGIqPpqN3VtOnRQWg6zw) | 📌[GitHub](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2FicyMojito&sa=D&sntz=1&usg=AFQjCNEK68E0cQfAcIa5OPZMPgkqwJhb5A) | 📌[GitHub](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Fhotheadfactory&sa=D&sntz=1&usg=AFQjCNFs4qbu1kDQPltE568HyUO9URB0EA) |
 
-<iframe width="1191" height="744" src="https://www.youtube.com/embed/atpizUjsY68" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![소개 영상](./image/youtube.png)](https://youtu.be/atpizUjsY68)
