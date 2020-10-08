@@ -84,4 +84,9 @@ public class Article {
     public long countLikes() {
         return this.likes.size();
     }
+
+    public void addComment(Comment comment) {
+        comment.setArticle(this);
+        this.comments.add(comment);
+    }
 }

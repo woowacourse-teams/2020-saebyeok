@@ -50,9 +50,9 @@ public class ArticleTest {
     @Test
     void loadExistingNicknameTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Comment comment = new Comment("내용", "닉네임1", null);
-        comment.setMember(member);
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
+        Comment comment = new Comment("내용", member, "닉네임1", article, null);
+        article.addComment(comment);
 
         assertThat(article.loadExistingNickname(member)).isEqualTo(Optional.of("닉네임1"));
     }

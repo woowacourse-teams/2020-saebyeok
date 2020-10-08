@@ -74,10 +74,6 @@ public class Comment implements Comparable<Comment> {
         return this.likes.size();
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
     public void setArticle(Article article) {
         this.article = article;
     }

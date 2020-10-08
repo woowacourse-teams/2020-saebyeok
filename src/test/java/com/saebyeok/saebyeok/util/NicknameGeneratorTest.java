@@ -44,9 +44,7 @@ public class NicknameGeneratorTest {
     @Test
     void severalCommentsByOneMemberTest() {
         String myNickname1 = nicknameGenerator.generate(me, othersArticle);
-        Comment comment = new Comment("댓글내용", myNickname1, null);
-        comment.setArticle(othersArticle);
-        comment.setMember(me);
+        Comment comment = new Comment("댓글내용", me, myNickname1, othersArticle, null);
         String myNickname2 = nicknameGenerator.generate(
                 me, new Article(2L, "게시물내용", other, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>()));
 
