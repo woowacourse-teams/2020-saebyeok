@@ -25,13 +25,13 @@ public class Report {
 
     private String content;
     private ReportType reportType;
+    private Long reportedId;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     @ManyToOne
     private Member member;
 
-    private Long reportedId;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "REPORT_CATEGORY_ID", nullable = false)

@@ -117,9 +117,4 @@ public class ArticleService {
                 }).
                 collect(Collectors.toList());
     }
-
-    public Article findArticleById(Long articleId) {
-        return articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundException(articleId));
-    }
 }

@@ -42,11 +42,6 @@ public class CommentService {
         return commentRepository.findAllByMemberAndIsDeleted(member, false);
     }
 
-    public Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId).
-                orElseThrow(() -> new CommentNotFoundException(commentId));
-    }
-
     @Transactional
     public void deleteComment(Member member, Long commentId) throws IllegalAccessException {
         Comment comment = commentRepository.findById(commentId)
