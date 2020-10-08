@@ -76,7 +76,7 @@ public class ReportServiceTest {
 
     @DisplayName("게시물 신고 생성을 요청하면 게시물 신고가 생성된다")
     @Test
-    void createArticleReportTest() {
+    void createReportTest() {
         ReportCreateRequest createRequest = new ReportCreateRequest(REPORT_CONTENT, REPORTED_ID, CATEGORY_ID, ReportType.ARTICLE.getName());
         when(reportRepository.save(any(Report.class))).thenReturn(report);
         when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
@@ -88,7 +88,7 @@ public class ReportServiceTest {
 
     @DisplayName("예외 테스트 : 잘못된 카테고리 ID로 게시글 신고를 생성하면 예외가 발생한다.")
     @Test
-    void createArticleReportWithCategoryExceptionTest() {
+    void createReportWithCategoryExceptionTest() {
         ReportCreateRequest invalidRequest = new ReportCreateRequest(REPORT_CONTENT, REPORTED_ID, INVALID_CATEGORY_ID, ReportType.ARTICLE.getName());
         when(reportCategoryRepository.findById(INVALID_CATEGORY_ID)).thenThrow(new ReportCategoryNotFoundException(INVALID_CATEGORY_ID));
 
