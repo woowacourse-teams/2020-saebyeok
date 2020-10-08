@@ -24,8 +24,10 @@ public class Report {
     private Long id;
 
     private String content;
-    private ReportType reportType;
     private Long reportedId;
+
+    @Enumerated(EnumType.STRING)
+    private ReportType reportType;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "MEMBER_ID", nullable = false)

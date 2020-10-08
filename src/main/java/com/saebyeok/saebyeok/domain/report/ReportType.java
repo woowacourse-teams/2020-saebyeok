@@ -1,5 +1,6 @@
 package com.saebyeok.saebyeok.domain.report;
 
+import com.saebyeok.saebyeok.exception.ReportTypeNotFoundException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -7,8 +8,7 @@ import java.util.Arrays;
 @Getter
 public enum ReportType {
     ARTICLE("ARTICLE"),
-    COMMENT("COMMENT"),
-    UNPROVIDED("");
+    COMMENT("COMMENT");
 
     private final String name;
 
@@ -20,7 +20,7 @@ public enum ReportType {
         return Arrays.stream(ReportType.values()).
                 filter(reportType -> reportType.name().equals(typeValue)).
                 findAny().
-                orElse(ReportType.UNPROVIDED);
+                orElseThrow(() -> new ReportTypeNotFoundException(typeValue));
     }
 
     public boolean isArticle() {
