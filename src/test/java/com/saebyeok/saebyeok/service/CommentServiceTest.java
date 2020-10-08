@@ -4,7 +4,6 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import com.saebyeok.saebyeok.util.NicknameGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,15 +32,13 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
     @Mock
     private ArticleRepository articleRepository;
-    @Mock
-    private NicknameGenerator nicknameGenerator;
 
     private Member member;
     private Article article;
 
     @BeforeEach
     void setUp() {
-        this.commentService = new CommentService(commentRepository, articleRepository, nicknameGenerator);
+        this.commentService = new CommentService(commentRepository, articleRepository);
         this.member = new Member();
         this.article = new Article();
     }

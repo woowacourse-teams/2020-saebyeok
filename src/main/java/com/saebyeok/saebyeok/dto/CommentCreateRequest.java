@@ -1,5 +1,9 @@
 package com.saebyeok.saebyeok.dto;
 
+import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Comment;
+import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.util.NicknameGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static com.saebyeok.saebyeok.domain.Comment.MAX_LENGTH;
-import static com.saebyeok.saebyeok.domain.Comment.MIN_LENGTH;
+import static com.saebyeok.saebyeok.domain.Comment.*;
 
 @Getter
 @NoArgsConstructor
@@ -23,4 +26,14 @@ public class CommentCreateRequest {
     private Long articleId;
 
     private Long parent;
+
+    public Comment toComment(Member member, Article article, Comment parent) {
+        return builder().
+                content(this.content).
+                member(member).
+                nickname(NicknameGenerator.generate(member, article)).
+                article(article).
+                parent(parent).
+                build();
+    }
 }

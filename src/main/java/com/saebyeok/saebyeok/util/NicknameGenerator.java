@@ -17,15 +17,15 @@ public class NicknameGenerator {
             .boxed()
             .collect(Collectors.toList());
 
-    public String generate(Member member, Article article) {
+    public static String generate(Member member, Article article) {
         if (article.isWrittenBy(member)) {
             return WRITER_NICKNAME;
         }
         return article.loadExistingNickname(member)
-                .orElse(createNewNickname(article));
+                .orElseGet(() -> createNewNickname(article));
     }
 
-    private String createNewNickname(Article article) {
+    private static String createNewNickname(Article article) {
         List<String> allNicknames = article.getAllNicknames();
         List<String> filteredNicknames = allNicknames.stream()
                 .filter(s -> s.contains(NICKNAME_PREFIX))
