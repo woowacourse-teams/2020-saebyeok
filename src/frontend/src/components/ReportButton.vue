@@ -76,8 +76,7 @@ import { REPORT_TYPE } from '@/utils/ReportType.js';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 import {
   FETCH_REPORT_CATEGORIES,
-  CREATE_ARTICLE_REPORT,
-  CREATE_COMMENT_REPORT
+  CREATE_REPORT
 } from '@/store/shared/actionTypes';
 
 import { mapMutations, mapActions, mapGetters } from 'vuex';
@@ -101,47 +100,22 @@ export default {
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
     ...mapActions([FETCH_REPORT_CATEGORIES]),
-    ...mapActions([CREATE_ARTICLE_REPORT]),
-    ...mapActions([CREATE_COMMENT_REPORT]),
+    ...mapActions([CREATE_REPORT]),
     onReport() {
       if (this.choiceCategory === undefined) {
         this.invalidCategoryChoice = true;
         return;
       }
-      //todo : 여기에 신고 연산이 들어간다
-      switch (this.reportType) {
-        case REPORT_TYPE.ARTICLE:
-          this.reportArticle();
-          return;
-        case REPORT_TYPE.COMMENT:
-          this.reportComment();
-          return;
-        default:
-          return;
-      }
+      this.submitReport();
     },
-    reportArticle() {
-      const articleReportCreateRequest = {
+    submitReport() {
+      const reportCreateRequest = {
         content: this.textContent,
-        articleId: this.reportedId,
+        reportedId: this.reportedId,
+        reportType: this.reportType.toString(),
         reportCategoryId: this.reportCategories[this.choiceCategory].id
       };
-      this.createArticleReport(articleReportCreateRequest)
-        .then(() => {
-          this.dialog = false;
-          this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
-        })
-        .catch(error => {
-          this.showSnackbar(error.response.data.errorMessage);
-        });
-    },
-    reportComment() {
-      const commentReportCreateRequest = {
-        content: this.textContent,
-        commentId: this.reportedId,
-        reportCategoryId: this.reportCategories[this.choiceCategory].id
-      };
-      this.createCommentReport(commentReportCreateRequest)
+      this.createReport(reportCreateRequest)
         .then(() => {
           this.dialog = false;
           this.showSnackbar('신고가 접수되었습니다. 감사합니다.');

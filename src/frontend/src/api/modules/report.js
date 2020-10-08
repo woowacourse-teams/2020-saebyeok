@@ -6,11 +6,8 @@ const ReportService = {
   getCategories() {
     return ApiService.get(`${BASE_URL}/categories`);
   },
-  createArticleReport(report) {
-    return ApiService.post(`${BASE_URL}/article`, report);
-  },
-  createCommentReport(report) {
-    return ApiService.post(`${BASE_URL}/comment`, report);
+  createReport(report) {
+    return ApiService.post(`${BASE_URL}`, report);
   }
 };
 

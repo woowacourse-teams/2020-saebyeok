@@ -22,5 +22,4 @@ export const UNLIKE_COMMENT = 'unlikeComment';
 export const CHECK_NAVBAR_SPACE_NEEDED = 'checkNavbarSpaceNeeded';
 export const DELETE_MEMBER = 'deleteMember';
 export const FETCH_REPORT_CATEGORIES = 'fetchReportCategories';
-export const CREATE_ARTICLE_REPORT = 'createArticleReport';
-export const CREATE_COMMENT_REPORT = 'createCommentReport';
+export const CREATE_REPORT = 'createReport';
