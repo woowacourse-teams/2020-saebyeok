@@ -3,12 +3,11 @@ package com.saebyeok.saebyeok.documentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.documentation.common.Documentation;
 import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.report.ArticleReport;
-import com.saebyeok.saebyeok.domain.report.CommentReport;
+import com.saebyeok.saebyeok.domain.report.Report;
+import com.saebyeok.saebyeok.domain.report.ReportType;
 import com.saebyeok.saebyeok.dto.TokenResponse;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,62 +86,32 @@ public class ReportDocumentation extends Documentation {
 
     @Test
     void createArticleReport() throws Exception {
-        ArticleReportCreateRequest articleReportCreateRequest = new ArticleReportCreateRequest("게시물 신고 내용", 1L, 1L);
-        ArticleReport articleReport = new ArticleReport(1L, "게시물 신고 내용", null, null, null, LocalDateTime.now(), false);
+        ReportCreateRequest reportCreateRequest = new ReportCreateRequest("게시물 신고 내용", 1L, 1L, "Article");
+        Report report = new Report("게시물에 대한 신고입니다.", null, ReportType.ARTICLE, 1L, null);
 
-        given(reportService.createArticleReport(any(Member.class), any())).willReturn(articleReport);
+        given(reportService.createReport(any(Member.class), any())).willReturn(report);
 
-        String content = objectMapper.writeValueAsString(articleReportCreateRequest);
+        String content = objectMapper.writeValueAsString(reportCreateRequest);
 
-        this.mockMvc.perform(post("/api/reports/article").
+        this.mockMvc.perform(post("/api/reports").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON).
                 content(content).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
                 andDo(print()).
-                andDo(document("reports/article/create",
+                andDo(document("reports/create",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),
                         requestFields(
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 신고 내용"),
-                                fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("신고할 게시물의 ID"),
-                                fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 분류 ID")),
-                        responseHeaders(
-                                headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
-                        )
-                ));
-    }
-
-    @Test
-    void createCommentReport() throws Exception {
-        CommentReportCreateRequest commentReportCreateRequest = new CommentReportCreateRequest("댓글 신고 내용", 1L, 1L);
-        CommentReport commentReport = new CommentReport(1L, "댓글 신고 내용", null, null, null, LocalDateTime.now(), false);
-
-        given(reportService.createCommentReport(any(Member.class), any())).willReturn(commentReport);
-
-        String content = objectMapper.writeValueAsString(commentReportCreateRequest);
-
-        this.mockMvc.perform(post("/api/reports/comment").
-                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
-                accept(MediaType.APPLICATION_JSON).
-                content(content).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isCreated()).
-                andDo(print()).
-                andDo(document("reports/comment/create",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 내용"),
+                                fieldWithPath("reportedId").type(JsonFieldType.NUMBER).description("신고할 게시물 혹은 댓글의 ID"),
+                                fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 카테고리 ID"),
+                                fieldWithPath("reportType").type(JsonFieldType.STRING).description("신고의 분류. 게시글이나 댓글, 혹은 그 외.")
                         ),
-                        requestFields(
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 신고 내용"),
-                                fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("신고할 댓글의 ID"),
-                                fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 분류 ID")),
                         responseHeaders(
                                 headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
                         )

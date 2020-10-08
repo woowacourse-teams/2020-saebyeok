@@ -38,7 +38,6 @@ class ArticleRepositoryTest {
     private Member member;
 
     @BeforeEach
-    @Transactional
     void setUp() {
         article1 = new Article("내용1", true);
         article2 = new Article("내용2", false);

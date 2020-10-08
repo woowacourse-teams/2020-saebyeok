@@ -1,15 +1,10 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.Role;
 import com.saebyeok.saebyeok.domain.report.*;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
-import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
-import com.saebyeok.saebyeok.exception.CommentNotFoundException;
+import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +28,7 @@ import static org.mockito.Mockito.when;
 @Sql("/truncate.sql")
 @ExtendWith(MockitoExtension.class)
 public class ReportServiceTest {
-    public static final String ARTICLE_REPORT_CONTENT = "이 게시물을 신고합니다";
+    public static final String REPORT_CONTENT = "이 게시물을 신고합니다";
     private static final Long MEMBER_ID = 1L;
     private static final String MEMBER_OAUTH_ID = "123456789";
     private static final String MEMBER_LOGIN_METHOD = "naver";
@@ -41,42 +36,27 @@ public class ReportServiceTest {
     private static final String CATEGORY_NAME = "광고 게시물";
     private static final String CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";
     private static final boolean IS_DELETED = false;
-    private static final Long ARTICLE_ID = 1L;
-    private static final Long INVALID_REPORT_ID = 10000L;
-    private static final Long ARTICLE_REPORT_ID = 1L;
-    public static final long COMMENT_REPORT_ID = 1L;
-    public static final String COMMENT_REPORT_CONTENT = "이 댓글을 신고합니다";
+    private static final Long REPORTED_ID = 1L;
+    private static final Long INVALID_CATEGORY_ID = 10000L;
 
     private ReportService reportService;
     @Mock
-    private ArticleService articleService;
-    @Mock
-    private CommentService commentService;
-    @Mock
     private ReportCategoryRepository reportCategoryRepository;
     @Mock
-    private ArticleReportRepository articleReportRepository;
-    @Mock
-    private CommentReportRepository commentReportRepository;
+    private ReportRepository reportRepository;
 
     private ReportCategory reportCategory;
     private Member member;
-    private ArticleReport articleReport;
-    Article article;
-    Comment comment;
-    private CommentReport commentReport;
+    private Report report;
 
     @BeforeEach
     void setUp() {
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
-        article = new Article(ARTICLE_ID, "게시물", member, LocalDateTime.now(), false, false, null, new ArrayList<>());
-        comment = new Comment();
 
-        reportService = new ReportService(articleService, commentService, reportCategoryRepository, articleReportRepository, commentReportRepository);
+        reportService = new ReportService(reportCategoryRepository, reportRepository);
         reportCategory = new ReportCategory(CATEGORY_ID, CATEGORY_NAME, CATEGORY_CONTENT);
 
-        articleReport = new ArticleReport(ARTICLE_REPORT_ID, ARTICLE_REPORT_CONTENT, member, article, reportCategory, LocalDateTime.now(), false);
-        commentReport = new CommentReport(COMMENT_REPORT_ID, COMMENT_REPORT_CONTENT, member, comment, reportCategory, LocalDateTime.now(), false);
+        report = new Report(REPORT_CONTENT, member, ReportType.ARTICLE, REPORTED_ID, reportCategory);
     }
 
     @DisplayName("전체 ReportCategory를 조회하면 ReportCategory 목록이 반환된다")
@@ -97,77 +77,23 @@ public class ReportServiceTest {
     @DisplayName("게시물 신고 생성을 요청하면 게시물 신고가 생성된다")
     @Test
     void createArticleReportTest() {
-        ArticleReportCreateRequest createRequest = new ArticleReportCreateRequest(ARTICLE_REPORT_CONTENT, 1L, 1L);
-        when(articleReportRepository.save(any(ArticleReport.class))).thenReturn(articleReport);
+        ReportCreateRequest createRequest = new ReportCreateRequest(REPORT_CONTENT, REPORTED_ID, CATEGORY_ID, ReportType.ARTICLE.getName());
+        when(reportRepository.save(any(Report.class))).thenReturn(report);
         when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
-        when(articleService.findArticleById(1L)).thenReturn(article);
 
-        ArticleReport createdArticleReport = reportService.createArticleReport(member, createRequest);
+        Report createdReport = reportService.createReport(member, createRequest);
 
-        assertThat(createdArticleReport).isNotNull();
-    }
-
-    @DisplayName("예외 테스트 : 잘못된 게시물 ID로 신고를 생성하면 예외가 발생한다.")
-    @Test
-    void createArticleReportWithArticleExceptionTest() {
-        Long invalidArticleId = 10000L;
-        ArticleReportCreateRequest invalidRequest = new ArticleReportCreateRequest(ARTICLE_REPORT_CONTENT, invalidArticleId, 1L);
-        when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
-        when(articleService.findArticleById(invalidArticleId)).thenThrow(new ArticleNotFoundException(invalidArticleId));
-
-        assertThatThrownBy(() -> reportService.createArticleReport(member, invalidRequest)).
-                isInstanceOf(ArticleNotFoundException.class).
-                hasMessage(invalidArticleId + "에 해당하는 게시글을 찾을 수 없습니다.");
+        assertThat(createdReport).isNotNull();
     }
 
     @DisplayName("예외 테스트 : 잘못된 카테고리 ID로 게시글 신고를 생성하면 예외가 발생한다.")
     @Test
     void createArticleReportWithCategoryExceptionTest() {
-        Long invalidCategoryId = 10000L;
-        ArticleReportCreateRequest invalidRequest = new ArticleReportCreateRequest(ARTICLE_REPORT_CONTENT, 1L, invalidCategoryId);
-        when(reportCategoryRepository.findById(invalidCategoryId)).thenThrow(new ReportCategoryNotFoundException(invalidCategoryId));
+        ReportCreateRequest invalidRequest = new ReportCreateRequest(REPORT_CONTENT, REPORTED_ID, INVALID_CATEGORY_ID, ReportType.ARTICLE.getName());
+        when(reportCategoryRepository.findById(INVALID_CATEGORY_ID)).thenThrow(new ReportCategoryNotFoundException(INVALID_CATEGORY_ID));
 
-        assertThatThrownBy(() -> reportService.createArticleReport(member, invalidRequest)).
+        assertThatThrownBy(() -> reportService.createReport(member, invalidRequest)).
                 isInstanceOf(ReportCategoryNotFoundException.class).
-                hasMessage(invalidCategoryId + "에 해당하는 신고 분류를 찾을 수 없습니다.");
-    }
-
-
-    @DisplayName("댓글 신고 생성을 요청하면 댓글 신고가 생성된다")
-    @Test
-    void createCommentReportTest() {
-        CommentReportCreateRequest createRequest = new CommentReportCreateRequest(COMMENT_REPORT_CONTENT, 1L, 1L);
-        when(commentReportRepository.save(any(CommentReport.class))).thenReturn(commentReport);
-        when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
-        when(commentService.findCommentById(1L)).thenReturn(comment);
-
-        CommentReport createdCommentReport = reportService.createCommentReport(member, createRequest);
-
-        assertThat(createdCommentReport).isNotNull();
-    }
-
-    @DisplayName("예외 테스트 : 잘못된 댓글 ID로 신고를 생성하면 예외가 발생한다.")
-    @Test
-    void createCommentReportWithCommentExceptionTest() {
-        Long invalidCommentId = 10000L;
-        CommentReportCreateRequest invalidRequest = new CommentReportCreateRequest(ARTICLE_REPORT_CONTENT, invalidCommentId, 1L);
-        when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
-        when(commentService.findCommentById(invalidCommentId)).thenThrow(new CommentNotFoundException(invalidCommentId));
-
-        assertThatThrownBy(() -> reportService.createCommentReport(member, invalidRequest)).
-                isInstanceOf(CommentNotFoundException.class).
-                hasMessage(invalidCommentId + "에 해당하는 댓글을 찾을 수 없습니다.");
-    }
-
-    @DisplayName("예외 테스트 : 잘못된 카테고리 ID로 댓글 신고를 생성하면 예외가 발생한다.")
-    @Test
-    void createCommentReportWithCategoryExceptionTest() {
-        Long invalidCategoryId = 10000L;
-        CommentReportCreateRequest invalidRequest = new CommentReportCreateRequest(ARTICLE_REPORT_CONTENT, 1L, invalidCategoryId);
-        when(reportCategoryRepository.findById(invalidCategoryId)).thenThrow(new ReportCategoryNotFoundException(invalidCategoryId));
-
-        assertThatThrownBy(() -> reportService.createCommentReport(member, invalidRequest)).
-                isInstanceOf(ReportCategoryNotFoundException.class).
-                hasMessage(invalidCategoryId + "에 해당하는 신고 분류를 찾을 수 없습니다.");
+                hasMessage(INVALID_CATEGORY_ID + "에 해당하는 신고 분류를 찾을 수 없습니다.");
     }
 }

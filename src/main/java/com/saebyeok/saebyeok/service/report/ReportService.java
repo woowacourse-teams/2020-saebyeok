@@ -1,15 +1,13 @@
 package com.saebyeok.saebyeok.service.report;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.report.*;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
+import com.saebyeok.saebyeok.domain.report.Report;
+import com.saebyeok.saebyeok.domain.report.ReportCategory;
+import com.saebyeok.saebyeok.domain.report.ReportCategoryRepository;
+import com.saebyeok.saebyeok.domain.report.ReportRepository;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
-import com.saebyeok.saebyeok.service.ArticleService;
-import com.saebyeok.saebyeok.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +18,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ReportService {
-
-    private final ArticleService articleService;
-    private final CommentService commentService;
     private final ReportCategoryRepository reportCategoryRepository;
-    private final ArticleReportRepository articleReportRepository;
-    private final CommentReportRepository commentReportRepository;
+    private final ReportRepository reportRepository;
 
     public List<ReportCategoryResponse> getReportCategories() {
         return reportCategoryRepository.findAll().
@@ -35,23 +29,11 @@ public class ReportService {
     }
 
     @Transactional
-    public ArticleReport createArticleReport(Member member, ArticleReportCreateRequest request) {
+    public Report createReport(Member member, ReportCreateRequest request) {
         ReportCategory reportCategory = readReportCategory(request.getReportCategoryId());
-        Article article = articleService.findArticleById(request.getArticleId());
+        Report report = request.toReport(member, reportCategory);
 
-        ArticleReport articleReport = request.toArticleReport(member, article, reportCategory);
-
-        return articleReportRepository.save(articleReport);
-    }
-
-    @Transactional
-    public CommentReport createCommentReport(Member member, CommentReportCreateRequest request) {
-        ReportCategory reportCategory = readReportCategory(request.getReportCategoryId());
-        Comment comment = commentService.findCommentById(request.getCommentId());
-
-        CommentReport commentReport = request.toCommentReport(member, comment, reportCategory);
-
-        return commentReportRepository.save(commentReport);
+        return reportRepository.save(report);
     }
 
     private ReportCategory readReportCategory(Long reportCategoryId) {

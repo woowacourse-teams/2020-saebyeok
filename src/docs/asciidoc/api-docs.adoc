@@ -116,18 +116,7 @@ operation::unlikes/comment[snippets='http-request,http-response,path-parameters,
 
 operation::reports/categories[snippets='http-request,http-response,request-headers,response-fields']
 
-[[resources-reports-article]]
-== ArticleReports
+[[resources-reports-create]]
+=== 신고 생성
 
-[[resources-reports-article-create]]
-=== 게시물 신고 생성
-
-operation::reports/article/delete[snippets='http-request,http-response,path-parameters,request-headers']
-
-[[resources-reports-comment]]
-== CommentReports
-
-[[resources-reports-comment-create]]
-=== 댓글 신고 생성
-
-operation::reports/comment/create[snippets='http-request,http-response,request-headers,request-fields,response-headers']
+operation::reports/create[snippets='http-request,http-response,path-parameters,request-headers']

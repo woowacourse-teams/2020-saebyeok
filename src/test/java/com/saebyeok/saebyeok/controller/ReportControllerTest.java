@@ -2,14 +2,13 @@ package com.saebyeok.saebyeok.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.report.ArticleReport;
-import com.saebyeok.saebyeok.domain.report.CommentReport;
-import com.saebyeok.saebyeok.dto.report.ArticleReportCreateRequest;
-import com.saebyeok.saebyeok.dto.report.CommentReportCreateRequest;
+import com.saebyeok.saebyeok.domain.report.Report;
+import com.saebyeok.saebyeok.domain.report.ReportCategory;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
-import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
+import com.saebyeok.saebyeok.exception.ReportTypeNotFoundException;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,13 +38,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReportControllerTest {
     // TODO: 2020/10/05 ReportController에 조회 로직 없이 생성 로직만 있어서, 부득이하게 인수테스트를 만들지 않았음. 추후 기능추가시 작성해보자.
     private static final String API = "/api";
-    public static final String TEST_ARTICLE_REPORT_CONTENT = "게시물에 대한 신고 본문입니다.";
-    public static final String TEST_COMMENT_REPORT_CONTENT = "댓글에 대한 신고 본문입니다.";
+    public static final String TEST_REPORT_CONTENT = "게시물에 대한 신고 본문입니다.";
     private static final Long TEST_CATEGORY_ID = 1L;
     private static final String TEST_CATEGORY_NAME = "광고 게시물";
     private static final String TEST_CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";
+    private static final String TEST_TYPE_ARTICLE = "Article";
     public static final Long TEST_ARTICLE_ID = 1L;
-    public static final Long TEST_COMMENT_ID = 1L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -75,92 +73,61 @@ public class ReportControllerTest {
                 andExpect(jsonPath("$[0].name").value(TEST_CATEGORY_NAME));
     }
 
-    @DisplayName("'/reports/article'로 post 요청을 보내면 글을 생성한다")
+    @DisplayName("'/reports'로 post 요청을 보내면 신고를 생성한다")
     @Test
-    void createArticleReportTest() throws Exception {
-        ArticleReportCreateRequest request = new ArticleReportCreateRequest(TEST_ARTICLE_REPORT_CONTENT, TEST_ARTICLE_ID, TEST_CATEGORY_ID);
+    void createReportTest() throws Exception {
+        ReportCreateRequest request = new ReportCreateRequest(TEST_REPORT_CONTENT, TEST_ARTICLE_ID, TEST_CATEGORY_ID, TEST_TYPE_ARTICLE);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-        ArticleReport articleReport = new ArticleReport(TEST_ARTICLE_REPORT_CONTENT, null, null, null);
+        Report report = request.toReport(new Member(), new ReportCategory());
 
-        when(reportService.createArticleReport(any(Member.class), any(ArticleReportCreateRequest.class))).thenReturn(articleReport);
+        when(reportService.createReport(any(Member.class), any(ReportCreateRequest.class))).thenReturn(report);
 
-        this.mockMvc.perform(post(API + "/reports/article").
+        this.mockMvc.perform(post(API + "/reports").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
                 andDo(print());
     }
 
-    @DisplayName("예외 테스트 : 게시글 신고 생성 요청에 함께 전달된 articleId가 존재하지 않을 경우, 예외가 발생한다")
+    @DisplayName("예외 테스트 : 게시글 신고 생성 요청에 함께 전달된 Id가 존재하지 않을 경우, 예외가 발생한다")
     @Test
     void noExistArticleIdTest() throws Exception {
-        when(reportService.createArticleReport(any(Member.class), any(ArticleReportCreateRequest.class))).thenThrow(ArticleNotFoundException.class);
+        when(reportService.createReport(any(Member.class), any(ReportCreateRequest.class))).thenThrow(ArticleNotFoundException.class);
 
-        ArticleReportCreateRequest request = new ArticleReportCreateRequest(TEST_ARTICLE_REPORT_CONTENT, null, TEST_CATEGORY_ID);
+        ReportCreateRequest request = new ReportCreateRequest(TEST_REPORT_CONTENT, null, TEST_CATEGORY_ID, TEST_TYPE_ARTICLE);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
 
-        this.mockMvc.perform(post(API + "/reports/article").
+        this.mockMvc.perform(post(API + "/reports").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest()).
                 andDo(print());
     }
 
-    @DisplayName("예외 테스트 : 게시글 신고 생성 요청에 함께 전달된 reportCategoryId가 존재하지 않을 경우, 예외가 발생한다")
+    @DisplayName("예외 테스트 : 신고 생성 요청에 함께 전달된 reportCategoryId가 존재하지 않을 경우, 예외가 발생한다")
     @Test
-    void noExistCategoryIdInArticleReportTest() throws Exception {
-        when(reportService.createArticleReport(any(Member.class), any(ArticleReportCreateRequest.class))).thenThrow(ReportCategoryNotFoundException.class);
+    void noExistCategoryIdTest() throws Exception {
+        when(reportService.createReport(any(Member.class), any(ReportCreateRequest.class))).thenThrow(ReportCategoryNotFoundException.class);
 
-        ArticleReportCreateRequest request = new ArticleReportCreateRequest(TEST_ARTICLE_REPORT_CONTENT, TEST_ARTICLE_ID, null);
+        ReportCreateRequest request = new ReportCreateRequest(TEST_REPORT_CONTENT, TEST_ARTICLE_ID, null, TEST_TYPE_ARTICLE);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
 
-        this.mockMvc.perform(post(API + "/reports/article").
+        this.mockMvc.perform(post(API + "/reports").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest()).
                 andDo(print());
     }
 
-    @DisplayName("'/reports/comment'로 post 요청을 보내면 글을 생성한다")
+    @DisplayName("예외 테스트 : 신고 생성 요청에 함께 전달된 타입 문자열이 존재하지 않을 경우, 예외가 발생한다")
     @Test
-    void createCommentReportTest() throws Exception {
-        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, TEST_COMMENT_ID, TEST_CATEGORY_ID);
-        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-        CommentReport commentReport = new CommentReport(TEST_COMMENT_REPORT_CONTENT, null, null, null);
+    void noExistTypeStringTest() throws Exception {
+        when(reportService.createReport(any(Member.class), any(ReportCreateRequest.class))).thenThrow(ReportTypeNotFoundException.class);
 
-        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenReturn(commentReport);
-
-        this.mockMvc.perform(post(API + "/reports/comment").
-                content(requestAsString).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isCreated()).
-                andDo(print());
-    }
-
-    @DisplayName("예외 테스트 : 댓글 신고 생성 요청에 함께 전달된 commentId가 존재하지 않을 경우, 예외가 발생한다")
-    @Test
-    void noExistCommentIdTest() throws Exception {
-        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenThrow(CommentNotFoundException.class);
-
-        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, null, TEST_CATEGORY_ID);
+        ReportCreateRequest request = new ReportCreateRequest(TEST_REPORT_CONTENT, TEST_ARTICLE_ID, TEST_CATEGORY_ID, null);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
 
-        this.mockMvc.perform(post(API + "/reports/comment").
-                content(requestAsString).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isBadRequest()).
-                andDo(print());
-    }
-
-    @DisplayName("예외 테스트 : 댓글 신고 생성 요청에 함께 전달된 reportCategoryId가 존재하지 않을 경우, 예외가 발생한다")
-    @Test
-    void noExistCategoryIdInCommentReportTest() throws Exception {
-        when(reportService.createCommentReport(any(Member.class), any(CommentReportCreateRequest.class))).thenThrow(ReportCategoryNotFoundException.class);
-
-        CommentReportCreateRequest request = new CommentReportCreateRequest(TEST_COMMENT_REPORT_CONTENT, TEST_COMMENT_ID, null);
-        String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-
-        this.mockMvc.perform(post(API + "/reports/comment").
+        this.mockMvc.perform(post(API + "/reports").
                 content(requestAsString).
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isBadRequest()).
