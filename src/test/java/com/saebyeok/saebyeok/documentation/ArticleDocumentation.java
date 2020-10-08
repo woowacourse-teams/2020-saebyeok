@@ -61,7 +61,7 @@ public class ArticleDocumentation extends Documentation {
     @Test
     void createArticle() throws Exception {
         ArticleCreateRequest articleCreateRequest = new ArticleCreateRequest("내용", 1L, Arrays.asList(1L, 2L), true);
-        Article article = articleCreateRequest.toArticle();
+        Article article = articleCreateRequest.toArticle(new Member());
 
         given(articleService.createArticle(any(), any())).willReturn(article);
 

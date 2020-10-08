@@ -51,7 +51,7 @@ public class CommentService {
         if (!comment.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_COMMENT_MESSAGE);
         }
-        comment.setIsDeleted(true);
+        comment.delete();
         commentRepository.save(comment);
     }
 

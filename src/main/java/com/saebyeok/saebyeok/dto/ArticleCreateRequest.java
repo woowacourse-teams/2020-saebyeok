@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.dto;
 
 import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-import static com.saebyeok.saebyeok.domain.Article.*;
+import static com.saebyeok.saebyeok.domain.Article.MAX_LENGTH;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +24,7 @@ public class ArticleCreateRequest {
     private List<Long> subEmotionIds;
     private Boolean isCommentAllowed;
 
-    public Article toArticle() {
-        return new Article(content, isCommentAllowed);
+    public Article toArticle(Member member) {
+        return new Article(content, member, isCommentAllowed);
     }
 }

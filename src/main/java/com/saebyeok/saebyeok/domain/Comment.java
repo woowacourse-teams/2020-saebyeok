@@ -74,16 +74,12 @@ public class Comment implements Comparable<Comment> {
         return this.likes.size();
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
     public void setArticle(Article article) {
         this.article = article;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
     }
 
     public void addLike(CommentLike like) {

@@ -52,8 +52,7 @@ public class ArticleService {
 
     @Transactional
     public Article createArticle(Member member, ArticleCreateRequest request) {
-        Article article = request.toArticle();
-        article.setMember(member);
+        Article article = request.toArticle(member);
 
         articleEmotionService.createArticleEmotion(article, request.getEmotionId());
         articleSubEmotionService.createArticleSubEmotion(article, request.getSubEmotionIds());
