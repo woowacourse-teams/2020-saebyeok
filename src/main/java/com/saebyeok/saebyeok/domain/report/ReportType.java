@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 @Getter
 public enum ReportType {
-    ARTICLE("Article"),
-    COMMENT("Comment"),
+    ARTICLE("ARTICLE"),
+    COMMENT("COMMENT"),
     UNPROVIDED("");
 
     private final String name;
@@ -18,7 +18,7 @@ public enum ReportType {
 
     public static ReportType findReportType(String typeValue) {
         return Arrays.stream(ReportType.values()).
-                filter(reportType -> reportType.name().startsWith(typeValue)).
+                filter(reportType -> reportType.name().equals(typeValue)).
                 findAny().
                 orElse(ReportType.UNPROVIDED);
     }

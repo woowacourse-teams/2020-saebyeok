@@ -119,4 +119,4 @@ operation::reports/categories[snippets='http-request,http-response,request-heade
 [[resources-reports-create]]
 === 신고 생성
 
-operation::reports/create[snippets='http-request,http-response,path-parameters,request-headers']
+operation::reports/create[snippets='http-request,http-response,request-headers,request-fields,response-headers']

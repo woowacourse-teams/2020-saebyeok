@@ -1,4 +1,4 @@
 export const REPORT_TYPE = {
-  COMMENT: 'Comment',
-  ARTICLE: 'Article'
+  COMMENT: 'COMMENT',
+  ARTICLE: 'ARTICLE'
 };
