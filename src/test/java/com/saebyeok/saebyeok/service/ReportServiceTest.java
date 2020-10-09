@@ -83,7 +83,9 @@ public class ReportServiceTest {
 
         Report createdReport = reportService.createReport(member, createRequest);
 
-        assertThat(createdReport).isNotNull();
+        assertThat(createdReport).
+                isNotNull().
+                isInstanceOf(Report.class);
     }
 
     @DisplayName("예외 테스트 : 잘못된 카테고리 ID로 게시글 신고를 생성하면 예외가 발생한다.")

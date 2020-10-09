@@ -22,12 +22,4 @@ public enum ReportType {
                 findAny().
                 orElseThrow(() -> new ReportTypeNotFoundException(typeValue));
     }
-
-    public boolean isArticle() {
-        return this.equals(ReportType.ARTICLE);
-    }
-
-    public boolean isComment() {
-        return this.equals(ReportType.COMMENT);
-    }
 }

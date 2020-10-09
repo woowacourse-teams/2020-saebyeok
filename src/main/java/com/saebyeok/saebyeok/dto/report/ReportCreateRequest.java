@@ -18,8 +18,10 @@ public class ReportCreateRequest {
 
     @NotNull(message = "신고할 게시물을 반드시 선택해 주셔야 해요.")
     private Long reportedId;
+
     @NotNull(message = "신고 분류는 반드시 선택해 주셔야 해요.")
     private Long reportCategoryId;
+
     @NotNull(message = "신고할 게시물의 종류는 반드시 선택해 주셔야 해요.")
     private String reportType;
 

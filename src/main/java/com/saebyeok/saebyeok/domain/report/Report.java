@@ -34,7 +34,6 @@ public class Report {
     @ManyToOne
     private Member member;
 
-
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "REPORT_CATEGORY_ID", nullable = false)
     @ManyToOne
