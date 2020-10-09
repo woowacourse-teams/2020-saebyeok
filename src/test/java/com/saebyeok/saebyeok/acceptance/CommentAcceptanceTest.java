@@ -197,7 +197,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Map<String, Object> params = new HashMap<>();
         params.put("content", RECOMMENT_CONTENT);
         params.put("articleId", articleId);
-        params.put("parent", commentId);
+        params.put("parentId", commentId);
 
         //@formatter:off
         return

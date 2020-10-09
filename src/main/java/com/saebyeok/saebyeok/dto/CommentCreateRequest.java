@@ -22,5 +22,5 @@ public class CommentCreateRequest {
     @NotNull(message = "해당하는 게시글이 없어요.")
     private Long articleId;
 
-    private Long parent;
+    private Long parentId;
 }
