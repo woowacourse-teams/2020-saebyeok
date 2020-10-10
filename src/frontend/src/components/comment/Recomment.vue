@@ -66,7 +66,7 @@
 <script>
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
@@ -90,17 +90,14 @@ export default {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.recomment.isLikedByMe) {
-        this.unlikeComment(this.recomment.id).then(() => {
-          this.recomment.isLikedByMe = false;
-          this.recomment.likesCount--;
-        });
+        this.unlikeComment(this.recomment);
       } else {
-        this.likeComment(this.recomment.id).then(() => {
-          this.recomment.isLikedByMe = true;
-          this.recomment.likesCount++;
-        });
+        this.likeComment(this.recomment);
       }
     }
+  },
+  computed: {
+    ...mapGetters(['article', 'comments'])
   }
 };
 </script>
