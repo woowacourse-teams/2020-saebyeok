@@ -21,7 +21,7 @@ public class GlobalExceptionAdvice {
             ArticleNotFoundException.class,
             EmotionNotFoundException.class,
             ReportCategoryNotFoundException.class,
-            ReportTypeNotFoundException.class,
+            ReportTargetNotFoundException.class,
             IllegalAccessException.class,
             DuplicateArticleLikeException.class,
             DuplicateCommentLikeException.class})

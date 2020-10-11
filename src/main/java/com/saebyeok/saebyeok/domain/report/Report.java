@@ -27,7 +27,7 @@ public class Report {
     private Long reportedId;
 
     @Enumerated(EnumType.STRING)
-    private ReportType reportType;
+    private ReportTarget reportTarget;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "MEMBER_ID", nullable = false)
@@ -44,10 +44,10 @@ public class Report {
 
     private Boolean isFinished = Boolean.FALSE;
 
-    public Report(String content, Member member, ReportType reportType, Long reportedId, ReportCategory reportCategory) {
+    public Report(String content, Member member, ReportTarget reportTarget, Long reportedId, ReportCategory reportCategory) {
         this.content = content;
         this.member = member;
-        this.reportType = reportType;
+        this.reportTarget = reportTarget;
         this.reportedId = reportedId;
         this.reportCategory = reportCategory;
     }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.documentation.common.Documentation;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.report.Report;
-import com.saebyeok.saebyeok.domain.report.ReportType;
+import com.saebyeok.saebyeok.domain.report.ReportTarget;
 import com.saebyeok.saebyeok.dto.TokenResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
@@ -87,7 +87,7 @@ public class ReportDocumentation extends Documentation {
     @Test
     void createArticleReport() throws Exception {
         ReportCreateRequest reportCreateRequest = new ReportCreateRequest("게시물 신고 내용", 1L, 1L, "Article");
-        Report report = new Report("게시물에 대한 신고입니다.", null, ReportType.ARTICLE, 1L, null);
+        Report report = new Report("게시물에 대한 신고입니다.", null, ReportTarget.ARTICLE, 1L, null);
 
         given(reportService.createReport(any(Member.class), any())).willReturn(report);
 
