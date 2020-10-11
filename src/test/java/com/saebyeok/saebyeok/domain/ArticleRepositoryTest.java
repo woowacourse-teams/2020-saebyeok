@@ -41,15 +41,12 @@ class ArticleRepositoryTest {
     @Transactional
     void setUp() {
         // TODO: 2020/08/12  emotion,sql 실행시킨 다음에, null 대신 진짜 값 넣어주면 어떨까? 고민
+        member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         article1 = new Article("내용1", true);
-        article2 = new Article("내용2", false);
+        article2 = new Article("내용2", member, false);
         article3 = new Article("내용3", true);
 
-        member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
-
-        article2.setMember(member);
-
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);

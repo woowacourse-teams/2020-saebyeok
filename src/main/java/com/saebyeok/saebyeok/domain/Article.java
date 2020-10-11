@@ -89,10 +89,4 @@ public class Article {
         comment.setArticle(this);
         this.comments.add(comment);
     }
-
-    public void setMember(Member member) {
-        // Todo: 편의 메소드 리팩토링(기존에 member가 있는 경우, add를 중복으로 하는 경우 등)
-        this.member = member;
-        member.addArticle(this);
-    }
 }
