@@ -51,7 +51,7 @@
         <report-button
           v-if="!comment.isMine"
           :reportTarget="getReportTarget()"
-          :reportedId="comment.id"
+          :targetContentId="comment.id"
         />
       </div>
     </v-flex>

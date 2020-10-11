@@ -111,7 +111,7 @@ export default {
     submitReport() {
       const reportCreateRequest = {
         content: this.textContent,
-        reportedId: this.reportedId,
+        targetContentId: this.targetContentId,
         reportTarget: this.reportTarget.toString(),
         reportCategoryId: this.reportCategories[this.choiceCategory].id
       };
@@ -147,7 +147,7 @@ export default {
       required: true,
       default: ''
     },
-    reportedId: {
+    targetContentId: {
       type: Number,
       required: true,
       default: 0

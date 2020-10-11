@@ -65,7 +65,7 @@
               <report-button
                 v-if="!article.isMine"
                 :reportTarget="getReportTarget()"
-                :reportedId="article.id"
+                :targetContentId="article.id"
               />
             </v-col>
           </v-row>
