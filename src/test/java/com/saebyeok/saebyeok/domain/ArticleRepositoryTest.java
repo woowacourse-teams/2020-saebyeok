@@ -42,9 +42,9 @@ class ArticleRepositoryTest {
     void setUp() {
         // TODO: 2020/08/12  emotion,sql 실행시킨 다음에, null 대신 진짜 값 넣어주면 어떨까? 고민
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        article1 = new Article("내용1", true);
+        article1 = new Article("내용1", null, true);
         article2 = new Article("내용2", member, false);
-        article3 = new Article("내용3", true);
+        article3 = new Article("내용3", null, true);
 
         memberRepository.save(member);
         articleRepository.save(article1);
@@ -69,7 +69,7 @@ class ArticleRepositoryTest {
     @DisplayName("게시글을 저장한다")
     @Test
     void saveTest() {
-        Article newArticle = new Article("내용4", true);
+        Article newArticle = new Article("내용4", null, true);
         int articleSize = articleRepository.findAll().size();
 
         articleRepository.save(newArticle);

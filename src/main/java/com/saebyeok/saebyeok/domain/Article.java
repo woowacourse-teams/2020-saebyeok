@@ -44,11 +44,6 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<ArticleLike> likes;
 
-    public Article(String content, Boolean isCommentAllowed) {
-        this.content = content;
-        this.isCommentAllowed = isCommentAllowed;
-    }
-
     public Article(String content, Member member, Boolean isCommentAllowed) {
         this.content = content;
         this.member = member;

@@ -55,12 +55,6 @@ public class Comment implements Comparable<Comment> {
         this.parent = parent;
     }
 
-    public Comment(String content, String nickname, Comment parent) {
-        this.content = content;
-        this.nickname = nickname;
-        this.parent = parent;
-    }
-
     public boolean isWrittenBy(Member member) {
         return this.member == member;
     }

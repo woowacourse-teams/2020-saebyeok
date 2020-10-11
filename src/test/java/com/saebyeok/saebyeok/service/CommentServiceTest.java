@@ -83,7 +83,7 @@ class CommentServiceTest {
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() throws IllegalAccessException {
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(new Comment("테스트", "슬픈돌고래", null)));
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(new Comment("테스트", null, "슬픈돌고래", null, null)));
         Long savedCommentId = 1L;
 
         commentService.deleteComment(any(Member.class), savedCommentId);
