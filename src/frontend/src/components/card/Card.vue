@@ -15,8 +15,8 @@
       </v-card-title>
       <v-card-text
         class="headline text-body-1 pb-0"
-        style="color:rgb(0,0,0)"
-        v-html="article.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+        style="color:rgb(0,0,0); min-height:10px; white-space: pre-wrap;"
+        v-text="article.content"
         v-linkified
         @click="clickCardContent()"
       >
