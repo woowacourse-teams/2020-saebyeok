@@ -1,4 +1,4 @@
-export const REPORT_TYPE = {
+export const REPORT_TARGET = {
   COMMENT: 'COMMENT',
   ARTICLE: 'ARTICLE'
 };
