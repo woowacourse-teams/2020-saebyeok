@@ -24,23 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
 
-    public static final int FEED_LIMIT_DAYS = 7;
+    public static final int VISIBLE_DAYS_ON_ANALYSIS = 7;
     private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
 
     private final ArticleRepository articleRepository;
     private final ArticleEmotionService articleEmotionService;
     private final ArticleSubEmotionService articleSubEmotionService;
-    private final CommentService commentService;
 
     public List<ArticleResponse> getArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
         if (!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
-            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(FEED_LIMIT_DAYS), false);
+            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS), false);
             return filterArticles(member, articles, emotionIds, pageable);
         }
 
-        return articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(FEED_LIMIT_DAYS), false, pageable).
+        return articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS), false, pageable).
                 stream().
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
@@ -63,7 +62,7 @@ public class ArticleService {
 
     public ArticleResponse readArticle(Member member, Long articleId) {
         Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId,
-                                                                                   LocalDateTime.now().minusDays(FEED_LIMIT_DAYS), false)
+                                                                                   LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
