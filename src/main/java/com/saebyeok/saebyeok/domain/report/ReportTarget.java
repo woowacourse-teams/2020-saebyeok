@@ -16,9 +16,9 @@ public enum ReportTarget {
         this.name = name;
     }
 
-    public static ReportTarget findReportType(String typeValue) {
+    public static ReportTarget findReportTarget(String typeValue) {
         return Arrays.stream(ReportTarget.values()).
-                filter(reportType -> reportType.name().equals(typeValue)).
+                filter(reportTarget -> reportTarget.name().equals(typeValue)).
                 findAny().
                 orElseThrow(() -> new ReportTargetNotFoundException(typeValue));
     }

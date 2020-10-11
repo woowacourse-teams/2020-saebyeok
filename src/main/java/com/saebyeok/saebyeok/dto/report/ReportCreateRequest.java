@@ -26,6 +26,6 @@ public class ReportCreateRequest {
     private String reportTarget;
 
     public Report toReport(Member member, ReportCategory reportCategory) {
-        return new Report(content, member, ReportTarget.findReportType(this.reportTarget), targetContentId, reportCategory);
+        return new Report(content, member, ReportTarget.findReportTarget(this.reportTarget), targetContentId, reportCategory);
     }
 }
