@@ -108,9 +108,9 @@ public class ReportDocumentation extends Documentation {
                         ),
                         requestFields(
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("신고 내용"),
-                                fieldWithPath("reportedId").type(JsonFieldType.NUMBER).description("신고할 게시물 혹은 댓글의 ID"),
+                                fieldWithPath("targetContentId").type(JsonFieldType.NUMBER).description("신고할 게시물 혹은 댓글의 ID"),
                                 fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 카테고리 ID"),
-                                fieldWithPath("reportType").type(JsonFieldType.STRING).description("신고의 분류. 게시글이나 댓글, 혹은 그 외.")
+                                fieldWithPath("reportTarget").type(JsonFieldType.STRING).description("신고 대상의 분류. 게시글 혹은 댓글로 분류되고 있음.")
                         ),
                         responseHeaders(
                                 headerWithName("Location").description("생성 성공 시 해당 주소로 이동")

@@ -17,7 +17,7 @@ public class ReportCreateRequest {
     private String content;
 
     @NotNull(message = "신고할 게시물을 반드시 선택해 주셔야 해요.")
-    private Long reportedId;
+    private Long targetContentId;
 
     @NotNull(message = "신고 분류는 반드시 선택해 주셔야 해요.")
     private Long reportCategoryId;
@@ -26,6 +26,6 @@ public class ReportCreateRequest {
     private String reportTarget;
 
     public Report toReport(Member member, ReportCategory reportCategory) {
-        return new Report(content, member, ReportTarget.findReportType(this.reportTarget), reportedId, reportCategory);
+        return new Report(content, member, ReportTarget.findReportType(this.reportTarget), targetContentId, reportCategory);
     }
 }

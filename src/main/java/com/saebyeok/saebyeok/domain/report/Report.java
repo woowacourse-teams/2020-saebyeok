@@ -24,7 +24,7 @@ public class Report {
     private Long id;
 
     private String content;
-    private Long reportedId;
+    private Long targetContentId;
 
     @Enumerated(EnumType.STRING)
     private ReportTarget reportTarget;
@@ -44,11 +44,11 @@ public class Report {
 
     private Boolean isFinished = Boolean.FALSE;
 
-    public Report(String content, Member member, ReportTarget reportTarget, Long reportedId, ReportCategory reportCategory) {
+    public Report(String content, Member member, ReportTarget reportTarget, Long targetContentId, ReportCategory reportCategory) {
         this.content = content;
         this.member = member;
         this.reportTarget = reportTarget;
-        this.reportedId = reportedId;
+        this.targetContentId = targetContentId;
         this.reportCategory = reportCategory;
     }
 
