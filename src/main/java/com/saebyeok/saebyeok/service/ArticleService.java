@@ -26,7 +26,6 @@ public class ArticleService {
 
     public static final int FEED_LIMIT_DAYS = 7;
     private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
-    public static final int ANALYSIS_LIMIT_DAYS = 30;
 
     private final ArticleRepository articleRepository;
     private final ArticleEmotionService articleEmotionService;
@@ -119,7 +118,7 @@ public class ArticleService {
                 collect(Collectors.toList());
     }
 
-    public List<Article> getLast1MonthArticles(Member member) {
-        return articleRepository.findAllByMemberAndCreatedDateGreaterThanEqualAndIsDeleted(member, LocalDateTime.now().minusDays(ANALYSIS_LIMIT_DAYS), false);
+    public List<Article> getLimitedDaysArticles(Member member, int limitDays) {
+        return articleRepository.findAllByMemberAndCreatedDateGreaterThanEqualAndIsDeleted(member, LocalDateTime.now().minusDays(limitDays), false);
     }
 }

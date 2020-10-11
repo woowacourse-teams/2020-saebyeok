@@ -20,14 +20,14 @@ public class AnalysisService {
     private final CommentService commentService;
 
     public List<Integer> findArticleEmotionsCount(Member member) {
-        List<Article> memberArticles = articleService.getLast1MonthArticles(member);
+        List<Article> memberArticles = articleService.getLimitedDaysArticles(member, 30);
         List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
         return articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds);
     }
 
     public Long findMostEmotionId(Member member) {
-        List<Article> articlesByMemberAndInquiryDays = articleService.getLast1MonthArticles(member).stream()
+        List<Article> articlesByMemberAndInquiryDays = articleService.getLimitedDaysArticles(member, 30).stream()
                 .filter(article -> article.getCreatedDate().isAfter(article.getCreatedDate().minusDays(INQUIRY_DAYS)))
                 .collect(Collectors.toList());
 
