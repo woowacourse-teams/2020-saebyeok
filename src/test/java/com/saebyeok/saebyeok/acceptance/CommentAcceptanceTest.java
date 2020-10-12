@@ -119,7 +119,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
 
         //then 댓글 삭제에 실패한다.
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
-                .contains("에 해당하는 댓글을 찾을 수 없습니다!");
+                .contains("에 해당하는 댓글을 찾을 수 없습니다");
     }
 
     private ExceptionResponse createInvalidComment(String content) {
