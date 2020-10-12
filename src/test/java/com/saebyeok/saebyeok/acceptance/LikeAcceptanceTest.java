@@ -42,7 +42,6 @@ public class LikeAcceptanceTest extends AcceptanceTest {
         ArticleResponse LikedArticle = readArticle(ARTICLE_ID);
         assertThat(LikedArticle.getLikesCount()).isEqualTo(1);
 
-
         // when 이미 공감한 글을 공감 취소한다.
         unlikeArticle(ARTICLE_ID);
 
