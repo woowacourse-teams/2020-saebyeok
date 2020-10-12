@@ -20,6 +20,7 @@ public class CommentResponse {
     private Boolean isMine;
     private Long likesCount;
     private Boolean isLikedByMe;
+    private Boolean hasNoParent;
 
     public CommentResponse(Comment comment, Member member) {
         this.id = comment.getId();
@@ -30,5 +31,6 @@ public class CommentResponse {
         this.isMine = comment.isWrittenBy(member);
         this.likesCount = comment.countLikes();
         this.isLikedByMe = comment.isLikedBy(member);
+        this.hasNoParent = comment.getParent() == null;
     }
 }

@@ -33,7 +33,7 @@ public class LikeAcceptanceTest extends AcceptanceTest {
     void manageLike() {
         // given 공감이 없는 게시글과 댓글이 등록되어있다.
         createArticle(ARTICLE_CONTENT, EMOTION_ID, SUB_EMOTION_IDS, true);
-        createComment(ARTICLE_ID, COMMENT_CONTENT);
+        createCommentOf(ARTICLE_ID);
 
         // when 회원이 게시글을 공감한다.
         likeArticle(ARTICLE_ID);

@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -28,6 +29,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
      * then 이제 글이 하나도 없다.
      */
 
+    @DisplayName("게시물에 대해 요청을 보낼 때, 응답이 올바르게 수행되어야 한다")
     @Test
     void manageArticle() {
         //given 글이 하나도 없다.

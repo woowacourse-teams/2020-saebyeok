@@ -83,22 +83,25 @@ public class AcceptanceTest {
         //@formatter:on
     }
 
-    public void createComment(Long articleId, String content) {
-        //@formatter:off
+    public Long createCommentOf(Long targetArticleId) {
         Map<String, Object> params = new HashMap<>();
-        params.put("articleId", articleId);
-        params.put("content", content);
+        params.put("content", COMMENT_CONTENT);
+        params.put("articleId", targetArticleId);
 
-        given().
-                auth().oauth2(TOKEN).
-                body(params).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(API + "/articles/" + articleId + "/comments").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value());
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                        body(params).
+                        contentType(MediaType.APPLICATION_JSON_VALUE).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                        post(API + "/articles/" + targetArticleId + "/comments").
+                then().
+                        log().all().
+                        statusCode(HttpStatus.CREATED.value()).
+                        extract().as(Long.class);
         //@formatter:on
+
     }
 }

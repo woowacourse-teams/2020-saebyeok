@@ -80,39 +80,7 @@ export default {
   name: 'Comment',
   data() {
     return {
-      deletedCommentMessage: '삭제된 댓글입니다.',
-      recomments: [
-        {
-          id: 100,
-          content: '대댓글 내용',
-          nickname: '대댓글닉네임',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:57:22',
-          isMine: true,
-          likesCount: 2,
-          isLikedByMe: false
-        },
-        {
-          id: 101,
-          content: '대댓글 내용2',
-          nickname: '대댓글닉네임2',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:58:22',
-          isMine: false,
-          likesCount: 3,
-          isLikedByMe: false
-        },
-        {
-          id: 102,
-          content: '대댓글 내용22222222222222222222222222222222222222222222222',
-          nickname: '대댓글닉네임2',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:59:22',
-          isMine: false,
-          likesCount: 3,
-          isLikedByMe: false
-        }
-      ]
+      deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
   components: {
@@ -152,7 +120,10 @@ export default {
       return REPORT_TARGET.COMMENT;
     },
     specifyMemberToRecomment() {
-      this.activateRecomment(this.comment.nickname);
+      this.activateRecomment({
+        targetNickname: this.comment.nickname,
+        targetCommentId: this.comment.id
+      });
     },
     getCommentNickname() {
       return this.comment.nickname === '작성자'
