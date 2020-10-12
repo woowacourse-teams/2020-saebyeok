@@ -57,8 +57,8 @@
         <div class="pb-2 pr-2">
           <report-button
             v-if="!comment.isMine"
-            :reportType="getReportType()"
-            :reportedId="comment.id"
+            :reportTarget="getReportTarget()"
+            :targetContentId="comment.id"
           />
         </div>
       </v-flex>
@@ -71,7 +71,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
@@ -116,14 +116,14 @@ export default {
         });
       }
     },
+    getReportTarget() {
+      return REPORT_TARGET.COMMENT;
+    },
     specifyMemberToRecomment() {
       this.activateRecomment({
         targetNickname: this.comment.nickname,
         targetCommentId: this.comment.id
       });
-    },
-    getReportType() {
-      return REPORT_TYPE.COMMENT;
     },
     getCommentNickname() {
       return this.comment.nickname === '작성자'

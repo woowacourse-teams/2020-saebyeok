@@ -131,7 +131,7 @@ class LikeServiceTest {
 
         assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
                 .isInstanceOf(CommentNotFoundException.class)
-                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
 
         verify(commentLikeRepository, never()).save(any());
     }
@@ -165,7 +165,7 @@ class LikeServiceTest {
 
         assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
                 .isInstanceOf(CommentNotFoundException.class)
-                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
 
         verify(commentLikeRepository, never()).deleteByMemberAndComment(any(), any());
     }

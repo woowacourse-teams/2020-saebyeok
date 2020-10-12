@@ -20,6 +20,8 @@ public class GlobalExceptionAdvice {
             CommentNotFoundException.class,
             ArticleNotFoundException.class,
             EmotionNotFoundException.class,
+            ReportCategoryNotFoundException.class,
+            ReportTargetNotFoundException.class,
             IllegalAccessException.class,
             DuplicateArticleLikeException.class,
             DuplicateCommentLikeException.class})

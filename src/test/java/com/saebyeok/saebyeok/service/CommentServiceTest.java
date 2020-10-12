@@ -80,7 +80,7 @@ class CommentServiceTest {
 
         assertThatThrownBy(() -> commentService.createComment(member, request))
                 .isInstanceOf(CommentNotFoundException.class)
-                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
     }
 
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")

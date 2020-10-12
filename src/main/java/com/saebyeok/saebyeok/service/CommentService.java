@@ -66,9 +66,4 @@ public class CommentService {
         comment.setIsDeleted(true);
         commentRepository.save(comment);
     }
-
-    @Transactional
-    public void deleteCommentsByArticle(Article article) {
-        commentRepository.deleteAll(article.getComments());
-    }
 }
