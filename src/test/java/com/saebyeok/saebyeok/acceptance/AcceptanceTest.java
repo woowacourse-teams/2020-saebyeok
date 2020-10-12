@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +22,14 @@ import java.util.Map;
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
-    public static final String API = "/api";
-    public static final Long MEMBER_ID = 1L;
-    public static final Long ARTICLE_ID = 1L;
-    public static String TOKEN = null;
+    static final String API = "/api";
+    static final Long MEMBER_ID = 1L;
+    static final Long ARTICLE_ID = 1L;
+    static final String ARTICLE_CONTENT = "내용입니다";
+    static final String COMMENT_CONTENT = "새벽 좋아요";
+    static final Long EMOTION_ID = 1L;
+    static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
+    static String TOKEN = null;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -72,6 +77,25 @@ public class AcceptanceTest {
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
                 post(API + "/articles").
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value());
+        //@formatter:on
+    }
+
+    public void createComment(Long articleId, String content) {
+        //@formatter:off
+        Map<String, Object> params = new HashMap<>();
+        params.put("articleId", articleId);
+        params.put("content", content);
+
+        given().
+                auth().oauth2(TOKEN).
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post(API + "/articles/" + articleId + "/comments").
         then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());

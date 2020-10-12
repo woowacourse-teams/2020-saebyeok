@@ -1,7 +1,7 @@
 import {
-  UPDATE_COMMENT_LIKES,
   ACTIVATE_RECOMMENT,
-  DEACTIVATE_RECOMMENT
+  DEACTIVATE_RECOMMENT,
+  UPDATE_COMMENT_LIKES
 } from '@/store/shared/mutationTypes';
 import {
   CREATE_COMMENT,
@@ -55,14 +55,14 @@ const actions = {
       commit('catchError', error)
     );
   },
-  async [LIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.like(commentId)
+  async [LIKE_COMMENT]({ commit }, params) {
+    return CommentService.like(params)
       .then(() => commit(UPDATE_COMMENT_LIKES, 1))
       .catch(error => commit('catchError', error));
   },
-  async [UNLIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.unlike(commentId)
-      .then(() => commit(UPDATE_COMMENT_LIKES, commentId, -1))
+  async [UNLIKE_COMMENT]({ commit }, params) {
+    return CommentService.unlike(params)
+      .then(() => commit(UPDATE_COMMENT_LIKES, -1))
       .catch(error => commit('catchError', error));
   }
 };

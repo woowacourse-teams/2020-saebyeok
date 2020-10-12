@@ -16,10 +16,10 @@ const ArticleService = {
     return ApiService.delete(`${BASE_URL}/${articleId}`);
   },
   like(articleId) {
-    return ApiService.post(`/likes/article/${articleId}`);
+    return ApiService.post(`${BASE_URL}/${articleId}/likes`);
   },
   unlike(articleId) {
-    return ApiService.delete(`/likes/article/${articleId}`);
+    return ApiService.delete(`${BASE_URL}/${articleId}/likes`);
   }
 };
 
