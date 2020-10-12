@@ -21,7 +21,7 @@ public class LikeController {
     public ResponseEntity<Void> likeArticle(@LoginMember Member member, @PathVariable Long articleId) {
         ArticleLike articleLike = likeService.likeArticle(member, articleId);
         return ResponseEntity
-                .created(URI.create("/article/" + articleId + "/likes/" + articleLike.getId()))
+                .created(URI.create("/articles/" + articleId + "/likes/" + articleLike.getId()))
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class LikeController {
     public ResponseEntity<Void> likeComment(@LoginMember Member member, @PathVariable Long articleId, @PathVariable Long commentId) {
         CommentLike commentLike = likeService.likeComment(member, commentId);
         return ResponseEntity
-                .created(URI.create("/likes/comment/" + commentId + "/comment_like" + commentLike.getId()))
+                .created(URI.create("/articles/" + articleId + "/comments/" + commentId + "/likes/" + commentLike.getId()))
                 .build();
     }
 
