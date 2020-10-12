@@ -12,25 +12,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class AnalysisService {
-    private static final int INQUIRY_DAYS = 30;
+    public static final int VISIBLE_DAYS_ON_ANALYSIS = 30;
 
+    private final ArticleService articleService;
     private final EmotionService emotionService;
     private final ArticleEmotionService articleEmotionService;
     private final CommentService commentService;
 
     public List<Integer> findArticleEmotionsCount(Member member) {
-        List<Article> memberArticles = member.getArticles();
+        List<Article> memberArticles = articleService.getVisibleDaysArticles(member, VISIBLE_DAYS_ON_ANALYSIS);
         List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
         return articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds);
     }
 
     public Long findMostEmotionId(Member member) {
-        List<Article> articlesByMemberAndInquiryDays = member.getArticles().stream()
-                .filter(article -> article.getCreatedDate().isAfter(article.getCreatedDate().minusDays(INQUIRY_DAYS)))
-                .collect(Collectors.toList());
+        List<Article> articlesByMemberAndVisibleDays = articleService.getVisibleDaysArticles(member, VISIBLE_DAYS_ON_ANALYSIS);
 
-        return articleEmotionService.findMostEmotionIdInArticles(articlesByMemberAndInquiryDays);
+        return articleEmotionService.findMostEmotionIdInArticles(articlesByMemberAndVisibleDays);
     }
 
     public Long countTotalCommentsBy(Member member) {
