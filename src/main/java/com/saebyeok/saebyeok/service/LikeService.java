@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.saebyeok.saebyeok.service.ArticleService.VISIBLE_DAYS_ON_ANALYSIS;
+import static com.saebyeok.saebyeok.service.ArticleService.VISIBLE_DAYS_ON_FEED;
 
 @Transactional
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class LikeService {
     private final CommentRepository commentRepository;
 
     public ArticleLike likeArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS), false)
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
 
         ArticleLike like = new ArticleLike(member, article);
@@ -38,7 +38,7 @@ public class LikeService {
     }
 
     public void unlikeArticle(Member member, Long articleId) {
-        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS), false)
+        Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
 
         articleLikeRepository.deleteByMemberAndArticle(member, article);
