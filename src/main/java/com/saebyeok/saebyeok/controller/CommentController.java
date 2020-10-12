@@ -19,12 +19,12 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/articles/{articleId}/comments")
-    public ResponseEntity<Void> createComment(@LoginMember Member member, @PathVariable Long articleId,
+    public ResponseEntity<Long> createComment(@LoginMember Member member, @PathVariable Long articleId,
                                               @Valid @RequestBody CommentCreateRequest commentCreateRequest) {
         Comment comment = commentService.createComment(member, commentCreateRequest);
         return ResponseEntity.
                 created(URI.create("/articles/" + articleId + "/comments/" + comment.getId())).
-                build();
+                body(comment.getId());
     }
 
     @DeleteMapping("/articles/{articleId}/comments/{commentId}")

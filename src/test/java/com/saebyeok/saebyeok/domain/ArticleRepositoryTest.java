@@ -45,9 +45,7 @@ class ArticleRepositoryTest {
     private Member member;
 
     @BeforeEach
-    @Transactional
     void setUp() {
-        // TODO: 2020/08/12  emotion,sql 실행시킨 다음에, null 대신 진짜 값 넣어주면 어떨까? 고민
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 

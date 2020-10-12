@@ -9,7 +9,7 @@
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h7 pl-3">
-          이 {{ getReportTypeText() }}을 신고하시겠어요?
+          이 {{ getReportTargetText() }}을 신고하시겠어요?
         </v-card-title>
 
         <v-card-actions>
@@ -72,11 +72,14 @@
   </div>
 </template>
 <script>
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
-import { FETCH_REPORT_CATEGORIES } from '@/store/shared/actionTypes';
+import {
+  CREATE_REPORT,
+  FETCH_REPORT_CATEGORIES
+} from '@/store/shared/actionTypes';
 
-import { mapMutations, mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'ReportButton',
@@ -97,15 +100,29 @@ export default {
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
     ...mapActions([FETCH_REPORT_CATEGORIES]),
+    ...mapActions([CREATE_REPORT]),
     onReport() {
       if (this.choiceCategory === undefined) {
         this.invalidCategoryChoice = true;
         return;
       }
-      //todo : 여기에 신고 연산이 들어간다
-
-      this.dialog = false;
-      this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
+      this.submitReport();
+    },
+    submitReport() {
+      const reportCreateRequest = {
+        content: this.textContent,
+        targetContentId: this.targetContentId,
+        reportTarget: this.reportTarget.toString(),
+        reportCategoryId: this.reportCategories[this.choiceCategory].id
+      };
+      this.createReport(reportCreateRequest)
+        .then(() => {
+          this.dialog = false;
+          this.showSnackbar('신고가 접수되었습니다. 감사합니다.');
+        })
+        .catch(error => {
+          this.showSnackbar(error.response.data.errorMessage);
+        });
     },
     onClickAlarmButton() {
       this.invalidCategoryChoice = false;
@@ -113,11 +130,11 @@ export default {
       this.textContent = '';
       this.dialog = true;
     },
-    getReportTypeText() {
-      switch (this.reportType) {
-        case REPORT_TYPE.ARTICLE:
+    getReportTargetText() {
+      switch (this.reportTarget) {
+        case REPORT_TARGET.ARTICLE:
           return '게시물';
-        case REPORT_TYPE.COMMENT:
+        case REPORT_TARGET.COMMENT:
           return '댓글';
         default:
           return '게시물';
@@ -125,12 +142,12 @@ export default {
     }
   },
   props: {
-    reportType: {
+    reportTarget: {
       type: String,
       required: true,
       default: ''
     },
-    reportedId: {
+    targetContentId: {
       type: Number,
       required: true,
       default: 0
