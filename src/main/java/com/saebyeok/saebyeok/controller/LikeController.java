@@ -17,30 +17,30 @@ import java.net.URI;
 public class LikeController {
     private final LikeService likeService;
 
-    @PostMapping("/likes/article/{articleId}")
+    @PostMapping("/articles/{articleId}/likes")
     public ResponseEntity<Void> likeArticle(@LoginMember Member member, @PathVariable Long articleId) {
         ArticleLike articleLike = likeService.likeArticle(member, articleId);
         return ResponseEntity
-                .created(URI.create("/likes/article/" + articleId + "/article_like/" + articleLike.getId()))
+                .created(URI.create("/article/" + articleId + "/likes/" + articleLike.getId()))
                 .build();
     }
 
-    @DeleteMapping("/likes/article/{articleId}")
+    @DeleteMapping("/articles/{articleId}/likes")
     public ResponseEntity<Void> unlikeArticle(@LoginMember Member member, @PathVariable Long articleId) {
         likeService.unlikeArticle(member, articleId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/likes/comment/{commentId}")
-    public ResponseEntity<Void> likeComment(@LoginMember Member member, @PathVariable Long commentId) {
+    @PostMapping("/articles/{articleId}/comments/{commentId}/likes")
+    public ResponseEntity<Void> likeComment(@LoginMember Member member, @PathVariable Long articleId, @PathVariable Long commentId) {
         CommentLike commentLike = likeService.likeComment(member, commentId);
         return ResponseEntity
                 .created(URI.create("/likes/comment/" + commentId + "/comment_like" + commentLike.getId()))
                 .build();
     }
 
-    @DeleteMapping("/likes/comment/{commentId}")
-    public ResponseEntity<Void> unlikeComment(@LoginMember Member member, @PathVariable Long commentId) {
+    @DeleteMapping("/articles/{articleId}/comments/{commentId}/likes")
+    public ResponseEntity<Void> unlikeComment(@LoginMember Member member, @PathVariable Long articleId, @PathVariable Long commentId) {
         likeService.unlikeComment(member, commentId);
         return ResponseEntity.noContent().build();
     }
