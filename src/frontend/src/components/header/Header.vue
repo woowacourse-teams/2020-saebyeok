@@ -8,7 +8,7 @@
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
       <logout-button v-if="this.token" />
-      <v-icon size="48px" v-else>mdi-blank</v-icon>
+      <login-button v-else />
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
@@ -16,6 +16,7 @@
 <script>
 import FilterButton from '@/components/FilterButton';
 import LogoutButton from '@/components/LogoutButton';
+import LoginButton from '@/components/LoginButton';
 
 export default {
   name: 'Header',
@@ -24,7 +25,8 @@ export default {
   },
   components: {
     FilterButton,
-    LogoutButton
+    LogoutButton,
+    LoginButton
   },
   methods: {
     clickTitle() {

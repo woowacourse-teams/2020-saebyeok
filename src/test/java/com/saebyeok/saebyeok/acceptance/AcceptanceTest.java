@@ -22,14 +22,14 @@ import java.util.Map;
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
-    public static final String API = "/api";
-    public static final Long MEMBER_ID = 1L;
-    public static final Long ARTICLE_ID = 1L;
-    public static final Long EMOTION_ID = 1L;
-    public static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
-    public static final String ARTICLE_CONTENT = "게시물 내용입니다";
-    public static final String COMMENT_CONTENT = "댓글 내용입니다";
-    public static String TOKEN = null;
+    static final String API = "/api";
+    static final Long MEMBER_ID = 1L;
+    static final Long ARTICLE_ID = 1L;
+    static final String ARTICLE_CONTENT = "내용입니다";
+    static final String COMMENT_CONTENT = "새벽 좋아요";
+    static final Long EMOTION_ID = 1L;
+    static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
+    static String TOKEN = null;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
