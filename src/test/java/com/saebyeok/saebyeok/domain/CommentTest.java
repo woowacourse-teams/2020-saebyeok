@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CommentTest {
     public static final String TEST_CONTENT = "새벽 좋아요";
@@ -45,26 +43,6 @@ public class CommentTest {
         assertThat(comment.getContent()).isEqualTo(TEST_CONTENT);
         assertThat(comment.getNickname()).isEqualTo(TEST_NICKNAME);
         assertThat(comment.getIsDeleted()).isFalse();
-    }
-
-    @DisplayName("예외 테스트: 해당 댓글에 대한 CommentLike가 아닌 CommentLike를 추가하면 예외가 발생한다")
-    @Test
-    void addInvalidLikeExceptionTest() {
-        CommentLike invalidCommentLike = new CommentLike(member, comment2);
-
-        assertThatThrownBy(() -> comment1.addLike(invalidCommentLike))
-                .isInstanceOf(RuntimeException.class);
-    }
-
-    @DisplayName("예외 테스트: 이미 존재하는 CommentLike를 추가하면 예외가 발생한다")
-    @Test
-    void addLikeExceptionTest() {
-        CommentLike commentLike = new CommentLike(member, comment1);
-        comment1.addLike(commentLike);
-
-        assertThatThrownBy(() -> comment1.addLike(commentLike))
-                .isInstanceOf(DuplicateCommentLikeException.class)
-                .hasMessage("이미 공감한 댓글에 추가 공감을 할 수 없습니다. MemberId: " + member.getId() + ", commentId: " + comment1.getId());
     }
 
     @DisplayName("특정 사용자가 해당 댓글을 공감했는지 여부를 확인할 수 있다")

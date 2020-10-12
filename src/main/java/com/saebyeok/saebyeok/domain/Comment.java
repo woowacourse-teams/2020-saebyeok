@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -96,20 +95,6 @@ public class Comment implements Comparable<Comment> {
 
     public void setParent(Comment parent) {
         this.parent = parent;
-    }
-
-    public void addLike(CommentLike like) {
-        Objects.requireNonNull(like);
-
-        if (like.getComment() != this) {
-            // TODO: 2020/08/22 : 커스텀 Exception 생성해서 사용하기
-            throw new RuntimeException();
-        }
-
-        if (this.likes.contains(like)) {
-            throw new DuplicateCommentLikeException(like.getMember().getId(), like.getComment().getId());
-        }
-        this.likes.add(like);
     }
 
     @Override
