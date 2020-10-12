@@ -57,8 +57,8 @@
         <div class="pb-2 pr-2">
           <report-button
             v-if="!comment.isMine"
-            :reportType="getReportType()"
-            :reportedId="comment.id"
+            :reportTarget="getReportTarget()"
+            :targetContentId="comment.id"
           />
         </div>
       </v-flex>
@@ -71,8 +71,8 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
-import { mapActions, mapMutations } from 'vuex';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 
@@ -99,16 +99,25 @@ export default {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
-        this.unlikeComment(this.comment.id).then(() => {
+        this.unlikeComment({
+          articleId: this.article.id,
+          commentId: this.comment.id
+        }).then(() => {
           this.comment.isLikedByMe = false;
           this.comment.likesCount--;
         });
       } else {
-        this.likeComment(this.comment.id).then(() => {
+        this.likeComment({
+          articleId: this.article.id,
+          commentId: this.comment.id
+        }).then(() => {
           this.comment.isLikedByMe = true;
           this.comment.likesCount++;
         });
       }
+    },
+    getReportTarget() {
+      return REPORT_TARGET.COMMENT;
     },
     specifyMemberToRecomment() {
       this.activateRecomment({
@@ -116,14 +125,14 @@ export default {
         targetCommentId: this.comment.id
       });
     },
-    getReportType() {
-      return REPORT_TYPE.COMMENT;
-    },
     getCommentNickname() {
       return this.comment.nickname === '작성자'
         ? '✒️ ' + this.comment.nickname
         : this.comment.nickname;
     }
+  },
+  computed: {
+    ...mapGetters(['article'])
   }
 };
 </script>

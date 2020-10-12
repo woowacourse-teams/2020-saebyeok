@@ -23,7 +23,7 @@ public class CommentService {
         Long articleId = commentCreateRequest.getArticleId();
         Article article = articleRepository.findById(articleId).
                 orElseThrow(() -> new ArticleNotFoundException(articleId));
-        Long parentId = commentCreateRequest.getParent();
+        Long parentId = commentCreateRequest.getParentId();
         Comment parent;
         if (parentId != null) {
             parent = commentRepository.findById(parentId).
@@ -53,10 +53,5 @@ public class CommentService {
         }
         comment.delete();
         commentRepository.save(comment);
-    }
-
-    @Transactional
-    public void deleteCommentsByArticle(Article article) {
-        commentRepository.deleteAll(article.getComments());
     }
 }

@@ -69,7 +69,7 @@ export default {
       const commentCreateRequest = {
         content: this.content,
         articleId: this.articleId,
-        parent: this.targetCommentId
+        parentId: this.targetCommentId
       };
 
       this.createComment(commentCreateRequest).then(response => {

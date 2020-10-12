@@ -5,7 +5,6 @@ import com.saebyeok.saebyeok.dto.EmotionResponse;
 import com.saebyeok.saebyeok.exception.ArticleEmotionNotFoundException;
 import com.saebyeok.saebyeok.exception.EmotionNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,8 @@ public class ArticleEmotionService {
     private final ArticleEmotionRepository articleEmotionRepository;
 
     public void createArticleEmotion(Article article, Long emotionId) {
-        Emotion emotion = emotionRepository.findById(emotionId).orElseThrow(
-                () -> new EmotionNotFoundException(emotionId));
+        Emotion emotion = emotionRepository.findById(emotionId).
+                orElseThrow(() -> new EmotionNotFoundException(emotionId));
         ArticleEmotion articleEmotion = new ArticleEmotion(article, emotion);
 
         articleEmotionRepository.save(articleEmotion);

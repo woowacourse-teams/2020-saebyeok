@@ -133,7 +133,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
 
         //then 댓글 삭제에 실패한다.
         assertThat(commentNotFoundExceptionResponse.getErrorMessage())
-                .contains("에 해당하는 댓글을 찾을 수 없습니다!");
+                .contains("에 해당하는 댓글을 찾을 수 없습니다");
 
         //when 댓글을 삭제한다.
         deleteComment(1L);
@@ -197,7 +197,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Map<String, Object> params = new HashMap<>();
         params.put("content", RECOMMENT_CONTENT);
         params.put("articleId", articleId);
-        params.put("parent", commentId);
+        params.put("parentId", commentId);
 
         //@formatter:off
         return

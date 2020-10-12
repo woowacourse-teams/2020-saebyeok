@@ -74,7 +74,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 import { mapActions } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
@@ -112,7 +112,7 @@ export default {
       }
     },
     getReportType() {
-      return REPORT_TYPE.COMMENT;
+      return REPORT_TARGET.COMMENT;
     },
     getCommentNickname() {
       return this.comment.nickname === '작성자'
