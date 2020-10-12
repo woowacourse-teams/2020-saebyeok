@@ -9,6 +9,7 @@ import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class ReportService {
     private final ReportCategoryRepository reportCategoryRepository;
     private final ReportRepository reportRepository;
 
+    @Cacheable(value = "ReportCategories")
     public List<ReportCategoryResponse> getReportCategories() {
         return reportCategoryRepository.findAll().
                 stream().
