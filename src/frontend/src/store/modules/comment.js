@@ -1,4 +1,8 @@
-import { UPDATE_COMMENT_LIKES } from '@/store/shared/mutationTypes';
+import {
+  ACTIVATE_RECOMMENT,
+  DEACTIVATE_RECOMMENT,
+  UPDATE_COMMENT_LIKES
+} from '@/store/shared/mutationTypes';
 import {
   CREATE_COMMENT,
   DELETE_COMMENT,
@@ -8,15 +12,39 @@ import {
 
 import CommentService from '@/api/modules/comment';
 
-const state = {};
+const state = {
+  isActiveRecomment: false,
+  targetNickname: '',
+  targetCommentId: null
+};
 
-const getters = {};
+const getters = {
+  isActiveRecomment(state) {
+    return state.isActiveRecomment;
+  },
+  targetNickname() {
+    return state.targetNickname;
+  },
+  targetCommentId() {
+    return state.targetCommentId;
+  }
+};
 
 const mutations = {
   [UPDATE_COMMENT_LIKES](state, value) {
     // pros와 vuex구조 및 comments분리 리팩토링 되고 나면 동작 확인하기
     // this.comment.value += value;
     console.log(state, value);
+  },
+  [ACTIVATE_RECOMMENT](state, payload) {
+    state.targetNickname = payload.targetNickname;
+    state.targetCommentId = payload.targetCommentId;
+    state.isActiveRecomment = true;
+  },
+  [DEACTIVATE_RECOMMENT](state) {
+    state.targetNickname = '';
+    state.targetCommentId = null;
+    state.isActiveRecomment = false;
   }
 };
 
@@ -33,14 +61,14 @@ const actions = {
       commit('catchError', error)
     );
   },
-  async [LIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.like(commentId)
+  async [LIKE_COMMENT]({ commit }, params) {
+    return CommentService.like(params)
       .then(() => commit(UPDATE_COMMENT_LIKES, 1))
       .catch(error => commit('catchError', error));
   },
-  async [UNLIKE_COMMENT]({ commit }, commentId) {
-    return CommentService.unlike(commentId)
-      .then(() => commit(UPDATE_COMMENT_LIKES, commentId, -1))
+  async [UNLIKE_COMMENT]({ commit }, params) {
+    return CommentService.unlike(params)
+      .then(() => commit(UPDATE_COMMENT_LIKES, -1))
       .catch(error => commit('catchError', error));
   }
 };

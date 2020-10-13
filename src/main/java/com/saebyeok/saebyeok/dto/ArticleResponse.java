@@ -46,6 +46,7 @@ public class ArticleResponse {
         }
         return article.getComments().
                 stream().
+                sorted().
                 map(comment -> new CommentResponse(comment, member)).
                 collect(Collectors.toList());
     }

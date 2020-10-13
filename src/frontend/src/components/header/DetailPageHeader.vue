@@ -10,13 +10,14 @@
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon>
       <logout-button v-if="this.token" />
-      <v-icon size="48px" v-else>mdi-blank</v-icon>
+      <login-button v-else />
     </v-app-bar-nav-icon>
   </v-app-bar>
 </template>
 
 <script>
 import LogoutButton from '@/components/LogoutButton';
+import LoginButton from '@/components/LoginButton';
 
 export default {
   name: 'DetailPageHeader',
@@ -24,7 +25,8 @@ export default {
     return { token: localStorage.getItem('token') };
   },
   components: {
-    LogoutButton
+    LogoutButton,
+    LoginButton
   }
 };
 </script>

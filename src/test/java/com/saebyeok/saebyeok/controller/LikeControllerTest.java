@@ -49,12 +49,12 @@ class LikeControllerTest {
                 .build();
     }
 
-    @DisplayName("'/api/likes/article/{articleId}'로 post 요청을 보내면 해당 게시글에 공감이 추가된다")
+    @DisplayName("'/api/articles/{articleId}/likes'로 POST 요청을 보내면 해당 게시글에 공감이 추가된다")
     @Test
     void likeArticleTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
 
-        this.mockMvc.perform(post("/api/likes/article/" + ARTICLE_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ARTICLE_ID + "/likes")).
                 andExpect(status().isCreated());
     }
 
@@ -63,7 +63,7 @@ class LikeControllerTest {
     void likeInvalidArticleTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(INVALID_ARTICLE_ID))).thenThrow(ArticleNotFoundException.class);
 
-        this.mockMvc.perform(post("/api/likes/article/" + INVALID_ARTICLE_ID)).
+        this.mockMvc.perform(post("/api/articles/" + INVALID_ARTICLE_ID + "/likes")).
                 andExpect(status().isBadRequest());
     }
 
@@ -72,16 +72,16 @@ class LikeControllerTest {
     void likeArticleAgainTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ALREADY_LIKED_ARTICLE_ID))).thenThrow(DuplicateArticleLikeException.class);
 
-        this.mockMvc.perform(post("/api/likes/article/" + ALREADY_LIKED_ARTICLE_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ALREADY_LIKED_ARTICLE_ID + "/likes")).
                 andExpect(status().isBadRequest());
     }
 
-    @DisplayName("'/api/likes/article/{articleId}'로 공감 취소 요청을 보내면 공감이 삭제된다")
+    @DisplayName("'/api/articles/{articleId}/likes'로 DELETE 요청을 보내면 공감이 삭제된다")
     @Test
     void unlikeArticleTest() throws Exception {
         doNothing().when(likeService).unlikeArticle(any(Member.class), eq(ARTICLE_ID));
 
-        this.mockMvc.perform((delete("/api/likes/article/" + ARTICLE_ID))).
+        this.mockMvc.perform((delete("/api/articles/" + ARTICLE_ID + "/likes"))).
                 andExpect(status().isNoContent());
     }
 
@@ -90,16 +90,16 @@ class LikeControllerTest {
     void unlikeInvalidArticleTest() throws Exception {
         doThrow(ArticleNotFoundException.class).when(likeService).unlikeArticle(any(Member.class), eq(INVALID_ARTICLE_ID));
 
-        this.mockMvc.perform(delete("/api/likes/article/" + INVALID_ARTICLE_ID)).
+        this.mockMvc.perform(delete("/api/articles/" + INVALID_ARTICLE_ID + "/likes")).
                 andExpect(status().isBadRequest());
     }
 
-    @DisplayName("'/api/likes/comment/{commentId}'로 post 요청을 보내면 해당 댓글 공감이 추가된다")
+    @DisplayName("'/api/articles/{articleId}/comments/{commentId}/likes'로 POST 요청을 보내면 해당 댓글 공감이 추가된다")
     @Test
     void likeCommentTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(COMMENT_ID))).thenReturn(new CommentLike());
 
-        this.mockMvc.perform(post("/api/likes/comment/" + COMMENT_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID + "/likes")).
                 andExpect(status().isCreated());
     }
 
@@ -108,7 +108,7 @@ class LikeControllerTest {
     void likeInvalidCommentTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(INVALID_COMMENT_ID))).thenThrow(CommentNotFoundException.class);
 
-        this.mockMvc.perform(post("/api/likes/comment/" + INVALID_COMMENT_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ARTICLE_ID + "/comments/" + INVALID_COMMENT_ID + "/likes")).
                 andExpect(status().isBadRequest());
     }
 
@@ -117,16 +117,16 @@ class LikeControllerTest {
     void likeCommentAgainTest() throws Exception {
         when(likeService.likeComment(any(Member.class), eq(ALREADY_LIKED_COMMENT_ID))).thenThrow(DuplicateCommentLikeException.class);
 
-        this.mockMvc.perform(post("/api/likes/comment/" + ALREADY_LIKED_COMMENT_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ARTICLE_ID + "/comments/" + ALREADY_LIKED_COMMENT_ID + "/likes")).
                 andExpect(status().isBadRequest());
     }
 
-    @DisplayName("'/api/likes/comment/{commentId}'로 공감 취소 요청을 보내면 공감이 삭제된다")
+    @DisplayName("'/api/articles/{articleId}/comments/{commentId}/likes'로 DELETE 요청을 보내면 공감이 삭제된다")
     @Test
     void unlikeCommentTest() throws Exception {
         doNothing().when(likeService).unlikeComment(any(Member.class), eq(COMMENT_ID));
 
-        this.mockMvc.perform((delete("/api/likes/comment/" + COMMENT_ID))).
+        this.mockMvc.perform((delete("/api/articles/" + ARTICLE_ID + "/comments/" + COMMENT_ID + "/likes"))).
                 andExpect(status().isNoContent());
     }
 
@@ -135,7 +135,7 @@ class LikeControllerTest {
     void unlikeInvalidCommentTest() throws Exception {
         doThrow(ArticleNotFoundException.class).when(likeService).unlikeComment(any(Member.class), eq(INVALID_COMMENT_ID));
 
-        this.mockMvc.perform(delete("/api/likes/comment/" + INVALID_COMMENT_ID)).
+        this.mockMvc.perform(delete("/api/articles/" + ARTICLE_ID + "/comments/" + INVALID_COMMENT_ID)).
                 andExpect(status().isBadRequest());
     }
 
@@ -145,7 +145,7 @@ class LikeControllerTest {
     void likeExceptionWithGuestUserTest() throws Exception {
         when(likeService.likeArticle(any(Member.class), eq(ARTICLE_ID))).thenReturn(new ArticleLike());
 
-        this.mockMvc.perform(post("/api/likes/article/" + ARTICLE_ID)).
+        this.mockMvc.perform(post("/api/articles/" + ARTICLE_ID + "/likes")).
                 andExpect(status().isUnauthorized());
     }
 }

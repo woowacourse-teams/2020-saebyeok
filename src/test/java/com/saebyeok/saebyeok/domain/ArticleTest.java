@@ -50,7 +50,7 @@ public class ArticleTest {
     @Test
     void loadExistingNicknameTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Comment comment = new Comment("내용", "닉네임1");
+        Comment comment = new Comment("내용", "닉네임1", null);
         comment.setMember(member);
         Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>());
 
@@ -70,9 +70,9 @@ public class ArticleTest {
     @Test
     void getAllNicknamesTest() {
         Member member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
-        Comment comment1 = new Comment("내용1", "닉네임1");
-        Comment comment2 = new Comment("내용2", "닉네임2");
-        Comment comment3 = new Comment("내용3", "닉네임3");
+        Comment comment1 = new Comment("내용1", "닉네임1", null);
+        Comment comment2 = new Comment("내용2", "닉네임2", null);
+        Comment comment3 = new Comment("내용3", "닉네임3", null);
         Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, Arrays.asList(comment1, comment2, comment3), new ArrayList<>());
 
         assertThat(article.getAllNicknames()).
