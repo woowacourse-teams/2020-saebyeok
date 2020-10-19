@@ -1,21 +1,17 @@
 <template>
   <v-card class="mx-auto rounded-lg" max-width="400">
     <v-row class="justify-center align-center">
-      <v-col
-        class="col-3"
-        style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
-      >
-        <v-chip @click="selectAll()" :disabled="isSelectedAll()"
-          >모두 보기</v-chip
-        >
+      <v-col class="col-3 choiceAllArea">
+        <v-chip @click="selectAll()">
+          {{ isSelectedAll() ? '전체 해제' : '전체 선택' }}
+        </v-chip>
       </v-col>
       <v-col
         v-for="emotion in emotions"
         :key="emotion.id"
         @click="toggleFeature(emotion)"
-        class="col-1"
+        class="col-1 chipsArea"
         :class="{ grayscale: !isSelected(emotion) }"
-        style="align: center; line-height: 40px; padding: 14px 0px 12px 0px;"
       >
         <v-img
           :src="emotion.imageResource"
@@ -46,11 +42,7 @@ export default {
       }
       this.allFilter = this.allFilter.sort();
       this.filter = this.allFilter.slice();
-
-      this.selectFilter({
-        emotionIds: this.filter.toString(),
-        isFiltered: !this.isSelectedAll()
-      });
+      this.applyFilter();
     });
   },
   computed: {
@@ -67,10 +59,15 @@ export default {
         this.filter.push(emotion.id);
         this.filter = this.filter.sort();
       }
-      this.selectFilter({
-        emotionIds: this.filter.toString(),
-        isFiltered: !this.isSelectedAll()
-      });
+      this.applyFilter();
+    },
+    selectAll() {
+      if (this.isSelectedAll()) {
+        this.filter = [];
+      } else {
+        this.filter = this.allFilter.slice();
+      }
+      this.applyFilter();
     },
     isSelected(emotion) {
       return this.filter.includes(emotion.id);
@@ -78,8 +75,7 @@ export default {
     isSelectedAll() {
       return this.filter.length === this.allFilter.length;
     },
-    selectAll() {
-      this.filter = this.allFilter.slice();
+    applyFilter() {
       this.selectFilter({
         emotionIds: this.filter.toString(),
         isFiltered: !this.isSelectedAll()
@@ -93,5 +89,15 @@ export default {
 .grayscale {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
+}
+.choiceAllArea {
+  font-size: 40px;
+  text-align: center;
+  line-height: 40px;
+  padding: 10px 0px 12px 0px;
+}
+.chipsArea {
+  line-height: 40px;
+  padding: 14px 0px 12px 0px;
 }
 </style>
