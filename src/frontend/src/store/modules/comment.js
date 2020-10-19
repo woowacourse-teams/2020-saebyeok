@@ -1,4 +1,5 @@
 import {
+  CATCH_ERROR,
   ACTIVATE_RECOMMENT,
   DEACTIVATE_RECOMMENT,
   UPDATE_COMMENT_LIKES,
@@ -53,13 +54,13 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_COMMENT]({ commit }, comment) {
     return CommentService.create(comment).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   // eslint-disable-next-line no-unused-vars
   async [DELETE_COMMENT]({ commit }, params) {
     return CommentService.delete(params).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   async [LIKE_COMMENT]({ commit, rootGetters }, comment) {
@@ -72,7 +73,7 @@ const actions = {
       commentId: comment.id
     })
       .then(() => commit(UPDATE_COMMENT_LIKES, comment))
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [UNLIKE_COMMENT]({ commit, rootGetters }, comment) {
     const currentArticle = rootGetters.article;
@@ -84,7 +85,7 @@ const actions = {
       commentId: comment.id
     })
       .then(() => commit(UPDATE_COMMENT_LIKES, comment))
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 

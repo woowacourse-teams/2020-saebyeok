@@ -1,4 +1,7 @@
-import { SET_REPORT_CATEGORIES } from '@/store/shared/mutationTypes';
+import {
+  CATCH_ERROR,
+  SET_REPORT_CATEGORIES
+} from '@/store/shared/mutationTypes';
 import { FETCH_REPORT_CATEGORIES } from '@/store/shared/actionTypes';
 import ReportService from '@/api/modules/report';
 
@@ -24,7 +27,7 @@ const actions = {
       .then(({ data }) => {
         commit(SET_REPORT_CATEGORIES, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 

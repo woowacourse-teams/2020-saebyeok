@@ -1,8 +1,10 @@
 import {
+  CATCH_ERROR,
   ADD_ARTICLES,
   SET_ARTICLE,
   SET_ARTICLES,
-  UPDATE_ARTICLE_LIKES
+  UPDATE_ARTICLE_LIKES,
+  SET_COMMENTS
 } from '@/store/shared/mutationTypes';
 import {
   CLEAR_ARTICLES,
@@ -49,17 +51,17 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_ARTICLE]({ commit }, article) {
     return ArticleService.create(article).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   async [FETCH_ARTICLE]({ commit }, articleId) {
     return ArticleService.get(articleId)
       .then(({ data }) => {
         commit(SET_ARTICLE, data);
-        commit('setComments', data.comments);
+        commit(SET_COMMENTS, data.comments);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [FETCH_ARTICLES]({ commit }, params) {
     return ArticleService.getAll(params)
@@ -67,7 +69,7 @@ const actions = {
         commit(SET_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [PAGING_ARTICLES]({ commit }, params) {
     return ArticleService.getAll(params)
@@ -75,12 +77,12 @@ const actions = {
         commit(ADD_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   // eslint-disable-next-line no-unused-vars
   async [DELETE_ARTICLE]({ commit }, articleId) {
     return ArticleService.delete(articleId).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   [CLEAR_ARTICLES]({ commit }) {
@@ -92,7 +94,7 @@ const actions = {
 
     return ArticleService.like(article.id)
       .then(() => commit(UPDATE_ARTICLE_LIKES, article))
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [UNLIKE_ARTICLE]({ commit }, article) {
     article.likesCount -= 1;
@@ -100,7 +102,7 @@ const actions = {
 
     return ArticleService.unlike(article.id)
       .then(() => commit(UPDATE_ARTICLE_LIKES, article))
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 
