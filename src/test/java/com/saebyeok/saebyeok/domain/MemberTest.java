@@ -32,7 +32,7 @@ class MemberTest {
     void deactivateTest() {
         member.deactivate();
 
-        assertThat(member.getIsDeleted()).isEqualTo(true);
+        assertThat(member.getIsDeleted()).isTrue();
         assertThat(member.getOauthId()).isEqualTo("DEACTIVATED");
         assertThat(member.getLoginMethod()).isEqualTo("DEACTIVATED");
     }

@@ -20,7 +20,7 @@ import java.util.Map;
 @WithUserDetails("123456789")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AcceptanceTest {
+class AcceptanceTest {
     public static final String API = "/api";
     public static final Long MEMBER_ID = 1L;
     public static final Long ARTICLE_ID = 1L;

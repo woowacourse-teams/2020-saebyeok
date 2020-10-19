@@ -57,8 +57,8 @@ class CommentLikeRepositoryTest {
 
         CommentLike savedLike = commentLikeRepository.save(like);
 
-        assertThat(savedLike).isNotNull();
-        assertThat(savedLike).isEqualTo(like);
+        assertThat(savedLike).isNotNull()
+                .isEqualTo(like);
         assertThat(savedLike.getId()).isNotNull();
     }
 
