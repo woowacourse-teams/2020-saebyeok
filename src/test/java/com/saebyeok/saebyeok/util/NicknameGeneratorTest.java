@@ -15,7 +15,7 @@ import java.util.Arrays;
 import static com.saebyeok.saebyeok.util.NicknameGenerator.WRITER_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NicknameGeneratorTest {
+class NicknameGeneratorTest {
 
     private NicknameGenerator nicknameGenerator;
     private Member me;

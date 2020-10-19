@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
-public class ReportControllerTest {
+class ReportControllerTest {
     private static final String API = "/api";
     private static final Long TEST_CATEGORY_ID = 1L;
     private static final String TEST_CATEGORY_NAME = "광고 게시물";

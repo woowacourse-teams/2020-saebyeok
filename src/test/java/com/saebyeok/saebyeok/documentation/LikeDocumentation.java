@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
-public class LikeDocumentation extends Documentation {
+class LikeDocumentation extends Documentation {
     protected TokenResponse tokenResponse;
     private MockMvc mockMvc;
 

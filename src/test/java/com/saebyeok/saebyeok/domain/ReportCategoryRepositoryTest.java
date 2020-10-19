@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql("/truncate.sql")
 @Transactional
 @SpringBootTest
-public class ReportCategoryRepositoryTest {
+class ReportCategoryRepositoryTest {
 
     @Autowired
     private ReportCategoryRepository reportCategoryRepository;

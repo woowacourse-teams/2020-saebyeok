@@ -14,13 +14,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.saebyeok.saebyeok.domain.CommentTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CommentAcceptanceTest extends AcceptanceTest {
     private static final Long EMOTION_ID = 1L;
     private static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
     private static final Long NOT_EXIST_COMMENT_ID = 10L;
+    public static final String TEST_CONTENT = "새벽 좋아요";
+    private static final String TEST_NICKNAME = "닉네임";
+    public static final String UNDER_LENGTH_CONTENT = "";
+    public static final String OVER_LENGTH_CONTENT = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
+            "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
+            "1만4000원.\n";
 
     private Map<String, Object> params;
 

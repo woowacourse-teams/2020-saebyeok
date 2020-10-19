@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ReportServiceTest {
+class ReportServiceTest {
     private static final Long CATEGORY_ID = 1L;
     private static final String CATEGORY_NAME = "광고 게시물";
     private static final String CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";

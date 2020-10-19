@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArticleTest {
+class ArticleTest {
     private Member member;
     private Article article1;
     private Article article2;
