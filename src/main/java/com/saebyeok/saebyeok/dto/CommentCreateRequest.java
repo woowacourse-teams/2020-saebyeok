@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.dto;
 
-import com.saebyeok.saebyeok.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static com.saebyeok.saebyeok.domain.Comment.*;
+import static com.saebyeok.saebyeok.domain.Comment.MAX_LENGTH;
+import static com.saebyeok.saebyeok.domain.Comment.MIN_LENGTH;
 
 @Getter
 @NoArgsConstructor
@@ -22,9 +22,5 @@ public class CommentCreateRequest {
     @NotNull(message = "해당하는 게시글이 없어요.")
     private Long articleId;
 
-    public Comment toComment() {
-        return builder().
-                content(this.content).
-                build();
-    }
+    private Long parentId;
 }

@@ -57,8 +57,8 @@
         <div class="pb-2 pr-2">
           <report-button
             v-if="!comment.isMine"
-            :reportType="getReportType()"
-            :reportedId="comment.id"
+            :reportTarget="getReportTarget()"
+            :targetContentId="comment.id"
           />
         </div>
       </v-flex>
@@ -71,7 +71,7 @@
 import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
@@ -80,39 +80,7 @@ export default {
   name: 'Comment',
   data() {
     return {
-      deletedCommentMessage: '삭제된 댓글입니다.',
-      recomments: [
-        {
-          id: 100,
-          content: '대댓글 내용',
-          nickname: '대댓글닉네임',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:57:22',
-          isMine: true,
-          likesCount: 2,
-          isLikedByMe: false
-        },
-        {
-          id: 101,
-          content: '대댓글 내용2',
-          nickname: '대댓글닉네임2',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:58:22',
-          isMine: false,
-          likesCount: 3,
-          isLikedByMe: false
-        },
-        {
-          id: 102,
-          content: '대댓글 내용22222222222222222222222222222222222222222222222',
-          nickname: '대댓글닉네임2',
-          isDeleted: false,
-          createdDate: '2020-09-14T20:59:22',
-          isMine: false,
-          likesCount: 3,
-          isLikedByMe: false
-        }
-      ]
+      deletedCommentMessage: '삭제된 댓글입니다.'
     };
   },
   components: {
@@ -136,11 +104,14 @@ export default {
         this.likeComment(this.comment);
       }
     },
-    specifyMemberToRecomment() {
-      this.activateRecomment(this.comment.nickname);
+    getReportTarget() {
+      return REPORT_TARGET.COMMENT;
     },
-    getReportType() {
-      return REPORT_TYPE.COMMENT;
+    specifyMemberToRecomment() {
+      this.activateRecomment({
+        targetNickname: this.comment.nickname,
+        targetCommentId: this.comment.id
+      });
     },
     getCommentNickname() {
       return this.comment.nickname === '작성자'

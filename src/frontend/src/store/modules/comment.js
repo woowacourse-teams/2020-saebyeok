@@ -17,6 +17,7 @@ import CommentService from '@/api/modules/comment';
 const state = {
   isActiveRecomment: false,
   targetNickname: '',
+  targetCommentId: null,
   comments: []
 };
 
@@ -27,18 +28,28 @@ const getters = {
   targetNickname() {
     return state.targetNickname;
   },
+  targetCommentId() {
+    return state.targetCommentId;
+  },
   comments(state) {
     return state.comments;
   }
 };
 
 const mutations = {
-  [ACTIVATE_RECOMMENT](state, nickname) {
-    state.targetNickname = nickname;
+  [UPDATE_COMMENT_LIKES](state, value) {
+    // pros와 vuex구조 및 comments분리 리팩토링 되고 나면 동작 확인하기
+    // this.comment.value += value;
+    console.log(state, value);
+  },
+  [ACTIVATE_RECOMMENT](state, payload) {
+    state.targetNickname = payload.targetNickname;
+    state.targetCommentId = payload.targetCommentId;
     state.isActiveRecomment = true;
   },
   [DEACTIVATE_RECOMMENT](state) {
     state.targetNickname = '';
+    state.targetCommentId = null;
     state.isActiveRecomment = false;
   },
   [SET_COMMENTS](state, comments) {

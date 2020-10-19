@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,13 +55,13 @@ class LikeServiceTest {
         this.likeService = new LikeService(articleLikeRepository, articleRepository, commentLikeRepository, commentRepository);
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, Collections.emptyList());
         this.article = new Article(ARTICLE_ID, "내용", member, LocalDateTime.now(), false, false, Collections.emptyList(), new ArrayList<>());
-        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, new ArrayList<>());
+        this.comment = new Comment(1L, "내용", member, "익명1", LocalDateTime.now(), article, false, null, new ArrayList<>());
     }
 
     @DisplayName("게시물 공감 등록 메서드를 실행하면 공감 등록을 수행한다")
     @Test
     void likeArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(eq(ARTICLE_ID), any(), any())).thenReturn(Optional.of(article));
+        when(articleRepository.findById(eq(ARTICLE_ID))).thenReturn(Optional.of(article));
         when(articleLikeRepository.save(any())).thenReturn(new ArticleLike(member, article));
 
         likeService.likeArticle(new Member(), ARTICLE_ID);
@@ -73,7 +72,7 @@ class LikeServiceTest {
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 등록을 요청하면 예외가 발생한다")
     @Test
     void likeInvalidArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(eq(INVALID_ARTICLE_ID), any(), any())).thenReturn(Optional.empty());
+        when(articleRepository.findById(eq(INVALID_ARTICLE_ID))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> likeService.likeArticle(member, INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
@@ -85,7 +84,7 @@ class LikeServiceTest {
     @DisplayName("예외 테스트: 이미 공감한 게시물에 다시 공감을 요청하면 예외가 발생한다")
     @Test
     void likeArticleAgainTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(eq(ALREADY_LIKED_ARTICLE_ID), any(), any())).thenReturn(Optional.of(article));
+        when(articleRepository.findById(eq(ALREADY_LIKED_ARTICLE_ID))).thenReturn(Optional.of(article));
         when(articleLikeRepository.save(any(ArticleLike.class))).thenThrow(DataIntegrityViolationException.class);
 
         assertThatThrownBy(() -> likeService.likeArticle(member, ALREADY_LIKED_ARTICLE_ID))
@@ -96,7 +95,7 @@ class LikeServiceTest {
     @DisplayName("게시글 공감 취소 메서드를 실행하면 공감이 삭제된다")
     @Test
     void unlikeArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(eq(ARTICLE_ID), any(), any())).thenReturn(Optional.of(article));
+        when(articleRepository.findById(eq(ARTICLE_ID))).thenReturn(Optional.of(article));
 
         likeService.unlikeArticle(member, ARTICLE_ID);
 
@@ -106,7 +105,7 @@ class LikeServiceTest {
     @DisplayName("예외 테스트: 잘못된 게시물에 공감 취소를 요청하면 예외가 발생한다")
     @Test
     void unlikeInvalidArticleTest() {
-        when(articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(eq(INVALID_ARTICLE_ID), any(), any())).thenReturn(Optional.empty());
+        when(articleRepository.findById(eq(INVALID_ARTICLE_ID))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> likeService.likeArticle(member, INVALID_ARTICLE_ID))
                 .isInstanceOf(ArticleNotFoundException.class)
@@ -132,7 +131,7 @@ class LikeServiceTest {
 
         assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
                 .isInstanceOf(CommentNotFoundException.class)
-                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
 
         verify(commentLikeRepository, never()).save(any());
     }
@@ -166,7 +165,7 @@ class LikeServiceTest {
 
         assertThatThrownBy(() -> likeService.likeComment(member, INVALID_COMMENT_ID))
                 .isInstanceOf(CommentNotFoundException.class)
-                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다!");
+                .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
 
         verify(commentLikeRepository, never()).deleteByMemberAndComment(any(), any());
     }

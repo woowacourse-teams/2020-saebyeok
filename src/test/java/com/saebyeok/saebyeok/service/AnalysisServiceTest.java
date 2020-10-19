@@ -26,6 +26,9 @@ public class AnalysisServiceTest {
     private AnalysisService analysisService;
 
     @Mock
+    private ArticleService articleService;
+
+    @Mock
     private EmotionService emotionService;
 
     @Mock
@@ -36,7 +39,7 @@ public class AnalysisServiceTest {
 
     @BeforeEach
     void setUp() {
-        analysisService = new AnalysisService(emotionService, articleEmotionService, commentService);
+        analysisService = new AnalysisService(articleService, emotionService, articleEmotionService, commentService);
 
         this.member = new Member(1L, "123456789", "naver", LocalDateTime.now(),
                                  false, Role.USER, new ArrayList<>());
@@ -101,9 +104,9 @@ public class AnalysisServiceTest {
         List<CommentLike> likes = new ArrayList<>(Arrays.asList(new CommentLike(), new CommentLike()));
         List<Comment> comments = new ArrayList<>();
         comments.add(new Comment(1L, "content1", new Member(), "nickname1", LocalDateTime.now(), new Article(), false,
-                                 likes));
+                null, likes));
         comments.add(new Comment(2L, "content2", new Member(), "nickname2", LocalDateTime.now(), new Article(), false,
-                                 likes));
+                null, likes));
 
         when(commentService.findAllCommentsBy(any(Member.class))).thenReturn(comments);
 

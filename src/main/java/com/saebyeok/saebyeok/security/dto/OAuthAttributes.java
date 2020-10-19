@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.security.dto;
 
-import com.saebyeok.saebyeok.domain.Gender;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.domain.Role;
 import lombok.Builder;

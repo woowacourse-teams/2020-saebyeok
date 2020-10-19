@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.exception.DuplicateCommentLikeException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Comment {
+public class Comment implements Comparable<Comment> {
     public static final int MIN_LENGTH = 1;
     public static final int MAX_LENGTH = 140;
 
@@ -26,7 +25,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 140, nullable = false)
+    @Column(length = MAX_LENGTH, nullable = false)
     private String content;
 
     @ManyToOne
@@ -40,13 +39,25 @@ public class Comment {
     private Article article;
     private Boolean isDeleted = Boolean.FALSE;
 
+    @ManyToOne
+    private Comment parent;
+
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> likes;
 
-    @Builder
-    public Comment(String content, String nickname) {
+    public Comment(String content, String nickname, Comment parent) {
         this.content = content;
         this.nickname = nickname;
+        this.parent = parent;
+    }
+
+    @Builder
+    public Comment(String content, Member member, String nickname, Article article, Comment parent) {
+        this.content = content;
+        this.member = member;
+        this.nickname = nickname;
+        this.article = article;
+        this.parent = parent;
     }
 
     public boolean isWrittenBy(Member member) {
@@ -60,6 +71,10 @@ public class Comment {
 
     public long countLikes() {
         return this.likes.size();
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setMember(Member member) {
@@ -78,17 +93,17 @@ public class Comment {
         this.isDeleted = isDeleted;
     }
 
-    public void addLike(CommentLike like) {
-        Objects.requireNonNull(like);
+    public void setParent(Comment parent) {
+        this.parent = parent;
+    }
 
-        if (like.getComment() != this) {
-            // TODO: 2020/08/22 : 커스텀 Exception 생성해서 사용하기
-            throw new RuntimeException();
+    @Override
+    public int compareTo(Comment other) {
+        Comment parentOfThis = (this.parent == null ? this : this.parent);
+        Comment parentOfOther = (other.parent == null ? other : other.parent);
+        if (parentOfThis != parentOfOther) {
+            return parentOfThis.createdDate.compareTo(parentOfOther.createdDate);
         }
-
-        if (this.likes.contains(like)) {
-            throw new DuplicateCommentLikeException(like.getMember().getId(), like.getComment().getId());
-        }
-        this.likes.add(like);
+        return this.createdDate.compareTo(other.createdDate);
     }
 }
