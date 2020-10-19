@@ -15,8 +15,8 @@ public class NicknameGenerator {
     private NicknameGenerator() {
     }
 
-    public static final String WRITER_NICKNAME = "작성자";
-    public static final String NICKNAME_PREFIX = "익명#";
+    static final String WRITER_NICKNAME = "작성자";
+    private static final String NICKNAME_PREFIX = "익명#";
     private static final List<Integer> TOTAL_NUMBERS = IntStream.rangeClosed(1, 1000)
             .boxed()
             .collect(Collectors.toList());
