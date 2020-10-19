@@ -30,12 +30,16 @@ class LoginMemberArgumentResolverTest {
 
     @Mock
     private MethodParameter parameter;
+
     @Mock
     private ModelAndViewContainer mavContainer;
+
     @Mock
     private NativeWebRequest webRequest;
+
     @Mock
     private WebDataBinderFactory binderFactory;
+
     @Mock
     private Method method;
 

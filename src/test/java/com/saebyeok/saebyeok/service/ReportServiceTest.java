@@ -40,8 +40,10 @@ class ReportServiceTest {
     private static final Long INVALID_CATEGORY_ID = 10000L;
 
     private ReportService reportService;
+
     @Mock
     private ReportCategoryRepository reportCategoryRepository;
+
     @Mock
     private ReportRepository reportRepository;
 

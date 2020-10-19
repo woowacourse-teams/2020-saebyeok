@@ -30,8 +30,10 @@ class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
+
     @Mock
     private ArticleRepository articleRepository;
+
     @Mock
     private NicknameGenerator nicknameGenerator;
 
