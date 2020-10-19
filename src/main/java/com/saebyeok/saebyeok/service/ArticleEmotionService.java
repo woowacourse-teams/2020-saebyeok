@@ -5,7 +5,6 @@ import com.saebyeok.saebyeok.dto.EmotionResponse;
 import com.saebyeok.saebyeok.exception.ArticleEmotionNotFoundException;
 import com.saebyeok.saebyeok.exception.EmotionNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
