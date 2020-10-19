@@ -43,7 +43,8 @@ const mutations = {
     state.articles = state.articles.concat(articles);
   },
   [UPDATE_ARTICLE_LIKES](state, article) {
-    state.article = article;
+    const index = state.articles.findIndex(it => it.id === article.id);
+    state.articles.splice(index, 1, article);
   }
 };
 
