@@ -78,6 +78,7 @@ import {
   CREATE_REPORT,
   FETCH_REPORT_CATEGORIES
 } from '@/store/shared/actionTypes';
+import { SHOW_REQUEST_LOGIN_MODAL } from '@/store/shared/mutationTypes';
 
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
@@ -88,7 +89,8 @@ export default {
       dialog: false,
       choiceCategory: undefined,
       invalidCategoryChoice: false,
-      textContent: ''
+      textContent: '',
+      token: localStorage.getItem('token')
     };
   },
   created() {
@@ -99,6 +101,7 @@ export default {
   },
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
+    ...mapMutations([SHOW_REQUEST_LOGIN_MODAL]),
     ...mapActions([FETCH_REPORT_CATEGORIES]),
     ...mapActions([CREATE_REPORT]),
     onReport() {
@@ -129,6 +132,13 @@ export default {
       this.choiceCategory = undefined;
       this.textContent = '';
       this.dialog = true;
+      this.isLoginUser();
+    },
+    checkLoginUser() {
+      if (this.token === null) {
+        this.dialog = false;
+        this.showRequestLoginModal();
+      }
     },
     getReportTargetText() {
       switch (this.reportTarget) {
