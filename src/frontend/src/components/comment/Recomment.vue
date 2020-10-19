@@ -99,10 +99,10 @@ export default {
   methods: {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
-      if (this.recomment.isLikedByMe) {
-        this.unlikeComment(this.recomment);
+      if (this.comment.isLikedByMe) {
+        this.unlikeComment(this.comment);
       } else {
-        this.likeComment(this.recomment);
+        this.likeComment(this.comment);
       }
     },
     getReportTarget() {
