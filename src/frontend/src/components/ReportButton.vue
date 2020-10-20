@@ -23,8 +23,7 @@
                 v-model="choiceCategory"
               >
                 <v-chip
-                  class="ma-1"
-                  style="font-size: 12px; padding: 5px"
+                  class="ma-1 report-category-text"
                   v-for="reportCategory in this.reportCategories"
                   @click="invalidCategoryChoice = false"
                   :key="reportCategory.id"
@@ -135,7 +134,7 @@ export default {
       this.choiceCategory = undefined;
       this.textContent = '';
       this.dialog = true;
-      this.isLoginUser();
+      this.checkLoginUser();
     },
     checkLoginUser() {
       if (this.token === null) {
@@ -163,5 +162,9 @@ export default {
 }
 .caption {
   font-weight: lighter;
+}
+.report-category-text {
+  font-size: 12px;
+  padding: 5px;
 }
 </style>

@@ -3,7 +3,7 @@
     <v-row class="justify-center align-center">
       <v-col class="col-3 choiceAllArea">
         <v-chip @click="selectAll()">
-          {{ isSelectedAll() ? '전체 해제' : '전체 선택' }}
+          {{ getSelectAllButtonText() }}
         </v-chip>
       </v-col>
       <v-col
@@ -11,7 +11,7 @@
         :key="emotion.id"
         @click="toggleFeature(emotion)"
         class="col-1 chipsArea"
-        :class="{ grayscale: !isSelected(emotion) }"
+        :class="{ grayscale: !isSelectedEmotion(emotion) }"
       >
         <v-img
           :src="emotion.imageResource"
@@ -52,7 +52,7 @@ export default {
     ...mapActions([FETCH_EMOTIONS]),
     ...mapActions([SELECT_FILTER]),
     toggleFeature(emotion) {
-      if (this.isSelected(emotion)) {
+      if (this.isSelectedEmotion(emotion)) {
         const idx = this.filter.indexOf(emotion.id);
         this.filter.splice(idx, 1);
       } else {
@@ -69,11 +69,17 @@ export default {
       }
       this.applyFilter();
     },
-    isSelected(emotion) {
+    isSelectedEmotion(emotion) {
       return this.filter.includes(emotion.id);
     },
     isSelectedAll() {
       return this.filter.length === this.allFilter.length;
+    },
+    getSelectAllButtonText() {
+      if (this.isSelectedAll()) {
+        return '전체 해제';
+      }
+      return '전체 선택';
     },
     applyFilter() {
       this.selectFilter({
