@@ -90,7 +90,9 @@ class ArticleEmotionRepositoryTest {
                                                                                                              emotions,
                                                                                                              pageable);
 
-        assertThat(actualArticleEmotions).hasSize(articleEmotions.size());
+        assertThat(actualArticleEmotions)
+                .hasSize(articleEmotions.size())
+                .contains(articleEmotion1, articleEmotion2, articleEmotion3);
     }
 
     @DisplayName("특정 게시글에서 만들어진 ArticleEmotion을 찾는다")
@@ -101,6 +103,8 @@ class ArticleEmotionRepositoryTest {
 
         List<ArticleEmotion> actualArticleEmotions = articleEmotionRepository.findAllByArticleIn(articles);
 
-        assertThat(actualArticleEmotions).hasSize(articleEmotions.size());
+        assertThat(actualArticleEmotions)
+                .hasSize(articleEmotions.size())
+                .contains(articleEmotion1, articleEmotion2, articleEmotion3);
     }
 }

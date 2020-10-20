@@ -66,7 +66,8 @@ class ArticleSubEmotionRepositoryTest {
         List<ArticleSubEmotion> actualArticleSubEmotions =
                 articleSubEmotionRepository.findAllByArticleId(article.getId());
 
-        assertThat(actualArticleSubEmotions).hasSize(articleSubEmotions.size());
-        assertThat(actualArticleSubEmotions).contains(articleSubEmotion1, articleSubEmotion2, articleSubEmotion3);
+        assertThat(actualArticleSubEmotions)
+                .hasSize(articleSubEmotions.size())
+                .contains(articleSubEmotion1, articleSubEmotion2, articleSubEmotion3);
     }
 }

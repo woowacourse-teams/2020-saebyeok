@@ -99,8 +99,9 @@ class ArticleSubEmotionServiceTest {
 
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
 
-        assertThat(subEmotionResponses).isNotNull();
-        assertThat(subEmotionResponses).hasSize(articleSubEmotions.size());
+        assertThat(subEmotionResponses)
+                .isNotNull()
+                .hasSize(articleSubEmotions.size());
         assertThat(subEmotionResponses.get(0).getName()).isEqualTo(subEmotion1.getName());
         assertThat(subEmotionResponses.get(1).getName()).isEqualTo(subEmotion2.getName());
         assertThat(subEmotionResponses.get(2).getName()).isEqualTo(subEmotion3.getName());
