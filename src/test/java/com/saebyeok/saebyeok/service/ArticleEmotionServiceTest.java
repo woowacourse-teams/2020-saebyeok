@@ -55,6 +55,7 @@ class ArticleEmotionServiceTest {
     @BeforeEach
     void setUp() {
         this.articleEmotionService = new ArticleEmotionService(emotionRepository, articleEmotionRepository);
+
         this.article1 = new Article(ARTICLE_1_ID, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>(),
                                     new ArrayList<>());
         this.article2 = new Article(ARTICLE_2_ID, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>(),
@@ -73,7 +74,7 @@ class ArticleEmotionServiceTest {
     void createArticleEmotionTest() {
         when(emotionRepository.findById(EMOTION_1_ID)).thenReturn(Optional.of(emotion1));
 
-        this.articleEmotionService.createArticleEmotion(article1, EMOTION_1_ID);
+        articleEmotionService.createArticleEmotion(article1, EMOTION_1_ID);
 
         verify(articleEmotionRepository).save(any());
     }
@@ -90,7 +91,7 @@ class ArticleEmotionServiceTest {
                 .hasMessage(invalidEmotionId + "에 해당하는 감정 대분류를 찾을 수 없습니다.");
     }
 
-    @DisplayName("기존에 생성된 게시글로 만들어진 ArticleEmotion을 통해 해당 게시글의 감정 대분류 정보를 가져온다")
+    @DisplayName("생성된 게시글로 만들어진 ArticleEmotion을 통해 해당 게시글의 감정 대분류 정보를 가져온다")
     @Test
     void findEmotionTest() {
         ArticleEmotion articleEmotion = new ArticleEmotion(article1, emotion1);
@@ -104,7 +105,7 @@ class ArticleEmotionServiceTest {
         assertThat(emotionResponse.getImageResource()).isEqualTo(emotion1.getImageResource());
     }
 
-    @DisplayName("예외 테스트: 기존에 생성된 게시글로 만들어진 ArticleEmotion이 존재하지 않으면 해당 게시글의 감정 대분류 정보를 가져올 때 " +
+    @DisplayName("예외 테스트: 생성된 게시글로 만들어진 ArticleEmotion이 존재하지 않으면 해당 게시글의 감정 대분류 정보를 가져올 때 " +
             "ArticleEmotionNotFoundException이 발생한다")
     @Test
     void findEmotionExceptionTest() {
