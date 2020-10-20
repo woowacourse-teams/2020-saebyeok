@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto rounded-lg" max-width="400">
     <v-row class="justify-center align-center">
-      <v-col class="col-3 choiceAllArea">
+      <v-col class="col-3 choice-all-text">
         <v-chip @click="selectAll()">
           {{ getSelectAllButtonText() }}
         </v-chip>
@@ -10,7 +10,7 @@
         v-for="emotion in emotions"
         :key="emotion.id"
         @click="toggleFeature(emotion)"
-        class="col-1 chipsArea"
+        class="col-1 chip-text"
         :class="{ grayscale: !isSelectedEmotion(emotion) }"
       >
         <v-img
@@ -96,13 +96,13 @@ export default {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
 }
-.choiceAllArea {
+.choice-all-text {
   font-size: 40px;
   text-align: center;
   line-height: 40px;
   padding: 10px 0px 12px 0px;
 }
-.chipsArea {
+.chip-text {
   line-height: 40px;
   padding: 14px 0px 12px 0px;
 }
