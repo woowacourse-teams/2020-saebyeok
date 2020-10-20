@@ -69,9 +69,9 @@ class ArticleEmotionRepositoryTest {
         articleEmotionRepository.save(articleEmotion3);
     }
 
-    @DisplayName("기존에 생성된 게시글로 만들어진 ArticleEmotion을 게시글 Id로 찾는다")
+    @DisplayName("생성된 게시글로 만들어진 ArticleEmotion을 게시글 Id로 찾는다")
     @Test
-    void findArticleEmotionByArticleIdTest() {
+    void findByArticleIdTest() {
         ArticleEmotion savedArticleEmotion = articleEmotionRepository.findByArticleId(article1.getId())
                 .orElseThrow(() -> new ArticleEmotionNotFoundException(article1.getId()));
 
@@ -80,7 +80,7 @@ class ArticleEmotionRepositoryTest {
 
     @DisplayName("특정 감정 대분류와 게시글에서 만들어진 ArticleEmotion을 요청받은 페이지 수만큼 찾는다")
     @Test
-    void findAllArticleEmotionsByArticleInAndEmotionInTest() {
+    void findAllByArticleInAndEmotionInTest() {
         List<Article> articles = Arrays.asList(article1, article2, article3);
         List<Emotion> emotions = Arrays.asList(emotion1, emotion2);
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
@@ -95,7 +95,7 @@ class ArticleEmotionRepositoryTest {
 
     @DisplayName("특정 게시글에서 만들어진 ArticleEmotion을 찾는다")
     @Test
-    void findAllArticleEmotionsByArticleInTest() {
+    void findAllByArticleInTest() {
         List<Article> articles = Arrays.asList(article1, article2, article3);
         List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3);
 
