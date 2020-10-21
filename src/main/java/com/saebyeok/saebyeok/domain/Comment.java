@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class Comment implements Comparable<Comment> {
     private Comment parent;
 
     @OneToMany(mappedBy = "comment")
-    private List<CommentLike> likes;
+    private List<CommentLike> likes = new ArrayList<>();
 
     @Builder
     public Comment(String content, Member member, String nickname, Article article, Comment parent) {

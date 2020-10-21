@@ -42,7 +42,7 @@ public class Article {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "article")
-    private List<ArticleLike> likes;
+    private List<ArticleLike> likes = new ArrayList<>();
 
     public Article(String content, Member member, Boolean isCommentAllowed) {
         this.content = content;
