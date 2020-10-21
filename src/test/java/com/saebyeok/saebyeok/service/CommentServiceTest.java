@@ -32,13 +32,15 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
     @Mock
     private ArticleRepository articleRepository;
+    @Mock
+    private NicknameGenerator nicknameGenerator;
 
     private Member member;
     private Article article;
 
     @BeforeEach
     void setUp() {
-        this.commentService = new CommentService(commentRepository, articleRepository);
+        this.commentService = new CommentService(commentRepository, articleRepository, nicknameGenerator);
         this.member = new Member();
         this.article = new Article();
     }

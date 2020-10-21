@@ -17,6 +17,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
+    private final NicknameGenerator nicknameGenerator;
 
     @Transactional
     public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
@@ -32,7 +33,8 @@ public class CommentService {
             parent = null;
         }
 
-        Comment comment = commentCreateRequest.toComment(member, article, parent);
+        String nickname = nicknameGenerator.generate(member, article);
+        Comment comment = commentCreateRequest.toComment(member, nickname, article, parent);
         return commentRepository.save(comment);
     }
 

@@ -1,7 +1,5 @@
-package com.saebyeok.saebyeok.util;
+package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Member;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -12,16 +10,13 @@ import java.util.stream.IntStream;
 @Component
 public class NicknameGenerator {
 
-    private NicknameGenerator() {
-    }
-
     static final String WRITER_NICKNAME = "작성자";
     private static final String NICKNAME_PREFIX = "익명#";
     private static final List<Integer> TOTAL_NUMBERS = IntStream.rangeClosed(1, 1000)
             .boxed()
             .collect(Collectors.toList());
 
-    public static String generate(Member member, Article article) {
+    public String generate(Member member, Article article) {
         if (article.isWrittenBy(member)) {
             return WRITER_NICKNAME;
         }
@@ -29,7 +24,7 @@ public class NicknameGenerator {
                 .orElseGet(() -> createNewNickname(article));
     }
 
-    private static String createNewNickname(Article article) {
+    private String createNewNickname(Article article) {
         List<String> allNicknames = article.getAllNicknames();
         List<String> filteredNicknames = allNicknames.stream()
                 .filter(s -> s.contains(NICKNAME_PREFIX))
