@@ -58,8 +58,8 @@
             <div class="pb-2 pr-2">
               <report-button
                 v-if="!comment.isMine"
-                :reportType="getReportType()"
-                :reportedId="comment.id"
+                :reportTarget="getReportTarget()"
+                :targetContentId="comment.id"
               />
             </div>
           </v-flex>
@@ -111,7 +111,7 @@ export default {
         });
       }
     },
-    getReportType() {
+    getReportTarget() {
       return REPORT_TARGET.COMMENT;
     },
     getCommentNickname() {
