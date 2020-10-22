@@ -119,7 +119,7 @@ export default {
     changeReportTarget() {
       this.setReportTarget({
         target: REPORT_TARGET.ARTICLE,
-        contentId: this.comment.id
+        contentId: this.article.id
       });
     },
     clickCardContent() {

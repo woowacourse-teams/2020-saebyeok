@@ -135,6 +135,7 @@ export default {
       this.textContent = '';
       this.dialog = true;
       this.checkLoginUser();
+      this.$emit('click');
     },
     checkLoginUser() {
       if (this.token === null) {

@@ -3,7 +3,7 @@
     <v-row class="justify-center align-center">
       <v-col class="col-3 choice-all-text">
         <v-chip @click="selectAll()">
-          {{ getSelectAllButtonText() }}
+          {{ selectAllButtonText() }}
         </v-chip>
       </v-col>
       <v-col
@@ -46,7 +46,10 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(['emotions'])
+    ...mapGetters(['emotions']),
+    selectAllButtonText() {
+      return this.isSelectedAll() ? '전체 선택' : '전체 해제';
+    }
   },
   methods: {
     ...mapActions([FETCH_EMOTIONS]),
@@ -74,12 +77,6 @@ export default {
     },
     isSelectedAll() {
       return this.filter.length === this.allFilter.length;
-    },
-    getSelectAllButtonText() {
-      if (this.isSelectedAll()) {
-        return '전체 해제';
-      }
-      return '전체 선택';
     },
     applyFilter() {
       this.selectFilter({
