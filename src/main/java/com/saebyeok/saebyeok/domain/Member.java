@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +27,6 @@ public class Member {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    @Builder.Default
     private Boolean isDeleted = Boolean.FALSE;
 
     @Enumerated(EnumType.STRING)
@@ -36,8 +34,13 @@ public class Member {
     private Role role;
 
     @OneToMany(mappedBy = "member")
-    @Builder.Default
     private List<Article> articles = new ArrayList<>();
+
+    public Member(String oauthId, String loginMethod, Role role) {
+        this.oauthId = oauthId;
+        this.loginMethod = loginMethod;
+        this.role = role;
+    }
 
     public String getRoleKey() {
         return this.role.getKey();
