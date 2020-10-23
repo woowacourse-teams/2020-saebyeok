@@ -53,10 +53,6 @@ public class OAuthAttributes {
     }
 
     public Member toEntity() {
-        return Member.builder()
-                .oauthId(id)
-                .loginMethod(loginMethod)
-                .role(Role.USER)
-                .build();
+        return new Member(id, loginMethod, Role.USER);
     }
 }
