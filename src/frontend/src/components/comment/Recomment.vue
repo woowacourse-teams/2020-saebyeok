@@ -75,7 +75,7 @@ import CreatedDate from '@/components/CreatedDate';
 import CommentMenu from '@/components/comment/CommentMenu';
 import ReportButton from '@/components/ReportButton';
 import { REPORT_TARGET } from '@/utils/ReportTarget.js';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
 
 export default {
@@ -100,15 +100,9 @@ export default {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
-        this.unlikeComment(this.comment.id).then(() => {
-          this.comment.isLikedByMe = false;
-          this.comment.likesCount--;
-        });
+        this.unlikeComment(this.comment);
       } else {
-        this.likeComment(this.comment.id).then(() => {
-          this.comment.isLikedByMe = true;
-          this.comment.likesCount++;
-        });
+        this.likeComment(this.comment);
       }
     },
     getReportTarget() {
@@ -119,6 +113,9 @@ export default {
         ? '✒️ ' + this.comment.nickname
         : this.comment.nickname;
     }
+  },
+  computed: {
+    ...mapGetters(['article', 'comments'])
   }
 };
 </script>

@@ -102,6 +102,5 @@ public class AcceptanceTest {
                         statusCode(HttpStatus.CREATED.value()).
                         extract().as(Long.class);
         //@formatter:on
-
     }
 }

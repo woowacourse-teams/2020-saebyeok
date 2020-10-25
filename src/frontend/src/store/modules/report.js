@@ -1,5 +1,6 @@
 import {
   SET_REPORT_CATEGORIES,
+  CATCH_ERROR,
   SET_REPORT_TARGET
 } from '@/store/shared/mutationTypes';
 import {
@@ -37,11 +38,11 @@ const actions = {
       .then(({ data }) => {
         commit(SET_REPORT_CATEGORIES, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [CREATE_REPORT]({ commit }, report) {
     return ReportService.createReport(report).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   }
 };

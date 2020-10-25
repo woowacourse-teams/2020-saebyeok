@@ -99,21 +99,9 @@ export default {
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
-        this.unlikeComment({
-          articleId: this.article.id,
-          commentId: this.comment.id
-        }).then(() => {
-          this.comment.isLikedByMe = false;
-          this.comment.likesCount--;
-        });
+        this.unlikeComment(this.comment);
       } else {
-        this.likeComment({
-          articleId: this.article.id,
-          commentId: this.comment.id
-        }).then(() => {
-          this.comment.isLikedByMe = true;
-          this.comment.likesCount++;
-        });
+        this.likeComment(this.comment);
       }
     },
     changeReportTarget() {
@@ -135,7 +123,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['article'])
+    ...mapGetters(['article', 'comments'])
   }
 };
 </script>

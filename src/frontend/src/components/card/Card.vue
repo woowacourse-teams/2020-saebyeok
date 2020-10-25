@@ -105,15 +105,9 @@ export default {
     toggleLike() {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
-        this.unlikeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = false;
-          this.article.likesCount--;
-        });
+        this.unlikeArticle(this.article);
       } else {
-        this.likeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = true;
-          this.article.likesCount++;
-        });
+        this.likeArticle(this.article);
       }
     },
     changeReportTarget() {
