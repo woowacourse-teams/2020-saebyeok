@@ -1,3 +1,4 @@
+import { CATCH_ERROR } from '@/store/shared/mutationTypes';
 import { STATUS } from '../../utils/Status';
 
 const state = {};
@@ -5,7 +6,7 @@ const state = {};
 const getters = {};
 
 const mutations = {
-  catchError(state, error) {
+  [CATCH_ERROR](state, error) {
     if (error.response.status === STATUS.UNAUTHORIZED) {
       this.commit('showRequestLoginModal');
     }
