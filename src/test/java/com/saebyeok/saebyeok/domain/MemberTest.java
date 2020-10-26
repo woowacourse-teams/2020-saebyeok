@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MemberTest {
+class MemberTest {
 
     private Member member;
 
@@ -33,7 +32,7 @@ public class MemberTest {
     void deactivateTest() {
         member.deactivate();
 
-        assertThat(member.getIsDeleted()).isEqualTo(true);
+        assertThat(member.getIsDeleted()).isTrue();
         assertThat(member.getOauthId()).isEqualTo("DEACTIVATED");
         assertThat(member.getLoginMethod()).isEqualTo("DEACTIVATED");
     }

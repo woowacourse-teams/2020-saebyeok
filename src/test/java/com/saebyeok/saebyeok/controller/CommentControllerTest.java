@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.saebyeok.saebyeok.domain.CommentTest.TEST_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -35,6 +34,7 @@ class CommentControllerTest {
     private static final String API = "/api";
     private static final Long COMMENT_ID = 1L;
     private static final Long ARTICLE_ID = 1L;
+    private static final String TEST_CONTENT = "내용";
     private static final Long INVALID_ARTICLE_ID = 100L;
 
     private MockMvc mockMvc;

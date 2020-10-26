@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @Sql("/truncate.sql")
 @ExtendWith(MockitoExtension.class)
-public class ReportServiceTest {
+class ReportServiceTest {
     public static final String REPORT_CONTENT = "이 게시물을 신고합니다";
     private static final Long MEMBER_ID = 1L;
     private static final String MEMBER_OAUTH_ID = "123456789";

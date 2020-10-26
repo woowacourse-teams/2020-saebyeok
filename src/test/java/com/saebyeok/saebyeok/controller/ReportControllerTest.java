@@ -35,14 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
 @SpringBootTest
-public class ReportControllerTest {
+class ReportControllerTest {
     // TODO: 2020/10/05 ReportController에 신고 조회 로직 없이 신고 생성 로직만 있어서, 부득이하게 신고에 대한 인수테스트를 만들지 않았음. 추후 기능 추가시 작성해보자.
+    private static final String API = "/api";
     public static final String TEST_REPORT_CONTENT = "신고 본문입니다.";
     public static final Long TEST_TARGET_CONTENT_ID = 1L;
     private static final Long TEST_CATEGORY_ID = 1L;
     private static final String TEST_CATEGORY_NAME = "광고 게시물";
     private static final String TEST_CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";
-    private static final String API = "/api";
     private static final String TEST_REPORT_TARGET = "ARTICLE";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

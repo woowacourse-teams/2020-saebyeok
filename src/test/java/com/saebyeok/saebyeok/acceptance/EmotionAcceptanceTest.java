@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmotionAcceptanceTest extends AcceptanceTest {
+class EmotionAcceptanceTest extends AcceptanceTest {
     private static final Long NOT_EXIST_EMOTION_ID = 10000L;
 
     /**

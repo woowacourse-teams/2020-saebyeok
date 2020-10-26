@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class EmotionControllerTest {
+class EmotionControllerTest {
     private static final String API = "/api";
     private static final Long TEST_ID = 1L;
     private static final String TEST_NAME = "기뻐요";

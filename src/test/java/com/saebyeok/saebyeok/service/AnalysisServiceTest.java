@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @Sql("/truncate.sql")
 @ExtendWith(MockitoExtension.class)
-public class AnalysisServiceTest {
+class AnalysisServiceTest {
     private Member member;
     private AnalysisService analysisService;
 

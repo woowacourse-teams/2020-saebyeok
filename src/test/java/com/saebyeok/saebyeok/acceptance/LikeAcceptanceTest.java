@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LikeAcceptanceTest extends AcceptanceTest {
+class LikeAcceptanceTest extends AcceptanceTest {
     private static final long COMMENT_ID = 1L;
 
     /**
@@ -47,7 +47,7 @@ public class LikeAcceptanceTest extends AcceptanceTest {
 
         // then 해당 게시글에 적용된 공감이 제거된다.
         ArticleResponse unLikedArticle = readArticle(ARTICLE_ID);
-        assertThat(unLikedArticle.getLikesCount()).isEqualTo(0);
+        assertThat(unLikedArticle.getLikesCount()).isZero();
 
         // when 회원이 댓글을 공감한다.
         likeComment(ARTICLE_ID, COMMENT_ID);
@@ -61,7 +61,7 @@ public class LikeAcceptanceTest extends AcceptanceTest {
 
         // then 해당 댓글에 적용된 공감이 제거된다.
         CommentResponse unLikedComment = readArticle(ARTICLE_ID).getComments().get(0);
-        assertThat(unLikedComment.getLikesCount()).isEqualTo(0);
+        assertThat(unLikedComment.getLikesCount()).isZero();
     }
 
     private void likeArticle(Long articleId) {
