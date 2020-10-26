@@ -1,5 +1,11 @@
-import { SET_REPORT_CATEGORIES } from '@/store/shared/mutationTypes';
-import { FETCH_REPORT_CATEGORIES } from '@/store/shared/actionTypes';
+import {
+  CATCH_ERROR,
+  SET_REPORT_CATEGORIES
+} from '@/store/shared/mutationTypes';
+import {
+  FETCH_REPORT_CATEGORIES,
+  CREATE_REPORT
+} from '@/store/shared/actionTypes';
 import ReportService from '@/api/modules/report';
 
 const state = {
@@ -24,7 +30,12 @@ const actions = {
       .then(({ data }) => {
         commit(SET_REPORT_CATEGORIES, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
+  },
+  async [CREATE_REPORT]({ commit }, report) {
+    return ReportService.createReport(report).catch(error =>
+      commit(CATCH_ERROR, error)
+    );
   }
 };
 

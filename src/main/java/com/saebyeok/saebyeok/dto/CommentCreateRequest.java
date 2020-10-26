@@ -1,6 +1,8 @@
 package com.saebyeok.saebyeok.dto;
 
+import com.saebyeok.saebyeok.domain.Article;
 import com.saebyeok.saebyeok.domain.Comment;
+import com.saebyeok.saebyeok.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +24,15 @@ public class CommentCreateRequest {
     @NotNull(message = "해당하는 게시글이 없어요.")
     private Long articleId;
 
-    public Comment toComment() {
+    private Long parentId;
+
+    public Comment toComment(Member member, String nickname, Article article, Comment parent) {
         return builder().
                 content(this.content).
+                member(member).
+                nickname(nickname).
+                article(article).
+                parent(parent).
                 build();
     }
 }

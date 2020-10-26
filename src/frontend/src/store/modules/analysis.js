@@ -1,4 +1,5 @@
 import {
+  CATCH_ERROR,
   SET_ARTICLES_ANALYSIS,
   SET_COMMENTS_ANALYSIS
 } from '@/store/shared/mutationTypes';
@@ -37,14 +38,14 @@ const actions = {
       .then(({ data }) => {
         commit(SET_ARTICLES_ANALYSIS, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [FETCH_COMMENTS_ANALYSIS]({ commit }) {
     return AnalysisService.getCommentsAnalysis()
       .then(({ data }) => {
         commit(SET_COMMENTS_ANALYSIS, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 

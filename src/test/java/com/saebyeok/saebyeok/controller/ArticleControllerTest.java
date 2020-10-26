@@ -109,7 +109,7 @@ class ArticleControllerTest {
     void createArticleTest() throws Exception {
         ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT_1, TEST_EMOTION_1.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-        Article article = new Article(TEST_CONTENT_1, TEST_IS_COMMENT_ALLOWED);
+        Article article = new Article(TEST_CONTENT_1, null, TEST_IS_COMMENT_ALLOWED);
 
         when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(article);
 

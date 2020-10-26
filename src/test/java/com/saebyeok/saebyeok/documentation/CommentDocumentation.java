@@ -60,8 +60,8 @@ class CommentDocumentation extends Documentation {
 
     @Test
     void createComment() throws Exception {
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("내용", 1L);
-        Comment comment = commentCreateRequest.toComment();
+        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("내용", 1L, 2L);
+        Comment comment = new Comment(1L, "내용", null, null, null, null, null, null, null);
 
         given(commentService.createComment(any(), any())).willReturn(comment);
 
@@ -84,7 +84,9 @@ class CommentDocumentation extends Documentation {
                         ),
                         requestFields(
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
-                                fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("댓글 게시물 ID")),
+                                fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("댓글 게시물 ID"),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).description("상위 댓글 ID")
+                        ),
                         responseHeaders(
                                 headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
                         )

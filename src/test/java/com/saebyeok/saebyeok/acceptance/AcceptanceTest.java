@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +21,15 @@ import java.util.Map;
 @WithUserDetails("123456789")
 @Sql({"/truncate.sql", "/emotion.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AcceptanceTest {
-    public static final String API = "/api";
-    public static final Long MEMBER_ID = 1L;
-    public static final Long ARTICLE_ID = 1L;
-    public static String TOKEN = null;
+public class AcceptanceTest {
+    static final String API = "/api";
+    static final Long MEMBER_ID = 1L;
+    static final Long ARTICLE_ID = 1L;
+    static final String ARTICLE_CONTENT = "내용입니다";
+    static final String COMMENT_CONTENT = "새벽 좋아요";
+    static final Long EMOTION_ID = 1L;
+    static final List<Long> SUB_EMOTION_IDS = Arrays.asList(1L, 2L);
+    static String TOKEN = null;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -70,11 +75,32 @@ class AcceptanceTest {
                 body(params).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
+        when().
                 post(API + "/articles").
-                then().
+        then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value());
+        //@formatter:on
+    }
+
+    public Long createCommentOf(Long targetArticleId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("content", COMMENT_CONTENT);
+        params.put("articleId", targetArticleId);
+
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                        body(params).
+                        contentType(MediaType.APPLICATION_JSON_VALUE).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                        post(API + "/articles/" + targetArticleId + "/comments").
+                then().
+                        log().all().
+                        statusCode(HttpStatus.CREATED.value()).
+                        extract().as(Long.class);
         //@formatter:on
     }
 }

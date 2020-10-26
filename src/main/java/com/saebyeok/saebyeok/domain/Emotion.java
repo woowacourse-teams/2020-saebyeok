@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,7 @@ public class Emotion {
     private String imageResource;
 
     @OneToMany(mappedBy = "emotion")
-    private List<SubEmotion> subEmotions;
+    private List<SubEmotion> subEmotions = new ArrayList<>();
 
     @Builder
     public Emotion(Long id, String name, String imageResource) {

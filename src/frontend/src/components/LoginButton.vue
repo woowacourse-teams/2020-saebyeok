@@ -1,16 +1,16 @@
 <template>
   <div>
-    <v-icon @click.stop="dialog = true">mdi-logout</v-icon>
+    <v-icon @click.stop="dialog = true">mdi-login</v-icon>
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
-        <v-card-title class="text-h6">정말 로그아웃 하시겠어요?</v-card-title>
+        <v-card-title class="text-h6">새벽에 로그인 하시겠어요?</v-card-title>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
           <v-btn color="#B2A4D4" text @click="dialog = false">아니요</v-btn>
 
-          <v-btn color="#B2A4D4" text @click="logout">네, 할게요</v-btn>
+          <v-btn color="#B2A4D4" text @click="login">네, 할게요</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -22,7 +22,7 @@ import { mapMutations } from 'vuex';
 import { SHOW_SNACKBAR } from '../store/shared/mutationTypes';
 
 export default {
-  name: 'LogoutButton',
+  name: 'LoginButton',
   data() {
     return {
       dialog: false
@@ -30,14 +30,8 @@ export default {
   },
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
-    logout() {
-      if (this.$router.currentRoute.name === 'Feed') {
-        this.$router.go();
-      } else {
-        this.$router.push('/feed').catch(() => {});
-      }
-      localStorage.removeItem('token');
-      this.showSnackbar('성공적으로 로그아웃되었어요. 안녕히 가세요👋');
+    login() {
+      this.$router.push('/signin');
     }
   }
 };

@@ -22,8 +22,8 @@ public class ArticleEmotionService {
     private final ArticleEmotionRepository articleEmotionRepository;
 
     public void createArticleEmotion(Article article, Long emotionId) {
-        Emotion emotion = emotionRepository.findById(emotionId).orElseThrow(
-                () -> new EmotionNotFoundException(emotionId));
+        Emotion emotion = emotionRepository.findById(emotionId).
+                orElseThrow(() -> new EmotionNotFoundException(emotionId));
         ArticleEmotion articleEmotion = new ArticleEmotion(article, emotion);
 
         articleEmotionRepository.save(articleEmotion);

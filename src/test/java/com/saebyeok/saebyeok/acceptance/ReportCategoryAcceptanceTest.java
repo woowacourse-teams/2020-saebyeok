@@ -25,9 +25,9 @@ class ReportCategoryAcceptanceTest extends AcceptanceTest {
 
         //then ReportCategory의 목록을 반환한다.
         assertThat(reportCategories).
-                hasSize(3).
+                hasSize(5).
                 extracting("id").
-                containsOnly(1L, 2L, 3L);
+                containsOnly(1L, 2L, 3L, 4L, 5L);
     }
 
     private List<ReportCategoryResponse> getReportCategories() {

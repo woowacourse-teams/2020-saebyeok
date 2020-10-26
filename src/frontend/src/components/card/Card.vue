@@ -64,8 +64,8 @@
             <v-col align="right" justify="end" style="padding:0px" cols="2">
               <report-button
                 v-if="!article.isMine"
-                :reportType="getReportType()"
-                :reportedId="article.id"
+                :reportTarget="getReportTarget()"
+                :targetContentId="article.id"
               />
             </v-col>
           </v-row>
@@ -81,7 +81,7 @@ import EmotionImage from '@/components/card/EmotionImage';
 import SubEmotionChips from '@/components/card/SubEmotionChips';
 import ReportButton from '@/components/ReportButton';
 import DetailCardMenu from '@/components/card/DetailCardMenu';
-import { REPORT_TYPE } from '@/utils/ReportType.js';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 
 import { mapActions } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
@@ -104,19 +104,13 @@ export default {
     toggleLike() {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
-        this.unlikeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = false;
-          this.article.likesCount--;
-        });
+        this.unlikeArticle(this.article);
       } else {
-        this.likeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = true;
-          this.article.likesCount++;
-        });
+        this.likeArticle(this.article);
       }
     },
-    getReportType() {
-      return REPORT_TYPE.ARTICLE;
+    getReportTarget() {
+      return REPORT_TARGET.ARTICLE;
     },
     clickCardContent() {
       this.$emit('clickCardContent');

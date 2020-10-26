@@ -56,12 +56,12 @@ class LikeDocumentation extends Documentation {
 
         given(likeService.likeArticle(any(Member.class), eq(articleId))).willReturn(new ArticleLike());
 
-        this.mockMvc.perform(post("/api/likes/article/{articleId}", articleId).
+        this.mockMvc.perform(post("/api/articles/{articleId}/likes", articleId).
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
                 andDo(print()).
-                andDo(document("likes/article",
+                andDo(document("likes/article-likes/create",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -81,12 +81,12 @@ class LikeDocumentation extends Documentation {
 
         doNothing().when(likeService).unlikeArticle(any(Member.class), eq(articleId));
 
-        this.mockMvc.perform(delete("/api/likes/article/{articleId}", articleId).
+        this.mockMvc.perform(delete("/api/articles/{articleId}/likes", articleId).
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isNoContent()).
                 andDo(print()).
-                andDo(document("unlikes/article",
+                andDo(document("likes/article-likes/delete",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -99,23 +99,25 @@ class LikeDocumentation extends Documentation {
 
     @Test
     void likeComment() throws Exception {
+        Long articleId = 1L;
         Long commentId = 1L;
 
         given(likeService.likeComment(any(Member.class), eq(commentId))).willReturn(new CommentLike());
 
-        this.mockMvc.perform(post("/api/likes/comment/{commentId}", commentId).
+        this.mockMvc.perform(post("/api/articles/{articleId}/comments/{commentId}/likes", articleId, commentId).
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isCreated()).
                 andDo(print()).
-                andDo(document("likes/comment",
+                andDo(document("likes/comment-likes/create",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("commentId").description("공감하는 댓글의 ID")),
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),
+                        pathParameters(
+                                parameterWithName("articleId").description("공감하는 댓글이 속한 게시물 ID"),
+                                parameterWithName("commentId").description("공감하는 댓글의 ID")),
                         responseHeaders(
                                 headerWithName("Location").description("새로 생성된 공감 자원의 위치")
                         )
@@ -124,23 +126,25 @@ class LikeDocumentation extends Documentation {
 
     @Test
     void unlikeComment() throws Exception {
+        Long articleId = 1L;
         Long commentId = 1L;
 
         doNothing().when(likeService).unlikeComment(any(Member.class), eq(commentId));
 
-        this.mockMvc.perform(delete("/api/likes/comment/{commentId}", commentId).
+        this.mockMvc.perform(delete("/api/articles/{articleId}/comments/{commentId}/likes", articleId, commentId).
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
                 accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isNoContent()).
                 andDo(print()).
-                andDo(document("unlikes/comment",
+                andDo(document("likes/comment-likes/delete",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("commentId").description("공감을 취소하는 댓글의 ID")),
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
-                        )
+                        ),
+                        pathParameters(
+                                parameterWithName("articleId").description("공감을 취소하는 댓글이 속한 게시물 ID"),
+                                parameterWithName("commentId").description("공감을 취소하는 댓글의 ID"))
                 ));
     }
 }

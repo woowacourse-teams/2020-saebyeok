@@ -1,9 +1,5 @@
-package com.saebyeok.saebyeok.util;
+package com.saebyeok.saebyeok.domain;
 
-import com.saebyeok.saebyeok.domain.Article;
-import com.saebyeok.saebyeok.domain.Comment;
-import com.saebyeok.saebyeok.domain.Member;
-import com.saebyeok.saebyeok.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.saebyeok.saebyeok.util.NicknameGenerator.WRITER_NICKNAME;
+import static com.saebyeok.saebyeok.domain.NicknameGenerator.WRITER_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NicknameGeneratorTest {
@@ -44,9 +40,7 @@ class NicknameGeneratorTest {
     @Test
     void severalCommentsByOneMemberTest() {
         String myNickname1 = nicknameGenerator.generate(me, othersArticle);
-        Comment comment = new Comment("댓글내용", myNickname1);
-        comment.setArticle(othersArticle);
-        comment.setMember(me);
+        Comment comment = new Comment("댓글내용", me, myNickname1, othersArticle, null);
         String myNickname2 = nicknameGenerator.generate(
                 me, new Article(2L, "게시물내용", other, LocalDateTime.now(), true, false, Arrays.asList(comment), new ArrayList<>()));
 

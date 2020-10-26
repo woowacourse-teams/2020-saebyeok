@@ -24,23 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
 
-    public static final int LIMIT_DAYS = 7;
+    public static final int VISIBLE_DAYS_ON_FEED = 7;
     private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
 
     private final ArticleRepository articleRepository;
     private final ArticleEmotionService articleEmotionService;
     private final ArticleSubEmotionService articleSubEmotionService;
-    private final CommentService commentService;
 
     public List<ArticleResponse> getArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
         if (!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
-            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(LIMIT_DAYS), false);
+            List<Article> articles = articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED), false);
             return filterArticles(member, articles, emotionIds, pageable);
         }
 
-        return articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(LIMIT_DAYS), false, pageable).
+        return articleRepository.findAllByCreatedDateGreaterThanEqualAndIsDeleted(LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED), false, pageable).
                 stream().
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
@@ -52,8 +51,7 @@ public class ArticleService {
 
     @Transactional
     public Article createArticle(Member member, ArticleCreateRequest request) {
-        Article article = request.toArticle();
-        article.setMember(member);
+        Article article = request.toArticle(member);
 
         articleEmotionService.createArticleEmotion(article, request.getEmotionId());
         articleSubEmotionService.createArticleSubEmotion(article, request.getSubEmotionIds());
@@ -63,7 +61,7 @@ public class ArticleService {
 
     public ArticleResponse readArticle(Member member, Long articleId) {
         Article article = articleRepository.findByIdAndCreatedDateGreaterThanEqualAndIsDeleted(articleId,
-                                                                                   LocalDateTime.now().minusDays(LIMIT_DAYS), false)
+                LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED), false)
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
@@ -84,7 +82,7 @@ public class ArticleService {
     public List<ArticleResponse> getMemberArticles(Member member, int page, int size, List<Long> emotionIds) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-        if(!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
+        if (!Objects.isNull(emotionIds) && !emotionIds.isEmpty()) {
             return filterArticles(member, member.getArticles(), emotionIds, pageable);
         }
 
@@ -116,5 +114,9 @@ public class ArticleService {
                     return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
                 }).
                 collect(Collectors.toList());
+    }
+
+    public List<Article> getVisibleDaysArticles(Member member, int limitDays) {
+        return articleRepository.findAllByMemberAndCreatedDateGreaterThanEqualAndIsDeleted(member, LocalDateTime.now().minusDays(limitDays), false);
     }
 }

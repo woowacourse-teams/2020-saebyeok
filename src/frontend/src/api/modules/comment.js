@@ -14,11 +14,15 @@ const CommentService = {
       `${BASE_URL}/${params.articleId}/comments/${params.commentId}`
     );
   },
-  like(commentId) {
-    return ApiService.post(`/likes/comment/${commentId}`);
+  like(params) {
+    return ApiService.post(
+      `${BASE_URL}/${params.articleId}/comments/${params.commentId}/likes`
+    );
   },
-  unlike(commentId) {
-    return ApiService.delete(`/likes/comment/${commentId}`);
+  unlike(params) {
+    return ApiService.delete(
+      `${BASE_URL}/${params.articleId}/comments/${params.commentId}/likes`
+    );
   }
 };
 

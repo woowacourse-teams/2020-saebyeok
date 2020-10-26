@@ -2,8 +2,12 @@ package com.saebyeok.saebyeok.documentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.documentation.common.Documentation;
+import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.report.Report;
+import com.saebyeok.saebyeok.domain.report.ReportTarget;
 import com.saebyeok.saebyeok.dto.TokenResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
+import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +25,14 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,6 +80,40 @@ class ReportDocumentation extends Documentation {
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("조회할 신고 분류의 ID"),
                                 fieldWithPath("[].name").type(JsonFieldType.STRING).description("조회할 신고 분류의 이름"),
                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("조회할 신고 분류의 상세 설명")
+                        )
+                ));
+    }
+
+    @Test
+    void createArticleReport() throws Exception {
+        ReportCreateRequest reportCreateRequest = new ReportCreateRequest("게시물 신고 내용", 1L, 1L, "Article");
+        Report report = new Report("게시물에 대한 신고입니다.", null, ReportTarget.ARTICLE, 1L, null);
+
+        given(reportService.createReport(any(Member.class), any())).willReturn(report);
+
+        String content = objectMapper.writeValueAsString(reportCreateRequest);
+
+        this.mockMvc.perform(post("/api/reports").
+                header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
+                accept(MediaType.APPLICATION_JSON).
+                content(content).
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isCreated()).
+                andDo(print()).
+                andDo(document("reports/create",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 내용"),
+                                fieldWithPath("targetContentId").type(JsonFieldType.NUMBER).description("신고할 게시물 혹은 댓글의 ID"),
+                                fieldWithPath("reportCategoryId").type(JsonFieldType.NUMBER).description("신고의 카테고리 ID"),
+                                fieldWithPath("reportTarget").type(JsonFieldType.STRING).description("신고 대상의 분류. 게시글 혹은 댓글로 분류되고 있음.")
+                        ),
+                        responseHeaders(
+                                headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
                         )
                 ));
     }
