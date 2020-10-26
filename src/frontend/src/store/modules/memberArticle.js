@@ -1,4 +1,5 @@
 import {
+  CATCH_ERROR,
   ADD_MEMBER_ARTICLES,
   SET_MEMBER_ARTICLE,
   SET_MEMBER_ARTICLES
@@ -45,7 +46,7 @@ const actions = {
         commit(SET_MEMBER_ARTICLE, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [FETCH_MEMBER_ARTICLES]({ commit }, params) {
     return MemberArticleService.getAll(params)
@@ -53,7 +54,7 @@ const actions = {
         commit(SET_MEMBER_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [PAGING_MEMBER_ARTICLES]({ commit }, params) {
     return MemberArticleService.getAll(params)
@@ -61,7 +62,7 @@ const actions = {
         commit(ADD_MEMBER_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   [CLEAR_MEMBER_ARTICLES]({ commit }) {
     commit(SET_MEMBER_ARTICLES, []);

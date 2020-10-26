@@ -39,29 +39,29 @@ public class LikeAcceptanceTest extends AcceptanceTest {
         likeArticle(ARTICLE_ID);
 
         // then 해당 게시글에 공감이 추가된다.
-        ArticleResponse LikedArticle = readArticle(ARTICLE_ID);
-        assertThat(LikedArticle.getLikesCount()).isEqualTo(1);
+        ArticleResponse likedArticle = readArticle(ARTICLE_ID);
+        assertThat(likedArticle.getLikesCount()).isEqualTo(1);
 
         // when 이미 공감한 글을 공감 취소한다.
         unlikeArticle(ARTICLE_ID);
 
         // then 해당 게시글에 적용된 공감이 제거된다.
-        ArticleResponse UnLikedArticle = readArticle(ARTICLE_ID);
-        assertThat(UnLikedArticle.getLikesCount()).isEqualTo(0);
+        ArticleResponse unLikedArticle = readArticle(ARTICLE_ID);
+        assertThat(unLikedArticle.getLikesCount()).isEqualTo(0);
 
         // when 회원이 댓글을 공감한다.
         likeComment(ARTICLE_ID, COMMENT_ID);
 
         // then 해당 댓글에 공감이 추가된다.
-        CommentResponse LikedComment = readArticle(ARTICLE_ID).getComments().get(0);
-        assertThat(LikedComment.getLikesCount()).isEqualTo(1);
+        CommentResponse likedComment = readArticle(ARTICLE_ID).getComments().get(0);
+        assertThat(likedComment.getLikesCount()).isEqualTo(1);
 
         // when 이미 공감한 댓글을 공감 취소한다.
         unlikeComment(ARTICLE_ID, COMMENT_ID);
 
         // then 해당 댓글에 적용된 공감이 제거된다.
-        CommentResponse UnLikedComment = readArticle(ARTICLE_ID).getComments().get(0);
-        assertThat(UnLikedComment.getLikesCount()).isEqualTo(0);
+        CommentResponse unLikedComment = readArticle(ARTICLE_ID).getComments().get(0);
+        assertThat(unLikedComment.getLikesCount()).isEqualTo(0);
     }
 
     private void likeArticle(Long articleId) {
