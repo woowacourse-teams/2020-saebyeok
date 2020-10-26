@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,13 +44,7 @@ public class Comment implements Comparable<Comment> {
     private Comment parent;
 
     @OneToMany(mappedBy = "comment")
-    private List<CommentLike> likes;
-
-    public Comment(String content, String nickname, Comment parent) {
-        this.content = content;
-        this.nickname = nickname;
-        this.parent = parent;
-    }
+    private List<CommentLike> likes = new ArrayList<>();
 
     @Builder
     public Comment(String content, Member member, String nickname, Article article, Comment parent) {
@@ -73,28 +68,12 @@ public class Comment implements Comparable<Comment> {
         return this.likes.size();
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
+    public void delete() {
+        this.isDeleted = true;
     }
 
     public void setArticle(Article article) {
         this.article = article;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public void setParent(Comment parent) {
-        this.parent = parent;
     }
 
     @Override

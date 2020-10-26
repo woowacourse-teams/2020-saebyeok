@@ -4,7 +4,6 @@ import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import com.saebyeok.saebyeok.util.NicknameGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +21,6 @@ public class CommentService {
 
     @Transactional
     public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
-        Comment comment = toComment(member, commentCreateRequest);
-        return commentRepository.save(comment);
-    }
-
-    private Comment toComment(Member member, CommentCreateRequest commentCreateRequest) {
         Long articleId = commentCreateRequest.getArticleId();
         Article article = articleRepository.findById(articleId).
                 orElseThrow(() -> new ArticleNotFoundException(articleId));
@@ -39,13 +33,9 @@ public class CommentService {
             parent = null;
         }
 
-        return Comment.builder()
-                .content(commentCreateRequest.getContent())
-                .member(member)
-                .nickname(nicknameGenerator.generate(member, article))
-                .article(article)
-                .parent(parent)
-                .build();
+        String nickname = nicknameGenerator.generate(member, article);
+        Comment comment = commentCreateRequest.toComment(member, nickname, article, parent);
+        return commentRepository.save(comment);
     }
 
     public Long countTotalCommentsBy(Member member) {
@@ -63,7 +53,7 @@ public class CommentService {
         if (!comment.isWrittenBy(member)) {
             throw new IllegalAccessException(NOT_YOUR_COMMENT_MESSAGE);
         }
-        comment.setIsDeleted(true);
+        comment.delete();
         commentRepository.save(comment);
     }
 }

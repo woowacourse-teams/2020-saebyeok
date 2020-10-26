@@ -47,15 +47,13 @@ class CommentRepositoryTest {
     }
 
     private Comment createTestComment() {
-        Comment comment = Comment.builder().
+        return Comment.builder().
                 content(TEST_CONTENT).
+                member(member).
                 nickname(TEST_NICKNAME).
+                article(article).
+                parent(null).
                 build();
-
-        comment.setMember(member);
-        comment.setArticle(article);
-
-        return comment;
     }
 
     @DisplayName("댓글을 DB에 저장하고, 저장된 댓글을 확인한다")

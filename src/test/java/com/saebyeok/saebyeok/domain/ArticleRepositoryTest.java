@@ -54,6 +54,7 @@ class ArticleRepositoryTest {
         article3 = new Article(null, "내용3", member, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
         article4 = new Article(null, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
 
+        memberRepository.save(member);
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);
@@ -77,7 +78,7 @@ class ArticleRepositoryTest {
     @DisplayName("게시글을 저장한다")
     @Test
     void saveTest() {
-        Article newArticle = new Article("내용5", true);
+        Article newArticle = new Article("내용4", null, true);
         int articleSize = articleRepository.findAll().size();
 
         articleRepository.save(newArticle);

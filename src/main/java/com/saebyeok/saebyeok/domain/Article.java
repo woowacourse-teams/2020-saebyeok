@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,20 +39,15 @@ public class Article {
     private Boolean isDeleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "article")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "article")
-    private List<ArticleLike> likes;
+    private List<ArticleLike> likes = new ArrayList<>();
 
-    public Article(String content, Boolean isCommentAllowed) {
+    public Article(String content, Member member, Boolean isCommentAllowed) {
         this.content = content;
-        this.isCommentAllowed = isCommentAllowed;
-    }
-
-    public void setMember(Member member) {
-        // Todo: 편의 메소드 리팩토링(기존에 member가 있는 경우, add를 중복으로 하는 경우 등)
         this.member = member;
-        member.addArticle(this);
+        this.isCommentAllowed = isCommentAllowed;
     }
 
     public void delete() {
@@ -82,5 +78,10 @@ public class Article {
 
     public long countLikes() {
         return this.likes.size();
+    }
+
+    public void addComment(Comment comment) {
+        comment.setArticle(this);
+        this.comments.add(comment);
     }
 }
