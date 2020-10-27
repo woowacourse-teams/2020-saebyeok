@@ -20,6 +20,7 @@ import java.util.*;
 import static com.saebyeok.saebyeok.service.ArticleEmotionService.NOT_EXIST_MOST_EMOTION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -98,9 +99,11 @@ class ArticleEmotionServiceTest {
 
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article1);
 
-        assertThat(emotionResponse).isNotNull();
-        assertThat(emotionResponse.getName()).isEqualTo(emotion1.getName());
-        assertThat(emotionResponse.getImageResource()).isEqualTo(emotion1.getImageResource());
+        assertAll(
+                () -> assertThat(emotionResponse).isNotNull(),
+                () -> assertThat(emotionResponse.getName()).isEqualTo(emotion1.getName()),
+                () -> assertThat(emotionResponse.getImageResource()).isEqualTo(emotion1.getImageResource())
+        );
     }
 
     @DisplayName("예외 테스트: 생성된 게시글로 만들어진 ArticleEmotion이 존재하지 않으면 해당 게시글의 감정 대분류 정보를 가져올 때 " +

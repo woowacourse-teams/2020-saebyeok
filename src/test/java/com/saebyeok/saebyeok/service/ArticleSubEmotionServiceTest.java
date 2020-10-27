@@ -15,6 +15,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
@@ -97,11 +98,13 @@ class ArticleSubEmotionServiceTest {
 
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
 
-        assertThat(subEmotionResponses)
-                .isNotNull()
-                .hasSize(articleSubEmotions.size());
-        assertThat(subEmotionResponses.get(0).getName()).isEqualTo(subEmotion1.getName());
-        assertThat(subEmotionResponses.get(1).getName()).isEqualTo(subEmotion2.getName());
-        assertThat(subEmotionResponses.get(2).getName()).isEqualTo(subEmotion3.getName());
+        assertAll(
+                () -> assertThat(subEmotionResponses)
+                        .isNotNull()
+                        .hasSize(articleSubEmotions.size()),
+                () -> assertThat(subEmotionResponses.get(0).getName()).isEqualTo(subEmotion1.getName()),
+                () -> assertThat(subEmotionResponses.get(1).getName()).isEqualTo(subEmotion2.getName()),
+                () -> assertThat(subEmotionResponses.get(2).getName()).isEqualTo(subEmotion3.getName())
+        );
     }
 }

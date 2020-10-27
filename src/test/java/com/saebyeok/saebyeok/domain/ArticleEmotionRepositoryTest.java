@@ -86,9 +86,8 @@ class ArticleEmotionRepositoryTest {
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
         List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3);
 
-        List<ArticleEmotion> actualArticleEmotions = articleEmotionRepository.findAllByArticleInAndEmotionIn(articles,
-                                                                                                             emotions,
-                                                                                                             pageable);
+        List<ArticleEmotion> actualArticleEmotions =
+                articleEmotionRepository.findAllByArticleInAndEmotionIn(articles, emotions, pageable);
 
         assertThat(actualArticleEmotions)
                 .hasSize(articleEmotions.size())
