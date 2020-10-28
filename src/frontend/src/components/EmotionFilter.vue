@@ -46,10 +46,7 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(['emotions']),
-    selectAllButtonText() {
-      return this.isSelectedAll() ? '전체 선택' : '전체 해제';
-    }
+    ...mapGetters(['emotions'])
   },
   methods: {
     ...mapActions([FETCH_EMOTIONS]),
@@ -83,6 +80,9 @@ export default {
         emotionIds: this.filter.toString(),
         isFiltered: !this.isSelectedAll()
       });
+    },
+    selectAllButtonText() {
+      return this.isSelectedAll() ? '전체 해제' : '전체 선택';
     }
   }
 };
