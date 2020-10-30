@@ -6,6 +6,7 @@ import com.saebyeok.saebyeok.domain.report.*;
 import com.saebyeok.saebyeok.dto.report.ReportCategoryResponse;
 import com.saebyeok.saebyeok.dto.report.ReportCreateRequest;
 import com.saebyeok.saebyeok.exception.ReportCategoryNotFoundException;
+import com.saebyeok.saebyeok.exception.ReportTargetNotFoundException;
 import com.saebyeok.saebyeok.service.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +38,8 @@ public class ReportServiceTest {
     private static final String CATEGORY_CONTENT = "상업적 목적을 가진 게시물에 해당합니다.";
     private static final boolean IS_DELETED = false;
     private static final Long TARGET_CONTENT_ID = 1L;
-    private static final Long INVALID_CATEGORY_ID = 10000L;
+    private static final Long INVALID_CATEGORY_ID = -1L;
+    private static final String INVALID_REPORT_TARGET = "INVALID";
 
     private ReportService reportService;
     @Mock
@@ -79,7 +81,7 @@ public class ReportServiceTest {
     void createReportTest() {
         ReportCreateRequest createRequest = new ReportCreateRequest(REPORT_CONTENT, TARGET_CONTENT_ID, CATEGORY_ID, ReportTarget.ARTICLE.getName());
         when(reportRepository.save(any(Report.class))).thenReturn(report);
-        when(reportCategoryRepository.findById(1L)).thenReturn(Optional.of(reportCategory));
+        when(reportCategoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(reportCategory));
 
         Report createdReport = reportService.createReport(member, createRequest);
 
@@ -97,5 +99,16 @@ public class ReportServiceTest {
         assertThatThrownBy(() -> reportService.createReport(member, invalidRequest)).
                 isInstanceOf(ReportCategoryNotFoundException.class).
                 hasMessage(INVALID_CATEGORY_ID + "에 해당하는 신고 분류를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("예외 테스트 : 잘못된 카테고리 타겟을 포함한 Request로 게시글 신고를 생성하면 예외가 발생한다.")
+    @Test
+    void createReportWithTargetTextExceptionTest() {
+        ReportCreateRequest invalidRequest = new ReportCreateRequest(REPORT_CONTENT, TARGET_CONTENT_ID, CATEGORY_ID, INVALID_REPORT_TARGET);
+        when(reportCategoryRepository.findById(CATEGORY_ID)).thenReturn(Optional.of(reportCategory));
+
+        assertThatThrownBy(() -> reportService.createReport(member, invalidRequest)).
+                isInstanceOf(ReportTargetNotFoundException.class).
+                hasMessage(INVALID_REPORT_TARGET + "에 해당하는 신고 타입을 찾을 수 없습니다.");
     }
 }
