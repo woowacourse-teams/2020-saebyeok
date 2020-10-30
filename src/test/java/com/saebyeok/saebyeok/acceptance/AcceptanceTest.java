@@ -23,7 +23,6 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
     static final String API = "/api";
-    static final Long MEMBER_ID = 1L;
     static final Long ARTICLE_ID = 1L;
     static final String ARTICLE_CONTENT = "내용입니다";
     static final String COMMENT_CONTENT = "새벽 좋아요";

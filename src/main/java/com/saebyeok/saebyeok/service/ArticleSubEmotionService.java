@@ -26,8 +26,8 @@ public class ArticleSubEmotionService {
                 map(subEmotion -> new ArticleSubEmotion(article, subEmotion)).
                 collect(Collectors.toList());
 
-        for (ArticleSubEmotion articleSubEmotion : articleSubEmotions) {
-            articleSubEmotionRepository.save(articleSubEmotion);
+        if (!articleSubEmotions.isEmpty()) {
+            articleSubEmotionRepository.saveAll(articleSubEmotions);
         }
     }
 

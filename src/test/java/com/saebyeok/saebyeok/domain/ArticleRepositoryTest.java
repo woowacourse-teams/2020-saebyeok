@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 class ArticleRepositoryTest {
-    @MockBean
-    private AuditingHandler auditingHandler;
-
     public static final int VISIBLE_DAYS_ON_FEED = 7;
     public static final int VISIBLE_DAYS_ON_ANALYSIS = 30;
     private static final PageRequest PAGE_REQUEST = PageRequest.of(0, 10);
+
+    @MockBean
+    private AuditingHandler auditingHandler;
 
     @Autowired
     private ArticleRepository articleRepository;
