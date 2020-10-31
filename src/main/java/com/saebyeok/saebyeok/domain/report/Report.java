@@ -51,8 +51,4 @@ public class Report {
         this.targetContentId = targetContentId;
         this.reportCategory = reportCategory;
     }
-
-    public void finish() {
-        this.isFinished = true;
-    }
 }
