@@ -29,7 +29,7 @@ public class OAuthAttributes {
         if ("google".equals(registrationId)) {
             return ofGoogle(userNameAttributeName, attributes);
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("올바르지 않은 소셜 로그인 방법입니다!");
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
