@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +20,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithUserDetails(userDetailsServiceBeanName = "userService", value = "123456789")
@@ -53,10 +58,26 @@ class CommentControllerTest {
                 .build();
     }
 
-    @DisplayName("댓글 등록 요청을 받을 때, 댓글을 등록 후 댓글 id를 반환한다.")
+    @DisplayName("'/articles/{articleId}/comments'로 get 요청을 보내면 해당 게시글의 댓글 목록 리스트를 받는다")
+    @Test
+    void getCommentsTest() throws Exception {
+        CommentResponse commentResponse = new CommentResponse(COMMENT_ID, "새벽 좋아요", "닉네임", null, null, null, null,
+                                                              null, null);
+        List<CommentResponse> commentResponses = Arrays.asList(commentResponse);
+        when(commentService.getComment(any(Member.class), anyLong())).thenReturn(commentResponses);
+
+        this.mockMvc.perform(get(API + "/articles/" + ARTICLE_ID + "/comments").
+                accept(MediaType.APPLICATION_JSON_VALUE)).
+                andExpect(jsonPath("$", hasSize(1))).
+                andExpect(jsonPath("$[0].content").value("새벽 좋아요")).
+                andExpect(jsonPath("$[0].nickname").value("닉네임"));
+    }
+
+    @DisplayName("'/articles/{articleId}/comments'로 create 요청을 보내면 해당 게시글의 댓글을 등록 후 댓글 id를 반환한다.")
     @Test
     void createCommentTest() throws Exception {
-        when(commentService.createComment(any(), any())).thenReturn(new Comment(COMMENT_ID, null, null, null, null, null, null, null, null));
+        when(commentService.createComment(any(), any())).thenReturn(new Comment(COMMENT_ID, null, null, null, null,
+                                                                                null, null, null, null));
 
         CommentCreateRequest request = new CommentCreateRequest(TEST_CONTENT, ARTICLE_ID, null);
         String content = objectMapper.writeValueAsString(request);
@@ -72,7 +93,6 @@ class CommentControllerTest {
         Long savedCommentId = Long.parseLong(mvcResult.getResponse().getContentAsString());
 
         assertThat(savedCommentId).isEqualTo(COMMENT_ID);
-
     }
 
     @DisplayName("예외 테스트: 최소 길이보다 짧은 댓글 등록 메서드를 호출했을 때, 예외가 발생한다")
@@ -121,7 +141,7 @@ class CommentControllerTest {
     }
 
 
-    @DisplayName("댓글 삭제 요청을 받을 때, 댓글을 삭제한다")
+    @DisplayName("'/articles/{articleId}/comments/{commentId}'로 delete 요청을 보내면 해당 게시글의 댓글을 삭제한다")
     @Test
     void deleteCommentTest() throws Exception {
         doNothing().when(commentService).deleteComment(any(Member.class), anyLong());
