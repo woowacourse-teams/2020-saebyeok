@@ -84,8 +84,7 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시물 내용"),
                                 fieldWithPath("emotionId").type(JsonFieldType.NUMBER).description("게시물 감정 대분류의 ID"),
                                 fieldWithPath("subEmotionIds[]").type(JsonFieldType.ARRAY).description("게시물 감정 소분류의 ID 목록"),
-                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 " +
-                                        "여부")),
+                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 여부")),
                         responseHeaders(
                                 headerWithName("Location").description("생성 성공 시 해당 주소로 이동")
                         )
@@ -127,8 +126,7 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
                                 fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
                                 fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 소분류의 이름"),
-                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" +
-                                        " 허용 여부"),
+                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
                                 fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
                                 fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
@@ -171,8 +169,7 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
                                 fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
                                 fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 소분류의 이름"),
-                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" +
-                                        " 허용 여부"),
+                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
                                 fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
                                 fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
                                 fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
@@ -220,9 +217,7 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("[].subEmotions[]").type(JsonFieldType.ARRAY).description("게시물의 감정 소분류 목록"),
                                 fieldWithPath("[].subEmotions[].id").type(JsonFieldType.NUMBER).description("게시물의 감정 소분류의 ID"),
                                 fieldWithPath("[].subEmotions[].name").type(JsonFieldType.STRING).description("게시물의 감정 소분류의 이름"),
-                                fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글" +
-                                        " 허용 " +
-                                        "여부"),
+                                fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
                                 fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
@@ -271,9 +266,7 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("[].subEmotions[]").type(JsonFieldType.ARRAY).description("게시물의 감정 소분류 목록"),
                                 fieldWithPath("[].subEmotions[].id").type(JsonFieldType.NUMBER).description("게시물의 감정 소분류의 ID"),
                                 fieldWithPath("[].subEmotions[].name").type(JsonFieldType.STRING).description("게시물의 감정 소분류의 이름"),
-                                fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글" +
-                                        " 허용 " +
-                                        "여부"),
+                                fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
                                 fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
