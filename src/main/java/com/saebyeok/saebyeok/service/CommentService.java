@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +22,12 @@ public class CommentService {
     private final NicknameGenerator nicknameGenerator;
 
     public List<CommentResponse> getComment(Member member, Long articleId) {
-        return new ArrayList<>();
+        List<Comment> comments = commentRepository.findAllByArticleId(articleId);
+        return comments.
+                stream().
+                sorted().
+                map(comment -> new CommentResponse(comment, member)).
+                collect(Collectors.toList());
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,12 +45,14 @@ class CommentServiceTest {
 
     private Member member;
     private Article article;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
         this.commentService = new CommentService(commentRepository, articleRepository, nicknameGenerator);
         this.member = new Member();
         this.article = new Article();
+        this.comment = new Comment("테스트", null, "슬픈돌고래", null, null);
     }
 
     @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다")
@@ -84,10 +92,22 @@ class CommentServiceTest {
                 .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
     }
 
+    @DisplayName("댓글 조회 메서드를 호출했을 때, 댓글 조회를 수행한다.")
+    @Test
+    void getCommentsTest() {
+        when(commentRepository.findAllByArticleId(anyLong())).thenReturn(Arrays.asList(comment));
+        List<CommentResponse> comments = commentService.getComment(member, ARTICLE_ID);
+
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0).getContent()).isEqualTo(comment.getContent());
+        assertThat(comments.get(0).getNickname()).isEqualTo(comment.getNickname());
+        assertFalse(comments.get(0).getIsDeleted());
+    }
+
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() throws IllegalAccessException {
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(new Comment("테스트", null, "슬픈돌고래", null, null)));
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
         Long savedCommentId = 1L;
 
         commentService.deleteComment(any(Member.class), savedCommentId);

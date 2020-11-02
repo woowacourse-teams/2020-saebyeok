@@ -9,4 +9,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     public Long countCommentsByMemberAndIsDeleted(Member member, Boolean isDeleted);
 
     public List<Comment> findAllByMemberAndIsDeleted(Member member, Boolean isDeleted);
+
+    public List<Comment> findAllByArticleId(Long articleId);
 }
