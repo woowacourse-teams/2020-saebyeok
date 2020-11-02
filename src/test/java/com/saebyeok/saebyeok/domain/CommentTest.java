@@ -82,4 +82,14 @@ class CommentTest {
         assertThat(sortedComments).extracting("id")
                 .containsExactly(1L, 6L, 2L, 4L, 5L, 3L);
     }
+
+    @DisplayName("equals가 잘 작동하는지 테스트")
+    @Test
+    void equalsTest() {
+        Comment commentA = new Comment(1L, null, null, null, LocalDateTime.of(2020, 1, 1, 1, 0), null, null, null, null);
+        Comment commentB = new Comment(1L, null, null, null, LocalDateTime.of(2020, 1, 1, 1, 0), null, null, null, null);
+
+        assertThat(commentA == commentB).isFalse();
+        assertThat(commentA.equals(commentB)).isTrue();
+    }
 }
