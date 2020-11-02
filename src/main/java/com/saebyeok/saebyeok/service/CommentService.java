@@ -44,7 +44,8 @@ public class CommentService {
             parent = null;
         }
 
-        String nickname = nicknameGenerator.generate(member, article);
+        List<Comment> comments = commentRepository.findAllByArticleId(articleId);
+        String nickname = nicknameGenerator.generate(member, article, comments);
         Comment comment = commentCreateRequest.toComment(member, nickname, article, parent);
         return commentRepository.save(comment);
     }

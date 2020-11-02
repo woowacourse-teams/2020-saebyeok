@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -39,9 +37,6 @@ public class Article {
     private Boolean isDeleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "article")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "article")
     private List<ArticleLike> likes = new ArrayList<>();
 
     public Article(String content, Member member, Boolean isCommentAllowed) {
@@ -58,19 +53,6 @@ public class Article {
         return this.member == member;
     }
 
-    public Optional<String> loadExistingNickname(Member member) {
-        return comments.stream()
-                .filter(comment -> comment.isWrittenBy(member))
-                .findFirst()
-                .map(Comment::getNickname);
-    }
-
-    public List<String> getAllNicknames() {
-        return comments.stream()
-                .map(Comment::getNickname)
-                .collect(Collectors.toList());
-    }
-
     public boolean isLikedBy(Member member) {
         Objects.requireNonNull(member);
         return this.likes.stream().anyMatch(it -> it.getMember() == member);
@@ -78,10 +60,5 @@ public class Article {
 
     public long countLikes() {
         return this.likes.size();
-    }
-
-    public void addComment(Comment comment) {
-        comment.setArticle(this);
-        this.comments.add(comment);
     }
 }

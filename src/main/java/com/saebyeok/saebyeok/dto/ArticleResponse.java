@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,9 +22,9 @@ public class ArticleResponse {
     private Boolean isMine;
     private Long likesCount;
     private Boolean isLikedByMe;
-    private List<CommentResponse> comments;
 
-    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions) {
+    public ArticleResponse(Article article, Member member, EmotionResponse emotion,
+                           List<SubEmotionResponse> subEmotions) {
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();
@@ -37,17 +34,5 @@ public class ArticleResponse {
         this.isMine = article.isWrittenBy(member);
         this.likesCount = article.countLikes();
         this.isLikedByMe = article.isLikedBy(member);
-        this.comments = transformComments(article, member);
-    }
-
-    private List<CommentResponse> transformComments(Article article, Member member) {
-        if (Objects.isNull(article.getComments()) || article.getComments().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return article.getComments().
-                stream().
-                sorted().
-                map(comment -> new CommentResponse(comment, member)).
-                collect(Collectors.toList());
     }
 }

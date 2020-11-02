@@ -49,10 +49,12 @@ class ArticleRepositoryTest {
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 
-        article1 = new Article(null, "내용1", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS + 1), false, false, new ArrayList<>(), new ArrayList<>());
-        article2 = new Article(null, "내용2", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED + 1), true, false, new ArrayList<>(), new ArrayList<>());
-        article3 = new Article(null, "내용3", member, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
-        article4 = new Article(null, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
+        article1 = new Article(null, "내용1", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS + 1),
+                               false, false, new ArrayList<>());
+        article2 = new Article(null, "내용2", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED + 1), true,
+                               false, new ArrayList<>());
+        article3 = new Article(null, "내용3", member, LocalDateTime.now(), true, false, new ArrayList<>());
+        article4 = new Article(null, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>());
 
         memberRepository.save(member);
         articleRepository.save(article1);

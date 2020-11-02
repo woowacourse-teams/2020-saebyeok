@@ -38,8 +38,7 @@ class ArticleSubEmotionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.article = new Article(1L, "내용", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                   new ArrayList<>());
+        this.article = new Article(1L, "내용", null, LocalDateTime.now(), true, false, new ArrayList<>());
         articleRepository.save(article);
 
         SubEmotion subEmotion1 = new SubEmotion(1L, "행복해요");

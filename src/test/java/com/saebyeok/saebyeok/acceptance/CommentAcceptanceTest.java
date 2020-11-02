@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.acceptance;
 
-import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,22 +148,6 @@ class CommentAcceptanceTest extends AcceptanceTest {
                 doesNotContain(1L);
     }
 
-    private List<CommentResponse> getComments(Long articleId) {
-        //@formatter:off
-        return
-                given().
-                        auth().oauth2(TOKEN).
-                        accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                        get(API + "/articles/" + articleId + "/comments").
-                then().
-                        log().all().
-                        extract().
-                        jsonPath().
-                        getList(".", CommentResponse.class);
-        //@formatter:on
-    }
-
     private ExceptionResponse createInvalidComment(String content) {
         //@formatter:off
         params.put("content", content);
@@ -234,19 +217,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     }
 
     private List<CommentResponse> readRecomments() {
-        //@formatter:off
-        ArticleResponse articleResponse =
-                given().
-                        auth().oauth2(TOKEN).
-                when().
-                        get(API + "/articles/" + ARTICLE_ID).
-                then().
-                        log().all().
-                        extract().
-                        as(ArticleResponse.class);
-        //@formatter:on
-
-        return articleResponse.getComments().stream()
+        return getComments(ARTICLE_ID).stream()
                 .filter(comment -> !comment.getHasNoParent())
                 .collect(Collectors.toList());
     }

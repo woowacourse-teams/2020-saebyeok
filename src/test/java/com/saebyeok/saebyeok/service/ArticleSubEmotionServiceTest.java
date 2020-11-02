@@ -43,8 +43,7 @@ class ArticleSubEmotionServiceTest {
     void setUp() {
         this.articleSubEmotionService = new ArticleSubEmotionService(subEmotionRepository, articleSubEmotionRepository);
 
-        this.article = new Article(ARTICLE_ID, "내용", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                   new ArrayList<>());
+        this.article = new Article(ARTICLE_ID, "내용", null, LocalDateTime.now(), true, false, new ArrayList<>());
         this.subEmotion1 = new SubEmotion(SUB_EMOTION_1_ID, "행복해요");
         this.subEmotion2 = new SubEmotion(SUB_EMOTION_2_ID, "신나요");
         this.subEmotion3 = new SubEmotion(SUB_EMOTION_3_ID, "멋져요");
