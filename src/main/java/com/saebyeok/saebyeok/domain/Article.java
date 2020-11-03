@@ -31,6 +31,9 @@ public class Article {
     @ManyToOne
     private Member member;
 
+    @OneToMany(mappedBy = "article")
+    private List<Comment> comments = new ArrayList<>();
+
     @CreatedDate
     private LocalDateTime createdDate;
     private Boolean isCommentAllowed;
@@ -60,5 +63,9 @@ public class Article {
 
     public long countLikes() {
         return this.likes.size();
+    }
+
+    public long countComments() {
+        return comments.size();
     }
 }

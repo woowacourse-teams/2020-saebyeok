@@ -9,10 +9,10 @@
     >
       <v-row dense>
         <v-col
-          v-for="comment in article.comments"
-          :key="comment.id"
-          cols="12"
-          class="justify-center pt-0 pb-0"
+                v-for="comment in comments"
+                :key="comment.id"
+                cols="12"
+                class="justify-center pt-0 pb-0"
         >
           <div v-if="comment.hasNoParent">
             <comment :comment="comment" />
@@ -33,24 +33,32 @@
   </v-container>
 </template>
 <script>
-import Comment from '@/components/comment/Comment';
-import Recomment from '@/components/comment/Recomment';
-export default {
-  name: 'Comments',
-  components: {
-    Comment,
-    Recomment
-  },
-  data() {
-    return {
-      commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
-    };
-  },
-  props: {
-    article: {
-      type: Object,
-      required: true
+  import Comment from '@/components/comment/Comment';
+  import Recomment from '@/components/comment/Recomment';
+
+  import {mapActions, mapGetters} from 'vuex';
+  import {FETCH_COMMENTS} from '@/store/shared/actionTypes';
+
+  export default {
+    name: 'Comments',
+    components: {
+      Comment,
+      Recomment
+    },
+    created() {
+      this.fetchComments(this.$route.params.articleId);
+    },
+    computed: {
+      ...mapGetters(['comments']),
+      ...mapGetters(['article'])
+    },
+    data() {
+      return {
+        commentNotAllowedMessage: '댓글을 작성할 수 없는 글입니다.'
+      };
+    },
+    methods: {
+      ...mapActions([FETCH_COMMENTS])
     }
-  }
-};
+  };
 </script>

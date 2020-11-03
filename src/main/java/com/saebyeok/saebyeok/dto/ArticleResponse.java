@@ -22,6 +22,7 @@ public class ArticleResponse {
     private Boolean isMine;
     private Long likesCount;
     private Boolean isLikedByMe;
+    private Long commentsSize;
 
     public ArticleResponse(Article article, Member member, EmotionResponse emotion,
                            List<SubEmotionResponse> subEmotions) {
@@ -34,5 +35,6 @@ public class ArticleResponse {
         this.isMine = article.isWrittenBy(member);
         this.likesCount = article.countLikes();
         this.isLikedByMe = article.isLikedBy(member);
+        this.commentsSize = article.countComments();
     }
 }

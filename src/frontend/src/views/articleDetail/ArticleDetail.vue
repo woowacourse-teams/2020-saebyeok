@@ -4,7 +4,7 @@
       <card :article="article" />
     </v-layout>
 
-    <comments :article="article" />
+    <comments/>
 
     <v-footer
       app
@@ -20,27 +20,24 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
-import {
-  FETCH_ARTICLE,
-  CHECK_NAVBAR_SPACE_NEEDED
-} from '@/store/shared/actionTypes';
-import { DEACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
-import Card from '@/components/card/Card';
-import Comments from '@/components/comment/Comments';
-import CommentCreateForm from '@/components/comment/CommentCreateForm';
+  import {mapActions, mapGetters, mapMutations} from 'vuex';
+  import {CHECK_NAVBAR_SPACE_NEEDED, FETCH_ARTICLE} from '@/store/shared/actionTypes';
+  import {DEACTIVATE_RECOMMENT} from '@/store/shared/mutationTypes';
+  import Card from '@/components/card/Card';
+  import Comments from '@/components/comment/Comments';
+  import CommentCreateForm from '@/components/comment/CommentCreateForm';
 
-export default {
-  name: 'ArticleDetail',
-  components: {
-    Card,
-    Comments,
-    CommentCreateForm
-  },
-  created() {
-    this.fetchArticle(this.$route.params.articleId);
-    this.checkNavbarSpaceNeeded();
-    this.deactivateRecomment();
+  export default {
+    name: 'ArticleDetail',
+    components: {
+      Card,
+      Comments,
+      CommentCreateForm
+    },
+    created() {
+      this.fetchArticle(this.$route.params.articleId);
+      this.checkNavbarSpaceNeeded();
+      this.deactivateRecomment();
   },
   computed: {
     ...mapGetters(['article']),
