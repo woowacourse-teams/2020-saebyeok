@@ -61,6 +61,7 @@ class ArticleControllerTest {
     private static final Long TEST_LIKES_COUNT = 10L;
     private static final String INVALID_CONTENT = "이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다.";
     public static final boolean TEST_IS_LIKED_BY_ME = false;
+    private static final long TEST_COMMENTS_SIZE = 3L;
 
     private MockMvc mockMvc;
     private List<ArticleResponse> articles;
@@ -78,10 +79,12 @@ class ArticleControllerTest {
                 TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
         articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(),
                                          new EmotionResponse(TEST_EMOTION_1), subEmotionResponses,
-                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME));
+                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME
+                , TEST_COMMENTS_SIZE));
         articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0),
                                          new EmotionResponse(TEST_EMOTION_2), subEmotionResponses,
-                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME));
+                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME
+                , TEST_COMMENTS_SIZE));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")

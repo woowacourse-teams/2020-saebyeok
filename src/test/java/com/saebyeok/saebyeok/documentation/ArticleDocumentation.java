@@ -97,7 +97,7 @@ class ArticleDocumentation extends Documentation {
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"),
                                                                      new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse,
-                                                              subEmotionResponses, true, true, 10L, false);
+                                                              subEmotionResponses, true, true, 10L, false, 3L);
 
         given(articleService.readArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -108,29 +108,35 @@ class ArticleDocumentation extends Documentation {
                 andDo(print()).
                 andDo(document("articles/read",
                                getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")
-                        ),
-                        pathParameters(
-                                parameterWithName("articleId").description("조회할 게시물의 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회할 게시물의 ID"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("조회할 게시물의 내용"),
-                                fieldWithPath("createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 작성 시간"),
-                                fieldWithPath("emotion").type(JsonFieldType.OBJECT).description("조회할 게시물의 감정 대분류"),
-                                fieldWithPath("emotion.id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 대분류의 ID"),
-                                fieldWithPath("emotion.name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이름"),
-                                fieldWithPath("emotion.imageResource").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이미지 리소스 링크"),
-                                fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
-                                fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
-                                fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 소분류의 이름"),
-                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
-                                fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
-                                fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
-                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
-                        )
+                               getDocumentResponse(),
+                               requestHeaders(
+                                       headerWithName("Authorization").description("Bearer auth credentials")
+                               ),
+                               pathParameters(
+                                       parameterWithName("articleId").description("조회할 게시물의 ID")
+                               ),
+                               responseFields(
+                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회할 게시물의 ID"),
+                                       fieldWithPath("content").type(JsonFieldType.STRING).description("조회할 게시물의 내용"),
+                                       fieldWithPath("createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 작성 시간"),
+                                       fieldWithPath("emotion").type(JsonFieldType.OBJECT).description("조회할 게시물의 감정 " +
+                                                                                                               "대분류"),
+                                       fieldWithPath("emotion.id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 대분류의 ID"),
+                                       fieldWithPath("emotion.name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이름"),
+                                       fieldWithPath("emotion.imageResource").type(JsonFieldType.STRING).description(
+                                               "조회할 게시물의 감정 대분류의 이미지 리소스 링크"),
+                                       fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
+                                       fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
+                                       fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description(
+                                               "조회할 게시물의 감정 소분류의 이름"),
+                                       fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
+                                       fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴" +
+                                                                                                               " 글인지 " +
+                                                                                                               "여부"),
+                                       fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                       fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
+                                       fieldWithPath("commentsSize").type(JsonFieldType.NUMBER).description("조회할 게시글에 달린 댓글의 수")
+                               )
                 ));
     }
 
@@ -140,7 +146,7 @@ class ArticleDocumentation extends Documentation {
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"),
                                                                      new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse,
-                                                              subEmotionResponses, true, true, 10L, false);
+                                                              subEmotionResponses, true, true, 10L, false, 3L);
 
         given(articleService.readMemberArticle(any(Member.class), any())).willReturn(articleResponse);
 
@@ -151,29 +157,35 @@ class ArticleDocumentation extends Documentation {
                 andDo(print()).
                 andDo(document("articles/readByMember",
                                getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer auth credentials")
-                        ),
-                        pathParameters(
-                                parameterWithName("articleId").description("조회할 게시물의 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회할 게시물의 ID"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("조회할 게시물의 내용"),
-                                fieldWithPath("createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 작성 시간"),
-                                fieldWithPath("emotion").type(JsonFieldType.OBJECT).description("조회할 게시물의 감정 대분류"),
-                                fieldWithPath("emotion.id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 대분류의 ID"),
-                                fieldWithPath("emotion.name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이름"),
-                                fieldWithPath("emotion.imageResource").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이미지 리소스 링크"),
-                                fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
-                                fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
-                                fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 소분류의 이름"),
-                                fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
-                                fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴 글인지 여부"),
-                                fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
-                                fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
-                        )
+                               getDocumentResponse(),
+                               requestHeaders(
+                                       headerWithName("Authorization").description("Bearer auth credentials")
+                               ),
+                               pathParameters(
+                                       parameterWithName("articleId").description("조회할 게시물의 ID")
+                               ),
+                               responseFields(
+                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회할 게시물의 ID"),
+                                       fieldWithPath("content").type(JsonFieldType.STRING).description("조회할 게시물의 내용"),
+                                       fieldWithPath("createdDate").type(JsonFieldType.STRING).description("조회할 게시물의 작성 시간"),
+                                       fieldWithPath("emotion").type(JsonFieldType.OBJECT).description("조회할 게시물의 감정 " +
+                                                                                                               "대분류"),
+                                       fieldWithPath("emotion.id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 대분류의 ID"),
+                                       fieldWithPath("emotion.name").type(JsonFieldType.STRING).description("조회할 게시물의 감정 대분류의 이름"),
+                                       fieldWithPath("emotion.imageResource").type(JsonFieldType.STRING).description(
+                                               "조회할 게시물의 감정 대분류의 이미지 리소스 링크"),
+                                       fieldWithPath("subEmotions[]").type(JsonFieldType.ARRAY).description("조회할 게시물의 감정 소분류 목록"),
+                                       fieldWithPath("subEmotions[].id").type(JsonFieldType.NUMBER).description("조회할 게시물의 감정 소분류의 ID"),
+                                       fieldWithPath("subEmotions[].name").type(JsonFieldType.STRING).description(
+                                               "조회할 게시물의 감정 소분류의 이름"),
+                                       fieldWithPath("isCommentAllowed").type(JsonFieldType.BOOLEAN).description("조회할 게시물의 댓글" + " 허용 여부"),
+                                       fieldWithPath("isMine").type(JsonFieldType.BOOLEAN).description("조회할 게시글이 내가 쓴" +
+                                                                                                               " 글인지 " +
+                                                                                                               "여부"),
+                                       fieldWithPath("likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
+                                       fieldWithPath("isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
+                                       fieldWithPath("commentsSize").type(JsonFieldType.NUMBER).description("조회할 게시글에 달린 댓글의 수")
+                               )
                 ));
     }
 
@@ -182,7 +194,7 @@ class ArticleDocumentation extends Documentation {
         EmotionResponse emotionResponse = new EmotionResponse(1L, "기뻐요", "이미지 리소스 링크");
         List<SubEmotionResponse> subEmotionResponses = Arrays.asList(new SubEmotionResponse(1L, "행복해요"),
                                                                      new SubEmotionResponse(2L, "설레요"));
-        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false);
+        ArticleResponse articleResponse = new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, 3L);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -211,16 +223,20 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시물의 내용"),
                                 fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("게시물의 작성 시간"),
                                 fieldWithPath("[].emotion").type(JsonFieldType.OBJECT).description("게시물의 감정 대분류"),
-                                fieldWithPath("[].emotion.id").type(JsonFieldType.NUMBER).description("게시물의 감정 대분류의 ID"),
+                                fieldWithPath("[].emotion.id").type(JsonFieldType.NUMBER).description("게시물의 감정 대분류의 " +
+                                                                                                              "ID"),
                                 fieldWithPath("[].emotion.name").type(JsonFieldType.STRING).description("게시물의 감정 대분류의 이름"),
-                                fieldWithPath("[].emotion.imageResource").type(JsonFieldType.STRING).description("게시물의 감정 대분류의 이미지 리소스 링크"),
-                                fieldWithPath("[].subEmotions[]").type(JsonFieldType.ARRAY).description("게시물의 감정 소분류 목록"),
+                                fieldWithPath("[].emotion.imageResource").type(JsonFieldType.STRING).description(
+                                        "게시물의 감정 대분류의 이미지 리소스 링크"),
+                                fieldWithPath("[].subEmotions[]").type(JsonFieldType.ARRAY).description("게시물의 감정 소분류 " +
+                                                                                                                "목록"),
                                 fieldWithPath("[].subEmotions[].id").type(JsonFieldType.NUMBER).description("게시물의 감정 소분류의 ID"),
                                 fieldWithPath("[].subEmotions[].name").type(JsonFieldType.STRING).description("게시물의 감정 소분류의 이름"),
                                 fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
-                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
+                                fieldWithPath("[].commentsSize").type(JsonFieldType.NUMBER).description("조회할 게시글에 달린 댓글의 수")
                         )
                 ));
     }
@@ -231,7 +247,7 @@ class ArticleDocumentation extends Documentation {
         List<SubEmotionResponse> subEmotionResponses =
                 Arrays.asList(new SubEmotionResponse(1L, "행복해요"), new SubEmotionResponse(2L, "설레요"));
         ArticleResponse articleResponse =
-                new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false);
+                new ArticleResponse(ARTICLE_ID, "내용", LocalDateTime.now(), emotionResponse, subEmotionResponses, true, true, 10L, false, 3L);
 
         List<ArticleResponse> articleResponses = Arrays.asList(articleResponse);
 
@@ -252,7 +268,6 @@ class ArticleDocumentation extends Documentation {
                                 parameterWithName("page").description("확인할 게시물의 페이지"),
                                 parameterWithName("size").description("확인할 게시물의 개수"),
                                 parameterWithName("emotionIds").description("필터링할 게시물의 감정 대분류 목록")
-                                // TODO: 2020/08/19 위 값은 필수가 아니다. 추후 문서화를 수정하면서 필수/비필수 칼럼을 만들면 도움이 될듯
                         ),
                         responseFields(
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY).description("전체 게시물의 목록"),
@@ -269,7 +284,8 @@ class ArticleDocumentation extends Documentation {
                                 fieldWithPath("[].isCommentAllowed").type(JsonFieldType.BOOLEAN).description("게시물의 댓글 허용 여부"),
                                 fieldWithPath("[].isMine").type(JsonFieldType.BOOLEAN).description("게시물이 내가 쓴 글인지 여부"),
                                 fieldWithPath("[].likesCount").type(JsonFieldType.NUMBER).description("조회할 게시글이 받은 공감의 수"),
-                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부")
+                                fieldWithPath("[].isLikedByMe").type(JsonFieldType.BOOLEAN).description("조회할 게시글을 내가 공감한 상태인지 여부"),
+                                fieldWithPath("[].commentsSize").type(JsonFieldType.NUMBER).description("조회할 게시글에 달린 댓글의 수")
                         )
                 ));
     }

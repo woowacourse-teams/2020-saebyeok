@@ -25,7 +25,7 @@ public class ArticleResponse {
     private Long commentsSize;
 
     public ArticleResponse(Article article, Member member, EmotionResponse emotion,
-                           List<SubEmotionResponse> subEmotions) {
+                           List<SubEmotionResponse> subEmotions, Long commentsSize) {
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();
@@ -35,6 +35,6 @@ public class ArticleResponse {
         this.isMine = article.isWrittenBy(member);
         this.likesCount = article.countLikes();
         this.isLikedByMe = article.isLikedBy(member);
-        this.commentsSize = article.countComments();
+        this.commentsSize = commentsSize;
     }
 }

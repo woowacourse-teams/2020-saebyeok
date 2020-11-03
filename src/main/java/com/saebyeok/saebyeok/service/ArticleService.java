@@ -28,6 +28,7 @@ public class ArticleService {
     private static final String NOT_YOUR_ARTICLE_MESSAGE = "자신의 게시글이 아닙니다!";
 
     private final ArticleRepository articleRepository;
+    private final CommentService commentService;
     private final ArticleEmotionService articleEmotionService;
     private final ArticleSubEmotionService articleSubEmotionService;
 
@@ -44,7 +45,8 @@ public class ArticleService {
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
                     List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
-                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                    Long commentsSize = commentService.countComments(article.getId());
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses, commentsSize);
                 }).
                 collect(Collectors.toList());
     }
@@ -65,8 +67,9 @@ public class ArticleService {
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+        Long commentsSize = commentService.countComments(article.getId());
 
-        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses, commentsSize);
     }
 
     @Transactional
@@ -91,7 +94,8 @@ public class ArticleService {
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
                     List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
-                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                    Long commentsSize = commentService.countComments(article.getId());
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses, commentsSize);
                 }).
                 collect(Collectors.toList());
     }
@@ -101,8 +105,9 @@ public class ArticleService {
                 .orElseThrow(() -> new ArticleNotFoundException(articleId));
         EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
         List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
+        Long commentsSize = commentService.countComments(article.getId());
 
-        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+        return new ArticleResponse(article, member, emotionResponse, subEmotionResponses, commentsSize);
     }
 
     private List<ArticleResponse> filterArticles(Member member, List<Article> articles, List<Long> emotionIds, Pageable pageable) {
@@ -111,7 +116,8 @@ public class ArticleService {
                 map(article -> {
                     EmotionResponse emotionResponse = articleEmotionService.findEmotion(article);
                     List<SubEmotionResponse> subEmotionResponses = articleSubEmotionService.findSubEmotions(article);
-                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses);
+                    Long commentsSize = commentService.countComments(article.getId());
+                    return new ArticleResponse(article, member, emotionResponse, subEmotionResponses, commentsSize);
                 }).
                 collect(Collectors.toList());
     }

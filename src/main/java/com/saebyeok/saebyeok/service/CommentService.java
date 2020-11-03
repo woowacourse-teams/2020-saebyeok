@@ -68,4 +68,8 @@ public class CommentService {
         comment.delete();
         commentRepository.save(comment);
     }
+
+    public Long countComments(Long articleId) {
+        return commentRepository.countCommentsByArticleId(articleId);
+    }
 }
