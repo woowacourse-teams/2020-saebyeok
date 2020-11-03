@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/feed", "/api/articles/**", "/api/emotions", "/api/reports/categories").permitAll()
+                    .antMatchers(HttpMethod.GET, "/feed", "/api/articles/**", "/api/emotions", "/api/reports/categories, /profile").permitAll()
                     .antMatchers("/api/**").authenticated()
                 .and()
                     .logout()
