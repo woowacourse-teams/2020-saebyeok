@@ -20,8 +20,7 @@ import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -104,14 +103,49 @@ class CommentServiceTest {
         assertFalse(comments.get(0).getIsDeleted());
     }
 
+    @DisplayName("특정 사용자의 삭제하지 않은 댓글 개수 조회 메서드를 호출했을 때, 댓글 개수 조회를 수행한다")
+    @Test
+    void countTotalCommentsByTest() {
+        Long expectedCommentsSize = 3L;
+        when(commentRepository.countCommentsByMemberAndIsDeleted(any(Member.class), anyBoolean())).thenReturn(expectedCommentsSize);
+
+        Long commentsSize = commentService.countTotalCommentsBy(member);
+
+        assertThat(commentsSize).isEqualTo(expectedCommentsSize);
+    }
+
+    @DisplayName("특정 사용자의 댓글 조회 메서드를 호출했을 때, 댓글 조회를 수행한다.")
+    @Test
+    void findAllCommentsByTest() {
+        when(commentRepository.findAllByMemberAndIsDeleted(any(Member.class), anyBoolean())).thenReturn(Arrays.asList(comment));
+        List<Comment> comments = commentService.findAllCommentsBy(member);
+
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0).getContent()).isEqualTo(comment.getContent());
+        assertThat(comments.get(0).getNickname()).isEqualTo(comment.getNickname());
+        assertFalse(comments.get(0).getIsDeleted());
+    }
+
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() throws IllegalAccessException {
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
         Long savedCommentId = 1L;
+        when(commentRepository.findById(savedCommentId)).thenReturn(Optional.of(comment));
 
-        commentService.deleteComment(any(Member.class), savedCommentId);
+        commentService.deleteComment(comment.getMember(), savedCommentId);
 
         verify(commentRepository).save(any());
+    }
+
+    @DisplayName("특정 게시물의 댓글 개수 조회 메서드를 호출했을 때, 댓글 개수 조회를 수행한다")
+    @Test
+    void countCommentsTest() {
+        Long articleId = 1L;
+        Long expectedCommentsSize = 3L;
+        when(commentRepository.countCommentsByArticleId(articleId)).thenReturn(expectedCommentsSize);
+
+        Long commentsSize = commentService.countComments(articleId);
+
+        assertThat(commentsSize).isEqualTo(expectedCommentsSize);
     }
 }

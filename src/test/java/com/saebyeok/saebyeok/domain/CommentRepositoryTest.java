@@ -91,7 +91,7 @@ class CommentRepositoryTest {
                 containsOnly(comment1.getId(), comment2.getId(), comment3.getId());
     }
 
-    @DisplayName("댓글 여러개를 DB에 저장하고, 저장된 댓글들을 findAllByArticle로 조회한다")
+    @DisplayName("댓글 여러개를 DB에 저장하고, 저장된 댓글들을 findAllByArticleId로 조회한다")
     @Test
     void findAllByArticleIdTest() {
         Comment comment1 = createTestComment();
@@ -108,6 +108,22 @@ class CommentRepositoryTest {
                 hasSize(3).
                 extracting("id").
                 containsOnly(comment1.getId(), comment2.getId(), comment3.getId());
+    }
+
+    @DisplayName("댓글 여러개를 DB에 저장하고, 저장된 댓글의 개수를 countCommentsByArticleId로 조회한다")
+    @Test
+    void countCommentsByArticleIdTest() {
+        Comment comment1 = createTestComment();
+        Comment comment2 = createTestComment();
+        Comment comment3 = createTestComment();
+
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        commentRepository.save(comment3);
+
+        Long commentsSize = commentRepository.countCommentsByArticleId(article.getId());
+
+        assertThat(commentsSize).isEqualTo(3L);
     }
 
     @DisplayName("존재하지 않는 댓글을 조회할 경우, 빈 값을 반환한다")
