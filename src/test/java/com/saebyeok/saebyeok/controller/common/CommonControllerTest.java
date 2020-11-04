@@ -1,5 +1,6 @@
-package com.saebyeok.saebyeok.controller;
+package com.saebyeok.saebyeok.controller.common;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,11 +15,11 @@ class CommonControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @DisplayName("현재 active된 profile의 set 값 확인")
     @Test
-    public void Profile확인() {
+    public void profileTest() {
         String profile = this.restTemplate.getForObject("/profile", String.class);
 
         assertThat(profile).isEqualTo("set1");
     }
-
 }
