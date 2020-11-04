@@ -68,25 +68,25 @@
 </template>
 
 <script>
-  import CreatedDate from '@/components/CreatedDate';
-  import CommentMenu from '@/components/comment/CommentMenu';
-  import ReportButton from '@/components/ReportButton';
-  import {REPORT_TARGET} from '@/utils/ReportTarget.js';
-  import {mapActions, mapGetters, mapMutations} from 'vuex';
-  import {LIKE_COMMENT, UNLIKE_COMMENT} from '@/store/shared/actionTypes';
-  import {ACTIVATE_RECOMMENT} from '@/store/shared/mutationTypes';
+import CreatedDate from '@/components/CreatedDate';
+import CommentMenu from '@/components/comment/CommentMenu';
+import ReportButton from '@/components/ReportButton';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
+import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 
-  export default {
-    name: 'Comment',
-    data() {
-      return {
-        deletedCommentMessage: '삭제된 댓글입니다.'
-      };
-    },
-    components: {
-      CreatedDate,
-      CommentMenu,
-      ReportButton
+export default {
+  name: 'Comment',
+  data() {
+    return {
+      deletedCommentMessage: '삭제된 댓글입니다.'
+    };
+  },
+  components: {
+    CreatedDate,
+    CommentMenu,
+    ReportButton
   },
   methods: {
     ...mapMutations([ACTIVATE_RECOMMENT]),
@@ -109,18 +109,18 @@
     },
     getCommentNickname() {
       return this.comment.nickname === '작성자'
-              ? '✒️ ' + this.comment.nickname
-              : this.comment.nickname;
+        ? '✒️ ' + this.comment.nickname
+        : this.comment.nickname;
     }
   },
-    computed: {
-      ...mapGetters(['article', 'comments'])
-    },
-    props: {
-      comment: {
-        type: Object,
-        required: true
-      }
+  computed: {
+    ...mapGetters(['article', 'comments'])
+  },
+  props: {
+    comment: {
+      type: Object,
+      required: true
     }
-  };
+  }
+};
 </script>
