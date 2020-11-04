@@ -1,4 +1,4 @@
-package com.saebyeok.saebyeok.controller;
+package com.saebyeok.saebyeok.controller.common;
 
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import com.saebyeok.saebyeok.exception.*;
@@ -48,4 +48,3 @@ public class GlobalExceptionAdvice {
                 body(new ExceptionResponse(exception.getMessage()));
     }
 }
-
