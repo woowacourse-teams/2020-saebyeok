@@ -3,7 +3,7 @@
     <v-layout mb-5>
       <card :article="memberArticle" />
     </v-layout>
-    <comments/>
+    <comments />
     <v-footer
       app
       shift
@@ -19,23 +19,26 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from 'vuex';
-  import {CHECK_NAVBAR_SPACE_NEEDED, FETCH_MEMBER_ARTICLE} from '@/store/shared/actionTypes';
-  import Card from '@/components/card/Card';
-  import Comments from '@/components/comment/Comments';
-  import CommentCreateForm from '@/components/comment/CommentCreateForm';
+import { mapActions, mapGetters } from 'vuex';
+import {
+  CHECK_NAVBAR_SPACE_NEEDED,
+  FETCH_MEMBER_ARTICLE
+} from '@/store/shared/actionTypes';
+import Card from '@/components/card/Card';
+import Comments from '@/components/comment/Comments';
+import CommentCreateForm from '@/components/comment/CommentCreateForm';
 
-  export default {
-    name: 'DiaryDetail',
-    components: {
-      Card,
-      Comments,
-      CommentCreateForm
-    },
-    created() {
-      this.fetchMemberArticle(this.$route.params.articleId);
-      this.checkNavbarSpaceNeeded();
-    },
+export default {
+  name: 'DiaryDetail',
+  components: {
+    Card,
+    Comments,
+    CommentCreateForm
+  },
+  created() {
+    this.fetchMemberArticle(this.$route.params.articleId);
+    this.checkNavbarSpaceNeeded();
+  },
   computed: {
     ...mapGetters(['memberArticle']),
     navbarSpaceNeeded() {

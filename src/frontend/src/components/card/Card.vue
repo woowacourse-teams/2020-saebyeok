@@ -51,8 +51,8 @@
                 </div>
               </div>
               <div
-                      v-if="article.isCommentAllowed && article.commentsSize > 0"
-                      style="float:left;"
+                v-if="article.isCommentAllowed && article.commentsSize > 0"
+                style="float:left;"
               >
                 <v-icon style="font-size:20px;" class="mr-1"
                   >mdi-comment-outline</v-icon
@@ -76,28 +76,28 @@
 </template>
 
 <script>
-  import CreatedDate from '@/components/CreatedDate';
-  import EmotionImage from '@/components/card/EmotionImage';
-  import SubEmotionChips from '@/components/card/SubEmotionChips';
-  import ReportButton from '@/components/ReportButton';
-  import DetailCardMenu from '@/components/card/DetailCardMenu';
-  import {REPORT_TARGET} from '@/utils/ReportTarget.js';
+import CreatedDate from '@/components/CreatedDate';
+import EmotionImage from '@/components/card/EmotionImage';
+import SubEmotionChips from '@/components/card/SubEmotionChips';
+import ReportButton from '@/components/ReportButton';
+import DetailCardMenu from '@/components/card/DetailCardMenu';
+import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 
-  import {mapActions} from 'vuex';
-  import {LIKE_ARTICLE, UNLIKE_ARTICLE} from '@/store/shared/actionTypes';
-  import linkify from 'vue-linkify';
+import { mapActions } from 'vuex';
+import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import linkify from 'vue-linkify';
 
-  export default {
-    name: 'Card',
-    components: {
-      CreatedDate,
-      EmotionImage,
-      SubEmotionChips,
-      ReportButton,
-      DetailCardMenu
-    },
-    directives: {
-      linkified: linkify
+export default {
+  name: 'Card',
+  components: {
+    CreatedDate,
+    EmotionImage,
+    SubEmotionChips,
+    ReportButton,
+    DetailCardMenu
+  },
+  directives: {
+    linkified: linkify
   },
   methods: {
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
