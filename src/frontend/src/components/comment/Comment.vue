@@ -55,11 +55,7 @@
         </div>
         <v-spacer />
         <div class="pb-2 pr-2">
-          <report-button
-            v-if="!comment.isMine"
-            :reportTarget="getReportTarget()"
-            :targetContentId="comment.id"
-          />
+          <report-button v-if="!comment.isMine" @click="changeReportTarget()" />
         </div>
       </v-flex>
     </v-card>
@@ -74,7 +70,10 @@ import ReportButton from '@/components/ReportButton';
 import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '@/store/shared/actionTypes';
-import { ACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
+import {
+  ACTIVATE_RECOMMENT,
+  SET_REPORT_TARGET
+} from '@/store/shared/mutationTypes';
 
 export default {
   name: 'Comment',
@@ -96,6 +95,7 @@ export default {
   },
   methods: {
     ...mapMutations([ACTIVATE_RECOMMENT]),
+    ...mapMutations([SET_REPORT_TARGET]),
     ...mapActions([LIKE_COMMENT, UNLIKE_COMMENT]),
     toggleLike() {
       if (this.comment.isLikedByMe) {
@@ -104,8 +104,11 @@ export default {
         this.likeComment(this.comment);
       }
     },
-    getReportTarget() {
-      return REPORT_TARGET.COMMENT;
+    changeReportTarget() {
+      this.setReportTarget({
+        target: REPORT_TARGET.COMMENT,
+        contentId: this.comment.id
+      });
     },
     specifyMemberToRecomment() {
       this.activateRecomment({

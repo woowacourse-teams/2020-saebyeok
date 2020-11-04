@@ -23,8 +23,7 @@
                 v-model="choiceCategory"
               >
                 <v-chip
-                  class="ma-1"
-                  style="font-size: 12px; padding: 5px"
+                  class="ma-1 report-category-text"
                   v-for="reportCategory in this.reportCategories"
                   @click="invalidCategoryChoice = false"
                   :key="reportCategory.id"
@@ -73,11 +72,14 @@
 </template>
 <script>
 import { REPORT_TARGET } from '@/utils/ReportTarget.js';
-import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes';
 import {
   CREATE_REPORT,
   FETCH_REPORT_CATEGORIES
 } from '@/store/shared/actionTypes';
+import {
+  SHOW_SNACKBAR,
+  SHOW_REQUEST_LOGIN_MODAL
+} from '@/store/shared/mutationTypes';
 
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
@@ -88,17 +90,20 @@ export default {
       dialog: false,
       choiceCategory: undefined,
       invalidCategoryChoice: false,
-      textContent: ''
+      textContent: '',
+      token: localStorage.getItem('token')
     };
   },
   created() {
     this.fetchReportCategories();
   },
   computed: {
-    ...mapGetters(['reportCategories'])
+    ...mapGetters(['reportCategories']),
+    ...mapGetters(['reportTarget'])
   },
   methods: {
     ...mapMutations([SHOW_SNACKBAR]),
+    ...mapMutations([SHOW_REQUEST_LOGIN_MODAL]),
     ...mapActions([FETCH_REPORT_CATEGORIES]),
     ...mapActions([CREATE_REPORT]),
     onReport() {
@@ -111,8 +116,8 @@ export default {
     submitReport() {
       const reportCreateRequest = {
         content: this.textContent,
-        targetContentId: this.targetContentId,
-        reportTarget: this.reportTarget.toString(),
+        targetContentId: this.reportTarget.contentId,
+        reportTarget: this.reportTarget.target,
         reportCategoryId: this.reportCategories[this.choiceCategory].id
       };
       this.createReport(reportCreateRequest)
@@ -129,9 +134,17 @@ export default {
       this.choiceCategory = undefined;
       this.textContent = '';
       this.dialog = true;
+      this.checkLoginUser();
+      this.$emit('click');
+    },
+    checkLoginUser() {
+      if (this.token === null) {
+        this.dialog = false;
+        this.showRequestLoginModal();
+      }
     },
     getReportTargetText() {
-      switch (this.reportTarget) {
+      switch (this.reportTarget.target) {
         case REPORT_TARGET.ARTICLE:
           return '게시물';
         case REPORT_TARGET.COMMENT:
@@ -139,18 +152,6 @@ export default {
         default:
           return '게시물';
       }
-    }
-  },
-  props: {
-    reportTarget: {
-      type: String,
-      required: true,
-      default: ''
-    },
-    targetContentId: {
-      type: Number,
-      required: true,
-      default: 0
     }
   }
 };
@@ -162,5 +163,9 @@ export default {
 }
 .caption {
   font-weight: lighter;
+}
+.report-category-text {
+  font-size: 12px;
+  padding: 5px;
 }
 </style>
