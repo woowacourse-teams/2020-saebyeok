@@ -12,10 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -162,5 +159,25 @@ class ArticleServiceTest {
         assertThat(articleResponse.getIsCommentAllowed()).isFalse();
         assertThat(articleResponse.getLikesCount()).isNotNull();
         assertThat(articleResponse.getIsLikedByMe()).isNotNull();
+    }
+
+    @DisplayName("게시글을 감정에 따라 필터하여 특정 감정의 게시글만 표시한다")
+    @Test
+    void filterArticleTest() {
+        when(articleEmotionService.findArticlesByEmotionIds(any(), any(), any())).thenReturn(Arrays.asList(article1, article2));
+
+        List<ArticleResponse> memberArticles = articleService.getMemberArticles(member, 1, 5, Arrays.asList(1L, 2L));
+        assertThat(memberArticles.size()).isEqualTo(2);
+    }
+
+    @DisplayName("다른 사용자의 게시글을 삭제할 경우 에러 발생")
+    @Test
+    void notMyArticleTest() {
+        Article article3 = new Article(ARTICLE_ID_1, CONTENT1, new Member(), LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, null, new ArrayList<>());
+
+        when(articleRepository.findById(any())).thenReturn(Optional.of(article3));
+
+        assertThatThrownBy(() -> articleService.deleteArticle(member, 1L))
+                .isInstanceOf(IllegalAccessException.class);
     }
 }

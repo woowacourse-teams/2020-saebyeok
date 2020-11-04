@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class AnalysisService {
+public class    AnalysisService {
     public static final int VISIBLE_DAYS_ON_ANALYSIS = 30;
 
     private final ArticleService articleService;
