@@ -47,7 +47,6 @@ class CommentControllerTest {
     @MockBean
     private CommentService commentService;
 
-    // TODO: 2020/07/20 controllerTest가 더 생기면 objectMapper 공통 사용 고려하기
     @Autowired
     private ObjectMapper objectMapper;
 

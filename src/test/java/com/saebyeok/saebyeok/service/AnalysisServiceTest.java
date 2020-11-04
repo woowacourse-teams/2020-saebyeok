@@ -1,6 +1,8 @@
 package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
+import com.saebyeok.saebyeok.dto.ArticlesAnalysisResponse;
+import com.saebyeok.saebyeok.dto.CommentsAnalysisResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.saebyeok.saebyeok.service.ArticleEmotionService.NOT_EXIST_MOST_EMOTION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,73 +45,44 @@ class AnalysisServiceTest {
                                  false, Role.USER, new ArrayList<>());
     }
 
-    @DisplayName("Member가 작성한 Article 개수를 Emotion 별로 받아온다")
+    @DisplayName("Member가 작성한 Article에 대한 Emotion별 통계를 받아온다")
     @Test
-    void findArticleEmotionsCountTest() {
-        List<Integer> expected = Arrays.asList(2, 1, 1, 0, 3, 0);
-        when(emotionService.getAllEmotionsIds()).thenReturn(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
-        when(articleEmotionService.findArticleEmotionsCount(any(), any())).thenReturn(expected);
+    void getArticlesAnalysisTest() {
+        List<Integer> articleEmotionsCount = Arrays.asList(2, 1, 1, 0, 3, 0);
+        Long mostEmotionId = 5L;
+        List<Article> memberArticles = Arrays.asList(new Article());
+        List<Long> allEmotionsIds = Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L);
 
-        List<Integer> result = analysisService.findArticleEmotionsCount(member);
+        when(emotionService.getAllEmotionsIds()).thenReturn(allEmotionsIds);
+        when(articleService.getVisibleDaysArticles(any(Member.class), anyInt())).thenReturn(memberArticles);
+        when(articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds)).thenReturn(articleEmotionsCount);
+        when(articleEmotionService.findMostEmotionIdInArticles(memberArticles)).thenReturn(mostEmotionId);
 
-        assertThat(result.get(0)).isEqualTo(expected.get(0));
-        assertThat(result.get(1)).isEqualTo(expected.get(1));
-        assertThat(result.get(2)).isEqualTo(expected.get(2));
-        assertThat(result.get(3)).isEqualTo(expected.get(3));
-        assertThat(result.get(4)).isEqualTo(expected.get(4));
-        assertThat(result.get(5)).isEqualTo(expected.get(5));
+        ArticlesAnalysisResponse result = analysisService.getArticlesAnalysis(member);
+
+        assertThat(result.getArticleEmotionsCount()).
+                hasSize(6).
+                containsExactly(articleEmotionsCount.get(0), articleEmotionsCount.get(1), articleEmotionsCount.get(2),
+                        articleEmotionsCount.get(3), articleEmotionsCount.get(4), articleEmotionsCount.get(5));
+        assertThat(result.getMostEmotionId()).isEqualTo(mostEmotionId);
     }
 
-    @DisplayName("Member가 작성한 Article 중 가장 많은 감정 대분류 ID를 받아온다")
-    @Test
-    void findMostEmotionIdTest() {
-        Long expected = 1L;
-        when(articleEmotionService.findMostEmotionIdInArticles(any())).thenReturn(expected);
-
-        Long result = analysisService.findMostEmotionId(member);
-
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @DisplayName("Member가 작성한 Article이 없으면 NOT_EXIST_MOST_EMOTION_ID를 받아온다")
-    @Test
-    void findNotExistMostEmotionIdTest() {
-        Long expected = NOT_EXIST_MOST_EMOTION_ID;
-
-        Member tempMember = new Member();
-        when(articleEmotionService.findMostEmotionIdInArticles(any())).thenReturn(expected);
-        Long result = analysisService.findMostEmotionId(tempMember);
-
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @DisplayName("Member가 작성한 Comment의 총 개수를 받아온다")
+    @DisplayName("Member가 작성한 Comment의 개수와 Likes 개수에 대한 값을 받아온다")
     @Test
     void countTotalCommentsByTest() {
-        Long expected = 1L;
-        when(commentService.countTotalCommentsBy(any(Member.class))).thenReturn(expected);
-
-        Long result = analysisService.countTotalCommentsBy(member);
-
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @DisplayName("Member가 작성한 Comment들의 CommentLike 총 개수를 받아온다")
-    @Test
-    void countLikedCommentsByTest() {
-        Long expected = 4L;
-
+        Long totalCommentsCount = 1L;
+        Long totalCommentsLikesCount = 4L;
         List<CommentLike> likes = new ArrayList<>(Arrays.asList(new CommentLike(), new CommentLike()));
         List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment(1L, "content1", new Member(), "nickname1", LocalDateTime.now(), new Article(), false,
-                null, likes));
-        comments.add(new Comment(2L, "content2", new Member(), "nickname2", LocalDateTime.now(), new Article(), false,
-                null, likes));
+        comments.add(new Comment(1L, "content1", new Member(), "nickname1", LocalDateTime.now(), new Article(), false, null, likes));
+        comments.add(new Comment(2L, "content2", new Member(), "nickname2", LocalDateTime.now(), new Article(), false, null, likes));
 
+        when(commentService.countTotalCommentsBy(any(Member.class))).thenReturn(totalCommentsCount);
         when(commentService.findAllCommentsBy(any(Member.class))).thenReturn(comments);
 
-        Long result = analysisService.countTotalCommentLikesBy(member);
+        CommentsAnalysisResponse result = analysisService.getCommentsAnalysis(member);
 
-        assertThat(result).isEqualTo(expected);
+        assertThat(result.getTotalCommentsCount()).isEqualTo(totalCommentsCount);
+        assertThat(result.getTotalCommentLikesCount()).isEqualTo(totalCommentsLikesCount);
     }
 }

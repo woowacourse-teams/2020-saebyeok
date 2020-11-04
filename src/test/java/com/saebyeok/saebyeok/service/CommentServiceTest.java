@@ -137,6 +137,16 @@ class CommentServiceTest {
         verify(commentRepository).save(any());
     }
 
+    @DisplayName("예외 테스트: 다른 사용자의 댓글을 삭제할 경우 에러 발생")
+    @Test
+    void deleteCommentExceptionTest() {
+        Comment anotherUserComment = new Comment(1L, "테스트", new Member(), "슬픈돌고래", null, null, false, null, null);
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(anotherUserComment));
+        assertThatThrownBy(() -> commentService.deleteComment(member, anotherUserComment.getId()))
+                .isInstanceOf(IllegalAccessException.class);
+    }
+
     @DisplayName("특정 게시물의 댓글 개수 조회 메서드를 호출했을 때, 댓글 개수 조회를 수행한다")
     @Test
     void countCommentsTest() {
