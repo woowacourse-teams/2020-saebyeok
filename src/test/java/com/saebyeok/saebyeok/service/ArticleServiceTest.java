@@ -167,7 +167,7 @@ class ArticleServiceTest {
         when(articleEmotionService.findArticlesByEmotionIds(any(), any(), any())).thenReturn(Arrays.asList(article1, article2));
 
         List<ArticleResponse> memberArticles = articleService.getMemberArticles(member, 1, 5, Arrays.asList(1L, 2L));
-        assertThat(memberArticles.size()).isEqualTo(2);
+        assertThat(memberArticles).hasSize(2);
     }
 
     @DisplayName("다른 사용자의 게시글을 삭제할 경우 에러 발생")
