@@ -12,9 +12,14 @@ import java.util.Base64;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class JwtTokenProviderTest {
+
+    public static final String INVALID_TOKEN = "invalid.token.123";
+    public static final Date ONE_SECOND_AGO = new Date(new Date().getTime() - 1_000);
+    public static final Date THOUSAND_SECOND_AGO = new Date(new Date().getTime() - 1_000_000);
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -45,12 +50,14 @@ class JwtTokenProviderTest {
     void invalidTokenTest() {
         String expiredKey = Jwts.builder()
                 .setClaims(Jwts.claims().setSubject("social identification"))
-                .setIssuedAt(new Date(new Date().getTime() - 1000000))
-                .setExpiration(new Date(new Date().getTime() - 1000))
+                .setIssuedAt(THOUSAND_SECOND_AGO)
+                .setExpiration(ONE_SECOND_AGO)
                 .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
                 .compact();
 
-        assertThat(jwtTokenProvider.isValidToken("invalid.token.123")).isFalse();
-        assertThat(jwtTokenProvider.isValidToken(expiredKey)).isFalse();
+        assertAll(
+                () -> assertThat(jwtTokenProvider.isValidToken(INVALID_TOKEN)).isFalse(),
+                () -> assertThat(jwtTokenProvider.isValidToken(expiredKey)).isFalse()
+        );
     }
 }
