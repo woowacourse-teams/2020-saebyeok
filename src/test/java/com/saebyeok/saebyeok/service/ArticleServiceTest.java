@@ -170,7 +170,7 @@ class ArticleServiceTest {
         assertThat(memberArticles).hasSize(2);
     }
 
-    @DisplayName("다른 사용자의 게시글을 삭제할 경우 에러 발생")
+    @DisplayName("예외 테스트: 다른 사용자의 게시글을 삭제할 경우 에러를 발생시킨다")
     @Test
     void notMyArticleTest() {
         Article article3 = new Article(ARTICLE_ID_1, CONTENT1, new Member(), LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, null, new ArrayList<>());

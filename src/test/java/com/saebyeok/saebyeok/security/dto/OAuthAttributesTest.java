@@ -18,6 +18,7 @@ class OAuthAttributesTest {
         attributes.put("name", "Andy H. Jung");
         attributes.put("id", "123456789");
         naverAttributes.put("response", attributes);
+
         assertThat(OAuthAttributes.of("naver", "id", naverAttributes))
                 .isInstanceOf(OAuthAttributes.class);
         assertThat(OAuthAttributes.of("google", "id", attributes))
@@ -25,7 +26,7 @@ class OAuthAttributesTest {
     }
 
     @Test
-    @DisplayName("잘못된 registrationId가 올 경우 예외 처리")
+    @DisplayName("예외 테스트: 잘못된 registrationId가 올 경우 예외를 발생시킨다")
     void wrongRegistrationIdTest() {
         assertThatThrownBy(() -> OAuthAttributes.of("daum", "id", null))
                 .isInstanceOf(IllegalArgumentException.class)
