@@ -55,12 +55,9 @@ class ArticleEmotionServiceTest {
     void setUp() {
         this.articleEmotionService = new ArticleEmotionService(emotionRepository, articleEmotionRepository);
 
-        this.article1 = new Article(ARTICLE_1_ID, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
-        this.article2 = new Article(ARTICLE_2_ID, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
-        this.article3 = new Article(ARTICLE_3_ID, "내용3", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
+        this.article1 = new Article(ARTICLE_1_ID, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>());
+        this.article2 = new Article(ARTICLE_2_ID, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>());
+        this.article3 = new Article(ARTICLE_3_ID, "내용3", null, LocalDateTime.now(), true, false, new ArrayList<>());
         this.emotion1 = new Emotion(EMOTION_1_ID, "기뻐요", "imageResourceUri1");
         this.emotion2 = new Emotion(EMOTION_2_ID, "슬퍼요", "imageResourceUri2");
         this.articleEmotion1 = new ArticleEmotion(article1, emotion1);

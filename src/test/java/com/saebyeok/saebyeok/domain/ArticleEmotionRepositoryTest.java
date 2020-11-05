@@ -46,12 +46,9 @@ class ArticleEmotionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.article1 = new Article(1L, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
-        this.article2 = new Article(2L, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
-        this.article3 = new Article(3L, "내용3", null, LocalDateTime.now(), true, false, new ArrayList<>(),
-                                    new ArrayList<>());
+        this.article1 = new Article(1L, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>());
+        this.article2 = new Article(2L, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>());
+        this.article3 = new Article(3L, "내용3", null, LocalDateTime.now(), true, false, new ArrayList<>());
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);

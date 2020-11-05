@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
@@ -21,22 +19,14 @@ public class AnalysisController {
 
     @GetMapping("/analysis/articles")
     public ResponseEntity<ArticlesAnalysisResponse> getArticlesAnalysis(@LoginMember Member member) {
-        List<Integer> articleEmotionsCount = analysisService.findArticleEmotionsCount(member);
-        Long mostEmotionId = analysisService.findMostEmotionId(member);
-
-        ArticlesAnalysisResponse articlesAnalysisResponse = new ArticlesAnalysisResponse(articleEmotionsCount,
-                mostEmotionId);
+        ArticlesAnalysisResponse articlesAnalysisResponse = analysisService.getArticlesAnalysis(member);
 
         return ResponseEntity.ok(articlesAnalysisResponse);
     }
 
     @GetMapping("/analysis/comments")
     public ResponseEntity<CommentsAnalysisResponse> getCommentsAnalysis(@LoginMember Member member) {
-        Long totalCommentsCount = analysisService.countTotalCommentsBy(member);
-        Long totalCommentLikesCount = analysisService.countTotalCommentLikesBy(member);
-
-        CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount,
-                totalCommentLikesCount);
+        CommentsAnalysisResponse commentsAnalysisResponse = analysisService.getCommentsAnalysis(member);
 
         return ResponseEntity.ok(commentsAnalysisResponse);
     }

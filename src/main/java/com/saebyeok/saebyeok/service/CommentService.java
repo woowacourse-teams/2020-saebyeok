@@ -2,6 +2,7 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -18,6 +20,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
     private final NicknameGenerator nicknameGenerator;
+
+    public List<CommentResponse> getComment(Member member, Long articleId) {
+        List<Comment> comments = commentRepository.findAllByArticleId(articleId);
+        return comments.
+                stream().
+                sorted().
+                map(comment -> new CommentResponse(comment, member)).
+                collect(Collectors.toList());
+    }
 
     @Transactional
     public Comment createComment(Member member, CommentCreateRequest commentCreateRequest) {
@@ -33,7 +44,8 @@ public class CommentService {
             parent = null;
         }
 
-        String nickname = nicknameGenerator.generate(member, article);
+        List<Comment> comments = commentRepository.findAllByArticleId(articleId);
+        String nickname = nicknameGenerator.generate(member, article, comments);
         Comment comment = commentCreateRequest.toComment(member, nickname, article, parent);
         return commentRepository.save(comment);
     }
@@ -55,5 +67,9 @@ public class CommentService {
         }
         comment.delete();
         commentRepository.save(comment);
+    }
+
+    public Long countComments(Long articleId) {
+        return commentRepository.countCommentsByArticleId(articleId);
     }
 }

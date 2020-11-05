@@ -4,7 +4,7 @@
       <card :article="article" />
     </v-layout>
 
-    <comments :article="article" />
+    <comments />
 
     <v-footer
       app
@@ -22,8 +22,8 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import {
-  FETCH_ARTICLE,
-  CHECK_NAVBAR_SPACE_NEEDED
+  CHECK_NAVBAR_SPACE_NEEDED,
+  FETCH_ARTICLE
 } from '@/store/shared/actionTypes';
 import { DEACTIVATE_RECOMMENT } from '@/store/shared/mutationTypes';
 import Card from '@/components/card/Card';

@@ -53,14 +53,14 @@ class LikeAcceptanceTest extends AcceptanceTest {
         likeComment(ARTICLE_ID, COMMENT_ID);
 
         // then 해당 댓글에 공감이 추가된다.
-        CommentResponse likedComment = readArticle(ARTICLE_ID).getComments().get(0);
+        CommentResponse likedComment = getComments(ARTICLE_ID).get(0);
         assertThat(likedComment.getLikesCount()).isEqualTo(1);
 
         // when 이미 공감한 댓글을 공감 취소한다.
         unlikeComment(ARTICLE_ID, COMMENT_ID);
 
         // then 해당 댓글에 적용된 공감이 제거된다.
-        CommentResponse unLikedComment = readArticle(ARTICLE_ID).getComments().get(0);
+        CommentResponse unLikedComment = getComments(ARTICLE_ID).get(0);
         assertThat(unLikedComment.getLikesCount()).isZero();
     }
 

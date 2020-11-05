@@ -87,12 +87,6 @@ export default {
     CommentMenu,
     ReportButton
   },
-  props: {
-    comment: {
-      type: Object,
-      required: true
-    }
-  },
   methods: {
     ...mapMutations([ACTIVATE_RECOMMENT]),
     ...mapMutations([SET_REPORT_TARGET]),
@@ -124,6 +118,12 @@ export default {
   },
   computed: {
     ...mapGetters(['article', 'comments'])
+  },
+  props: {
+    comment: {
+      type: Object,
+      required: true
+    }
   }
 };
 </script>

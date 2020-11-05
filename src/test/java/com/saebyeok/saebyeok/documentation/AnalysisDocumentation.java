@@ -2,6 +2,8 @@ package com.saebyeok.saebyeok.documentation;
 
 import com.saebyeok.saebyeok.documentation.common.Documentation;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.dto.ArticlesAnalysisResponse;
+import com.saebyeok.saebyeok.dto.CommentsAnalysisResponse;
 import com.saebyeok.saebyeok.dto.TokenResponse;
 import com.saebyeok.saebyeok.service.AnalysisService;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,9 +56,9 @@ class AnalysisDocumentation extends Documentation {
     void getArticlesAnalysis() throws Exception {
         List<Integer> articleEmotionsCount = Arrays.asList(5, 3, 4, 0, 1, 1);
         Long mostEmotionId = 1L;
+        ArticlesAnalysisResponse articlesAnalysisResponse = new ArticlesAnalysisResponse(articleEmotionsCount, mostEmotionId);
 
-        given(analysisService.findArticleEmotionsCount(any(Member.class))).willReturn(articleEmotionsCount);
-        given(analysisService.findMostEmotionId(any(Member.class))).willReturn(mostEmotionId);
+        given(analysisService.getArticlesAnalysis(any(Member.class))).willReturn(articlesAnalysisResponse);
 
         this.mockMvc.perform(get("/api/analysis/articles").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
@@ -64,17 +66,15 @@ class AnalysisDocumentation extends Documentation {
                 andExpect(status().isOk()).
                 andDo(print()).
                 andDo(document("analysis/articles",
-                               getDocumentRequest(),
-                               getDocumentResponse(),
-                               requestHeaders(
-                                       headerWithName("Authorization").description("Bearer auth credentials")
-                               ),
-                               responseFields(
-                                       fieldWithPath("articleEmotionsCount").type(JsonFieldType.ARRAY)
-                                               .description("감정 대분류 별 사용자가 작성한 게시글의 개수 (감정 대분류 순서대로 배열)"),
-                                       fieldWithPath("mostEmotionId").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 최근 일정 기간 동안 작성한 게시글 중 가장 많은 감정 대분류의 ID")
-                               )
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        responseFields(
+                                fieldWithPath("articleEmotionsCount").type(JsonFieldType.ARRAY).description("감정 대분류 별 사용자가 작성한 게시글의 개수 (감정 대분류 순서대로 배열)"),
+                                fieldWithPath("mostEmotionId").type(JsonFieldType.NUMBER).description("사용자가 최근 일정 기간 동안 작성한 게시글 중 가장 많은 감정 대분류의 ID")
+                        )
                 ));
     }
 
@@ -82,8 +82,8 @@ class AnalysisDocumentation extends Documentation {
     void getCommentsAnalysis() throws Exception {
         Long totalCommentsCount = 42L;
         Long totalCommentLikesCount = 7L;
-        given(analysisService.countTotalCommentsBy(any(Member.class))).willReturn(totalCommentsCount);
-        given(analysisService.countTotalCommentLikesBy(any(Member.class))).willReturn(totalCommentLikesCount);
+        CommentsAnalysisResponse commentsAnalysisResponse = new CommentsAnalysisResponse(totalCommentsCount, totalCommentLikesCount);
+        given(analysisService.getCommentsAnalysis(any(Member.class))).willReturn(commentsAnalysisResponse);
 
         this.mockMvc.perform(get("/api/analysis/comments").
                 header("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken()).
@@ -91,17 +91,15 @@ class AnalysisDocumentation extends Documentation {
                 andExpect(status().isOk()).
                 andDo(print()).
                 andDo(document("analysis/comments",
-                               getDocumentRequest(),
-                               getDocumentResponse(),
-                               requestHeaders(
-                                       headerWithName("Authorization").description("Bearer auth credentials")
-                               ),
-                               responseFields(
-                                       fieldWithPath("totalCommentsCount").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 작성한 댓글의 총 개수"),
-                                       fieldWithPath("totalCommentLikesCount").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 작성한 댓글에 받은 공감의 총 개수")
-                               )
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        responseFields(
+                                fieldWithPath("totalCommentsCount").type(JsonFieldType.NUMBER).description("사용자가 작성한 댓글의 총 개수"),
+                                fieldWithPath("totalCommentLikesCount").type(JsonFieldType.NUMBER).description("사용자가 작성한 댓글에 받은 공감의 총 개수")
+                        )
                 ));
     }
 }

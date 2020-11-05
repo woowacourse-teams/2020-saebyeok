@@ -3,8 +3,7 @@ import {
   ADD_ARTICLES,
   SET_ARTICLE,
   SET_ARTICLES,
-  UPDATE_ARTICLE_LIKES,
-  SET_COMMENTS
+  UPDATE_ARTICLE_LIKES
 } from '@/store/shared/mutationTypes';
 import {
   CLEAR_ARTICLES,
@@ -59,7 +58,6 @@ const actions = {
     return ArticleService.get(articleId)
       .then(({ data }) => {
         commit(SET_ARTICLE, data);
-        commit(SET_COMMENTS, data.comments);
         return data;
       })
       .catch(error => commit(CATCH_ERROR, error));
