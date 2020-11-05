@@ -60,8 +60,7 @@ class CommentControllerTest {
     @DisplayName("'/articles/{articleId}/comments'로 get 요청을 보내면 해당 게시글의 댓글 목록 리스트를 받는다")
     @Test
     void getCommentsTest() throws Exception {
-        CommentResponse commentResponse = new CommentResponse(COMMENT_ID, "새벽 좋아요", "닉네임", null, null, null, null,
-                                                              null, null);
+        CommentResponse commentResponse = new CommentResponse(COMMENT_ID, "새벽 좋아요", "닉네임", null, null, null, null, null, null);
         List<CommentResponse> commentResponses = Arrays.asList(commentResponse);
         when(commentService.getComment(any(Member.class), anyLong())).thenReturn(commentResponses);
 
@@ -75,8 +74,7 @@ class CommentControllerTest {
     @DisplayName("'/articles/{articleId}/comments'로 create 요청을 보내면 해당 게시글의 댓글을 등록 후 댓글 id를 반환한다.")
     @Test
     void createCommentTest() throws Exception {
-        when(commentService.createComment(any(), any())).thenReturn(new Comment(COMMENT_ID, null, null, null, null,
-                                                                                null, null, null, null));
+        when(commentService.createComment(any(), any())).thenReturn(new Comment(COMMENT_ID, null, null, null, null, null, null, null, null));
 
         CommentCreateRequest request = new CommentCreateRequest(TEST_CONTENT, ARTICLE_ID, null);
         String content = objectMapper.writeValueAsString(request);

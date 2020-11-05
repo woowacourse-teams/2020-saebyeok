@@ -66,17 +66,15 @@ class AnalysisDocumentation extends Documentation {
                 andExpect(status().isOk()).
                 andDo(print()).
                 andDo(document("analysis/articles",
-                               getDocumentRequest(),
-                               getDocumentResponse(),
-                               requestHeaders(
-                                       headerWithName("Authorization").description("Bearer auth credentials")
-                               ),
-                               responseFields(
-                                       fieldWithPath("articleEmotionsCount").type(JsonFieldType.ARRAY)
-                                               .description("감정 대분류 별 사용자가 작성한 게시글의 개수 (감정 대분류 순서대로 배열)"),
-                                       fieldWithPath("mostEmotionId").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 최근 일정 기간 동안 작성한 게시글 중 가장 많은 감정 대분류의 ID")
-                               )
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        responseFields(
+                                fieldWithPath("articleEmotionsCount").type(JsonFieldType.ARRAY).description("감정 대분류 별 사용자가 작성한 게시글의 개수 (감정 대분류 순서대로 배열)"),
+                                fieldWithPath("mostEmotionId").type(JsonFieldType.NUMBER).description("사용자가 최근 일정 기간 동안 작성한 게시글 중 가장 많은 감정 대분류의 ID")
+                        )
                 ));
     }
 
@@ -96,14 +94,12 @@ class AnalysisDocumentation extends Documentation {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
-                                       headerWithName("Authorization").description("Bearer auth credentials")
-                               ),
-                               responseFields(
-                                       fieldWithPath("totalCommentsCount").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 작성한 댓글의 총 개수"),
-                                       fieldWithPath("totalCommentLikesCount").type(JsonFieldType.NUMBER)
-                                               .description("사용자가 작성한 댓글에 받은 공감의 총 개수")
-                               )
+                                headerWithName("Authorization").description("Bearer auth credentials")
+                        ),
+                        responseFields(
+                                fieldWithPath("totalCommentsCount").type(JsonFieldType.NUMBER).description("사용자가 작성한 댓글의 총 개수"),
+                                fieldWithPath("totalCommentLikesCount").type(JsonFieldType.NUMBER).description("사용자가 작성한 댓글에 받은 공감의 총 개수")
+                        )
                 ));
     }
 }

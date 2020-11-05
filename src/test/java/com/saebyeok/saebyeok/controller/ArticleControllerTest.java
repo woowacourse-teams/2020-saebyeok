@@ -47,8 +47,7 @@ class ArticleControllerTest {
     private static final Emotion TEST_EMOTION_1 = new Emotion(1L, "기뻐요", "이미지 리소스");
     private static final Emotion TEST_EMOTION_2 = new Emotion(2L, "슬퍼요", "이미지 리소스");
     private static final SubEmotion TEST_SUB_EMOTION_1 = new SubEmotion(1L, "행복해요");
-    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(TEST_SUB_EMOTION_1, new SubEmotion(2L,
-                                                                                                               "설레요"));
+    public static final Boolean TEST_IS_LIKED_BY_ME = false;
     private static final Boolean TEST_IS_MINE = true;
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
     private static final Long TEST_ID_1 = 1L;
@@ -60,8 +59,9 @@ class ArticleControllerTest {
     private static final Integer TEST_PAGE_SIZE = 10;
     private static final Long TEST_LIKES_COUNT = 10L;
     private static final String INVALID_CONTENT = "이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다.";
-    public static final boolean TEST_IS_LIKED_BY_ME = false;
-    private static final long TEST_COMMENTS_SIZE = 3L;
+    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(TEST_SUB_EMOTION_1, new SubEmotion(2L,
+            "설레요"));
+    private static final Long TEST_COMMENTS_SIZE = 3L;
 
     private MockMvc mockMvc;
     private List<ArticleResponse> articles;
@@ -77,14 +77,10 @@ class ArticleControllerTest {
         this.articles = new ArrayList<>();
         List<SubEmotionResponse> subEmotionResponses =
                 TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(),
-                                         new EmotionResponse(TEST_EMOTION_1), subEmotionResponses,
-                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME
-                , TEST_COMMENTS_SIZE));
-        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0),
-                                         new EmotionResponse(TEST_EMOTION_2), subEmotionResponses,
-                                         TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME
-                , TEST_COMMENTS_SIZE));
+        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses,
+                TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, TEST_COMMENTS_SIZE));
+        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses,
+                TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, TEST_COMMENTS_SIZE));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")

@@ -42,9 +42,8 @@ class NicknameGeneratorTest {
         List<Comment> comments = new ArrayList<>();
         String myNickname1 = nicknameGenerator.generate(me, othersArticle, comments);
         comments.add(new Comment("댓글내용", me, myNickname1, othersArticle, null));
-        String myNickname2 = nicknameGenerator.generate(
-                me, new Article(2L, "게시물내용", other, LocalDateTime.now(), true, false, new ArrayList<>()),
-                comments);
+        String myNickname2 = nicknameGenerator.generate(me, new Article(2L, "게시물내용", other,
+                LocalDateTime.now(), true, false, new ArrayList<>()), comments);
 
         assertThat(myNickname1).isEqualTo(myNickname2);
     }

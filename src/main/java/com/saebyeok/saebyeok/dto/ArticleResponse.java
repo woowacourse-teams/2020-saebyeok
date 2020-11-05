@@ -24,8 +24,7 @@ public class ArticleResponse {
     private Boolean isLikedByMe;
     private Long commentsSize;
 
-    public ArticleResponse(Article article, Member member, EmotionResponse emotion,
-                           List<SubEmotionResponse> subEmotions, Long commentsSize) {
+    public ArticleResponse(Article article, Member member, EmotionResponse emotion, List<SubEmotionResponse> subEmotions, Long commentsSize) {
         this.id = article.getId();
         this.content = article.getContent();
         this.createdDate = article.getCreatedDate();
