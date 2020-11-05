@@ -64,8 +64,7 @@
             <v-col align="right" justify="end" style="padding:0px" cols="2">
               <report-button
                 v-if="!article.isMine"
-                :reportTarget="getReportTarget()"
-                :targetContentId="article.id"
+                @click="changeReportTarget()"
               />
             </v-col>
           </v-row>
@@ -83,8 +82,9 @@ import ReportButton from '@/components/ReportButton';
 import DetailCardMenu from '@/components/card/DetailCardMenu';
 import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import { SET_REPORT_TARGET } from '@/store/shared/mutationTypes';
 import linkify from 'vue-linkify';
 
 export default {
@@ -100,6 +100,7 @@ export default {
     linkified: linkify
   },
   methods: {
+    ...mapMutations([SET_REPORT_TARGET]),
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     toggleLike() {
       event.stopPropagation();
@@ -109,8 +110,11 @@ export default {
         this.likeArticle(this.article);
       }
     },
-    getReportTarget() {
-      return REPORT_TARGET.ARTICLE;
+    changeReportTarget() {
+      this.setReportTarget({
+        target: REPORT_TARGET.ARTICLE,
+        contentId: this.article.id
+      });
     },
     clickCardContent() {
       this.$emit('clickCardContent');
