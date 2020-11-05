@@ -6,7 +6,6 @@ import com.saebyeok.saebyeok.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,7 @@ public class UserService implements UserDetailsService {
     private final MemberService memberService;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String id) {
         Member member = memberService.findByOauthId(id);
         return User.builder()
                 .id(member.getId())

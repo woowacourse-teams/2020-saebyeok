@@ -1,4 +1,5 @@
 import {
+  CATCH_ERROR,
   ADD_ARTICLES,
   SET_ARTICLE,
   SET_ARTICLES,
@@ -40,8 +41,9 @@ const mutations = {
   [ADD_ARTICLES](state, articles) {
     state.articles = state.articles.concat(articles);
   },
-  [UPDATE_ARTICLE_LIKES](state, value) {
-    state.articles.likesCount += value;
+  [UPDATE_ARTICLE_LIKES](state, article) {
+    const index = state.articles.findIndex(it => it.id === article.id);
+    state.articles.splice(index, 1, article);
   }
 };
 
@@ -49,7 +51,7 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   async [CREATE_ARTICLE]({ commit }, article) {
     return ArticleService.create(article).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   async [FETCH_ARTICLE]({ commit }, articleId) {
@@ -58,7 +60,7 @@ const actions = {
         commit(SET_ARTICLE, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [FETCH_ARTICLES]({ commit }, params) {
     return ArticleService.getAll(params)
@@ -66,7 +68,7 @@ const actions = {
         commit(SET_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [PAGING_ARTICLES]({ commit }, params) {
     return ArticleService.getAll(params)
@@ -74,26 +76,32 @@ const actions = {
         commit(ADD_ARTICLES, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   // eslint-disable-next-line no-unused-vars
   async [DELETE_ARTICLE]({ commit }, articleId) {
     return ArticleService.delete(articleId).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   },
   [CLEAR_ARTICLES]({ commit }) {
     commit(SET_ARTICLES, []);
   },
-  async [LIKE_ARTICLE]({ commit }, articleId) {
-    return ArticleService.like(articleId)
-      .then(() => commit(UPDATE_ARTICLE_LIKES, 1))
-      .catch(error => commit('catchError', error));
+  async [LIKE_ARTICLE]({ commit }, article) {
+    article.likesCount += 1;
+    article.isLikedByMe = true;
+
+    return ArticleService.like(article.id)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, article))
+      .catch(error => commit(CATCH_ERROR, error));
   },
-  async [UNLIKE_ARTICLE]({ commit }, articleId) {
-    return ArticleService.unlike(articleId)
-      .then(() => commit(UPDATE_ARTICLE_LIKES, -1))
-      .catch(error => commit('catchError', error));
+  async [UNLIKE_ARTICLE]({ commit }, article) {
+    article.likesCount -= 1;
+    article.isLikedByMe = false;
+
+    return ArticleService.unlike(article.id)
+      .then(() => commit(UPDATE_ARTICLE_LIKES, article))
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 

@@ -3,7 +3,7 @@
     <v-layout mb-5>
       <card :article="memberArticle" />
     </v-layout>
-    <comments :article="memberArticle" />
+    <comments />
     <v-footer
       app
       shift
@@ -21,8 +21,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import {
-  FETCH_MEMBER_ARTICLE,
-  CHECK_NAVBAR_SPACE_NEEDED
+  CHECK_NAVBAR_SPACE_NEEDED,
+  FETCH_MEMBER_ARTICLE
 } from '@/store/shared/actionTypes';
 import Card from '@/components/card/Card';
 import Comments from '@/components/comment/Comments';

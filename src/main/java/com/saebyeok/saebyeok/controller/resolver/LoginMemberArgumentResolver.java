@@ -13,6 +13,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Objects;
+
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
     private final MemberService memberService;
@@ -30,11 +32,11 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
-        String methodName = parameter.getMethod().getName();
+        String methodName = Objects.requireNonNull(parameter.getMethod()).getName();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication instanceof AnonymousAuthenticationToken &&
-                ("getArticles".equals(methodName) || "readArticle".equals(methodName))) {  // 비회원이 피드 혹은 글 디테일 요청
+                ("getArticles".equals(methodName) || "readArticle".equals(methodName) || "getComments".equals(methodName))) {
             return new Member();
         } else {
             User user = (User) authentication.getPrincipal();

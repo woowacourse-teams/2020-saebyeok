@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmotionServiceTest {
+class EmotionServiceTest {
     private static final Long EMOTION_ID = 1L;
     private static final String EMOTION_NAME = "기뻐요";
     private static final String EMOTION_IMAGE_RESOURCE = "리소스";

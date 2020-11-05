@@ -1,4 +1,8 @@
-import { SET_EMOTION, SET_EMOTIONS } from '@/store/shared/mutationTypes';
+import {
+  CATCH_ERROR,
+  SET_EMOTION,
+  SET_EMOTIONS
+} from '@/store/shared/mutationTypes';
 import { FETCH_EMOTION, FETCH_EMOTIONS } from '@/store/shared/actionTypes';
 import EmotionService from '@/api/modules/emotion';
 
@@ -32,14 +36,14 @@ const actions = {
         commit(SET_EMOTION, data);
         return data;
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [FETCH_EMOTIONS]({ commit }) {
     return EmotionService.getAll()
       .then(({ data }) => {
         commit(SET_EMOTIONS, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   }
 };
 

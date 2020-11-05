@@ -30,12 +30,16 @@ class LoginMemberArgumentResolverTest {
 
     @Mock
     private MethodParameter parameter;
+
     @Mock
     private ModelAndViewContainer mavContainer;
+
     @Mock
     private NativeWebRequest webRequest;
+
     @Mock
     private WebDataBinderFactory binderFactory;
+
     @Mock
     private Method method;
 
@@ -54,7 +58,7 @@ class LoginMemberArgumentResolverTest {
 
     @WithAnonymousUser
     @DisplayName("비회원이 피드 혹은 글 디테일 페이지에 접근하면 빈 Member를 리턴한다.")
-    @ValueSource(strings = {"getArticles", "readArticle"})
+    @ValueSource(strings = {"getArticles", "readArticle", "getComments"})
     @ParameterizedTest
     void anonymousResolverArgumentTest(String methodName) {
         when(parameter.getMethod()).thenReturn(method);

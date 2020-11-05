@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.acceptance;
 
-import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.dto.ExceptionResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,12 +15,14 @@ import java.util.stream.Collectors;
 
 import static com.saebyeok.saebyeok.domain.Comment.MAX_LENGTH;
 import static com.saebyeok.saebyeok.domain.Comment.MIN_LENGTH;
-import static com.saebyeok.saebyeok.domain.CommentTest.OVER_LENGTH_CONTENT;
-import static com.saebyeok.saebyeok.domain.CommentTest.UNDER_LENGTH_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CommentAcceptanceTest extends AcceptanceTest {
     private static final Long NOT_EXIST_COMMENT_ID = 10L;
+    public static final String UNDER_LENGTH_CONTENT = "";
+    public static final String OVER_LENGTH_CONTENT = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
+            "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
+            "1만4000원.\n";
     private static final String RECOMMENT_CONTENT = "대댓글 내용입니다.";
 
     private Map<String, Object> params = new HashMap<>();
@@ -78,8 +79,8 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Long commentAId = createCommentOf(ARTICLE_ID);
 
         //then 댓글이 등록에 성공한다. (현재 댓글 1개, 대댓글 0개)
-        ArticleResponse articleResponse = readArticle(ARTICLE_ID);
-        assertThat(articleResponse.getComments()).
+        List<CommentResponse> commentResponses = getComments(ARTICLE_ID);
+        assertThat(commentResponses).
                 hasSize(1).
                 extracting("id").
                 contains(commentAId);
@@ -103,10 +104,10 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Long commentCId = createCommentOf(ARTICLE_ID);
 
         //when 게시글에 달린 댓글을 모두 조회한다.
-        articleResponse = readArticle(ARTICLE_ID);
+        commentResponses = getComments(ARTICLE_ID);
 
         //then 댓글 목록의 조회에 성공한다. (A, B, C 순으로 조회된다.)
-        assertThat(articleResponse.getComments()).
+        assertThat(commentResponses).
                 hasSize(3).
                 extracting("id").
                 containsExactly(commentAId, commentBId, commentCId);
@@ -116,14 +117,14 @@ class CommentAcceptanceTest extends AcceptanceTest {
         Long commentEId = createRecommentOf(ARTICLE_ID, commentBId);
 
         //then 대댓글이 저장된다. (현재 댓글 3개, 대댓글 2개)
-        List<CommentResponse> commentResponses = readRecomments();
+        commentResponses = readRecomments();
         assertThat(commentResponses).hasSize(2);
 
         //when 댓글 전체를 조회한다.
-        articleResponse = readArticle(ARTICLE_ID);
+        commentResponses = getComments(ARTICLE_ID);
 
         //then 댓글 목록의 조회에 성공한다. (A -> B -> D -> E -> C 순으로 조회된다.)
-        assertThat(articleResponse.getComments()).
+        assertThat(commentResponses).
                 hasSize(5).
                 extracting("id").
                 containsExactly(commentAId, commentBId, commentDId, commentEId, commentCId);
@@ -139,8 +140,8 @@ class CommentAcceptanceTest extends AcceptanceTest {
         deleteComment(1L);
 
         //then 댓글 삭제에 성공한다.
-        articleResponse = readArticle(ARTICLE_ID);
-        assertThat(articleResponse.getComments().stream().
+        commentResponses = getComments(ARTICLE_ID);
+        assertThat(commentResponses.stream().
                 filter(commentResponse -> !commentResponse.getIsDeleted())).
                 hasSize(4).
                 extracting("id").
@@ -216,19 +217,7 @@ class CommentAcceptanceTest extends AcceptanceTest {
     }
 
     private List<CommentResponse> readRecomments() {
-        //@formatter:off
-        ArticleResponse articleResponse =
-                given().
-                        auth().oauth2(TOKEN).
-                when().
-                        get(API + "/articles/" + ARTICLE_ID).
-                then().
-                        log().all().
-                        extract().
-                        as(ArticleResponse.class);
-        //@formatter:on
-
-        return articleResponse.getComments().stream()
+        return getComments(ARTICLE_ID).stream()
                 .filter(comment -> !comment.getHasNoParent())
                 .collect(Collectors.toList());
     }

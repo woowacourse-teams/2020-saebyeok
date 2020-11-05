@@ -1,6 +1,7 @@
 package com.saebyeok.saebyeok.acceptance;
 
 import com.saebyeok.saebyeok.dto.ArticleResponse;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.infra.JwtTokenProvider;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
@@ -23,7 +24,6 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
     static final String API = "/api";
-    static final Long MEMBER_ID = 1L;
     static final Long ARTICLE_ID = 1L;
     static final String ARTICLE_CONTENT = "내용입니다";
     static final String COMMENT_CONTENT = "새벽 좋아요";
@@ -42,12 +42,12 @@ public class AcceptanceTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    protected void setUp() {
         RestAssured.port = port;
         TOKEN = jwtTokenProvider.createToken("123456789");
     }
 
-    public ArticleResponse readArticle(Long id) {
+    protected ArticleResponse readArticle(Long id) {
         //@formatter:off
         return
                 given().
@@ -62,7 +62,7 @@ public class AcceptanceTest {
         //@formatter:on
     }
 
-    public void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
+    protected void createArticle(String content, Long emotionId, List<Long> subEmotionIds, Boolean isCommentAllowed) {
         Map<String, Object> params = new HashMap<>();
         params.put("content", content);
         params.put("emotionId", emotionId);
@@ -83,7 +83,7 @@ public class AcceptanceTest {
         //@formatter:on
     }
 
-    public Long createCommentOf(Long targetArticleId) {
+    protected Long createCommentOf(Long targetArticleId) {
         Map<String, Object> params = new HashMap<>();
         params.put("content", COMMENT_CONTENT);
         params.put("articleId", targetArticleId);
@@ -102,6 +102,21 @@ public class AcceptanceTest {
                         statusCode(HttpStatus.CREATED.value()).
                         extract().as(Long.class);
         //@formatter:on
+    }
 
+    protected List<CommentResponse> getComments(Long articleId) {
+        //@formatter:off
+        return
+                given().
+                        auth().oauth2(TOKEN).
+                        accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                        get(API + "/articles/" + articleId + "/comments").
+                then().
+                        log().all().
+                        extract().
+                        jsonPath().
+                        getList(".", CommentResponse.class);
+        //@formatter:on
     }
 }

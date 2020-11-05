@@ -10,6 +10,7 @@ export const CLEAR_MEMBER_ARTICLES = 'clearMemberArticles';
 export const CREATE_ARTICLE = 'createArticle';
 export const CREATE_COMMENT = 'createComment';
 export const DELETE_COMMENT = 'deleteComment';
+export const FETCH_COMMENTS = 'fetchComments';
 export const FETCH_EMOTION = 'fetchEmotion';
 export const FETCH_EMOTIONS = 'fetchEmotions';
 export const SELECT_FILTER = 'selectFilter';

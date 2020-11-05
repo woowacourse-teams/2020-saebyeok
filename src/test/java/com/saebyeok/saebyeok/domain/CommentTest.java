@@ -13,13 +13,9 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CommentTest {
+class CommentTest {
     public static final String TEST_CONTENT = "새벽 좋아요";
     public static final String TEST_NICKNAME = "시라소니";
-    public static final String UNDER_LENGTH_CONTENT = "";
-    public static final String OVER_LENGTH_CONTENT = "나만 잘되게 해주세요(강보라 지음·인물과사상사)=자존감이 높은 사람과 ‘관종’의 차이는 무엇일까? " +
-            "‘취향 존중’이 유행하고, ‘오이를 싫어하는 사람들의 모임’이 생기는 이유는 뭘까? 이 시대 새로운 지위를 차지하고 있는 ‘개인’에 관한 탐구 보고서. " +
-            "1만4000원.\n";
 
     private Member member;
     private Comment comment1;
@@ -85,5 +81,15 @@ public class CommentTest {
 
         assertThat(sortedComments).extracting("id")
                 .containsExactly(1L, 6L, 2L, 4L, 5L, 3L);
+    }
+
+    @DisplayName("equals가 잘 작동하는지 테스트")
+    @Test
+    void equalsTest() {
+        Comment commentA = new Comment(1L, null, null, null, LocalDateTime.of(2020, 1, 1, 1, 0), null, null, null, null);
+        Comment commentB = new Comment(1L, null, null, null, LocalDateTime.of(2020, 1, 1, 1, 0), null, null, null, null);
+
+        assertThat(commentA == commentB).isFalse();
+        assertThat(commentA.equals(commentB)).isTrue();
     }
 }

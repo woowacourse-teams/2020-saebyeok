@@ -51,21 +51,20 @@
                 </div>
               </div>
               <div
-                v-if="article.isCommentAllowed && article.comments.length > 0"
+                v-if="article.isCommentAllowed && article.commentsSize > 0"
                 style="float:left;"
               >
                 <v-icon style="font-size:20px;" class="mr-1"
                   >mdi-comment-outline</v-icon
                 >
-                <span class="subheading">{{ article.comments.length }}</span>
+                <span class="subheading">{{ article.commentsSize }}</span>
               </div>
               <v-spacer />
             </v-col>
             <v-col align="right" justify="end" style="padding:0px" cols="2">
               <report-button
                 v-if="!article.isMine"
-                :reportTarget="getReportTarget()"
-                :targetContentId="article.id"
+                @click="changeReportTarget()"
               />
             </v-col>
           </v-row>
@@ -83,8 +82,9 @@ import ReportButton from '@/components/ReportButton';
 import DetailCardMenu from '@/components/card/DetailCardMenu';
 import { REPORT_TARGET } from '@/utils/ReportTarget.js';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { LIKE_ARTICLE, UNLIKE_ARTICLE } from '@/store/shared/actionTypes';
+import { SET_REPORT_TARGET } from '@/store/shared/mutationTypes';
 import linkify from 'vue-linkify';
 
 export default {
@@ -100,23 +100,21 @@ export default {
     linkified: linkify
   },
   methods: {
+    ...mapMutations([SET_REPORT_TARGET]),
     ...mapActions([LIKE_ARTICLE, UNLIKE_ARTICLE]),
     toggleLike() {
       event.stopPropagation();
       if (this.article.isLikedByMe) {
-        this.unlikeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = false;
-          this.article.likesCount--;
-        });
+        this.unlikeArticle(this.article);
       } else {
-        this.likeArticle(this.article.id).then(() => {
-          this.article.isLikedByMe = true;
-          this.article.likesCount++;
-        });
+        this.likeArticle(this.article);
       }
     },
-    getReportTarget() {
-      return REPORT_TARGET.ARTICLE;
+    changeReportTarget() {
+      this.setReportTarget({
+        target: REPORT_TARGET.ARTICLE,
+        contentId: this.article.id
+      });
     },
     clickCardContent() {
       this.$emit('clickCardContent');

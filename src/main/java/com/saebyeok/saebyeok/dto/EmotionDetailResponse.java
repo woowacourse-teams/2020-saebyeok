@@ -27,7 +27,7 @@ public class EmotionDetailResponse {
     }
 
     private List<SubEmotionResponse> transformSubEmotions(Emotion emotion) {
-        if (Objects.isNull(emotion.getSubEmotions()) || emotion.getSubEmotions().isEmpty()) {
+        if (emotion.getSubEmotions().isEmpty()) {
             return new ArrayList<>();
         }
         return emotion.getSubEmotions().

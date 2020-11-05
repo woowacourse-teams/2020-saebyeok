@@ -1,6 +1,5 @@
 package com.saebyeok.saebyeok.domain;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MemberTest {
+class MemberTest {
 
     private Member member;
 
@@ -22,7 +21,7 @@ public class MemberTest {
     @Test
     @DisplayName("사용자의 게시글을 추가하면 리스트에 추가되어야 한다")
     void addArticleTest() {
-        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, null, new ArrayList<>());
+        Article article = new Article(1L, "내용", member, LocalDateTime.now(), true, false, new ArrayList<>());
         member.addArticle(article);
 
         assertThat(member.getArticles().size()).isEqualTo(1);
@@ -33,7 +32,7 @@ public class MemberTest {
     void deactivateTest() {
         member.deactivate();
 
-        assertThat(member.getIsDeleted()).isEqualTo(true);
+        assertThat(member.getIsDeleted()).isTrue();
         assertThat(member.getOauthId()).isEqualTo("DEACTIVATED");
         assertThat(member.getLoginMethod()).isEqualTo("DEACTIVATED");
     }

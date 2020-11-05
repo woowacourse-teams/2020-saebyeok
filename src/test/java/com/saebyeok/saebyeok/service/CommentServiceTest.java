@@ -2,9 +2,9 @@ package com.saebyeok.saebyeok.service;
 
 import com.saebyeok.saebyeok.domain.*;
 import com.saebyeok.saebyeok.dto.CommentCreateRequest;
+import com.saebyeok.saebyeok.dto.CommentResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import com.saebyeok.saebyeok.exception.CommentNotFoundException;
-import com.saebyeok.saebyeok.util.NicknameGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,19 +35,23 @@ class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
+
     @Mock
     private ArticleRepository articleRepository;
+
     @Mock
     private NicknameGenerator nicknameGenerator;
 
     private Member member;
     private Article article;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
         this.commentService = new CommentService(commentRepository, articleRepository, nicknameGenerator);
         this.member = new Member();
         this.article = new Article();
+        this.comment = new Comment("테스트", null, "슬픈돌고래", null, null);
     }
 
     @DisplayName("댓글 등록 메서드를 호출했을 때, 댓글 등록을 수행한다")
@@ -83,14 +91,71 @@ class CommentServiceTest {
                 .hasMessage(INVALID_COMMENT_ID + "에 해당하는 댓글을 찾을 수 없습니다.");
     }
 
+    @DisplayName("댓글 조회 메서드를 호출했을 때, 댓글 조회를 수행한다.")
+    @Test
+    void getCommentsTest() {
+        when(commentRepository.findAllByArticleId(anyLong())).thenReturn(Arrays.asList(comment));
+        List<CommentResponse> comments = commentService.getComment(member, ARTICLE_ID);
+
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0).getContent()).isEqualTo(comment.getContent());
+        assertThat(comments.get(0).getNickname()).isEqualTo(comment.getNickname());
+        assertFalse(comments.get(0).getIsDeleted());
+    }
+
+    @DisplayName("특정 사용자의 삭제하지 않은 댓글 개수 조회 메서드를 호출했을 때, 댓글 개수 조회를 수행한다")
+    @Test
+    void countTotalCommentsByTest() {
+        Long expectedCommentsSize = 3L;
+        when(commentRepository.countCommentsByMemberAndIsDeleted(any(Member.class), anyBoolean())).thenReturn(expectedCommentsSize);
+
+        Long commentsSize = commentService.countTotalCommentsBy(member);
+
+        assertThat(commentsSize).isEqualTo(expectedCommentsSize);
+    }
+
+    @DisplayName("특정 사용자의 댓글 조회 메서드를 호출했을 때, 댓글 조회를 수행한다.")
+    @Test
+    void findAllCommentsByTest() {
+        when(commentRepository.findAllByMemberAndIsDeleted(any(Member.class), anyBoolean())).thenReturn(Arrays.asList(comment));
+        List<Comment> comments = commentService.findAllCommentsBy(member);
+
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0).getContent()).isEqualTo(comment.getContent());
+        assertThat(comments.get(0).getNickname()).isEqualTo(comment.getNickname());
+        assertFalse(comments.get(0).getIsDeleted());
+    }
+
     @DisplayName("댓글 삭제 메서드를 호출했을 때, 댓글 삭제를 수행한다")
     @Test
     void deleteCommentTest() throws IllegalAccessException {
-        when(commentRepository.findById(1L)).thenReturn(Optional.of(new Comment("테스트", "슬픈돌고래", null)));
         Long savedCommentId = 1L;
+        when(commentRepository.findById(savedCommentId)).thenReturn(Optional.of(comment));
 
-        commentService.deleteComment(any(Member.class), savedCommentId);
+        commentService.deleteComment(comment.getMember(), savedCommentId);
 
         verify(commentRepository).save(any());
+    }
+
+    @DisplayName("예외 테스트: 다른 사용자의 댓글을 삭제할 경우 에러 발생")
+    @Test
+    void deleteCommentExceptionTest() {
+        Comment anotherUserComment = new Comment(1L, "테스트", new Member(), "슬픈돌고래", null, null, false, null, null);
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(anotherUserComment));
+        assertThatThrownBy(() -> commentService.deleteComment(member, anotherUserComment.getId()))
+                .isInstanceOf(IllegalAccessException.class);
+    }
+
+    @DisplayName("특정 게시물의 댓글 개수 조회 메서드를 호출했을 때, 댓글 개수 조회를 수행한다")
+    @Test
+    void countCommentsTest() {
+        Long articleId = 1L;
+        Long expectedCommentsSize = 3L;
+        when(commentRepository.countCommentsByArticleId(articleId)).thenReturn(expectedCommentsSize);
+
+        Long commentsSize = commentService.countComments(articleId);
+
+        assertThat(commentsSize).isEqualTo(expectedCommentsSize);
     }
 }

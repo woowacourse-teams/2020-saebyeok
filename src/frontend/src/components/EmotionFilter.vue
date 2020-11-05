@@ -1,21 +1,17 @@
 <template>
   <v-card class="mx-auto rounded-lg" max-width="400">
     <v-row class="justify-center align-center">
-      <v-col
-        class="col-3"
-        style="font-size: 40px; text-align: center; line-height: 40px; padding: 10px 0px 12px 0px; "
-      >
-        <v-chip @click="selectAll()" :disabled="isSelectedAll()"
-          >모두 보기</v-chip
-        >
+      <v-col class="col-3 choice-all-text">
+        <v-chip @click="selectAll()">
+          {{ selectAllButtonText() }}
+        </v-chip>
       </v-col>
       <v-col
         v-for="emotion in emotions"
         :key="emotion.id"
         @click="toggleFeature(emotion)"
-        class="col-1"
-        :class="{ grayscale: !isSelected(emotion) }"
-        style="align: center; line-height: 40px; padding: 14px 0px 12px 0px;"
+        class="col-1 chip-text"
+        :class="{ grayscale: !isSelectedEmotion(emotion) }"
       >
         <v-img
           :src="emotion.imageResource"
@@ -46,11 +42,7 @@ export default {
       }
       this.allFilter = this.allFilter.sort();
       this.filter = this.allFilter.slice();
-
-      this.selectFilter({
-        emotionIds: this.filter.toString(),
-        isFiltered: !this.isSelectedAll()
-      });
+      this.applyFilter();
     });
   },
   computed: {
@@ -60,30 +52,37 @@ export default {
     ...mapActions([FETCH_EMOTIONS]),
     ...mapActions([SELECT_FILTER]),
     toggleFeature(emotion) {
-      if (this.isSelected(emotion)) {
+      if (this.isSelectedEmotion(emotion)) {
         const idx = this.filter.indexOf(emotion.id);
         this.filter.splice(idx, 1);
       } else {
         this.filter.push(emotion.id);
         this.filter = this.filter.sort();
       }
-      this.selectFilter({
-        emotionIds: this.filter.toString(),
-        isFiltered: !this.isSelectedAll()
-      });
+      this.applyFilter();
     },
-    isSelected(emotion) {
+    selectAll() {
+      if (this.isSelectedAll()) {
+        this.filter = [];
+      } else {
+        this.filter = this.allFilter.slice();
+      }
+      this.applyFilter();
+    },
+    isSelectedEmotion(emotion) {
       return this.filter.includes(emotion.id);
     },
     isSelectedAll() {
       return this.filter.length === this.allFilter.length;
     },
-    selectAll() {
-      this.filter = this.allFilter.slice();
+    applyFilter() {
       this.selectFilter({
         emotionIds: this.filter.toString(),
         isFiltered: !this.isSelectedAll()
       });
+    },
+    selectAllButtonText() {
+      return this.isSelectedAll() ? '전체 해제' : '전체 선택';
     }
   }
 };
@@ -93,5 +92,15 @@ export default {
 .grayscale {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
+}
+.choice-all-text {
+  font-size: 40px;
+  text-align: center;
+  line-height: 40px;
+  padding: 10px 0px 12px 0px;
+}
+.chip-text {
+  line-height: 40px;
+  padding: 14px 0px 12px 0px;
 }
 </style>

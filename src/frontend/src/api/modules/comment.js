@@ -9,6 +9,9 @@ const CommentService = {
       commentRequest
     );
   },
+  get(articleId) {
+    return ApiService.get(`${BASE_URL}/${articleId}/comments`);
+  },
   delete(params) {
     return ApiService.delete(
       `${BASE_URL}/${params.articleId}/comments/${params.commentId}`

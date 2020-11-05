@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReportCategoryAcceptanceTest extends AcceptanceTest {
+class ReportCategoryAcceptanceTest extends AcceptanceTest {
     /**
      * Scenario: ReportCategory를 조회할 수 있다.
      * <p>

@@ -46,7 +46,8 @@ class ArticleControllerTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Emotion TEST_EMOTION_1 = new Emotion(1L, "기뻐요", "이미지 리소스");
     private static final Emotion TEST_EMOTION_2 = new Emotion(2L, "슬퍼요", "이미지 리소스");
-    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(new SubEmotion(1L, "행복해요"), new SubEmotion(2L, "설레요"));
+    private static final SubEmotion TEST_SUB_EMOTION_1 = new SubEmotion(1L, "행복해요");
+    public static final Boolean TEST_IS_LIKED_BY_ME = false;
     private static final Boolean TEST_IS_MINE = true;
     private static final Boolean TEST_IS_COMMENT_ALLOWED = true;
     private static final Long TEST_ID_1 = 1L;
@@ -58,7 +59,9 @@ class ArticleControllerTest {
     private static final Integer TEST_PAGE_SIZE = 10;
     private static final Long TEST_LIKES_COUNT = 10L;
     private static final String INVALID_CONTENT = "이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다. 이 글은 300자가 넘어가는 글입니다.";
-    public static final boolean TEST_IS_LIKED_BY_ME = false;
+    private static final List<SubEmotion> TEST_SUB_EMOTIONS = Arrays.asList(TEST_SUB_EMOTION_1, new SubEmotion(2L,
+            "설레요"));
+    private static final Long TEST_COMMENTS_SIZE = 3L;
 
     private MockMvc mockMvc;
     private List<ArticleResponse> articles;
@@ -72,9 +75,12 @@ class ArticleControllerTest {
                 .apply(springSecurity())
                 .build();
         this.articles = new ArrayList<>();
-        List<SubEmotionResponse> subEmotionResponses = TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
-        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null));
-        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses, TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, null));
+        List<SubEmotionResponse> subEmotionResponses =
+                TEST_SUB_EMOTIONS.stream().map(SubEmotionResponse::new).collect(Collectors.toList());
+        articles.add(new ArticleResponse(TEST_ID_1, TEST_CONTENT_1, LocalDateTime.now(), new EmotionResponse(TEST_EMOTION_1), subEmotionResponses,
+                TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, TEST_COMMENTS_SIZE));
+        articles.add(new ArticleResponse(TEST_ID_2, TEST_CONTENT_2, LocalDateTime.of(2020, 6, 12, 5, 30, 0), new EmotionResponse(TEST_EMOTION_2), subEmotionResponses,
+                TEST_IS_COMMENT_ALLOWED, TEST_IS_MINE, TEST_LIKES_COUNT, TEST_IS_LIKED_BY_ME, TEST_COMMENTS_SIZE));
     }
 
     @DisplayName("'/articles'로 get 요청을 보내면 글 목록 리스트를 받는다")
@@ -109,7 +115,7 @@ class ArticleControllerTest {
     void createArticleTest() throws Exception {
         ArticleCreateRequest request = new ArticleCreateRequest(TEST_CONTENT_1, TEST_EMOTION_1.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
         String requestAsString = OBJECT_MAPPER.writeValueAsString(request);
-        Article article = new Article(TEST_CONTENT_1, TEST_IS_COMMENT_ALLOWED);
+        Article article = new Article(TEST_CONTENT_1, null, TEST_IS_COMMENT_ALLOWED);
 
         when(articleService.createArticle(any(Member.class), any(ArticleCreateRequest.class))).thenReturn(article);
 
@@ -120,7 +126,7 @@ class ArticleControllerTest {
                 andDo(print());
     }
 
-    @DisplayName("예외 테스트: 제한 글자수를 넘었을때 예외가 발생한다")
+    @DisplayName("예외 테스트: '/articles'로 post 요청을 보내는 글의 내용이 제한 글자수를 넘으면 예외가 발생한다")
     @Test
     void overLengthContentTest() throws Exception {
         ArticleCreateRequest request = new ArticleCreateRequest(INVALID_CONTENT, TEST_EMOTION_1.getId(), Collections.emptyList(), TEST_IS_COMMENT_ALLOWED);
@@ -133,7 +139,7 @@ class ArticleControllerTest {
                 andDo(print());
     }
 
-    @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
+    @DisplayName("'/articles/{articleId}'로 get 요청을 보내면 articleId에 해당하는 글을 받는다")
     @Test
     void readArticleTest() throws Exception {
         when(articleService.readArticle(any(Member.class), eq(TEST_ID_1))).thenReturn(articles.get(0));
@@ -144,13 +150,14 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.id").value(TEST_ID_1)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_1.getName())).
+                andExpect(jsonPath("$.subEmotions[0].name").value(TEST_SUB_EMOTION_1.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
                 andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
                 andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 
     @WithAnonymousUser
-    @DisplayName("ID로 개별 글 조회를 요청하면 해당 글을 전달 받는다")
+    @DisplayName("비회원이 '/articles/{articleId}'로 get 요청을 보내면 articleId에 해당하는 글을 받는다")
     @Test
     void readArticleWithGuestUserTest() throws Exception {
         when(articleService.readArticle(any(Member.class), eq(TEST_ID_1))).thenReturn(articles.get(0));
@@ -161,12 +168,13 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.id").value(TEST_ID_1)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_1)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_1.getName())).
+                andExpect(jsonPath("$.subEmotions[0].name").value(TEST_SUB_EMOTION_1.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
                 andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
                 andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));
     }
 
-    @DisplayName("예외 테스트: 없는 ID의 글 조회를 요청하면 ArticleNotFoundException이 발생한다")
+    @DisplayName("예외 테스트: '/articles/{articleId}'로 get 요청을 보냈을 때 articleId가 존재하지 않으면 ArticleNotFoundException이 발생한다")
     @Test
     void readArticleExceptionTest() throws Exception {
         when(articleService.readArticle(any(Member.class), eq(INVALID_ARTICLE_ID)))
@@ -177,7 +185,7 @@ class ArticleControllerTest {
                 andExpect(status().isBadRequest());
     }
 
-    @DisplayName("특정 ID의 글 삭제를 요청하면 해당 글을 삭제한다")
+    @DisplayName("'/articles/{articleId}'로 delete 요청을 보내면 articleId에 해당하는 글을 삭제한다")
     @Test
     void deleteArticleTest() throws Exception {
         doNothing().when(articleService).deleteArticle(any(Member.class), eq(TEST_ID_1));
@@ -186,7 +194,7 @@ class ArticleControllerTest {
                 andExpect(status().isNoContent());
     }
 
-    @DisplayName("예외 테스트: 없는 ID의 글 삭제를 요청하면 ArticleNotFoundException이 발생한다")
+    @DisplayName("예외 테스트: '/articles/{articleId}'로 delete 요청을 보냈을 때 articleId가 존재하지 않으면 ArticleNotFoundException이 발생한다")
     @Test
     void deleteArticleExceptionTest() throws Exception {
         doThrow(new ArticleNotFoundException(INVALID_ARTICLE_ID))
@@ -197,7 +205,7 @@ class ArticleControllerTest {
                 andExpect(status().isBadRequest());
     }
 
-    @DisplayName("사용자가 쓴 게시글 목록을 날짜에 상관없이 불러온다")
+    @DisplayName("'/member/articles'로 get 요청을 보내면 사용자가 작성한 글 목록 리스트를 작성 날짜와 상관없이 받는다")
     @Test
     void memberArticleLoadTest() throws Exception {
         when(articleService.getMemberArticles(any(), eq(TEST_PAGE_NUMBER), eq(TEST_PAGE_SIZE), any())).thenReturn(articles);
@@ -212,7 +220,7 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$[1].content").value(TEST_CONTENT_2));
     }
 
-    @DisplayName("ID로 사용자가 쓴 글 조회를 요청하면 해당 글을 전달 받는다")
+    @DisplayName("'/member/articles/{articleId}'로 get 요청을 보내면 articleId에 해당하는 글을 받는다")
     @Test
     void memberArticleReadTest() throws Exception {
         when(articleService.readMemberArticle(any(Member.class), eq(TEST_ID_2))).thenReturn(articles.get(1));
@@ -223,6 +231,7 @@ class ArticleControllerTest {
                 andExpect(jsonPath("$.id").value(TEST_ID_2)).
                 andExpect(jsonPath("$.content").value(TEST_CONTENT_2)).
                 andExpect(jsonPath("$.emotion.name").value(TEST_EMOTION_2.getName())).
+                andExpect(jsonPath("$.subEmotions[0].name").value(TEST_SUB_EMOTION_1.getName())).
                 andExpect(jsonPath("$.isCommentAllowed").value(TEST_IS_COMMENT_ALLOWED)).
                 andExpect(jsonPath("$.likesCount").value(TEST_LIKES_COUNT)).
                 andExpect(jsonPath("$.isLikedByMe").value(TEST_IS_LIKED_BY_ME));

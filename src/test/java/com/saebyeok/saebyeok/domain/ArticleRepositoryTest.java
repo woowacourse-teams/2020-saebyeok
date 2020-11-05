@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 class ArticleRepositoryTest {
-    @MockBean
-    private AuditingHandler auditingHandler;
-
     public static final int VISIBLE_DAYS_ON_FEED = 7;
     public static final int VISIBLE_DAYS_ON_ANALYSIS = 30;
     private static final PageRequest PAGE_REQUEST = PageRequest.of(0, 10);
+
+    @MockBean
+    private AuditingHandler auditingHandler;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -49,11 +49,12 @@ class ArticleRepositoryTest {
         member = new Member(1L, "123456789", "naver", LocalDateTime.now(), false, Role.USER, new ArrayList<>());
         memberRepository.save(member);
 
-        article1 = new Article(null, "내용1", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS + 1), false, false, new ArrayList<>(), new ArrayList<>());
-        article2 = new Article(null, "내용2", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED + 1), true, false, new ArrayList<>(), new ArrayList<>());
-        article3 = new Article(null, "내용3", member, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
-        article4 = new Article(null, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>(), new ArrayList<>());
+        article1 = new Article(null, "내용1", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_ANALYSIS + 1), false, false, new ArrayList<>());
+        article2 = new Article(null, "내용2", member, LocalDateTime.now().minusDays(VISIBLE_DAYS_ON_FEED + 1), true, false, new ArrayList<>());
+        article3 = new Article(null, "내용3", member, LocalDateTime.now(), true, false, new ArrayList<>());
+        article4 = new Article(null, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>());
 
+        memberRepository.save(member);
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);
@@ -77,7 +78,7 @@ class ArticleRepositoryTest {
     @DisplayName("게시글을 저장한다")
     @Test
     void saveTest() {
-        Article newArticle = new Article("내용5", true);
+        Article newArticle = new Article("내용4", null, true);
         int articleSize = articleRepository.findAll().size();
 
         articleRepository.save(newArticle);

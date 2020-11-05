@@ -5,10 +5,8 @@ import com.saebyeok.saebyeok.domain.ArticleSubEmotion;
 import com.saebyeok.saebyeok.domain.ArticleSubEmotionRepository;
 import com.saebyeok.saebyeok.domain.SubEmotionRepository;
 import com.saebyeok.saebyeok.dto.SubEmotionResponse;
-import com.saebyeok.saebyeok.exception.ArticleSubEmotionNotFoundException;
 import com.saebyeok.saebyeok.exception.SubEmotionNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +26,8 @@ public class ArticleSubEmotionService {
                 map(subEmotion -> new ArticleSubEmotion(article, subEmotion)).
                 collect(Collectors.toList());
 
-        for (ArticleSubEmotion articleSubEmotion : articleSubEmotions) {
-            articleSubEmotionRepository.save(articleSubEmotion);
+        if (!articleSubEmotions.isEmpty()) {
+            articleSubEmotionRepository.saveAll(articleSubEmotions);
         }
     }
 

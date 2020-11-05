@@ -19,3 +19,6 @@ export const DEACTIVATE_RECOMMENT = 'deactivateRecomment';
 export const SHOW_REQUEST_LOGIN_MODAL = 'showRequestLoginModal';
 export const HIDE_REQUEST_LOGIN_MODAL = 'hideRequestLoginModal';
 export const SET_REPORT_CATEGORIES = 'setReportCategories';
+export const SET_REPORT_TARGET = 'setReportTarget';
+export const SET_COMMENTS = 'setComments';
+export const CATCH_ERROR = 'catchError';

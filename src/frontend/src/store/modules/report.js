@@ -1,4 +1,8 @@
-import { SET_REPORT_CATEGORIES } from '@/store/shared/mutationTypes';
+import {
+  SET_REPORT_CATEGORIES,
+  CATCH_ERROR,
+  SET_REPORT_TARGET
+} from '@/store/shared/mutationTypes';
 import {
   FETCH_REPORT_CATEGORIES,
   CREATE_REPORT
@@ -6,18 +10,25 @@ import {
 import ReportService from '@/api/modules/report';
 
 const state = {
-  reportCategories: []
+  reportCategories: [],
+  reportTarget: {}
 };
 
 const getters = {
   reportCategories(state) {
     return state.reportCategories;
+  },
+  reportTarget(state) {
+    return state.reportTarget;
   }
 };
 
 const mutations = {
   [SET_REPORT_CATEGORIES](state, reportCategories) {
     state.reportCategories = reportCategories;
+  },
+  [SET_REPORT_TARGET](state, reportTarget) {
+    state.reportTarget = reportTarget;
   }
 };
 
@@ -27,11 +38,11 @@ const actions = {
       .then(({ data }) => {
         commit(SET_REPORT_CATEGORIES, data);
       })
-      .catch(error => commit('catchError', error));
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [CREATE_REPORT]({ commit }, report) {
     return ReportService.createReport(report).catch(error =>
-      commit('catchError', error)
+      commit(CATCH_ERROR, error)
     );
   }
 };
