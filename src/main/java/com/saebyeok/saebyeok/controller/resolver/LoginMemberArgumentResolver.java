@@ -36,7 +36,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication instanceof AnonymousAuthenticationToken &&
-                ("getArticles".equals(methodName) || "readArticle".equals(methodName))) {  // 비회원이 피드 혹은 글 디테일 요청
+                ("getArticles".equals(methodName) || "readArticle".equals(methodName) || "getComments".equals(methodName))) {  // 비회원이 피드 혹은 글 디테일 요청
             return new Member();
         } else {
             User user = (User) authentication.getPrincipal();
