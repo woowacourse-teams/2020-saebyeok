@@ -137,8 +137,7 @@ class ArticleEmotionServiceTest {
         when(emotionRepository.findAllById(emotionIds)).thenReturn(emotions);
         when(articleEmotionRepository.findAllByArticleInAndEmotionIn(articles, emotions, pageable)).thenReturn(articleEmotions);
 
-        List<Article> articlesByEmotionIds = articleEmotionService.findArticlesByEmotionIds(articles, emotionIds,
-                pageable);
+        List<Article> articlesByEmotionIds = articleEmotionService.findArticlesByEmotionIds(articles, emotionIds, pageable);
 
         assertThat(articlesByEmotionIds).hasSize(articles.size());
     }

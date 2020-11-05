@@ -30,6 +30,5 @@ class OAuthAttributesTest {
         assertThatThrownBy(() -> OAuthAttributes.of("daum", "id", null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("올바르지 않은 소셜 로그인 방법");
-
     }
 }
