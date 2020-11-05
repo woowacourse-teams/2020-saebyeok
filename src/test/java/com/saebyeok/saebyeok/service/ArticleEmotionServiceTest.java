@@ -30,6 +30,7 @@ class ArticleEmotionServiceTest {
     private static final Long ARTICLE_1_ID = 1L;
     private static final Long ARTICLE_2_ID = 2L;
     private static final Long ARTICLE_3_ID = 3L;
+    private static final Long ARTICLE_4_ID = 4L;
     private static final Long EMOTION_1_ID = 1L;
     private static final Long EMOTION_2_ID = 2L;
     private static final Long EMOTION_3_ID = 3L;
@@ -45,24 +46,29 @@ class ArticleEmotionServiceTest {
     private Article article1;
     private Article article2;
     private Article article3;
+    private Article article4;
     private Emotion emotion1;
     private Emotion emotion2;
+    private Emotion emotion3;
     private ArticleEmotion articleEmotion1;
     private ArticleEmotion articleEmotion2;
     private ArticleEmotion articleEmotion3;
+    private ArticleEmotion articleEmotion4;
 
     @BeforeEach
     void setUp() {
         this.articleEmotionService = new ArticleEmotionService(emotionRepository, articleEmotionRepository);
-
         this.article1 = new Article(ARTICLE_1_ID, "내용1", null, LocalDateTime.now(), true, false, new ArrayList<>());
         this.article2 = new Article(ARTICLE_2_ID, "내용2", null, LocalDateTime.now(), true, false, new ArrayList<>());
         this.article3 = new Article(ARTICLE_3_ID, "내용3", null, LocalDateTime.now(), true, false, new ArrayList<>());
+        this.article4 = new Article(ARTICLE_4_ID, "내용4", null, LocalDateTime.now(), true, false, new ArrayList<>());
         this.emotion1 = new Emotion(EMOTION_1_ID, "기뻐요", "imageResourceUri1");
         this.emotion2 = new Emotion(EMOTION_2_ID, "슬퍼요", "imageResourceUri2");
+        this.emotion3 = new Emotion(EMOTION_3_ID, "그냥 그래요", "imageResourceUri3");
         this.articleEmotion1 = new ArticleEmotion(article1, emotion1);
-        this.articleEmotion2 = new ArticleEmotion(article2, emotion1);
+        this.articleEmotion2 = new ArticleEmotion(article2, emotion2);
         this.articleEmotion3 = new ArticleEmotion(article3, emotion2);
+        this.articleEmotion4 = new ArticleEmotion(article4, emotion3);
     }
 
     @DisplayName("새로 생성한 게시글과 이에 속하는 감정 대분류의 Id를 통해 ArticleEmotion을 생성한다")
@@ -117,17 +123,16 @@ class ArticleEmotionServiceTest {
     @DisplayName("특정 감정 대분류에 속하는 게시글 목록을 요청받은 페이지 수만큼 가져온다")
     @Test
     void findArticlesByEmotionIdsTest() {
-        List<Article> articles = Arrays.asList(article1, article2, article3);
-        List<Long> emotionIds = Arrays.asList(EMOTION_1_ID, EMOTION_2_ID);
-        List<Emotion> emotions = Arrays.asList(emotion1, emotion2);
+        List<Article> articles = Arrays.asList(article1, article2, article3, article4);
+        List<Long> emotionIds = Arrays.asList(EMOTION_1_ID, EMOTION_2_ID, EMOTION_3_ID);
+        List<Emotion> emotions = Arrays.asList(emotion1, emotion2, emotion3);
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
-        List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3);
+        List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3, articleEmotion4);
 
         when(emotionRepository.findAllById(emotionIds)).thenReturn(emotions);
         when(articleEmotionRepository.findAllByArticleInAndEmotionIn(articles, emotions, pageable)).thenReturn(articleEmotions);
 
-        List<Article> articlesByEmotionIds = articleEmotionService.findArticlesByEmotionIds(articles, emotionIds,
-                                                                                            pageable);
+        List<Article> articlesByEmotionIds = articleEmotionService.findArticlesByEmotionIds(articles, emotionIds, pageable);
 
         assertThat(articlesByEmotionIds).hasSize(articles.size());
     }
@@ -135,30 +140,30 @@ class ArticleEmotionServiceTest {
     @DisplayName("각 감정 대분류마다 특정 멤버의 게시글이 몇 개가 존재하는지 ArticleEmotion을 통해 구한다")
     @Test
     void findArticleEmotionsCountTest() {
-        List<Article> memberArticles = Arrays.asList(article1, article2, article3);
+        List<Article> memberArticles = Arrays.asList(article1, article2, article3, article4);
         List<Long> allEmotionsIds = Arrays.asList(EMOTION_1_ID, EMOTION_2_ID, EMOTION_3_ID);
-        List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3);
+        List<ArticleEmotion> articleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3, articleEmotion4);
 
         when(articleEmotionRepository.findAllByArticleIn(memberArticles)).thenReturn(articleEmotions);
 
         List<Integer> articleEmotionsCount = articleEmotionService.findArticleEmotionsCount(memberArticles,
-                                                                                            allEmotionsIds);
+                allEmotionsIds);
 
         assertThat(articleEmotionsCount).hasSize(allEmotionsIds.size())
-                .isEqualTo(Arrays.asList(2, 1, 0));
+                .isEqualTo(Arrays.asList(1, 2, 1));
     }
 
     @DisplayName("특정 멤버의 게시글에서 가장 많은 감정 대분류의 id가 무엇인지 ArticleEmotion을 통해 구한다")
     @Test
     void findMostEmotionIdInArticlesTest() {
-        List<Article> memberArticles = Arrays.asList(article1, article2, article3);
-        List<ArticleEmotion> memberArticleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3);
+        List<Article> memberArticles = Arrays.asList(article1, article2, article3, article4);
+        List<ArticleEmotion> memberArticleEmotions = Arrays.asList(articleEmotion1, articleEmotion2, articleEmotion3, articleEmotion4);
 
         when(articleEmotionRepository.findAllByArticleIn(memberArticles)).thenReturn(memberArticleEmotions);
 
         Long mostEmotionIdInArticles = articleEmotionService.findMostEmotionIdInArticles(memberArticles);
 
-        assertThat(mostEmotionIdInArticles).isEqualTo(EMOTION_1_ID);
+        assertThat(mostEmotionIdInArticles).isEqualTo(EMOTION_2_ID);
     }
 
     @DisplayName("특정 멤버가 작성한 게시글이 없으면 NOT_EXIST_MOST_EMOTION_ID을 반환한다")
