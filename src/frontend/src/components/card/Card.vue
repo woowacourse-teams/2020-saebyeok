@@ -51,13 +51,13 @@
                 </div>
               </div>
               <div
-                v-if="article.isCommentAllowed && article.comments.length > 0"
+                v-if="article.isCommentAllowed && article.commentsSize > 0"
                 style="float:left;"
               >
                 <v-icon style="font-size:20px;" class="mr-1"
                   >mdi-comment-outline</v-icon
                 >
-                <span class="subheading">{{ article.comments.length }}</span>
+                <span class="subheading">{{ article.commentsSize }}</span>
               </div>
               <v-spacer />
             </v-col>

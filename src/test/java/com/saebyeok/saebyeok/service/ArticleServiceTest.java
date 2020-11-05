@@ -1,6 +1,9 @@
 package com.saebyeok.saebyeok.service;
 
-import com.saebyeok.saebyeok.domain.*;
+import com.saebyeok.saebyeok.domain.Article;
+import com.saebyeok.saebyeok.domain.ArticleRepository;
+import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.domain.Role;
 import com.saebyeok.saebyeok.dto.ArticleResponse;
 import com.saebyeok.saebyeok.exception.ArticleNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,15 +56,13 @@ class ArticleServiceTest {
     private Member member;
     private Article article1;
     private Article article2;
-    private Emotion emotion;
-    private List<SubEmotion> subEmotions;
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(articleRepository, articleEmotionService, articleSubEmotionService);
+        articleService = new ArticleService(articleRepository, commentService, articleEmotionService, articleSubEmotionService);
         member = new Member(MEMBER_ID, MEMBER_OAUTH_ID, MEMBER_LOGIN_METHOD, LocalDateTime.now(), IS_DELETED, Role.USER, new ArrayList<>());
-        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, null, new ArrayList<>());
-        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, false, null, new ArrayList<>());
+        article1 = new Article(ARTICLE_ID_1, CONTENT1, member, LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, new ArrayList<>());
+        article2 = new Article(ARTICLE_ID_2, CONTENT2, member, LocalDateTime.of(2020, 6, 12, 5, 30, 0), IS_COMMENT_ALLOWED_2, false, new ArrayList<>());
     }
 
     @DisplayName("게시글을 조회하면 게시글 목록이 리턴된다")
@@ -173,7 +174,7 @@ class ArticleServiceTest {
     @DisplayName("예외 테스트: 다른 사용자의 게시글을 삭제할 경우 에러를 발생시킨다")
     @Test
     void notMyArticleTest() {
-        Article article3 = new Article(ARTICLE_ID_1, CONTENT1, new Member(), LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, null, new ArrayList<>());
+        Article article3 = new Article(ARTICLE_ID_1, CONTENT1, new Member(), LocalDateTime.now(), IS_COMMENT_ALLOWED_1, false, new ArrayList<>());
 
         when(articleRepository.findById(any())).thenReturn(Optional.of(article3));
 

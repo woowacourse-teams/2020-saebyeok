@@ -8,6 +8,7 @@ import {
 import {
   CREATE_COMMENT,
   DELETE_COMMENT,
+  FETCH_COMMENTS,
   LIKE_COMMENT,
   UNLIKE_COMMENT
 } from '@/store/shared/actionTypes';
@@ -73,6 +74,14 @@ const actions = {
     return CommentService.delete(params).catch(error =>
       commit(CATCH_ERROR, error)
     );
+  },
+  async [FETCH_COMMENTS]({ commit }, articleId) {
+    return CommentService.get(articleId)
+      .then(({ data }) => {
+        commit(SET_COMMENTS, data);
+        return data;
+      })
+      .catch(error => commit(CATCH_ERROR, error));
   },
   async [LIKE_COMMENT]({ commit, rootGetters }, comment) {
     const currentArticle = rootGetters.article;

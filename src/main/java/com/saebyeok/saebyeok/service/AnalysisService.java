@@ -3,6 +3,8 @@ package com.saebyeok.saebyeok.service;
 import com.saebyeok.saebyeok.domain.Article;
 import com.saebyeok.saebyeok.domain.Comment;
 import com.saebyeok.saebyeok.domain.Member;
+import com.saebyeok.saebyeok.dto.ArticlesAnalysisResponse;
+import com.saebyeok.saebyeok.dto.CommentsAnalysisResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +20,32 @@ public class AnalysisService {
     private final ArticleEmotionService articleEmotionService;
     private final CommentService commentService;
 
-    public List<Integer> findArticleEmotionsCount(Member member) {
+    public ArticlesAnalysisResponse getArticlesAnalysis(Member member) {
+        List<Integer> articleEmotionsCount = findArticleEmotionsCount(member);
+        Long mostEmotionId = findMostEmotionId(member);
+
+        return new ArticlesAnalysisResponse(articleEmotionsCount, mostEmotionId);
+    }
+
+    public CommentsAnalysisResponse getCommentsAnalysis(Member member) {
+        Long totalCommentsCount = commentService.countTotalCommentsBy(member);
+        Long totalCommentLikesCount = commentService.findAllCommentsBy(member).stream()
+                .mapToLong(Comment::countLikes)
+                .sum();
+
+        return new CommentsAnalysisResponse(totalCommentsCount, totalCommentLikesCount);
+    }
+
+    private List<Integer> findArticleEmotionsCount(Member member) {
         List<Article> memberArticles = articleService.getVisibleDaysArticles(member, VISIBLE_DAYS_ON_ANALYSIS);
         List<Long> allEmotionsIds = emotionService.getAllEmotionsIds();
 
         return articleEmotionService.findArticleEmotionsCount(memberArticles, allEmotionsIds);
     }
 
-    public Long findMostEmotionId(Member member) {
+    private Long findMostEmotionId(Member member) {
         List<Article> articlesByMemberAndVisibleDays = articleService.getVisibleDaysArticles(member, VISIBLE_DAYS_ON_ANALYSIS);
 
         return articleEmotionService.findMostEmotionIdInArticles(articlesByMemberAndVisibleDays);
-    }
-
-    public Long countTotalCommentsBy(Member member) {
-        return commentService.countTotalCommentsBy(member);
-    }
-
-    public Long countTotalCommentLikesBy(Member member) {
-        return commentService.findAllCommentsBy(member).stream()
-                .mapToLong(Comment::countLikes)
-                .sum();
     }
 }

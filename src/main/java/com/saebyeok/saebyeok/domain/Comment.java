@@ -72,10 +72,6 @@ public class Comment implements Comparable<Comment> {
         this.isDeleted = true;
     }
 
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
     @Override
     public int compareTo(Comment other) {
         Comment parentOfThis = (this.parent == null ? this : this.parent);
